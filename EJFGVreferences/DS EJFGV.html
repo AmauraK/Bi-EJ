@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS EJFGV — Design System &amp; Biblioteca de Tokens e Componentes</title>
+  <meta name="description" content="Design System oficial da EJFGV extraído de conteudo.ejfgv.com/business-intelligence-dados com cursor e navegação Grotesk Zero.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       1. PRIMITIVE TOKENS (Extraídos de conteudo.ejfgv.com/business-intelligence-dados)
+       ========================================================================== */
+    :root {
+      /* Brand Primary — Terracotta / Laranja Institucional EJFGV */
+      --primary25:  #fefaf5;
+      --primary50:  #fef6ee;
+      --primary100: #fdead7;
+      --primary200: #f7b27a; /* Eyebrow em fundo escuro (.section_beneficios) */
+      --primary300: #f38744;
+      --primary400: #df792f;
+      --primary500: #ef6820; /* Superfície de destaque (.beneficios_banner) */
+      --primary600: #e04f16; /* Acento principal, Botão Primário, Cursor, Hero Divider */
+      --primary700: #b93815; /* Hover Primário, Eyebrow em fundo claro ("Quem somos?"), Botão Terciário */
+      --primary800: #932f19;
+      --primary900: #772917;
+
+      /* Gray Warm — Escala Escura Quente (DNA Consultoria & Contraste Editorial) */
+      --graywarm950: #171412; /* Fundo profundo / Botão secundário / Texto sobre banner laranja */
+      --graywarm900: #1c1917; /* Fundo da seção escura (.section_beneficios) */
+      --graywarm600: #57534e; /* Texto secundário em cards (.metodo_card, .icp_item) */
+      --graywarm300: #d7d3d0; /* Texto de apoio e itens de checklist sobre fundo escuro */
+
+      /* Gray Cool — Escala Neutra de Interface, Tipografia e Formulários */
+      --gray900: #101828; /* Títulos principais sobre fundo claro */
+      --gray800: #182230; /* Início do gradiente de títulos (.text-color-gradient-gray) */
+      --gray700: #344054; /* Labels de formulário e subtítulos fortes */
+      --gray600: #475467; /* Lead do Hero e fim do gradiente de títulos */
+      --gray500: #667085; /* Texto auxiliar / metadados */
+      --gray400: #98a2b3; /* Placeholders e ícones inativos */
+      --gray300: #d0d5dd; /* Bordas de inputs e divisores estruturais */
+      --gray200: #eaecf0; /* Bordas sutis de cards e linhas de tabela */
+      --gray100: #f2f4f7; /* Superfície neutra secundária */
+      --gray50:  #f9fafb; /* Superfície de depoimentos (.depoimentos_content) e seções alternadas */
+      --gray25:  #fcfcfd; /* Fundo claro sutil */
+      --white:   #ffffff;
+
+      /* Status / Feedback Semântico (Extraídos do Webflow EJFGV) */
+      --success50:  #ecfdf3;
+      --success200: #a6f4c5;
+      --success500: #12b76a;
+      --success700: #027a48;
+
+      --warning50:  #fffaeb;
+      --warning200: #fedf89;
+      --warning500: #f79009;
+      --warning700: #b54708;
+
+      --error50:    #fef3f2;
+      --error200:   #fecdca;
+      --error500:   #f04438;
+      --error700:   #b42318;
+
+      /* Gradientes Originais da Página BI & Dados */
+      --gradient-title-gray: linear-gradient(63deg, #182230, #475467);
+      --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
+      --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0), #f5f5f5 80%);
+
+      /* ========================================================================
+         2. SEMANTIC & ALIAS TOKENS (Camada Semântica do DS EJFGV)
+         ======================================================================== */
+      --surface-page-light:      var(--white);
+      --surface-page-subtle:     var(--gray50);
+      --surface-section-dark:    var(--graywarm900);
+      --surface-section-deep:    var(--graywarm950);
+      --surface-banner-accent:   var(--primary500);
+      --surface-card-light:      var(--white);
+      --surface-card-metodo:     var(--gradient-metodo-card);
+      --surface-card-testimonial:var(--gray50);
+
+      --text-primary-light:      var(--gray900);
+      --text-secondary-light:    var(--gray600);
+      --text-warm-muted:         var(--graywarm600);
+      --text-primary-dark:       var(--white);
+      --text-secondary-dark:     var(--graywarm300);
+      --text-eyebrow-light:      var(--primary700);
+      --text-eyebrow-dark:       var(--primary200);
+      --text-accent:             var(--primary600);
+
+      --border-hairline-light:   rgba(16, 24, 40, 0.12);
+      --border-hairline-dark:    rgba(255, 255, 255, 0.14);
+      --border-input:            var(--gray300);
+      --border-focus:            var(--primary600);
+      --ring-focus:              0 1px 2px 0 rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
+
+      /* ========================================================================
+         3. TYPOGRAPHY & MOTION TOKENS (Sans-Serif + Grotesk Zero Mechanics)
+         ======================================================================== */
+      --font-sans: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-ui:   'Inter', 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-height: 60px;
+
+      /* Component Tokens */
+      --btn-radius: 0.5rem;
+      --card-radius-md: 1rem;
+      --card-radius-lg: 1.25rem;
+      --card-radius-xl: 1.5rem;
+      --hero-divider-w: 5rem;
+      --hero-divider-h: 1rem;
+    }
+
+    /* ==========================================================================
+       4. RESET & SUBSTRATE (Base Grotesk Zero + Sans-Serif)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--surface-page-light);
+      color: var(--text-primary-light);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      overflow-x: hidden;
+      background: var(--surface-page-light);
+      color: var(--text-primary-light);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+
+    ::selection {
+      background: var(--primary600);
+      color: var(--white);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    /* Textura de grão sutil herdada do Grotesk Zero */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -50%;
+      z-index: 90;
+      pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    }
+
+    /* ==========================================================================
+       5. CUSTOM CURSOR (Extraído de grotesk-zero-45-design-system.zip)
+       ========================================================================== */
+    .cursor {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary600);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s var(--ease-out-expo),
+                  height 0.3s var(--ease-out-expo),
+                  background 0.3s var(--ease-out-expo),
+                  border-color 0.3s var(--ease-out-expo),
+                  opacity 0.3s;
+    }
+
+    .cursor.is-link {
+      width: 42px;
+      height: 42px;
+      background: transparent;
+      border: 1px solid var(--primary600);
+    }
+
+    @media (pointer: coarse) {
+      .cursor {
+        display: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       6. NAVIGATION BAR (Extraído de grotesk-zero-45-design-system.zip)
+       ========================================================================== */
+    .gz-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 3.2vw;
+      mix-blend-mode: difference;
+      color: #ffffff;
+      transition: background 0.35s var(--ease-out-expo),
+                  border-color 0.35s var(--ease-out-expo);
+    }
+
+    /* Modo sólido glass (usado quando o usuário alterna ou no catálogo) */
+    .gz-nav.is-glass {
+      mix-blend-mode: normal;
+      color: var(--white);
+      background: rgba(23, 20, 18, 0.94);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-hairline-dark);
+    }
+
+    .gz-nav .wordmark {
+      font-family: var(--font-sans);
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-variation-settings: 'wght' 900, 'wdth' 100;
+      transition: font-variation-settings 0.5s var(--ease-out-expo);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gz-nav .wordmark:hover {
+      font-variation-settings: 'wght' 100, 'wdth' 100;
+    }
+
+    .gz-nav .wordmark .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary600);
+      display: inline-block;
+    }
+
+    .gz-nav .links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .gz-nav .links a:not(.buy) {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .gz-nav .links a:not(.buy)::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      height: 1px;
+      width: 0;
+      background: currentColor;
+      transition: width 0.35s var(--ease-out-expo);
+    }
+
+    .gz-nav .links a:not(.buy):hover::after,
+    .gz-nav .links a:not(.buy).is-active::after {
+      width: 100%;
+    }
+
+    .gz-nav .buy {
+      font-family: var(--font-sans);
+      border: 1px solid currentColor;
+      padding: 9px 18px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: background 0.3s var(--ease-out-expo),
+                  color 0.3s var(--ease-out-expo),
+                  border-color 0.3s var(--ease-out-expo);
+    }
+
+    .gz-nav .buy:hover {
+      background: var(--primary600);
+      border-color: var(--primary600);
+      color: var(--white);
+    }
+
+    /* ==========================================================================
+       7. CATALOG SHELL LAYOUT (Sidebar + Main Stage inspirado no Grotesk Zero)
+       ========================================================================== */
+    .ds-layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+    }
+
+    .ds-sidebar {
+      position: sticky;
+      top: var(--nav-height);
+      height: calc(100vh - var(--nav-height));
+      overflow-y: auto;
+      padding: 28px 14px 40px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--graywarm950);
+      border-right: 1px solid var(--border-hairline-dark);
+      color: var(--white);
+      z-index: 20;
+    }
+
+    .ds-sidebar .ds-lbl {
+      margin: 14px 0 10px 10px;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .ds-sidebar .ds-lbl:first-child {
+      margin-top: 0;
+    }
+
+    .ds-sidebar a {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 9px 10px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      transition: background 0.25s var(--ease-out-expo), color 0.25s var(--ease-out-expo);
+      border-radius: 4px;
+    }
+
+    .ds-sidebar a b {
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.4);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ds-sidebar a:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .ds-sidebar a.is-current {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .ds-sidebar a.is-current::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--primary600);
+    }
+
+    .ds-sidebar a.is-current b {
+      color: var(--primary200);
+    }
+
+    .ds-main {
+      padding: 56px clamp(20px, 4vw, 72px) 140px;
+      max-width: 1320px;
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       8. DESIGN SYSTEM DOCUMENTATION HELPERS
+       ========================================================================== */
+    .ds-group {
+      padding-bottom: 110px;
+      scroll-margin-top: 90px;
+    }
+
+    .ds-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      border-bottom: 1px solid var(--gray200);
+      padding-bottom: 18px;
+      margin-bottom: 40px;
+    }
+
+    .ds-head h2 {
+      font-family: var(--font-sans);
+      font-weight: 800;
+      font-size: clamp(28px, 3.2vw, 44px);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      color: var(--gray900);
+    }
+
+    .ds-tag {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--primary700);
+      background: var(--primary50);
+      border: 1px solid var(--primary100);
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .ds-spec {
+      margin-bottom: 56px;
+    }
+
+    .ds-spec > h3 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--gray900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ds-note {
+      max-width: 82ch;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--gray600);
+      margin-bottom: 20px;
+    }
+
+    .ds-meta {
+      display: block;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: var(--gray50);
+      border-left: 2px solid var(--primary600);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--gray700);
+    }
+
+    .ds-meta code, .ds-note code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      background: var(--gray100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary800);
+    }
+
+    /* Color Swatches Grid */
+    .ds-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .ds-swatch {
+      border: 1px solid var(--gray200);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      background: var(--white);
+      transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .ds-swatch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+    }
+
+    .ds-swatch-color {
+      height: 76px;
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .ds-swatch-body {
+      padding: 12px 14px;
+    }
+
+    .ds-swatch-body strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray900);
+    }
+
+    .ds-swatch-body code {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11.5px;
+      color: var(--primary700);
+      margin-top: 2px;
+    }
+
+    .ds-swatch-body p {
+      font-size: 11.5px;
+      color: var(--gray600);
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       9. COMPONENTES REAIS EXTRAÍDOS DE conteudo.ejfgv.com/business-intelligence-dados
+       ========================================================================== */
+
+    /* 9.1 Tipografia & Gradientes EJFGV */
+    .text-color-gradient-gray {
+      -webkit-text-fill-color: transparent;
+      background-image: var(--gradient-title-gray);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .text-color-primary700 {
+      color: var(--primary700);
+    }
+
+    .text-color-primary200 {
+      color: var(--primary200);
+    }
+
+    .text-color-gray600 {
+      color: var(--gray600);
+    }
+
+    .text-color-graywarm300 {
+      color: var(--graywarm300);
+    }
+
+    .text-color-graywarm600 {
+      color: var(--graywarm600);
+    }
+
+    .home-hero_divider {
+      background-color: var(--primary600);
+      width: var(--hero-divider-w);
+      height: var(--hero-divider-h);
+      margin-bottom: 1.5rem;
+    }
+
+    /* 9.2 Botões Oficiais (.button, .button-secondary, .button-tertiary) */
+    .button {
+      grid-column-gap: 0.5rem;
+      border: 1px solid var(--primary600);
+      background-color: var(--primary600);
+      min-width: 200px;
+      height: 60px;
+      color: var(--white);
+      text-align: center;
+      white-space: nowrap;
+      border-radius: var(--btn-radius);
+      justify-content: center;
+      align-items: center;
+      padding: 0.625rem 1.35rem;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      transition: all 0.3s var(--ease-out-expo);
+      display: inline-flex;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+      cursor: pointer;
+    }
+
+    .button:hover {
+      border-color: var(--primary700);
+      background-color: var(--primary700);
+      transform: translateY(-1px);
+    }
+
+    .button:focus-visible {
+      outline: none;
+      box-shadow: var(--ring-focus);
+    }
+
+    .button.is-button-small {
+      height: 48px;
+      min-width: auto;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .button.is-button-large {
+      height: 64px;
+      padding: 1rem 1.75rem;
+      font-size: 1.0625rem;
+    }
+
+    .button-secondary {
+      grid-column-gap: 0.5rem;
+      background-color: var(--graywarm950);
+      border: 1px solid var(--graywarm950);
+      height: 60px;
+      color: var(--white);
+      text-align: center;
+      white-space: nowrap;
+      border-radius: var(--btn-radius);
+      justify-content: center;
+      align-items: center;
+      padding: 0.625rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s var(--ease-out-expo);
+      display: inline-flex;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+      cursor: pointer;
+    }
+
+    .button-secondary:hover {
+      background-color: var(--graywarm600);
+      border-color: var(--graywarm600);
+    }
+
+    .button-secondary:focus-visible {
+      outline: none;
+      box-shadow: var(--ring-focus);
+    }
+
+    .button-tertiary {
+      grid-column-gap: 0.5rem;
+      color: var(--primary700);
+      white-space: nowrap;
+      background-color: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--btn-radius);
+      justify-content: center;
+      align-items: center;
+      padding: 0.625rem 1.125rem;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      line-height: 1.5;
+      text-decoration: none;
+      transition: all 0.3s var(--ease-out-expo);
+      display: inline-flex;
+      cursor: pointer;
+    }
+
+    .button-tertiary:hover {
+      background-color: var(--primary50);
+    }
+
+    /* Botão Grotesk Zero Style (Borda Hairline / Inversão) */
+    .button-grotesk {
+      border: 1px solid currentColor;
+      padding: 11px 22px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .button-grotesk:hover {
+      background: var(--primary600);
+      border-color: var(--primary600);
+      color: var(--white);
+    }
+
+    /* 9.3 Hero Specimen (.section_hero) */
+    .specimen-hero {
+      position: relative;
+      border: 1px solid var(--gray200);
+      border-radius: var(--card-radius-xl);
+      overflow: hidden;
+      background-color: var(--white);
+      background-image:
+        radial-gradient(var(--gray300) 1px, transparent 1px),
+        var(--gradient-hero-radial);
+      background-size: 20px 20px, 100% 100%;
+      padding: clamp(2rem, 4vw, 4rem);
+    }
+
+    .hero_wrapper {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero_title {
+      font-family: var(--font-sans);
+      font-size: clamp(2rem, 3.4vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero_lead {
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      color: var(--gray600);
+      margin-bottom: 1.75rem;
+      max-width: 54ch;
+    }
+
+    .home-hero_grandes-clientes {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray200);
+    }
+
+    .clientes-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.5rem 2.25rem;
+      margin-top: 0.75rem;
+      color: var(--gray500);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero_visual-card {
+      background: var(--graywarm950);
+      color: var(--white);
+      border-radius: var(--card-radius-lg);
+      padding: 2rem;
+      position: relative;
+      border: 1px solid var(--border-hairline-dark);
+      box-shadow: 0 24px 48px -12px rgba(23, 20, 18, 0.25);
+    }
+
+    .hero_video-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: var(--primary600);
+      color: var(--white);
+      padding: 0.6rem 1rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    /* 9.4 Seção Escura de Benefícios / Serviços (.section_beneficios + .beneficios_banner) */
+    .specimen-beneficios {
+      background-color: var(--graywarm900);
+      color: var(--white);
+      border-radius: var(--card-radius-xl);
+      padding: clamp(2rem, 4vw, 4rem);
+      overflow: hidden;
+    }
+
+    .beneficios_title {
+      text-align: center;
+      max-width: 46rem;
+      margin: 0 auto 3.5rem;
+    }
+
+    .beneficios_eyebrow {
+      color: var(--primary200);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+
+    .beneficios_item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .vantagens_icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.75rem;
+      background: rgba(224, 79, 22, 0.16);
+      border: 1px solid rgba(247, 178, 122, 0.3);
+      color: var(--primary200);
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .vantagens_list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 1.5rem;
+      list-style: none;
+    }
+
+    .vantagens_list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: var(--graywarm300);
+      font-size: 0.95rem;
+    }
+
+    .vantagens_check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(224, 79, 22, 0.22);
+      color: var(--primary300);
+      display: inline-grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .beneficios_banner {
+      background-color: var(--primary500);
+      width: 100%;
+      color: var(--graywarm950);
+      border-radius: var(--card-radius-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+    }
+
+    .beneficios_banner h4 {
+      font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      max-width: 32ch;
+    }
+
+    /* 9.5 Método 4 Etapas (.metodo_cards / .metodo_card) */
+    .metodo_cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .metodo_card {
+      color: #181818;
+      text-align: center;
+      background-image: var(--gradient-metodo-card);
+      border: 1px solid rgba(16, 24, 40, 0.06);
+      border-radius: var(--card-radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      transition: transform 0.25s var(--ease-out-expo);
+    }
+
+    .metodo_card:hover {
+      transform: translateY(-4px);
+    }
+
+    .metodo_step-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--primary700);
+      background: rgba(255, 255, 255, 0.8);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .metodo_card h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--gray900);
+      margin-bottom: 0.6rem;
+    }
+
+    .metodo_card p {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--graywarm600);
+    }
+
+    /* 9.6 Qualificação ICP (.icp_item + .icp_banner) */
+    .icp_grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .icp_item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 1.15rem;
+      row-gap: 0.4rem;
+      color: var(--gray900);
+      padding: 1.5rem;
+      border-radius: var(--card-radius-md);
+      border: 1px solid var(--gray200);
+      background: var(--white);
+    }
+
+    .icp_icon {
+      grid-row: span 2;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.65rem;
+      background: var(--primary50);
+      color: var(--primary600);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .icp_item h4 {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--gray900);
+    }
+
+    .icp_item p {
+      font-size: 0.925rem;
+      color: var(--graywarm600);
+      line-height: 1.55;
+    }
+
+    /* 9.7 Depoimentos & Marquee de Clientes (.depoimentos_content + .slider-clientes) */
+    .marquee-box {
+      overflow: hidden;
+      border-top: 1px solid var(--gray200);
+      border-bottom: 1px solid var(--gray200);
+      padding: 1.25rem 0;
+      background: var(--white);
+      position: relative;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 3.5rem;
+      width: max-content;
+      animation: marqueeMove 24s linear infinite;
+      align-items: center;
+    }
+
+    .marquee-track span {
+      font-family: var(--font-sans);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray400);
+    }
+
+    @keyframes marqueeMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .depoimentos_content {
+      background-color: var(--gray50);
+      border: 1px solid var(--gray200);
+      border-radius: var(--card-radius-xl);
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      overflow: hidden;
+    }
+
+    .depoimentos_content-right {
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .depoimentos_rating-wrapper {
+      display: flex;
+      gap: 0.25rem;
+      color: var(--primary500);
+      margin-bottom: 1.25rem;
+      font-size: 1.1rem;
+    }
+
+    /* 9.8 Formulário Institucional (.section_form) */
+    .specimen-form {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      border-radius: var(--card-radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--gray200);
+      background: var(--white);
+    }
+
+    .form_visual-side {
+      background: var(--graywarm950);
+      color: var(--white);
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .form_body-side {
+      padding: clamp(2rem, 3.5vw, 3.5rem);
+    }
+
+    .form_grid-2-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form_field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form_label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--gray700);
+    }
+
+    .form_label .req {
+      color: var(--primary600);
+    }
+
+    .form_input {
+      height: 46px;
+      padding: 0.625rem 0.875rem;
+      border: 1px solid var(--gray300);
+      border-radius: 0.5rem;
+      background: var(--white);
+      color: var(--gray900);
+      font-size: 0.9375rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form_input::placeholder {
+      color: var(--gray400);
+    }
+
+    .form_input:focus {
+      outline: none;
+      border-color: var(--primary600);
+      box-shadow: var(--ring-focus);
+    }
+
+    textarea.form_input {
+      height: auto;
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Demo de Navegação Grotesk Zero em múltiplos fundos */
+    .nav-specimen-box {
+      position: relative;
+      height: 110px;
+      border-radius: var(--card-radius-md);
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5vw;
+    }
+
+    .nav-specimen-box.is-split {
+      background: linear-gradient(90deg, var(--graywarm950) 0 50%, var(--primary50) 50% 100%);
+    }
+
+    /* Toast de cópia de token */
+    .copy-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9000;
+      background: var(--graywarm950);
+      color: var(--white);
+      border: 1px solid var(--primary600);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: all 0.25s var(--ease-out-expo);
+    }
+
+    .copy-toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 991px) {
+      .ds-layout {
+        grid-template-columns: 1fr;
+      }
+      .ds-sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 12px 16px;
+      }
+      .ds-sidebar .ds-lbl {
+        display: none;
+      }
+      .ds-sidebar a {
+        white-space: nowrap;
+      }
+      .hero_wrapper,
+      .beneficios_item,
+      .metodo_cards,
+      .icp_grid,
+      .depoimentos_content,
+      .specimen-form,
+      .form_grid-2-col {
+        grid-template-columns: 1fr;
+      }
+      .beneficios_banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR CUSTOMIZADO (Extraído de grotesk-zero-45-design-system.zip) -->
+  <div class="cursor" id="cursor"></div>
+  <div class="copy-toast" id="copyToast">Token copiado!</div>
+
+  <!-- NAVIGATION BAR (Extraído de grotesk-zero-45-design-system.zip) -->
+  <nav class="gz-nav is-glass" id="mainNav">
+    <a class="wordmark" href="#top">
+      <span class="dot"></span>
+      <span>DS EJFGV</span>
+    </a>
+    <div class="links">
+      <a href="#colors" class="is-active">Tokens</a>
+      <a href="#typography">Sans-Serif</a>
+      <a href="#cursor-nav">Cursor &amp; Nav</a>
+      <a href="#components">Componentes BI</a>
+      <button type="button" class="buy" id="toggleBlendBtn" title="Alternar entre Mix-Blend-Mode Difference e Glass">Modo: Glass / Blend</button>
+    </div>
+  </nav>
+
+  <div class="ds-layout" id="top">
+    <!-- SIDEBAR DE NAVEGAÇÃO DO CATÁLOGO (Estrutura Grotesk Zero) -->
+    <aside class="ds-sidebar" id="dsSidebar">
+      <div class="ds-lbl">Fundação &amp; Tokens</div>
+      <a href="#overview" class="is-current"><b>00</b> Visão Geral &amp; Fontes</a>
+      <a href="#colors"><b>01</b> Cores &amp; Tokens</a>
+      <a href="#typography"><b>02</b> Tipografia Sans-Serif</a>
+      <a href="#cursor-nav"><b>03</b> Cursor &amp; Navegação</a>
+
+      <div class="ds-lbl">Componentes (BI &amp; Dados)</div>
+      <a href="#buttons"><b>04</b> Botões &amp; Ações</a>
+      <a href="#hero-spec"><b>05</b> Hero &amp; Autoridade</a>
+      <a href="#beneficios-spec"><b>06</b> Benefícios (Dark) &amp; Banner</a>
+      <a href="#metodo-icp"><b>07</b> Método 4 Etapas &amp; ICP</a>
+      <a href="#prova-social"><b>08</b> Prova Social &amp; Depoimentos</a>
+      <a href="#form-spec"><b>09</b> Formulário de Conversão</a>
+      <a href="#css-export"><b>10</b> Código CSS `:root`</a>
+    </aside>
+
+    <!-- PALCO PRINCIPAL DO DESIGN SYSTEM -->
+    <main class="ds-main">
+
+      <!-- ====================================================================
+           00. VISÃO GERAL & ARQUITETURA DE FONTES DA EXTRAÇÃO
+           ==================================================================== -->
+      <section class="ds-group" id="overview">
+        <div class="ds-head">
+          <div>
+            <div class="home-hero_divider"></div>
+            <h1 class="hero_title text-color-gradient-gray" id="interactiveTitle">DS EJFGV — Sistema de Design &amp; Tokens</h1>
+          </div>
+          <span class="ds-tag">v2.0 · Baseado em Referências Reais</span>
+        </div>
+
+        <p class="ds-note">
+          Este arquivo consolida a nova fundação visual da <strong>EJFGV</strong> construída do zero a partir das três diretrizes definidas. <strong>Clique em qualquer card de cor abaixo para copiar a variável CSS</strong>, passe o cursor sobre links, botões e títulos para testar a resposta física do cursor e do eixo variável <code>sans-serif</code>.
+        </p>
+
+        <div class="metodo_cards" style="grid-template-columns: repeat(3, 1fr); margin-top: 24px;">
+          <div class="icp_item" style="margin:0;">
+            <div class="icp_icon">01</div>
+            <h4>Cores &amp; Insights</h4>
+            <p>Extraídos diretamente do CSS de produção (<code>ejfgv.webflow.shared.css</code>) da página <strong>conteudo.ejfgv.com/business-intelligence-dados</strong>.</p>
+          </div>
+          <div class="icp_item" style="margin:0;">
+            <div class="icp_icon">02</div>
+            <h4>Cursor &amp; Navigation</h4>
+            <p>Extraídos de <strong>grotesk-zero-45-design-system.zip</strong>: cursor interpolado (8px → anel 42px), wordmark com peso variável e links com sublinhado animado.</p>
+          </div>
+          <div class="icp_item" style="margin:0;">
+            <div class="icp_icon">03</div>
+            <h4>Fonte Sans-Serif</h4>
+            <p>Sistema 100% <strong>Sans-Serif</strong> (<code>Archivo</code> variável + <code>Inter</code>), eliminando serifas e garantindo leitura técnica de consultoria e dados.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           01. CORES & TOKENS (Extraídos de conteudo.ejfgv.com/business-intelligence-dados)
+           ==================================================================== -->
+      <section class="ds-group" id="colors">
+        <div class="ds-head">
+          <h2>01. Código de Cores &amp; Tokens</h2>
+          <span class="ds-tag">Clique no card para copiar o token</span>
+        </div>
+
+        <!-- Escala Primary -->
+        <div class="ds-spec">
+          <h3>Escala Principal — Primary (Terracotta / Laranja EJFGV)</h3>
+          <p class="ds-note">
+            Extraída integralmente do <code>:root</code> de <code>conteudo.ejfgv.com/business-intelligence-dados</code>. O tom <code>--primary600 (#e04f16)</code> lidera os botões primários, divisores de hero e o cursor interativo; <code>--primary500 (#ef6820)</code> colore os banners de conversão; <code>--primary200 (#f7b27a)</code> ilumina eyebrows sobre seções escuras.
+          </p>
+          <div class="ds-swatch-grid">
+            <div class="ds-swatch" data-copy="var(--primary25)">
+              <div class="ds-swatch-color" style="background:#fefaf5; color:#101828;"><span>Aa</span><span>#FEFAF5</span></div>
+              <div class="ds-swatch-body"><strong>Primary 25</strong><code>--primary25</code><p>Fundo cálido mínimo</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary50)">
+              <div class="ds-swatch-color" style="background:#fef6ee; color:#101828;"><span>Aa</span><span>#FEF6EE</span></div>
+              <div class="ds-swatch-body"><strong>Primary 50</strong><code>--primary50</code><p>Hover de botão terciário e badges</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary100)">
+              <div class="ds-swatch-color" style="background:#fdead7; color:#101828;"><span>Aa</span><span>#FDEAD7</span></div>
+              <div class="ds-swatch-body"><strong>Primary 100</strong><code>--primary100</code><p>Anel de foco (4px focus ring)</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary200)">
+              <div class="ds-swatch-color" style="background:#f7b27a; color:#171412;"><span>Aa</span><span>#F7B27A</span></div>
+              <div class="ds-swatch-body"><strong>Primary 200</strong><code>--primary200</code><p>Eyebrow sobre fundo escuro (Benefícios)</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary300)">
+              <div class="ds-swatch-color" style="background:#f38744; color:#171412;"><span>Aa</span><span>#F38744</span></div>
+              <div class="ds-swatch-body"><strong>Primary 300</strong><code>--primary300</code><p>Ícones de destaque em fundo escuro</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary400)">
+              <div class="ds-swatch-color" style="background:#df792f; color:#ffffff;"><span>Aa</span><span>#DF792F</span></div>
+              <div class="ds-swatch-body"><strong>Primary 400</strong><code>--primary400</code><p>Acento intermediário</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary500)">
+              <div class="ds-swatch-color" style="background:#ef6820; color:#171412;"><span>Aa</span><span>#EF6820</span></div>
+              <div class="ds-swatch-body"><strong>Primary 500</strong><code>--primary500</code><p>Fundo do <code>.beneficios_banner</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary600)">
+              <div class="ds-swatch-color" style="background:#e04f16; color:#ffffff;"><span>Aa</span><span>#E04F16</span></div>
+              <div class="ds-swatch-body"><strong>Primary 600 ★</strong><code>--primary600</code><p>Botão primário, Hero divider e Cursor</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary700)">
+              <div class="ds-swatch-color" style="background:#b93815; color:#ffffff;"><span>Aa</span><span>#B93815</span></div>
+              <div class="ds-swatch-body"><strong>Primary 700</strong><code>--primary700</code><p>Hover primário, Eyebrow claro, Terciário</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary800)">
+              <div class="ds-swatch-color" style="background:#932f19; color:#ffffff;"><span>Aa</span><span>#932F19</span></div>
+              <div class="ds-swatch-body"><strong>Primary 800</strong><code>--primary800</code><p>Contraste profundo de marca</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--primary900)">
+              <div class="ds-swatch-color" style="background:#772917; color:#ffffff;"><span>Aa</span><span>#772917</span></div>
+              <div class="ds-swatch-body"><strong>Primary 900</strong><code>--primary900</code><p>Tom escuro máximo da escala laranja</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escala Gray Warm -->
+        <div class="ds-spec">
+          <h3>Escala Gray Warm — Contraste Escuro &amp; Neutros Quentes</h3>
+          <p class="ds-note">
+            O segredo do peso institucional da página de BI da EJFGV está no uso de cinzas quentes profundos (<code>--graywarm950</code> e <code>--graywarm900</code>) para a vitrine de serviços e botões secundários, criando harmonia imediata com o laranja <code>--primary600</code> e com a estética <em>ink</em> do Grotesk Zero.
+          </p>
+          <div class="ds-swatch-grid">
+            <div class="ds-swatch" data-copy="var(--graywarm950)">
+              <div class="ds-swatch-color" style="background:#171412; color:#ffffff;"><span>Aa</span><span>#171412</span></div>
+              <div class="ds-swatch-body"><strong>Gray Warm 950 ★</strong><code>--graywarm950</code><p>Botão secundário, sidebar e texto no banner laranja</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--graywarm900)">
+              <div class="ds-swatch-color" style="background:#1c1917; color:#ffffff;"><span>Aa</span><span>#1C1917</span></div>
+              <div class="ds-swatch-body"><strong>Gray Warm 900 ★</strong><code>--graywarm900</code><p>Fundo da seção escura <code>.section_beneficios</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--graywarm600)">
+              <div class="ds-swatch-color" style="background:#57534e; color:#ffffff;"><span>Aa</span><span>#57534E</span></div>
+              <div class="ds-swatch-body"><strong>Gray Warm 600</strong><code>--graywarm600</code><p>Descrições em <code>.metodo_card</code> e <code>.icp_item</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--graywarm300)">
+              <div class="ds-swatch-color" style="background:#d7d3d0; color:#171412;"><span>Aa</span><span>#D7D3D0</span></div>
+              <div class="ds-swatch-body"><strong>Gray Warm 300</strong><code>--graywarm300</code><p>Parágrafos e checklist sobre fundo escuro</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escala Gray Cool -->
+        <div class="ds-spec">
+          <h3>Escala Gray Cool — Tipografia Clara, Bordas &amp; Formulários</h3>
+          <div class="ds-swatch-grid">
+            <div class="ds-swatch" data-copy="var(--gray900)">
+              <div class="ds-swatch-color" style="background:#101828; color:#ffffff;"><span>Aa</span><span>#101828</span></div>
+              <div class="ds-swatch-body"><strong>Gray 900</strong><code>--gray900</code><p>Títulos principais em fundo claro</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray800)">
+              <div class="ds-swatch-color" style="background:#182230; color:#ffffff;"><span>Aa</span><span>#182230</span></div>
+              <div class="ds-swatch-body"><strong>Gray 800</strong><code>--gray800</code><p>Início do gradiente <code>.text-color-gradient-gray</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray700)">
+              <div class="ds-swatch-color" style="background:#344054; color:#ffffff;"><span>Aa</span><span>#344054</span></div>
+              <div class="ds-swatch-body"><strong>Gray 700</strong><code>--gray700</code><p>Labels de formulário</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray600)">
+              <div class="ds-swatch-color" style="background:#475467; color:#ffffff;"><span>Aa</span><span>#475467</span></div>
+              <div class="ds-swatch-body"><strong>Gray 600</strong><code>--gray600</code><p>Subtítulo Hero e fim do gradiente de título</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray400)">
+              <div class="ds-swatch-color" style="background:#98a2b3; color:#101828;"><span>Aa</span><span>#98A2B3</span></div>
+              <div class="ds-swatch-body"><strong>Gray 400</strong><code>--gray400</code><p>Placeholders e logos de clientes em repouso</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray300)">
+              <div class="ds-swatch-color" style="background:#d0d5dd; color:#101828;"><span>Aa</span><span>#D0D5DD</span></div>
+              <div class="ds-swatch-body"><strong>Gray 300</strong><code>--gray300</code><p>Bordas padrão de inputs</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray200)">
+              <div class="ds-swatch-color" style="background:#eaecf0; color:#101828;"><span>Aa</span><span>#EAECF0</span></div>
+              <div class="ds-swatch-body"><strong>Gray 200</strong><code>--gray200</code><p>Divisores e bordas de cards</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gray50)">
+              <div class="ds-swatch-color" style="background:#f9fafb; color:#101828;"><span>Aa</span><span>#F9FAFB</span></div>
+              <div class="ds-swatch-body"><strong>Gray 50</strong><code>--gray50</code><p>Fundo do card de depoimentos</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gradientes e Status -->
+        <div class="ds-spec">
+          <h3>Gradientes de Superfície &amp; Tokens de Status</h3>
+          <div class="ds-swatch-grid">
+            <div class="ds-swatch" data-copy="var(--gradient-title-gray)">
+              <div class="ds-swatch-color" style="background:linear-gradient(63deg, #182230, #475467); color:#ffffff;"><span>H1/H2</span><span>63deg</span></div>
+              <div class="ds-swatch-body"><strong>Gradient Title Gray</strong><code>--gradient-title-gray</code><p><code>linear-gradient(63deg, #182230, #475467)</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--gradient-metodo-card)">
+              <div class="ds-swatch-color" style="background:linear-gradient(90deg, #eef5ff, #fff2f2); color:#181818;"><span>Card</span><span>90deg</span></div>
+              <div class="ds-swatch-body"><strong>Gradient Método Card</strong><code>--gradient-metodo-card</code><p><code>linear-gradient(90deg, #eef5ff, #fff2f2)</code></p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--success500)">
+              <div class="ds-swatch-color" style="background:#12b76a; color:#ffffff;"><span>OK</span><span>#12B76A</span></div>
+              <div class="ds-swatch-body"><strong>Success 500</strong><code>--success500</code><p>Validação positiva e métricas em alta</p></div>
+            </div>
+            <div class="ds-swatch" data-copy="var(--error500)">
+              <div class="ds-swatch-color" style="background:#f04438; color:#ffffff;"><span>!</span><span>#F04438</span></div>
+              <div class="ds-swatch-body"><strong>Error 500</strong><code>--error500</code><p>Erro de validação em formulário</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           02. TIPOGRAFIA SANS-SERIF (Com Eixo Variável Interativo)
+           ==================================================================== -->
+      <section class="ds-group" id="typography">
+        <div class="ds-head">
+          <h2>02. Tipografia Sans-Serif</h2>
+          <span class="ds-tag">100% Sans-Serif · Eixo Variável (wght 100–900)</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Hierarquia Editorial Sans-Serif + Testador Variável</h3>
+          <p class="ds-note">
+            Seguindo a sua definição de fonte <strong>sans-serif</strong> combinada com a mecânica tipográfica do arquivo <code>grotesk-zero-45-design-system.zip</code>, o sistema utiliza <code>--font-sans: 'Archivo', 'Inter', sans-serif</code>. Experimente ajustar o peso e a largura abaixo:
+          </p>
+
+          <div style="border:1px solid var(--gray200); border-radius:var(--card-radius-lg); padding:2rem; background:var(--gray50); margin-bottom:2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+              <span style="font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--primary700);">Specimen Editável Sans-Serif</span>
+              <code id="typeReadout" style="font-size:12px; color:var(--gray700);">wght 800 · wdth 100 · 48px</code>
+            </div>
+            <div id="typeTesterText" contenteditable="true" spellcheck="false" style="font-family:var(--font-sans); font-size:48px; font-variation-settings:'wght' 800, 'wdth' 100; line-height:1.08; letter-spacing:-0.025em; color:var(--gray900); outline:none; padding:8px 0; border-bottom:1px solid var(--gray300); margin-bottom:20px;">
+              Business Intelligence e Dados para Decisões de Impacto
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:20px;">
+              <label style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--gray600);">
+                Peso (wght): <b id="lblWght">800</b>
+                <input type="range" id="rngWght" min="100" max="900" value="800" style="width:100%; accent-color:var(--primary600); margin-top:6px;">
+              </label>
+              <label style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--gray600);">
+                Largura (wdth): <b id="lblWdth">100</b>
+                <input type="range" id="rngWdth" min="62" max="125" value="100" style="width:100%; accent-color:var(--primary600); margin-top:6px;">
+              </label>
+              <label style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--gray600);">
+                Tamanho (px): <b id="lblSize">48</b>
+                <input type="range" id="rngSize" min="24" max="84" value="48" style="width:100%; accent-color:var(--primary600); margin-top:6px;">
+              </label>
+            </div>
+          </div>
+
+          <!-- Tabela de Escala Tipográfica -->
+          <div style="border-top:1px solid var(--gray200);">
+            <div style="display:grid; grid-template-columns:180px 1fr 180px; gap:24px; align-items:center; padding:20px 0; border-bottom:1px solid var(--gray200);">
+              <div><strong style="font-size:14px;">Display / Hero H1</strong><div style="font-size:12px; color:var(--gray500);">.text-color-gradient-gray</div></div>
+              <div class="text-color-gradient-gray" style="font-size:clamp(28px, 3.2vw, 48px); font-weight:800; line-height:1.1; letter-spacing:-0.025em;">Business Intelligence (BI)</div>
+              <div style="text-align:right; font-size:12px; color:var(--gray600);"><code>clamp(2.25rem, 4vw, 3.5rem)</code><br>wght 800 · lh 1.1</div>
+            </div>
+            <div style="display:grid; grid-template-columns:180px 1fr 180px; gap:24px; align-items:center; padding:20px 0; border-bottom:1px solid var(--gray200);">
+              <div><strong style="font-size:14px;">Section Title H2</strong><div style="font-size:12px; color:var(--gray500);">Claro ou Escuro</div></div>
+              <div style="font-size:clamp(24px, 2.5vw, 36px); font-weight:700; line-height:1.18; letter-spacing:-0.02em; color:var(--gray900);">Por que escolher a EJFGV?</div>
+              <div style="text-align:right; font-size:12px; color:var(--gray600);"><code>clamp(1.75rem, 3vw, 2.5rem)</code><br>wght 700 · lh 1.2</div>
+            </div>
+            <div style="display:grid; grid-template-columns:180px 1fr 180px; gap:24px; align-items:center; padding:20px 0; border-bottom:1px solid var(--gray200);">
+              <div><strong style="font-size:14px;">Eyebrow / Kicker</strong><div style="font-size:12px; color:var(--gray500);">.text-color-primary700</div></div>
+              <div class="text-color-primary700" style="font-size:14px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">✨ Nossos serviços são personalizados de acordo com suas demandas</div>
+              <div style="text-align:right; font-size:12px; color:var(--gray600);"><code>0.875rem (14px)</code><br>wght 600–700</div>
+            </div>
+            <div style="display:grid; grid-template-columns:180px 1fr 180px; gap:24px; align-items:center; padding:20px 0; border-bottom:1px solid var(--gray200);">
+              <div><strong style="font-size:14px;">Nav Link (Grotesk)</strong><div style="font-size:12px; color:var(--gray500);">nav .links a</div></div>
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray900);">SOLUÇÕES · MÉTODO · CASES · DIAGNÓSTICO</div>
+              <div style="text-align:right; font-size:12px; color:var(--gray600);"><code>11px</code> · tracking <code>0.18em</code><br>uppercase</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           03. CURSOR & NAVEGAÇÃO (Extraídos de grotesk-zero-45-design-system.zip)
+           ==================================================================== -->
+      <section class="ds-group" id="cursor-nav">
+        <div class="ds-head">
+          <h2>03. Cursor &amp; Navegação (Grotesk Zero)</h2>
+          <span class="ds-tag">grotesk-zero-45-design-system.zip</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Barra de Navegação com <code>mix-blend-mode: difference</code> &amp; Wordmark Variável</h3>
+          <p class="ds-note">
+            Extraída diretamente de <code>grotesk.css</code>: a barra <code>nav</code> opera fixa no topo com <code>padding: 18px 3.2vw</code>, <code>mix-blend-mode: difference</code> sobre fundos claros/escuros, <code>.wordmark</code> que transiciona de <code>'wght' 900</code> para <code>'wght' 100</code> no hover, links em caixa alta (<code>11px</code>, <code>letter-spacing: .18em</code>) com linha <code>1px</code> que cresce de <code>0%</code> a <code>100%</code>, e botão <code>.buy</code> com borda <code>1px solid currentColor</code>.
+          </p>
+
+          <!-- Demonstração da Nav sobre fundo dividido -->
+          <div class="nav-specimen-box is-split">
+            <a href="#cursor-nav" class="wordmark" style="mix-blend-mode:difference; color:#fff; font-weight:900; font-size:15px; letter-spacing:0.05em; transition:font-variation-settings 0.5s var(--ease-out-expo);" onmouseover="this.style.fontVariationSettings='\'wght\' 100'" onmouseout="this.style.fontVariationSettings='\'wght\' 900'">EJFGV CONSULTORIA</a>
+            <div style="display:flex; gap:28px; align-items:center; mix-blend-mode:difference; color:#fff;">
+              <a href="#cursor-nav" style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Soluções</a>
+              <a href="#cursor-nav" style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Método</a>
+              <a href="#cursor-nav" style="border:1px solid currentColor; padding:9px 18px; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Agendar Reunião</a>
+            </div>
+          </div>
+
+          <span class="ds-meta">
+            <strong>Regras extraídas de <code>grotesk.css</code>:</strong> <code>nav { position:fixed; padding:18px 3.2vw; mix-blend-mode:difference; color:#fff; }</code> · <code>nav .wordmark { font-variation-settings:'wght' 900; } nav .wordmark:hover { font-variation-settings:'wght' 100; }</code> · <code>nav .links a::after { height:1px; width:0; transition:width .35s cubic-bezier(.22,1,.36,1); }</code>
+          </span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Cursor Customizado (<code>.cursor</code> &amp; <code>.cursor.is-link</code>)</h3>
+          <p class="ds-note">
+            O cursor desta página já está rodando ao vivo com o código de <code>grotesk-zero-45</code>! Em estado de repouso, é um ponto sólido de <code>8px × 8px</code> na cor <code>var(--primary600)</code> com interpolação suave (<code>0.22</code> lerp factor). Ao entrar em qualquer elemento interativo (<code>a, button, input, [contenteditable]</code>), recebe a classe <code>.is-link</code> e expande para um anel vazado de <code>42px × 42px</code> com <code>border: 1px solid var(--primary600)</code>.
+          </p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div style="border:1px solid var(--gray200); border-radius:var(--card-radius-md); padding:28px; display:flex; align-items:center; gap:24px; background:var(--gray50);">
+              <div style="width:48px; height:48px; display:grid; place-items:center; background:var(--white); border-radius:8px; border:1px solid var(--gray200);">
+                <span style="width:8px; height:8px; border-radius:50%; background:var(--primary600); display:block;"></span>
+              </div>
+              <div>
+                <strong style="font-size:14px;">Estado Padrão (<code>.cursor</code>)</strong>
+                <p style="font-size:12.5px; color:var(--gray600); margin-top:4px;"><code>width: 8px; height: 8px; background: var(--primary600);</code> · Segue o ponteiro com amortecimento suave.</p>
+              </div>
+            </div>
+            <div style="border:1px solid var(--gray200); border-radius:var(--card-radius-md); padding:28px; display:flex; align-items:center; gap:24px; background:var(--gray50);">
+              <div style="width:48px; height:48px; display:grid; place-items:center; background:var(--white); border-radius:8px; border:1px solid var(--gray200);">
+                <span style="width:42px; height:42px; border-radius:50%; border:1px solid var(--primary600); display:block;"></span>
+              </div>
+              <div>
+                <strong style="font-size:14px;">Estado Hover Interativo (<code>.cursor.is-link</code>)</strong>
+                <p style="font-size:12.5px; color:var(--gray600); margin-top:4px;"><code>width: 42px; height: 42px; background: transparent; border: 1px solid var(--primary600);</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           04. BOTÕES & HIERARQUIA DE AÇÕES
+           ==================================================================== -->
+      <section class="ds-group" id="buttons">
+        <div class="ds-head">
+          <h2>04. Botões &amp; Hierarquia de Ações</h2>
+          <span class="ds-tag">Tokens de Componente</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Família de Botões EJFGV + Botão de Navegação Grotesk</h3>
+          <p class="ds-note">
+            Combinação dos 3 níveis de botão extraídos de <code>conteudo.ejfgv.com/business-intelligence-dados</code> (<code>.button</code>, <code>.button-secondary</code>, <code>.button-tertiary</code>) com o botão editorial bordado (<code>.button-grotesk</code> / <code>nav .buy</code>).
+          </p>
+
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; padding:32px; border:1px solid var(--gray200); border-radius:var(--card-radius-lg); background:var(--white);">
+            <div>
+              <small style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:var(--gray500); margin-bottom:8px;">Primário (.button)</small>
+              <button type="button" class="button">Agende uma reunião →</button>
+            </div>
+            <div>
+              <small style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:var(--gray500); margin-bottom:8px;">Secundário (.button-secondary)</small>
+              <button type="button" class="button-secondary">Marque um diagnóstico gratuito</button>
+            </div>
+            <div>
+              <small style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:var(--gray500); margin-bottom:8px;">Terciário (.button-tertiary)</small>
+              <button type="button" class="button-tertiary">Conhecer metodologia →</button>
+            </div>
+            <div>
+              <small style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:var(--gray500); margin-bottom:8px;">Grotesk Outline (.buy)</small>
+              <button type="button" class="button-grotesk">Solicitar Proposta <span>↗</span></button>
+            </div>
+          </div>
+
+          <span class="ds-meta">
+            <strong>Tokens aplicados:</strong> Primário: <code>bg: var(--primary600)</code>, <code>hover: var(--primary700)</code>, <code>radius: 0.5rem</code>, <code>height: 60px</code> · Secundário: <code>bg: var(--graywarm950)</code>, <code>hover: var(--graywarm600)</code>, <code>focus-ring: 0 0 0 4px var(--primary100)</code> · Terciário: <code>color: var(--primary700)</code>, <code>hover-bg: var(--primary50)</code>.
+          </span>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           05. INSIGHT DE PÁGINA 1: HERO & AUTORIDADE (.section_hero)
+           ==================================================================== -->
+      <section class="ds-group" id="hero-spec">
+        <div class="ds-head">
+          <h2>05. Hero &amp; Barra de Autoridade</h2>
+          <span class="ds-tag">Insight #1 · .section_hero</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Padrão Composto: <code>.home-hero_divider</code> + Título Gradiente + Clientes de Elite</h3>
+          <p class="ds-note">
+            Na página de BI da EJFGV, o Hero abre com um bloco retangular sólido laranja (<code>.home-hero_divider</code> de <code>5rem × 1rem</code> em <code>--primary600</code>), seguido pelo título com <code>.text-color-gradient-gray</code>, subtítulo em <code>--gray600</code>, CTA primário, chancela imediata de grandes clientes (Tam, Samsung, Faber-Castell, Vigor, Natura) sobre fundo de malha de pontos (dot grid) e coluna visual com gatilho de vídeo institucional.
+          </p>
+
+          <div class="specimen-hero">
+            <div class="hero_wrapper">
+              <div>
+                <div class="home-hero_divider"></div>
+                <h2 class="hero_title text-color-gradient-gray">Business Intelligence (BI) e Análise de Dados</h2>
+                <p class="hero_lead">
+                  Aumente a eficiência da sua empresa e tome decisões estratégicas com base em dados confiáveis, dashboards automatizados e inteligência analítica desenvolvida pela FGV.
+                </p>
+                <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
+                  <button type="button" class="button">Agende uma reunião</button>
+                  <button type="button" class="button-tertiary">Ver casos de impacto →</button>
+                </div>
+
+                <div class="home-hero_grandes-clientes">
+                  <span style="font-size:12px; font-weight:600; color:var(--gray500); text-transform:uppercase; letter-spacing:0.08em;">Aprovada por grandes clientes:</span>
+                  <div class="clientes-strip">
+                    <span>LATAM / TAM</span>
+                    <span>SAMSUNG</span>
+                    <span>FABER-CASTELL</span>
+                    <span>VIGOR</span>
+                    <span>NATURA</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero_visual-card">
+                <div class="hero_video-badge">▶ Vídeo Institucional · 1:45</div>
+                <h3 style="font-size:1.35rem; font-weight:700; margin-bottom:0.75rem;">Visão Executiva em Tempo Real</h3>
+                <p style="font-size:0.9rem; color:var(--graywarm300); margin-bottom:1.5rem;">
+                  Integração de múltiplas fontes (ERP, CRM, Planilhas) em painéis executivos auditáveis.
+                </p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; border-top:1px solid var(--border-hairline-dark); padding-top:16px;">
+                  <div>
+                    <div style="font-size:1.75rem; font-weight:800; color:var(--primary200);">+700</div>
+                    <div style="font-size:0.75rem; color:var(--graywarm300); text-transform:uppercase; letter-spacing:0.08em;">Projetos Entregues</div>
+                  </div>
+                  <div>
+                    <div style="font-size:1.75rem; font-weight:800; color:var(--primary200);">24h</div>
+                    <div style="font-size:0.75rem; color:var(--graywarm300); text-transform:uppercase; letter-spacing:0.08em;">SLA de Retorno</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           06. INSIGHT DE PÁGINA 2: SEÇÃO ESCURA DE BENEFÍCIOS & BANNER LARANJA
+           ==================================================================== -->
+      <section class="ds-group" id="beneficios-spec">
+        <div class="ds-head">
+          <h2>06. Seção Escura de Serviços &amp; Banner CTA</h2>
+          <span class="ds-tag">Insight #2 · .section_beneficios + .beneficios_banner</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Contraste Quente Profundo (<code>--graywarm900</code>) + Checklist de Entregáveis + Banner <code>--primary500</code></h3>
+          <p class="ds-note">
+            A página quebra a monotonia do fundo branco mergulhando os serviços em <code>--graywarm900 (#1c1917)</code>. O eyebrow usa <code>--primary200 (#f7b27a)</code>, cada serviço apresenta um ícone laranja, descrição em <code>--graywarm300</code> e lista de 5 entregáveis (<code>.vantagens_list-item</code>), fechando com o banner de alto impacto <code>.beneficios_banner</code> em <code>--primary500 (#ef6820)</code> com botão <code>.button-secondary</code> escuro.
+          </p>
+
+          <div class="specimen-beneficios">
+            <div class="beneficios_title">
+              <span class="beneficios_eyebrow">✨ Nossos serviços são personalizados de acordo com suas demandas</span>
+              <h3 style="font-size:clamp(1.75rem, 2.8vw, 2.5rem); font-weight:800; letter-spacing:-0.02em; margin-bottom:0.75rem;">
+                Como nossas soluções de dados alavancam seus resultados
+              </h3>
+              <p class="text-color-graywarm300" style="font-size:1rem;">
+                Estruturamos desde a arquitetura e limpeza da base até dashboards executivos automatizados.
+              </p>
+            </div>
+
+            <div class="beneficios_item">
+              <div>
+                <div class="vantagens_icon">📊</div>
+                <h4 style="font-size:1.5rem; font-weight:700; margin-bottom:0.75rem;">Dashboards em BI &amp; Automação</h4>
+                <p class="text-color-graywarm300">
+                  Transforme planilhas desconectadas em painéis interativos com atualização automática e indicadores confiáveis para a diretoria.
+                </p>
+                <ul class="vantagens_list">
+                  <li class="vantagens_list-item"><span class="vantagens_check">✓</span> Mapeamento de KPIs estratégicos por área</li>
+                  <li class="vantagens_list-item"><span class="vantagens_check">✓</span> Modelagem de banco de dados e ETL automatizado</li>
+                  <li class="vantagens_list-item"><span class="vantagens_check">✓</span> Dashboards intuitivos em Power BI / Looker / Tableau</li>
+                  <li class="vantagens_list-item"><span class="vantagens_check">✓</span> Redução drástica de retrabalho manual em planilhas</li>
+                  <li class="vantagens_list-item"><span class="vantagens_check">✓</span> Treinamento completo da equipe cliente</li>
+                </ul>
+              </div>
+
+              <div style="background:var(--graywarm950); border:1px solid var(--border-hairline-dark); border-radius:1.25rem; padding:2rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                  <span style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--primary200);">Painel Executivo · DRE &amp; Vendas</span>
+                  <span style="font-size:11px; background:rgba(18,183,106,0.15); color:var(--success200); padding:4px 8px; border-radius:4px;">● Atualizado agora</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.5rem;">
+                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                    <div style="font-size:11px; color:var(--graywarm300);">Margem EBITDA</div>
+                    <div style="font-size:20px; font-weight:800; color:var(--white); margin-top:4px;">28,4%</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                    <div style="font-size:11px; color:var(--graywarm300);">Tempo de Relatório</div>
+                    <div style="font-size:20px; font-weight:800; color:var(--primary200); margin-top:4px;">-85%</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                    <div style="font-size:11px; color:var(--graywarm300);">Fontes Integradas</div>
+                    <div style="font-size:20px; font-weight:800; color:var(--white); margin-top:4px;">12 ERPs</div>
+                  </div>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden;">
+                  <div style="width:78%; height:100%; background:var(--primary500);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banner Laranja (.beneficios_banner) -->
+            <div class="beneficios_banner">
+              <div>
+                <span style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.14em; display:block; margin-bottom:6px;">Diagnóstico Personalizado</span>
+                <h4>Pronto para transformar dados brutos em vantagem competitiva?</h4>
+              </div>
+              <button type="button" class="button-secondary">Marque um diagnóstico gratuito →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           07. INSIGHT DE PÁGINA 3: MÉTODO 4 ETAPAS & QUALIFICAÇÃO ICP
+           ==================================================================== -->
+      <section class="ds-group" id="metodo-icp">
+        <div class="ds-head">
+          <h2>07. Método (4 Etapas) &amp; Qualificação ICP</h2>
+          <span class="ds-tag">Insight #3 · .section_metodo + .section_icp</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Cards de Processo (<code>.metodo_card</code> com <code>linear-gradient(90deg, #eef5ff, #fff2f2)</code>)</h3>
+          <p class="ds-note">
+            O processo de atendimento da EJFGV é apresentado em 4 etapas horizontais claras (<strong>Contato → Diagnóstico → Proposta → Solução</strong>) usando o gradiente suave original extraído do CSS da página.
+          </p>
+
+          <div class="metodo_cards">
+            <div class="metodo_card">
+              <span class="metodo_step-num">Etapa 01</span>
+              <h4>Contato</h4>
+              <p>Você preenche o formulário e nossa equipe entra em contato em até 1 dia útil.</p>
+            </div>
+            <div class="metodo_card">
+              <span class="metodo_step-num">Etapa 02</span>
+              <h4>Diagnóstico</h4>
+              <p>Reunião gratuita para mapear gargalos operacionais, bases de dados e objetivos.</p>
+            </div>
+            <div class="metodo_card">
+              <span class="metodo_step-num">Etapa 03</span>
+              <h4>Proposta</h4>
+              <p>Desenho de escopo sob medida, cronograma de sprints e investimento transparente.</p>
+            </div>
+            <div class="metodo_card">
+              <span class="metodo_step-num">Etapa 04</span>
+              <h4>Solução</h4>
+              <p>Execução acompanhada por orientadores da FGV com entrega prática e treinamento.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Matriz de Qualificação do Cliente Ideal (<code>.section_icp</code> — "Sua empresa precisa de BI se...")</h3>
+          <p class="ds-note">
+            Padrão de autoidentificação de dor comercial: 4 blocos objetivos (<code>.icp_item</code>) que ajudam o decisor a reconhecer imediatamente a necessidade do projeto.
+          </p>
+
+          <div class="icp_grid">
+            <div class="icp_item">
+              <div class="icp_icon">01</div>
+              <h4>Possui grande volume de dados</h4>
+              <p>As informações estão espalhadas em múltiplas planilhas e sistemas sem consolidação confiável.</p>
+            </div>
+            <div class="icp_item">
+              <div class="icp_icon">02</div>
+              <h4>Decisões demoram a acontecer</h4>
+              <p>A diretoria perde horas semanais aguardando relatórios manuais sujeitos a erros humanos.</p>
+            </div>
+            <div class="icp_item">
+              <div class="icp_icon">03</div>
+              <h4>Falta clareza sobre indicadores</h4>
+              <p>Dificuldade em visualizar margem por produto, CAC, LTV ou eficiência operacional em tempo real.</p>
+            </div>
+            <div class="icp_item">
+              <div class="icp_icon">04</div>
+              <h4>Busca cultura orientada a dados</h4>
+              <p>Precisa padronizar métricas entre setores comercial, financeiro e operações com rigor técnico.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           08. INSIGHT DE PÁGINA 4: PROVA SOCIAL, MARQUEE & DEPOIMENTOS
+           ==================================================================== -->
+      <section class="ds-group" id="prova-social">
+        <div class="ds-head">
+          <h2>08. Prova Social &amp; Depoimentos</h2>
+          <span class="ds-tag">Insight #4 · .slider-clientes + .depoimentos_content</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Faixa Infinita de Clientes ("Aprovada por mais de 700 clientes") + Card Editorial de Depoimento</h3>
+          <div style="margin-bottom:24px;">
+            <span class="text-color-primary700" style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:8px;">Quem somos? · Aprovada por mais de 700 clientes</span>
+            <div class="marquee-box">
+              <div class="marquee-track">
+                <span>TAM / LATAM</span><span>•</span>
+                <span>SAMSUNG</span><span>•</span>
+                <span>FABER-CASTELL</span><span>•</span>
+                <span>VIGOR</span><span>•</span>
+                <span>NATURA</span><span>•</span>
+                <span>M CASSAVIA</span><span>•</span>
+                <span>TALENT ACADEMY</span><span>•</span>
+                <span>TAM / LATAM</span><span>•</span>
+                <span>SAMSUNG</span><span>•</span>
+                <span>FABER-CASTELL</span><span>•</span>
+                <span>VIGOR</span><span>•</span>
+                <span>NATURA</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="depoimentos_content">
+            <div class="depoimentos_content-right">
+              <div>
+                <div class="depoimentos_rating-wrapper">★★★★★</div>
+                <blockquote style="font-size:clamp(1.1rem, 1.8vw, 1.35rem); font-weight:600; color:var(--gray900); line-height:1.5; margin-bottom:1.5rem;">
+                  “A equipe da EJFGV estruturou nossos indicadores com uma profundidade analítica impressionante. Hoje tomamos decisões estratégicas com visibilidade total da operação.”
+                </blockquote>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--gray200); padding-top:1rem;">
+                <div>
+                  <strong style="display:block; font-size:0.95rem; color:var(--gray900);">Diretoria Executiva — M Cassavia</strong>
+                  <span style="font-size:0.825rem; color:var(--gray600);">Projeto de Estruturação &amp; Inteligência de Negócios</span>
+                </div>
+                <span class="ds-tag">Case Verificado</span>
+              </div>
+            </div>
+            <div style="background:var(--graywarm950); color:var(--white); padding:2.5rem; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;">
+              <span style="font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--primary200); margin-bottom:12px;">Rigor FGV</span>
+              <div style="font-size:3rem; font-weight:900; line-height:1; color:var(--white); margin-bottom:8px;">+35 anos</div>
+              <p style="font-size:0.9rem; color:var(--graywarm300); line-height:1.55;">
+                Conectando a excelência acadêmica da Fundação Getulio Vargas aos desafios reais do mercado brasileiro.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           09. INSIGHT DE PÁGINA 5: FORMULÁRIO DE CONVERSÃO (.section_form)
+           ==================================================================== -->
+      <section class="ds-group" id="form-spec">
+        <div class="ds-head">
+          <h2>09. Formulário de Conversão B2B</h2>
+          <span class="ds-tag">Insight #5 · .section_form</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Layout Split 50/50 com Campos Corporativos + Consentimento LGPD + SLA de 1 Dia Útil</h3>
+          <div class="specimen-form">
+            <div class="form_visual-side">
+              <div>
+                <div class="home-hero_divider"></div>
+                <span style="color:var(--primary200); font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; display:block; margin-bottom:10px;">Diagnóstico Gratuito</span>
+                <h3 style="font-size:clamp(1.6rem, 2.4vw, 2.25rem); font-weight:800; line-height:1.15; margin-bottom:1rem;">
+                  Vamos conversar sobre o próximo passo da sua empresa?
+                </h3>
+                <p style="color:var(--graywarm300); font-size:0.95rem; line-height:1.6;">
+                  Preencha os dados ao lado. Um consultor especialista entrará em contato em até <strong>1 dia útil</strong> para agendar seu diagnóstico sem compromisso.
+                </p>
+              </div>
+              <div style="border-top:1px solid var(--border-hairline-dark); padding-top:1.25rem; font-size:0.85rem; color:var(--graywarm300);">
+                📍 Avenida Paulista / FGV EAESP · São Paulo — SP
+              </div>
+            </div>
+
+            <form class="form_body-side" onsubmit="event.preventDefault();">
+              <div class="form_grid-2-col">
+                <div class="form_field" style="margin-bottom:0;">
+                  <label class="form_label">Nome <span class="req">*</span></label>
+                  <input type="text" class="form_input" placeholder="Seu nome completo">
+                </div>
+                <div class="form_field" style="margin-bottom:0;">
+                  <label class="form_label">Email corporativo <span class="req">*</span></label>
+                  <input type="email" class="form_input" placeholder="voce@suaempresa.com.br">
+                </div>
+              </div>
+
+              <div class="form_grid-2-col">
+                <div class="form_field" style="margin-bottom:0;">
+                  <label class="form_label">Qual o nome da sua empresa</label>
+                  <input type="text" class="form_input" placeholder="Nome da empresa">
+                </div>
+                <div class="form_field" style="margin-bottom:0;">
+                  <label class="form_label">Telefone <span class="req">*</span></label>
+                  <input type="tel" class="form_input" placeholder="(11) 99999-9999">
+                </div>
+              </div>
+
+              <div class="form_field">
+                <label class="form_label">Mensagem / Desafio atual</label>
+                <textarea class="form_input" placeholder="Conte brevemente sobre sua demanda ou objetivo..."></textarea>
+              </div>
+
+              <label style="display:flex; align-items:flex-start; gap:10px; font-size:12.5px; color:var(--gray600); margin-bottom:20px; cursor:pointer;">
+                <input type="checkbox" checked style="margin-top:3px; accent-color:var(--primary600);">
+                <span>Concordo em receber comunicações e contato comercial da EJFGV conforme a Política de Privacidade (LGPD).</span>
+              </label>
+
+              <button type="submit" class="button" style="width:100%;">Enviar e agendar diagnóstico →</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           10. EXPORTAÇÃO DE TOKENS CSS (:root PRONTO PARA USO)
+           ==================================================================== -->
+      <section class="ds-group" id="css-export">
+        <div class="ds-head">
+          <h2>10. Código Base de Tokens (CSS `:root`)</h2>
+          <span class="ds-tag">Pronto para Reutilização e Expansão</span>
+        </div>
+
+        <div class="ds-spec">
+          <h3>Arquitetura Consolidada de Tokens do DS EJFGV</h3>
+          <pre style="background:var(--graywarm950); color:var(--graywarm300); padding:24px; border-radius:var(--card-radius-md); overflow-x:auto; font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:12.5px; line-height:1.65; border:1px solid var(--border-hairline-dark);"><code>:root {
+  /* 1. Brand Primary (Extraído de conteudo.ejfgv.com/business-intelligence-dados) */
+  --primary25:  #fefaf5;
+  --primary50:  #fef6ee;
+  --primary100: #fdead7;
+  --primary200: #f7b27a;
+  --primary300: #f38744;
+  --primary400: #df792f;
+  --primary500: #ef6820;
+  --primary600: #e04f16;
+  --primary700: #b93815;
+  --primary800: #932f19;
+  --primary900: #772917;
+
+  /* 2. Warm &amp; Cool Grays */
+  --graywarm950: #171412;
+  --graywarm900: #1c1917;
+  --graywarm600: #57534e;
+  --graywarm300: #d7d3d0;
+  --gray900: #101828;
+  --gray800: #182230;
+  --gray700: #344054;
+  --gray600: #475467;
+  --gray500: #667085;
+  --gray400: #98a2b3;
+  --gray300: #d0d5dd;
+  --gray200: #eaecf0;
+  --gray100: #f2f4f7;
+  --gray50:  #f9fafb;
+  --white:   #ffffff;
+
+  /* 3. Gradientes Originais EJFGV */
+  --gradient-title-gray:  linear-gradient(63deg, #182230, #475467);
+  --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
+
+  /* 4. Tipografia Sans-Serif + Easing Grotesk Zero */
+  --font-sans: 'Archivo', 'Inter', sans-serif;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}</code></pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       SCRIPTS INTERATIVOS (Cursor Grotesk Zero + Testador Variável + Copy Token)
+       ====================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isTouch = window.matchMedia("(pointer: coarse)").matches;
+      const cursor = document.getElementById("cursor");
+
+      /* 1. Cursor Customizado Interpolado (Extraído de grotesk-zero-45-design-system.zip) */
+      if (!isTouch && !reduceMotion && cursor) {
+        let cx = window.innerWidth / 2;
+        let cy = window.innerHeight / 2;
+        let tx = cx;
+        let ty = cy;
+
+        window.addEventListener("pointermove", (e) => {
+          tx = e.clientX;
+          ty = e.clientY;
+        }, { passive: true });
+
+        function tickCursor() {
+          cx += (tx - cx) * 0.22;
+          cy += (ty - cy) * 0.22;
+          cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+          requestAnimationFrame(tickCursor);
+        }
+        requestAnimationFrame(tickCursor);
+
+        const interactiveSelectors = "a, button, input, textarea, select, [contenteditable], .ds-swatch, .metodo_card";
+        document.querySelectorAll(interactiveSelectors).forEach((el) => {
+          el.addEventListener("pointerenter", () => cursor.classList.add("is-link"));
+          el.addEventListener("pointerleave", () => cursor.classList.remove("is-link"));
+        });
+      }
+
+      /* 2. Alternador de Modo da Navbar (Glass vs Mix-Blend-Mode Difference) */
+      const mainNav = document.getElementById("mainNav");
+      const toggleBlendBtn = document.getElementById("toggleBlendBtn");
+      if (mainNav && toggleBlendBtn) {
+        toggleBlendBtn.addEventListener("click", () => {
+          mainNav.classList.toggle("is-glass");
+          const isGlass = mainNav.classList.contains("is-glass");
+          toggleBlendBtn.textContent = isGlass ? "Modo: Glass / Blend" : "Modo: Difference Ativo";
+        });
+      }
+
+      /* 3. Clique em Swatch para Copiar Token */
+      const toast = document.getElementById("copyToast");
+      let toastTimer = null;
+      document.querySelectorAll(".ds-swatch").forEach((swatch) => {
+        swatch.addEventListener("click", () => {
+          const token = swatch.getAttribute("data-copy");
+          if (!token) return;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(token).catch(() => {});
+          }
+          if (toast) {
+            toast.textContent = `Copiado: ${token}`;
+            toast.classList.add("is-visible");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800);
+          }
+        });
+      });
+
+      /* 4. Testador de Tipografia Sans-Serif Variável */
+      const testerText = document.getElementById("typeTesterText");
+      const readout = document.getElementById("typeReadout");
+      const rngWght = document.getElementById("rngWght");
+      const rngWdth = document.getElementById("rngWdth");
+      const rngSize = document.getElementById("rngSize");
+      const lblWght = document.getElementById("lblWght");
+      const lblWdth = document.getElementById("lblWdth");
+      const lblSize = document.getElementById("lblSize");
+
+      function updateTypeTester() {
+        if (!testerText) return;
+        const w = rngWght.value;
+        const d = rngWdth.value;
+        const s = rngSize.value;
+        testerText.style.fontVariationSettings = `'wght' ${w}, 'wdth' ${d}`;
+        testerText.style.fontSize = `${s}px`;
+        lblWght.textContent = w;
+        lblWdth.textContent = d;
+        lblSize.textContent = s;
+        readout.textContent = `wght ${w} · wdth ${d} · ${s}px`;
+      }
+
+      if (rngWght && rngWdth && rngSize) {
+        [rngWght, rngWdth, rngSize].forEach((input) => {
+          input.addEventListener("input", updateTypeTester);
+        });
+      }
+
+      /* 5. Destaque de Seção Ativa na Sidebar */
+      const sideLinks = Array.from(document.querySelectorAll("#dsSidebar a"));
+      const sections = sideLinks
+        .map((a) => document.querySelector(a.getAttribute("href")))
+        .filter(Boolean);
+
+      window.addEventListener("scroll", () => {
+        const scrollPos = window.scrollY + 140;
+        let currentId = sections[0] ? sections[0].id : "";
+        for (const sec of sections) {
+          if (sec.offsetTop <= scrollPos) {
+            currentId = sec.id;
+          }
+        }
+        sideLinks.forEach((a) => {
+          a.classList.toggle("is-current", a.getAttribute("href") === `#${currentId}`);
+        });
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

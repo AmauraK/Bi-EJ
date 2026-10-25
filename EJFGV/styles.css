@@ -1,0 +1,1591 @@
+/* ==========================================================================
+   DS EJFGV — FOLHA DE ESTILOS OFICIAL DA HOME (styles.css)
+   Baseada estritamente no documento DS EJFGV.html:
+   - Tokens de cores e componentes de conteudo.ejfgv.com/business-intelligence-dados
+   - Cursor e Navegação de grotesk-zero-45-design-system.zip
+   - Tipografia 100% Sans-Serif (Archivo Variable + Inter)
+   ========================================================================== */
+
+:root {
+  /* 1. PRIMITIVE TOKENS — Brand Primary (Terracotta / Laranja EJFGV) */
+  --primary25:  #fefaf5;
+  --primary50:  #fef6ee;
+  --primary100: #fdead7;
+  --primary200: #f7b27a; /* Eyebrow em fundo escuro (.section_beneficios) */
+  --primary300: #f38744;
+  --primary400: #df792f;
+  --primary500: #ef6820; /* Superfície de destaque (.beneficios_banner) */
+  --primary600: #e04f16; /* Acento principal, Botão Primário, Cursor, Hero Divider */
+  --primary700: #b93815; /* Hover Primário, Eyebrow claro ("Quem somos?"), Botão Terciário */
+  --primary800: #932f19;
+  --primary900: #772917;
+
+  /* 2. PRIMITIVE TOKENS — Gray Warm (Contraste Escuro Quente & Textos de Apoio) */
+  --graywarm950: #171412; /* Fundo profundo / Botão secundário / Texto no banner laranja */
+  --graywarm900: #1c1917; /* Fundo da seção escura (.section_beneficios) */
+  --graywarm600: #57534e; /* Texto secundário em cards (.metodo_card, .icp_item) */
+  --graywarm300: #d7d3d0; /* Texto de apoio e checklist em fundo escuro */
+
+  /* 3. PRIMITIVE TOKENS — Gray Cool (Interface, Tipografia Clara & Formulários) */
+  --gray900: #101828;
+  --gray800: #182230;
+  --gray700: #344054;
+  --gray600: #475467;
+  --gray500: #667085;
+  --gray400: #98a2b3;
+  --gray300: #d0d5dd;
+  --gray200: #eaecf0;
+  --gray100: #f2f4f7;
+  --gray50:  #f9fafb;
+  --gray25:  #fcfcfd;
+  --white:   #ffffff;
+
+  /* 4. STATUS TOKENS */
+  --success50:  #ecfdf3;
+  --success200: #a6f4c5;
+  --success500: #12b76a;
+  --success700: #027a48;
+  --warning500: #f79009;
+  --error500:   #f04438;
+
+  /* 5. GRADIENT TOKENS (Extraídos do Webflow EJFGV) */
+  --gradient-title-gray:  linear-gradient(63deg, #182230, #475467);
+  --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
+  --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0), #f5f5f5 80%);
+
+  /* 6. SEMANTIC & COMPONENT TOKENS */
+  --surface-page-light:       var(--white);
+  --surface-page-subtle:      var(--gray50);
+  --surface-section-dark:     var(--graywarm900);
+  --surface-section-deep:     var(--graywarm950);
+  --surface-banner-accent:    var(--primary500);
+  --surface-card-testimonial: var(--gray50);
+
+  --text-primary-light:       var(--gray900);
+  --text-secondary-light:     var(--gray600);
+  --text-warm-muted:          var(--graywarm600);
+  --text-primary-dark:        var(--white);
+  --text-secondary-dark:      var(--graywarm300);
+  --text-eyebrow-light:       var(--primary700);
+  --text-eyebrow-dark:        var(--primary200);
+
+  --border-hairline-light:    rgba(16, 24, 40, 0.1);
+  --border-hairline-dark:     rgba(255, 255, 255, 0.12);
+  --ring-focus:               0 1px 2px 0 rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
+
+  /* 7. TYPOGRAPHY & MOTION (Sans-Serif + Grotesk Zero) */
+  --font-sans: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --nav-height: 68px;
+
+  --btn-radius: 0.5rem;
+  --card-radius-md: 1rem;
+  --card-radius-lg: 1.25rem;
+  --card-radius-xl: 1.5rem;
+  --hero-divider-w: 4.5rem;
+  --hero-divider-h: 0.75rem;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background: var(--surface-page-light);
+  color: var(--text-primary-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+  background: var(--surface-page-light);
+  color: var(--text-primary-light);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--primary600);
+  color: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, svg, video {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Textura sutil de grão herdada do DS EJFGV / Grotesk Zero */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+/* Containers Padronizados */
+.page-padding {
+  padding-left: clamp(1.25rem, 4vw, 3.5rem);
+  padding-right: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.container-large {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.padding-section-medium {
+  padding-top: clamp(3.75rem, 6.5vw, 6rem);
+  padding-bottom: clamp(3.75rem, 6.5vw, 6rem);
+}
+
+/* Utilitários de Cor Tipográfica do DS EJFGV */
+.text-color-gradient-gray {
+  -webkit-text-fill-color: transparent;
+  background-image: var(--gradient-title-gray);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.text-color-primary600 { color: var(--primary600); }
+.text-color-primary700 { color: var(--primary700); }
+.text-color-primary200 { color: var(--primary200); }
+.text-color-gray600    { color: var(--gray600); }
+.text-color-gray800    { color: var(--gray800); }
+.text-color-graywarm300{ color: var(--graywarm300); }
+.text-color-graywarm600{ color: var(--graywarm600); }
+.text-color-white      { color: var(--white); }
+
+/* ==========================================================================
+   CURSOR CUSTOMIZADO (Extraído de grotesk-zero-45-design-system.zip)
+   ========================================================================== */
+.cursor {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary600);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-out-expo),
+              height 0.3s var(--ease-out-expo),
+              background 0.3s var(--ease-out-expo),
+              border-color 0.3s var(--ease-out-expo),
+              opacity 0.3s;
+}
+
+.cursor.is-link {
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  border: 1px solid var(--primary600);
+}
+
+@media (pointer: coarse) {
+  .cursor {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   NAVIGATION BAR (Extraído de grotesk-zero-45-design-system.zip + DS EJFGV)
+   ========================================================================== */
+.gz-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
+  background: rgba(23, 20, 18, 0.92);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-hairline-dark);
+  color: var(--white);
+  transition: background 0.35s var(--ease-out-expo),
+              border-color 0.35s var(--ease-out-expo),
+              box-shadow 0.35s var(--ease-out-expo);
+}
+
+.gz-nav.is-blend {
+  mix-blend-mode: difference;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.gz-nav .wordmark {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variation-settings: 'wght' 900, 'wdth' 100;
+  transition: font-variation-settings 0.5s var(--ease-out-expo);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gz-nav .wordmark:hover {
+  font-variation-settings: 'wght' 200, 'wdth' 100;
+}
+
+.gz-nav .wordmark .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary600);
+  display: inline-block;
+}
+
+.gz-nav .wordmark .sub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--graywarm300);
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gz-nav .links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.gz-nav .links a:not(.buy) {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  position: relative;
+  padding: 4px 0;
+  color: rgba(255, 255, 255, 0.88);
+  transition: color 0.25s;
+}
+
+.gz-nav .links a:not(.buy):hover {
+  color: var(--white);
+}
+
+.gz-nav .links a:not(.buy)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 0;
+  background: var(--primary500);
+  transition: width 0.35s var(--ease-out-expo);
+}
+
+.gz-nav .links a:not(.buy):hover::after,
+.gz-nav .links a:not(.buy).is-active::after {
+  width: 100%;
+}
+
+.gz-nav .buy {
+  font-family: var(--font-sans);
+  border: 1px solid var(--primary600);
+  background: var(--primary600);
+  color: var(--white);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background 0.3s var(--ease-out-expo),
+              border-color 0.3s var(--ease-out-expo),
+              transform 0.25s var(--ease-out-expo);
+}
+
+.gz-nav .buy:hover {
+  background: var(--primary700);
+  border-color: var(--primary700);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   BOTÕES OFICIAIS DO DS EJFGV (.button, .button-secondary, .button-tertiary)
+   ========================================================================== */
+.button {
+  gap: 0.5rem;
+  border: 1px solid var(--primary600);
+  background-color: var(--primary600);
+  min-width: 190px;
+  height: 54px;
+  color: var(--white);
+  text-align: center;
+  white-space: nowrap;
+  border-radius: var(--btn-radius);
+  justify-content: center;
+  align-items: center;
+  padding: 0.625rem 1.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all 0.3s var(--ease-out-expo);
+  display: inline-flex;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--primary700);
+  background-color: var(--primary700);
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+}
+
+.button-secondary {
+  gap: 0.5rem;
+  background-color: var(--graywarm950);
+  border: 1px solid var(--graywarm950);
+  height: 54px;
+  color: var(--white);
+  text-align: center;
+  white-space: nowrap;
+  border-radius: var(--btn-radius);
+  justify-content: center;
+  align-items: center;
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all 0.3s var(--ease-out-expo);
+  display: inline-flex;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  cursor: pointer;
+}
+
+.button-secondary:hover {
+  background-color: var(--graywarm600);
+  border-color: var(--graywarm600);
+  transform: translateY(-1px);
+}
+
+.button-tertiary {
+  gap: 0.5rem;
+  color: var(--primary700);
+  white-space: nowrap;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--btn-radius);
+  justify-content: center;
+  align-items: center;
+  height: 54px;
+  padding: 0.625rem 1.125rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all 0.3s var(--ease-out-expo);
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.button-tertiary:hover {
+  background-color: var(--primary50);
+}
+
+/* ==========================================================================
+   1. PRIMEIRA DOBRA — HERO & AUTORIDADE (.section_hero)
+   Enfatizando a foto da equipe EJFGV (Gemini_Generated_Image_651r13651r13651r.jpg)
+   e mantendo tamanhos equilibrados para caber confortavelmente na 1ª dobra.
+   ========================================================================== */
+.section_hero {
+  position: relative;
+  padding-top: calc(var(--nav-height) + clamp(1.75rem, 3.2vw, 3rem));
+  padding-bottom: clamp(2.5rem, 4.5vw, 4.25rem);
+  min-height: min(100vh, 860px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--white);
+}
+
+.hero_background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(var(--gray300) 1px, transparent 1px),
+    var(--gradient-hero-radial);
+  background-size: 22px 22px, 100% 100%;
+}
+
+.hero_wrapper {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  /* Coluna da foto levemente maior (1.12fr) para enfatizar a imagem da equipe na 1ª dobra */
+  grid-template-columns: 0.88fr 1.12fr;
+  gap: clamp(2rem, 3.5vw, 3.5rem);
+  align-items: center;
+}
+
+.home-hero_divider {
+  background-color: var(--primary600);
+  width: var(--hero-divider-w);
+  height: var(--hero-divider-h);
+  margin-bottom: 1.15rem;
+  border-radius: 2px;
+}
+
+.hero_kicker {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary700);
+  margin-bottom: 0.65rem;
+}
+
+/* Cuidado com o tamanho: título objetivo, forte e perfeitamente proporcionado */
+.hero_heading {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 3.1vw, 2.85rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+}
+
+.hero_heading .highlight-purpose {
+  color: var(--primary600);
+  -webkit-text-fill-color: var(--primary600);
+}
+
+.hero_description {
+  font-size: clamp(0.975rem, 1.1vw, 1.0625rem);
+  line-height: 1.6;
+  color: var(--gray600);
+  margin-bottom: 1.5rem;
+  max-width: 48ch;
+}
+
+.hero_actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.home-hero_grandes-clientes {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray200);
+}
+
+.grandes-clientes_label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray500);
+  margin-bottom: 0.85rem;
+}
+
+.grandes-clientes_row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 1.75rem;
+}
+
+.grandes-clientes_logo {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.82;
+  filter: grayscale(100%);
+  transition: opacity 0.25s, filter 0.25s;
+}
+
+.grandes-clientes_logo:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+/* Coluna Direita da 1ª Dobra: Foto da Equipe EJFGV Enfatizada */
+.home-hero_image-col {
+  position: relative;
+  width: 100%;
+}
+
+.hero-photo-frame {
+  position: relative;
+  border-radius: var(--card-radius-xl);
+  overflow: hidden;
+  background: var(--graywarm950);
+  border: 2px solid var(--white);
+  box-shadow:
+    0 24px 48px -12px rgba(23, 20, 18, 0.22),
+    0 0 0 1px var(--gray200);
+}
+
+/* Barra de destaque laranja no topo da moldura da foto */
+.hero-photo-frame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary600), var(--primary400));
+  z-index: 3;
+}
+
+.home-hero_image {
+  width: 100%;
+  aspect-ratio: 16 / 10.8;
+  object-fit: cover;
+  object-position: center 28%;
+  display: block;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.hero-photo-frame:hover .home-hero_image {
+  transform: scale(1.025);
+}
+
+/* Legenda / Selo sobreposto na base da foto da equipe */
+.hero-photo-caption {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  background: rgba(23, 20, 18, 0.88);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--white);
+}
+
+.hero-photo-caption-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-photo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary500);
+  box-shadow: 0 0 0 4px rgba(239, 104, 32, 0.22);
+  flex-shrink: 0;
+}
+
+.hero-photo-caption strong {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hero-photo-caption span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--graywarm300);
+}
+
+.hero-video-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary600);
+  color: var(--white);
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo);
+}
+
+.hero-video-trigger:hover {
+  background: var(--primary700);
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+   2. NÚMEROS E IMPACTO OBJETIVO (.section_home-resultados)
+   Extraído de conteudo.ejfgv.com/business-intelligence-dados (800+, 38, 70, 90)
+   ========================================================================== */
+.section_resultados-strip {
+  background: var(--gray50);
+  border-top: 1px solid var(--gray200);
+  border-bottom: 1px solid var(--gray200);
+  padding: 2.5rem 0;
+}
+
+.resultados_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.resultados_card {
+  background: var(--white);
+  border: 1px solid var(--gray200);
+  border-radius: var(--card-radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.resultados_big-number {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 2.8vw, 2.65rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--primary600);
+}
+
+.resultados_card strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gray900);
+  margin-top: 0.25rem;
+}
+
+.resultados_card p {
+  font-size: 0.825rem;
+  color: var(--gray600);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   3. SOLUÇÕES E SERVIÇOS (.section_beneficios — Fundo Escuro --graywarm900)
+   Apresentação objetiva do trabalho da consultoria + .beneficios_banner
+   ========================================================================== */
+.section_beneficios {
+  background-color: var(--graywarm900);
+  color: var(--white);
+  overflow: hidden;
+}
+
+.beneficios_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 5vw, 4.5rem);
+}
+
+.beneficios_title {
+  text-align: center;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.beneficios_eyebrow {
+  color: var(--primary200);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.65rem;
+  display: inline-block;
+}
+
+.beneficios_title h2 {
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.85rem;
+  color: var(--white);
+}
+
+.beneficios_title p {
+  font-size: 1rem;
+  color: var(--graywarm300);
+  line-height: 1.6;
+}
+
+/* Abas / Filtro Objetivo das 5 Frentes da EJFGV */
+.frentes_tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: -1rem;
+}
+
+.frente_tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-hairline-dark);
+  color: var(--graywarm300);
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out-expo);
+}
+
+.frente_tab:hover,
+.frente_tab.is-active {
+  background: var(--primary600);
+  border-color: var(--primary600);
+  color: var(--white);
+}
+
+/* Linhas Z-Pattern (.beneficios_item) */
+.beneficios_list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 5vw, 4.5rem);
+}
+
+.beneficios_item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4.5vw, 4.5rem);
+  align-items: center;
+}
+
+.vantagens_icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.15rem;
+}
+
+.beneficios_item h3 {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+
+.beneficios_item p {
+  font-size: 0.975rem;
+  color: var(--graywarm300);
+  line-height: 1.6;
+}
+
+.vantagens_list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1.35rem;
+  list-style: none;
+}
+
+.vantagens_list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--graywarm300);
+}
+
+.vantagens_list-item img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.vantagens_image {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-hairline-dark);
+}
+
+/* Card de Resumo das Demais Frentes da Consultoria */
+.frentes_cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-hairline-dark);
+}
+
+.frente_mini-card {
+  background: var(--graywarm950);
+  border: 1px solid var(--border-hairline-dark);
+  border-radius: var(--card-radius-md);
+  padding: 1.5rem;
+  transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
+}
+
+.frente_mini-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary500);
+}
+
+.frente_mini-card span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--primary200);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.frente_mini-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.frente_mini-card p {
+  font-size: 0.85rem;
+  color: var(--graywarm300);
+  line-height: 1.5;
+}
+
+/* Banner de Conversão em Laranja (.beneficios_banner) */
+.beneficios_banner {
+  background-color: var(--primary500);
+  width: 100%;
+  color: var(--graywarm950);
+  border-radius: var(--card-radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(2rem, 3.5vw, 3.25rem);
+}
+
+.beneficios-banner_title {
+  font-size: clamp(1.3rem, 2.1vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  max-width: 34ch;
+}
+
+/* ==========================================================================
+   4. QUALIFICAÇÃO OBJETIVA (.section_icp — "Sua empresa precisa da EJFGV se...")
+   ========================================================================== */
+.section_icp {
+  background: var(--white);
+  position: relative;
+}
+
+.icp_header {
+  max-width: 42rem;
+  margin-bottom: 2.75rem;
+}
+
+.icp_header h2 {
+  font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  color: var(--gray900);
+  margin-top: 0.4rem;
+}
+
+.icp_wrapper {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+.icp_list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.icp_item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border-radius: var(--card-radius-md);
+  border: 1px solid var(--gray200);
+  background: var(--gray50);
+  transition: border-color 0.25s, transform 0.25s var(--ease-out-expo);
+}
+
+.icp_item:hover {
+  border-color: var(--primary300);
+  transform: translateY(-2px);
+}
+
+.icp_icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.icp_item h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gray900);
+  line-height: 1.35;
+}
+
+.icp_item p {
+  font-size: 0.875rem;
+  color: var(--graywarm600);
+  line-height: 1.55;
+}
+
+.icp_image {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  max-height: 440px;
+  object-fit: cover;
+  border-radius: var(--card-radius-lg);
+}
+
+/* ==========================================================================
+   5. PROVAS, CASES E QUEM SOMOS (.section_home-quem-somos + .section_depoimentos)
+   ========================================================================== */
+.section_home-quem-somos {
+  background: var(--gray50);
+  border-top: 1px solid var(--gray200);
+  border-bottom: 1px solid var(--gray200);
+}
+
+.quem-somos_wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  margin-bottom: 2.75rem;
+}
+
+.quem-somos_wrapper h2 {
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gray900);
+  margin: 0.35rem 0 0.5rem;
+}
+
+.quem-somos_pillars {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray700);
+}
+
+.quem-somos_copy {
+  font-size: 1rem;
+  color: var(--gray600);
+  line-height: 1.65;
+}
+
+/* Carrossel Infinito de Clientes (+700 clientes) */
+.clientes_wrapper {
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--gray200);
+}
+
+.clientes_title {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray600);
+  margin-bottom: 1.5rem;
+}
+
+.slider-clientes_component {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.slider-clientes_logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex: none;
+  padding-right: 3rem;
+  animation: loop-move-left 38s linear infinite;
+}
+
+.client_logo {
+  height: 32px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  opacity: 0.85;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.client_logo:hover {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+@keyframes loop-move-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Depoimentos & Cases Objetivos (.section_depoimentos) */
+.section_depoimentos {
+  background: var(--white);
+}
+
+.cases_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.case_card {
+  background: var(--white);
+  border: 1px solid var(--gray200);
+  border-radius: var(--card-radius-lg);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s;
+}
+
+.case_card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.08);
+}
+
+.case_metric {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--primary600);
+  line-height: 1;
+}
+
+.case_tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary700);
+  background: var(--primary50);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.case_card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray900);
+}
+
+.case_card p {
+  font-size: 0.9rem;
+  color: var(--gray600);
+  line-height: 1.55;
+}
+
+/* Slider de Depoimento em Vídeo (.depoimentos_content) */
+.depoimentos_content {
+  background-color: var(--gray50);
+  border: 1px solid var(--gray200);
+  border-radius: var(--card-radius-xl);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  overflow: hidden;
+}
+
+.depoimentos_content-right {
+  padding: clamp(2rem, 3.5vw, 3.25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.depoimentos_rating-wrapper {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.depoimento_quote {
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--gray900);
+  letter-spacing: -0.01em;
+}
+
+.depoimento_author strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--gray900);
+}
+
+.depoimento_author span {
+  font-size: 0.85rem;
+  color: var(--gray600);
+}
+
+.depoimentos_controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.depoimento_dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e4e7ec;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.depoimento_dot.is-active {
+  background: var(--primary700);
+  transform: scale(1.2);
+}
+
+.depoimentos_lightbox {
+  position: relative;
+  min-height: 320px;
+  background: var(--graywarm950);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.depoimentos_lightbox img.uui-testimonial12_lightbox-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition: transform 0.5s var(--ease-out-expo), opacity 0.3s;
+}
+
+.depoimentos_lightbox:hover img.uui-testimonial12_lightbox-image {
+  transform: scale(1.03);
+  opacity: 1;
+}
+
+.lightbox_play-btn {
+  position: absolute;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(224, 79, 22, 0.92);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  transition: transform 0.25s var(--ease-out-expo);
+}
+
+.depoimentos_lightbox:hover .lightbox_play-btn {
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   6. PROCESSO DE ATENDIMENTO (.section_metodo — 4 Etapas)
+   ========================================================================== */
+.section_metodo {
+  background: var(--gray50);
+  border-top: 1px solid var(--gray200);
+  border-bottom: 1px solid var(--gray200);
+}
+
+.metodo_header {
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto 2.75rem;
+}
+
+.metodo_header h2 {
+  font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gray900);
+  margin-top: 0.35rem;
+}
+
+.metodo_cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.metodo_card {
+  color: #181818;
+  text-align: center;
+  background-image: var(--gradient-metodo-card);
+  border: 1px solid rgba(16, 24, 40, 0.07);
+  border-radius: var(--card-radius-lg);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s;
+}
+
+.metodo_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.08);
+}
+
+.metodo_step-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary700);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 0.25rem;
+}
+
+.metodo_card h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--gray900);
+}
+
+.metodo_card p {
+  font-size: 0.88rem;
+  color: var(--graywarm600);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   7. FORMULÁRIO DE CONVERSÃO (.section_form)
+   ========================================================================== */
+.section_form {
+  background: var(--white);
+  position: relative;
+}
+
+.form_wrapper {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  border-radius: var(--card-radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--gray200);
+  box-shadow: 0 20px 40px -16px rgba(16, 24, 40, 0.08);
+}
+
+.form_info-col {
+  background: var(--graywarm950);
+  color: var(--white);
+  padding: clamp(2rem, 3.8vw, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.form_info-col h2 {
+  font-size: clamp(1.55rem, 2.3vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.form_info-col p {
+  font-size: 0.95rem;
+  color: var(--graywarm300);
+  line-height: 1.6;
+}
+
+.form_sla-badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-hairline-dark);
+}
+
+.form_sla-badges div strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary200);
+}
+
+.form_sla-badges div span {
+  font-size: 0.8rem;
+  color: var(--graywarm300);
+}
+
+.form_component {
+  background: var(--white);
+  padding: clamp(2rem, 3.8vw, 3.5rem);
+}
+
+.form_grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray700);
+}
+
+.form-input {
+  height: 46px;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--gray300);
+  border-radius: 0.5rem;
+  background: var(--white);
+  color: var(--gray900);
+  font-size: 0.9375rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input::placeholder {
+  color: var(--gray400);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary600);
+  box-shadow: var(--ring-focus);
+}
+
+.form-input.text-area {
+  height: auto;
+  min-height: 96px;
+  resize: vertical;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.825rem;
+  color: var(--gray600);
+  margin: 0.5rem 0 1.25rem;
+  cursor: pointer;
+}
+
+.form-checkbox input {
+  margin-top: 3px;
+  accent-color: var(--primary600);
+}
+
+.form-feedback {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--success50);
+  border: 1px solid var(--success200);
+  color: var(--success700);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-feedback.is-visible {
+  display: block;
+}
+
+/* ==========================================================================
+   8. FOOTER E MODAL DE VÍDEO (.footer)
+   ========================================================================== */
+.footer {
+  background: var(--graywarm950);
+  color: var(--graywarm300);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border-hairline-dark);
+}
+
+.footer_component {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.footer_logo {
+  height: 28px;
+  width: auto;
+}
+
+/* Lightbox Modal de Vídeo */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  background: rgba(16, 24, 40, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.video-modal.is-open {
+  display: flex;
+}
+
+.video-modal_dialog {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal_close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  background: rgba(23, 20, 18, 0.85);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (Desktop / Tablet / Mobile)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero_wrapper,
+  .beneficios_item,
+  .icp_wrapper,
+  .quem-somos_wrapper,
+  .depoimentos_content,
+  .form_wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .resultados_grid,
+  .frentes_cards-grid,
+  .metodo_cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cases_grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section_hero {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .gz-nav .links a:not(.buy),
+  .gz-nav .wordmark .sub {
+    display: none;
+  }
+
+  .resultados_grid,
+  .frentes_cards-grid,
+  .icp_list,
+  .metodo_cards,
+  .form_grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .beneficios_banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-photo-caption {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
