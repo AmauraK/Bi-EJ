@@ -1,0 +1,5 @@
+# Cabeçalhos do Cloudflare (Workers static assets).
+# Os endereços *.workers.dev são uma prévia: ficam fora dos buscadores para não competir com ejfgv.com.
+# A regra vale só para esse domínio. Quando o ejfgv.com apontar para o Worker, ele continua indexável.
+https://:worker.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
