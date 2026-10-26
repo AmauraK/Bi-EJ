@@ -1,0 +1,98 @@
+<!-- Conteúdo da home (/). Cabeçalho, rodapé e <head> vêm de site/layout.mjs. -->
+  <main id="conteudo">
+    <section class="hero section-pad" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">Seu próximo<br>passo merece<br><span class="orange-word">movimento<span class="period">.</span></span></h1>
+        <p class="hero-description">Conectamos o conhecimento da FGV à energia de quem faz acontecer. Para transformar os desafios do seu negócio em novas possibilidades.</p>
+        <a class="button button-dark magnetic" href="#solucoes">Descubra seu próximo passo <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-art" aria-label="Composição tridimensional com blocos e imagens da equipe. Reage ao movimento do mouse.">
+        <div class="art-grid" aria-hidden="true"></div>
+        <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div>
+        <div class="sculpture" aria-hidden="true">
+          <div class="block block-one"><i class="face front"><span>Conhecimento<br>FGV</span></i><i class="face back"></i><i class="face right"></i><i class="face left"></i><i class="face top"></i><i class="face bottom"></i></div>
+          <div class="block block-two"><i class="face front">Energia</i><i class="face back"></i><i class="face right"></i><i class="face left"></i><i class="face top"></i><i class="face bottom"></i></div>
+          <div class="block block-three"><i class="face front">Resultados</i><i class="face back"></i><i class="face right"></i><i class="face left"></i><i class="face top"></i><i class="face bottom"></i></div>
+        </div>
+        <figure class="photo-float photo-one"><img src="/fotos/img-4644-480.webp" srcset="/fotos/img-4644-480.webp 480w, /fotos/img-4644-960.webp 960w, /fotos/img-4644-1600.webp 1600w, /fotos/img-4644-2400.webp 2400w" sizes="250px" width="600" height="400" alt="Equipe trabalhando em conjunto diante de um computador" fetchpriority="high"><figcaption><span>CONHECIMENTO EM AÇÃO</span><span>↗</span></figcaption></figure>
+        <figure class="photo-float photo-two"><img src="/fotos/img-4709-480.webp" srcset="/fotos/img-4709-480.webp 480w, /fotos/img-4709-960.webp 960w, /fotos/img-4709-1600.webp 1600w, /fotos/img-4709-2400.webp 2400w" sizes="190px" width="600" height="400" alt="Integrantes da EJFGV em uma reunião"><figcaption><span>CONSTRUÍMOS JUNTOS.</span><span>✳</span></figcaption></figure>
+        <span class="art-note"><span aria-hidden="true">↔</span> Mova o mouse. Mude a perspectiva.</span>
+        <button class="motion-toggle" type="button" aria-pressed="false" aria-label="Pausar animações">Ⅱ</button>
+      </div>
+      <div class="hero-bottom"><a href="#indicadores"><span class="scroll-icon" aria-hidden="true">↓</span> CONTINUE EXPLORANDO</a></div>
+    </section>
+    <section class="indicators" id="indicadores" aria-labelledby="indicators-title">
+      <div class="indicator-stage">
+        <h2 id="indicators-title" class="indicator-heading">Nossa trajetória <span>em números.</span></h2>
+        <div class="indicator-atmosphere" aria-hidden="true"></div>
+        <div class="indicator-window">
+          <ul class="indicator-track">
+            <li class="indicator-card"><strong class="indicator-number">1ª</strong><p>Empresa júnior da<br>América Latina</p></li>
+            <li class="indicator-card"><strong class="indicator-number">+30</strong><p>Anos de experiência<br>no mercado</p></li>
+            <li class="indicator-card"><strong class="indicator-number">+500</strong><p>Projetos de consultoria<br>de impacto</p></li>
+            <li class="indicator-card"><strong class="indicator-number">+40</strong><p>Professores renomados<br>da FGV auxiliando</p></li>
+          </ul>
+        </div>
+        <div class="clients-strip" role="group" aria-labelledby="clients-title">
+          <div class="clients-heading"><p id="clients-title">Quem já construiu com a gente</p><button class="clients-toggle" type="button" aria-label="Pausar faixa de clientes" aria-pressed="false" title="Pausar faixa de clientes"><span aria-hidden="true">Ⅱ</span></button></div>
+          <div class="clients-window">
+            <div class="clients-track">
+              <!-- Replace each reserved slot with a client logo and descriptive alt text. -->
+              <ul class="clients-group" aria-label="Espaços reservados para logos de clientes">
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+                <li class="client-slot"><span class="sr-only">Logo a definir</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="solutions" id="solucoes" aria-labelledby="solutions-title">
+      <h2 id="solutions-title" class="sr-only">Soluções para o seu próximo passo</h2>
+      <div class="solution-explorer">
+        <div class="solution-navigation" inert aria-hidden="true">
+        <nav class="solution-tabs" aria-label="Navegue pelas soluções">
+          <button id="tab-estrategia" aria-current="true" aria-controls="solution-panel-estrategia" data-solution="estrategia" data-page="{{url:estrategia}}"><span class="tab-number">01</span><span>Tirar uma ideia do papel<small>Estratégia</small></span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button id="tab-marketing" aria-current="false" aria-controls="solution-panel-marketing" data-solution="marketing" data-page="{{url:marketing}}"><span class="tab-number">02</span><span>Conquistar novos mercados<small>Marketing</small></span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button id="tab-financas" aria-current="false" aria-controls="solution-panel-financas" data-solution="financas" data-page="{{url:financas}}"><span class="tab-number">03</span><span>Decidir com segurança<small>Finanças</small></span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button id="tab-gestao" aria-current="false" aria-controls="solution-panel-gestao" data-solution="gestao" data-page="{{url:gestao}}"><span class="tab-number">04</span><span>Fazer a operação fluir<small>Gestão</small></span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+          <button id="tab-dados" aria-current="false" aria-controls="solution-panel-dados" data-solution="dados" data-page="{{url:dados}}"><span class="tab-number">05</span><span>Encontrar respostas nos dados<small>Data Science</small></span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+        </nav>
+        <p class="solution-scroll-hint"><span>ROLE PARA EXPLORAR <span aria-hidden="true">↓</span></span><span class="solution-counter">01 / 05</span></p>
+        </div>
+        <div class="solution-stack">
+        <article class="solution-panel" id="solution-panel-estrategia" aria-labelledby="solution-title">
+          <div class="solution-tab-caption"><span>01 / ESTRATÉGIA</span><span aria-hidden="true">↗</span></div>
+          <div class="solution-visual" data-visual="estrategia" aria-hidden="true"><div class="visual-ring"></div><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i></div><span class="visual-symbol">↗</span><span class="visual-caption">DO POTENCIAL À DIREÇÃO.</span><span class="visual-index">01 / 05</span></div>
+          <div class="solution-content"><p class="eyebrow" id="solution-category">CONSULTORIA ESTRATÉGICA</p><h3 id="solution-title">Tirar uma ideia do papel.</h3><p class="solution-lead">Uma boa ideia. Um caminho para acontecer.</p><p id="solution-description">Transforme possibilidades em um plano consistente, com prioridades claras e uma visão do próximo passo.</p><ul class="deliverables" id="solution-deliverables"><li>Plano de negócios</li><li>Planejamento estratégico</li></ul><a class="text-link" id="solution-contact" href="#contato">Vamos construir esse caminho <span aria-hidden="true">↗</span></a><a class="solution-page-link" id="solution-page" href="{{url:estrategia}}">Conheça a solução completa <span aria-hidden="true">→</span></a></div>
+          <div class="solution-card-footer"><span class="solution-page-number">01 / 05</span><button class="solution-next" type="button">A seguir: conquistar novos mercados <span aria-hidden="true">↓</span></button></div>
+        </article>
+        </div>
+      </div>
+    </section>
+    <div class="manifesto-strip" aria-hidden="true"><div class="strip-track"><span>Ideias em movimento</span><b>✳</b><span>Negócios em transformação</span><b>✳</b><span>Ideias em movimento</span><b>✳</b></div></div>
+    <section class="method" id="metodo" aria-labelledby="method-title">
+      <div class="method-sticky section-pad">
+        <div class="section-top"><span class="small-note">ROLE PARA CONHECER O CAMINHO <span aria-hidden="true">↓</span></span></div>
+        <div class="method-layout"><div class="method-copy"><h2 id="method-title">Transformar<br>é um trabalho<br><span>em conjunto.</span></h2><div class="method-controls" aria-label="Etapas do projeto"><button class="active" aria-pressed="true" data-step="0">01<span>Escutar</span></button><button aria-pressed="false" data-step="1">02<span>Conectar</span></button><button aria-pressed="false" data-step="2">03<span>Construir</span></button><button aria-pressed="false" data-step="3">04<span>Impulsionar</span></button></div></div>
+          <div class="method-card"><span class="method-big-number" aria-hidden="true">01</span><span class="method-star" aria-hidden="true">✳</span><div class="method-card-copy"><h3>Antes das respostas,<br>as perguntas certas.</h3><p>Uma conversa para entender seu momento, seus objetivos e os desafios que precisam de atenção.</p></div><div class="method-progress" aria-hidden="true"><span></span></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="contact section-pad" id="contato" aria-labelledby="contact-title">
+      <div class="contact-intro reveal"><p class="eyebrow">04 / O PRÓXIMO PASSO É SEU</p><h2 id="contact-title">Vamos colocar<br>seu negócio em<br><span>movimento?</span></h2><p>Conte um pouco sobre o seu momento.<br>Uma boa conversa pode abrir novos caminhos.</p><span class="contact-arrow" aria-hidden="true">↗</span></div>
+      <form class="contact-form reveal">
+        <p class="form-kicker">COMECE POR AQUI <span>↗</span></p>
+        <label for="challenge">O que você quer transformar?</label><select id="challenge" name="challenge"><option value="estrategia">Tirar uma ideia do papel</option><option value="marketing">Conquistar novos mercados</option><option value="financas">Decidir com segurança</option><option value="gestao">Fazer a operação fluir</option><option value="dados">Encontrar respostas nos dados</option><option value="outro">Quero conversar sobre outro desafio</option></select>
+        <label for="name">Como podemos chamar você?</label><input id="name" name="name" placeholder="Seu nome" required autocomplete="name" maxlength="100">
+        <label for="email">Qual é o seu e-mail?</label><input id="email" name="email" type="email" placeholder="voce@empresa.com.br" required autocomplete="email" maxlength="254">
+        <label for="message">Conte um pouco mais <span class="optional">(opcional)</span></label><textarea id="message" name="message" placeholder="Sua ideia, seu momento, seu desafio…" rows="2" maxlength="2000"></textarea>
+        <button class="button button-dark" type="submit">Preparar minha conversa <span aria-hidden="true">↗</span></button><p class="form-note">Prévia interativa: você poderá revisar e copiar o resumo. Nenhum dado é enviado.</p>
+      </form>
+    </section>
+  </main>
+  <dialog class="summary-dialog" aria-labelledby="summary-title"><button class="dialog-close" aria-label="Fechar resumo">×</button><p class="eyebrow">SUA CONVERSA COMEÇA AQUI</p><h2 id="summary-title">Um novo caminho,<br>bem pensado.</h2><p>Revise seu resumo abaixo. Esta demonstração não envia informações à EJFGV.</p><pre id="summary-text"></pre><button class="button button-dark copy-summary" type="button">Copiar resumo <span aria-hidden="true">↗</span></button><p class="copy-status" role="status"></p></dialog>
