@@ -1,0 +1,165 @@
+---
+// Linha do tempo da página Sobre (docx: "linha de tempo breve (1988 → hoje) mostrando marcos da EJ FGV").
+// Textos de ../site/conteudo/sobre.mjs (legado). Os marcos entre 1988 e hoje ainda não chegaram: ficam como marcador.
+// Os números do movimento ("Hoje") são de 2023, como avisa a nota.
+import { NUMEROS } from '../../consts';
+---
+
+<section class="linha" id="historia" aria-labelledby="historia-titulo">
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="icp_header">
+				<span class="eyebrow">Transformando realidades de negócios desde {NUMEROS.fundacao}</span>
+				<h2 id="historia-titulo">Nossa história</h2>
+			</div>
+
+			<ol class="linha_lista">
+				<li class="linha_item">
+					<span class="linha_ano">1967</span>
+					<h3>O início</h3>
+					<p>Alunos da ESSEC (École Supérieure des Sciences Économiques et Commerciales), em Paris, fundaram a primeira empresa júnior do mundo, a ESSEC Conseil, para colocar em prática o conhecimento que acumulavam em sala de aula.</p>
+				</li>
+				<li class="linha_item">
+					<span class="linha_ano">{NUMEROS.fundacao}</span>
+					<h3>Fundação da EJFGV</h3>
+					<p>Nós, da Empresa Júnior da Fundação Getulio Vargas, tivemos o privilégio de ser a empresa pioneira do MEJ (Movimento Empresa Júnior) na América Latina, dando início a uma onda de inovação no país.</p>
+				</li>
+				<li class="linha_item is-pendente">
+					<span class="linha_ano-pendente"><span class="preencher">A preencher: ano</span></span>
+					<h3><span class="preencher">A preencher: marcos da EJFGV entre {NUMEROS.fundacao} e hoje</span></h3>
+					<p><span class="preencher">A preencher: ano e descrição de cada marco</span></p>
+				</li>
+				<li class="linha_item">
+					<span class="linha_ano">Hoje</span>
+					<h3>O movimento</h3>
+					<p>Hoje o movimento envolve mais de 900 empresas juniores e já faturou mais de 23 milhões de reais. A EJFGV se mantém como referência no movimento, com resultados grandiosos em seus projetos de consultoria estratégica.</p>
+					<p class="linha_nota">Números de 2023.</p>
+				</li>
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.linha {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.linha_lista {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.5rem;
+	}
+
+	.linha_item {
+		position: relative;
+		padding-top: 2.25rem;
+	}
+
+	/* Trilho: atravessa o espaço entre os marcos */
+	.linha_item::before {
+		content: "";
+		position: absolute;
+		top: 0.45rem;
+		left: 0;
+		right: -1.5rem;
+		height: 2px;
+		background: var(--gray300);
+	}
+
+	.linha_item:last-child::before {
+		right: 0;
+	}
+
+	/* Ponto do marco */
+	.linha_item::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 1rem;
+		height: 1rem;
+		border-radius: 50%;
+		background: var(--primary600);
+		box-shadow: 0 0 0 4px var(--primary100);
+	}
+
+	.linha_item.is-pendente::after {
+		background: var(--gray50);
+		border: 2px dashed var(--warning500);
+		box-shadow: none;
+	}
+
+	.linha_ano {
+		display: block;
+		margin-bottom: 0.5rem;
+		color: var(--primary600);
+		font-size: clamp(2rem, 2.8vw, 2.65rem);
+		font-weight: 900;
+		line-height: 1.05;
+		letter-spacing: -0.03em;
+	}
+
+	.linha_ano-pendente {
+		display: block;
+		margin-bottom: 0.75rem;
+		font-size: 0.85rem;
+	}
+
+	.linha_item h3 {
+		margin-bottom: 0.5rem;
+		color: var(--gray900);
+		font-size: 1.1rem;
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+	.linha_item p {
+		color: var(--graywarm600);
+		font-size: 0.925rem;
+		line-height: 1.6;
+	}
+
+	.linha_item .linha_nota {
+		margin-top: 0.5rem;
+		color: var(--gray600);
+		font-size: 0.8rem;
+		font-weight: 600;
+	}
+
+	/* Tablet e celular: linha vertical à esquerda */
+	@media (max-width: 1024px) {
+		.linha_lista {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		.linha_item {
+			padding: 0 0 2.25rem 2.5rem;
+		}
+
+		.linha_item:last-child {
+			padding-bottom: 0;
+		}
+
+		.linha_item::before {
+			top: 0.55rem;
+			bottom: 0;
+			left: 0.45rem;
+			right: auto;
+			width: 2px;
+			height: auto;
+		}
+
+		.linha_item:last-child::before {
+			display: none;
+		}
+
+		.linha_item::after {
+			top: 0.55rem;
+		}
+	}
+</style>

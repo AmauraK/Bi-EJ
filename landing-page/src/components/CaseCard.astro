@@ -1,0 +1,39 @@
+---
+// Card de case (.case_card, .case_tag, .case_metric da LP). `metrica` é o resultado em destaque (o "spoiler").
+interface Props {
+	tag: string;
+	metrica: string;
+	titulo: string;
+	texto: string;
+	href?: string;
+	nivel?: 'h2' | 'h3';
+}
+
+const { tag, metrica, titulo, texto, href, nivel = 'h3' } = Astro.props;
+const Titulo = nivel;
+---
+
+<article class="case_card">
+	<div>
+		<span class="case_tag">{tag}</span>
+		<div class="case_metric">{metrica}</div>
+	</div>
+	<div>
+		<Titulo>{titulo}</Titulo>
+		<p>{texto}</p>
+		{href && <a class="button-tertiary case_link" href={href}>Ver case completo →</a>}
+	</div>
+</article>
+
+<style>
+	.case_link {
+		height: auto;
+		margin-top: 0.75rem;
+		padding: 0.35rem 0;
+	}
+
+	.case_link:hover {
+		background-color: transparent;
+		text-decoration: underline;
+	}
+</style>

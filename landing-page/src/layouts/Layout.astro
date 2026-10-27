@@ -1,23 +1,158 @@
+---
+// Estrutura comum de todas as páginas: <head> (SEO, OG, fontes, JSON-LD), navegação, rodapé,
+// WhatsApp flutuante, modal de vídeo e main.js.
+import '../styles/styles.css';
+import { SITE, CONTATO, NAV, SOLUCOES, NUMEROS, ATUALIZADO_EM } from '../consts';
+
+interface Props {
+	titulo: string;
+	descricao: string;
+	/** Destino do botão "Fale com um Especialista". Nas soluções, '#formulario'. */
+	ctaHref?: string;
+	/** JSON-LD extra da página (Service, FAQPage, Article...). */
+	jsonLd?: object | object[];
+	noindex?: boolean;
+}
+
+const { titulo, descricao, ctaHref = '/contato/', jsonLd, noindex = false } = Astro.props;
+const caminho = Astro.url.pathname;
+const canonical = new URL(caminho, Astro.site).href;
+
+const organizacao = {
+	'@context': 'https://schema.org',
+	'@type': 'ProfessionalService',
+	name: SITE.nome,
+	alternateName: SITE.nomeCompleto,
+	description: `A ${SITE.nome} é a ${SITE.nomeCompleto}, a primeira empresa júnior da América Latina, fundada em ${NUMEROS.fundacao}. Consultoria estratégica feita por alunos da graduação da FGV.`,
+	url: SITE.url,
+	logo: SITE.logo,
+	email: CONTATO.email,
+	telephone: CONTATO.whatsapp,
+	foundingDate: String(NUMEROS.fundacao),
+	address: { '@type': 'PostalAddress', streetAddress: CONTATO.endereco, addressCountry: 'BR' },
+	sameAs: [CONTATO.instagram, CONTATO.linkedin],
+};
+const extras = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const atualizado = ATUALIZADO_EM.split('-').reverse().join('/');
+const ano = new Date().getFullYear();
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{titulo}</title>
+		<meta name="description" content={descricao} />
+		{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="pt_BR" />
+		<meta property="og:site_name" content={SITE.nome} />
+		<meta property="og:title" content={titulo} />
+		<meta property="og:description" content={descricao} />
+		{!noindex && <meta property="og:url" content={canonical} />}
 		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+		<script type="application/ld+json" set:html={JSON.stringify(organizacao)} />
+		{extras.map((dados) => <script type="application/ld+json" set:html={JSON.stringify(dados)} />)}
 	</head>
 	<body>
-		<slot />
+		<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+		<!-- CURSOR CUSTOMIZADO (Documento DS EJFGV / Grotesk Zero) -->
+		<div class="cursor" id="cursor"></div>
+
+		<!-- NAVEGAÇÃO PRINCIPAL (Documento DS EJFGV / Grotesk Zero) -->
+		<nav class="gz-nav" id="mainNav" aria-label="Navegação principal">
+			<a class="wordmark" href="/" aria-label="EJFGV — Início">
+				<span class="dot"></span>
+				<span>EJFGV</span>
+				<span class="sub">Transformar Realidades · Desde {NUMEROS.fundacao}</span>
+			</a>
+			<div class="links" id="navLinks">
+				{NAV.map((item) =>
+					item.itens ? (
+						<details class:list={['dropdown', { 'is-current': item.itens.some((f) => f.href === caminho) }]}>
+							<summary>{item.rotulo}</summary>
+							<ul class="dropdown-list">
+								{item.itens.map((f) => (
+									<li><a href={f.href} aria-current={f.href === caminho ? 'page' : undefined}>{f.rotulo}</a></li>
+								))}
+							</ul>
+						</details>
+					) : (
+						<a href={item.href} aria-current={item.href === caminho ? 'page' : undefined}>{item.rotulo}</a>
+					)
+				)}
+			</div>
+			<div class="nav-actions">
+				<a href={ctaHref} class="buy">Fale com um Especialista</a>
+				<button type="button" class="menu-toggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
+			</div>
+		</nav>
+
+		<main id="conteudo">
+			<slot />
+		</main>
+
+		<!-- RODAPÉ INSTITUCIONAL (.footer) -->
+		<footer id="footer" class="footer">
+			<div class="page-padding">
+				<div class="container-large">
+					<div class="footer_grid">
+						<div class="footer_col">
+							<img src={SITE.logo} loading="lazy" alt="Logo EJFGV" class="footer_logo" />
+							<p>
+								{SITE.nome} · {SITE.nomeCompleto}. A primeira empresa júnior da América Latina, desde {NUMEROS.fundacao}.
+								Propósito: <strong>{SITE.proposito}</strong>.
+							</p>
+							<p>{CONTATO.endereco}</p>
+						</div>
+						<nav class="footer_col" aria-label="Serviços">
+							<p class="footer_title">Serviços</p>
+							{SOLUCOES.map((s) => <a href={s.url}>{s.nome}</a>)}
+						</nav>
+						<nav class="footer_col" aria-label="Links rápidos">
+							<p class="footer_title">Links rápidos</p>
+							<a href="/sobre-nos/">Sobre</a>
+							<a href="/blog/">Blog</a>
+							<a href="/contato/">Contato</a>
+							<a href="/politica-de-privacidade/">Política de Privacidade</a>
+							<a href="/mapa-do-site/">Mapa do Site</a>
+						</nav>
+						<div class="footer_col">
+							<p class="footer_title">Contato e redes</p>
+							<a href={`mailto:${CONTATO.email}`}>{CONTATO.email}</a>
+							<a href={CONTATO.whatsappUrl} target="_blank" rel="noopener">WhatsApp {CONTATO.whatsapp}</a>
+							<a href={CONTATO.instagram} target="_blank" rel="noopener">Instagram</a>
+							<a href={CONTATO.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+						</div>
+					</div>
+					<div class="footer_bottom">
+						<span>© {ano} {SITE.nome} – Todos os direitos reservados · {CONTATO.razaoSocial} · CNPJ {CONTATO.cnpj}</span>
+						<span>Atualizado em {atualizado}</span>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<a class="whatsapp-float" href={CONTATO.whatsappUrl} target="_blank" rel="noopener" aria-label="Fale com a EJFGV pelo WhatsApp">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"></path>
+			</svg>
+			<span>WhatsApp</span>
+		</a>
+
+		<!-- MODAL DE VÍDEO (Vimeo Institucional & Depoimentos) -->
+		<dialog class="video-modal" id="videoModal" aria-label="Vídeo">
+			<div class="video-modal_dialog">
+				<button type="button" class="video-modal_close" id="closeVideoModal" aria-label="Fechar vídeo">✕</button>
+				<iframe id="videoIframe" width="100%" height="100%" src="" title="Vídeo EJFGV" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+			</div>
+		</dialog>
+
+		<script src="/main.js" is:inline></script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

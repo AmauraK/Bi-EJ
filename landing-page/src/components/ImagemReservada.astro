@@ -1,0 +1,15 @@
+---
+// Espaço em branco reservado para uma foto real que ainda não existe (nenhuma imagem fictícia).
+// `classe` recebe a classe de tamanho da imagem original (ex.: 'home-hero_image', 'vantagens_image', 'icp_image').
+interface Props {
+	descricao: string;
+	classe?: string;
+	escuro?: boolean;
+}
+
+const { descricao, classe, escuro = false } = Astro.props;
+---
+
+<div class:list={['image-placeholder', classe, { 'is-dark': escuro }]} aria-hidden="true" data-imagem-reservada={descricao}>
+	<span class="image-placeholder_label">Imagem a definir · {descricao}</span>
+</div>

@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SOLUCOES, CASES } from '../consts';
+
+const grupos = [
+	{ titulo: 'Institucional', links: [{ rotulo: 'Início', href: '/' }, { rotulo: 'Sobre', href: '/sobre-nos/' }, { rotulo: 'Contato', href: '/contato/' }, { rotulo: 'Política de Privacidade', href: '/politica-de-privacidade/' }] },
+	{ titulo: 'Soluções', links: SOLUCOES.map((s) => ({ rotulo: s.nome, href: s.url })) },
+	{ titulo: 'Cases de Sucesso', links: [{ rotulo: 'Todos os cases', href: '/cases-de-sucesso/' }, ...CASES.map((c) => ({ rotulo: c.titulo, href: c.url }))] },
+	{ titulo: 'Conteúdo', links: [{ rotulo: 'Blog', href: '/blog/' }, { rotulo: 'Materiais Ricos', href: '/materiais-ricos/' }] },
+];
+---
+
+<Layout titulo="Mapa do Site - EJFGV" descricao="Todas as páginas do site da EJFGV: soluções de consultoria, cases de sucesso, conteúdo e páginas institucionais.">
+	<PageHeader kicker="Institucional" titulo="Mapa do site" descricao="Todas as páginas do site da EJFGV, a Empresa Júnior da Fundação Getulio Vargas." />
+
+	<section class="section_icp" aria-label="Páginas do site">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="mapa_grid">
+					{grupos.map((g) => (
+						<nav class="icp_item" aria-label={g.titulo}>
+							<h2>{g.titulo}</h2>
+							<ul>
+								{g.links.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}
+							</ul>
+						</nav>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.mapa_grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+	}
+
+	.mapa_grid h2 {
+		color: var(--gray900);
+		font-size: 1.1rem;
+		font-weight: 800;
+	}
+
+	.mapa_grid ul {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.mapa_grid a {
+		color: var(--primary700);
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+
+	.mapa_grid a:hover {
+		text-decoration: underline;
+	}
+
+	@media (max-width: 767px) {
+		.mapa_grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

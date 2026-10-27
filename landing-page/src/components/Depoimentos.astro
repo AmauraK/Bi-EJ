@@ -1,0 +1,62 @@
+---
+// Depoimentos (.depoimentos_* da LP). Todos os cards ficam no HTML (buscadores e LLMs leem todos);
+// os pontos alternam qual aparece, sem troca automática. `pendentes` acrescenta vagas "A preencher".
+import { DEPOIMENTOS, type Depoimento } from '../consts';
+
+interface Props {
+	itens?: Depoimento[];
+	pendentes?: number;
+}
+
+const { itens = DEPOIMENTOS, pendentes = 0 } = Astro.props;
+const slides: (Depoimento | null)[] = [...itens, ...Array(pendentes).fill(null)];
+---
+
+<div class="depoimentos" data-depoimentos>
+	{slides.map((item, i) => (
+		<article class:list={['depoimentos_content', { 'is-sem-video': !item?.video }]} data-depoimento={i} hidden={i > 0}>
+			<div class="depoimentos_content-right">
+				<div>
+					{item?.imagem && !item.video && <img class="depoimento_logo" src={item.imagem} alt={item.autor} loading="lazy" />}
+					<blockquote class="depoimento_quote">
+						{item ? `“${item.texto}”` : <span class="preencher">A preencher: depoimento de cliente</span>}
+					</blockquote>
+				</div>
+				<div class="depoimento_rodape">
+					<div class="depoimento_author">
+						{item ? <strong>— {item.autor}</strong> : <strong><span class="preencher">A preencher: nome e empresa</span></strong>}
+						{item?.cargo && <span>{item.cargo}</span>}
+					</div>
+					{slides.length > 1 && (
+						<div class="depoimentos_controls" role="group" aria-label="Alternar depoimento">
+							{slides.map((_, j) => (
+								<button type="button" class:list={['depoimento_dot', { 'is-active': j === i }]} data-ir={j} aria-pressed={j === i ? 'true' : 'false'} aria-label={`Depoimento ${j + 1}`}></button>
+							))}
+						</div>
+					)}
+				</div>
+			</div>
+			{item?.video && (
+				<button type="button" class="depoimentos_lightbox" data-video={item.video} aria-label={`Assistir depoimento de ${item.autor} em vídeo`}>
+					<span class="lightbox_play-btn">▶</span>
+					{item.imagem && <img src={item.imagem} loading="lazy" alt="" class="uui-testimonial12_lightbox-image" />}
+				</button>
+			)}
+		</article>
+	))}
+</div>
+
+<style>
+	.depoimento_rodape {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.depoimentos_lightbox {
+		border: none;
+		cursor: pointer;
+	}
+</style>

@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Metodo from '../components/Metodo.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { CONTATO, NUMEROS, SITE } from '../consts';
+---
+
+<Layout
+	titulo="Contato - EJFGV"
+	descricao="Fale com um especialista da EJFGV, a Empresa Júnior da Fundação Getulio Vargas. Diagnóstico gratuito e retorno em até 1 dia útil."
+	ctaHref="#formulario"
+>
+	<PageHeader
+		kicker="Contato"
+		titulo="Fale com um especialista da EJFGV"
+		descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}, consultoria estratégica feita por alunos da FGV desde ${NUMEROS.fundacao}. Conte o desafio da sua empresa: o diagnóstico é gratuito e nossa equipe retorna em até ${NUMEROS.retornoDiasUteis} dia útil.`}
+	>
+		<Fragment slot="acoes">
+			<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+			<a href={CONTATO.whatsappUrl} class="button-tertiary" target="_blank" rel="noopener">Conversar no WhatsApp →</a>
+		</Fragment>
+	</PageHeader>
+
+	<Metodo />
+
+	<LeadForm />
+</Layout>

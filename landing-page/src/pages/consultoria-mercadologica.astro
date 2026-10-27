@@ -1,0 +1,165 @@
+---
+// Consultoria Mercadológica. URL, title e description iguais aos do WordPress (a página ranqueia):
+// vêm de solucao.seo e não mudam. Os termos de busca ficam no H1 e nos H2 do slot "especifico".
+// Fontes: consts.ts (solução, cases, depoimentos), legado (solucoes.mjs, sobre.mjs), LP e docx.
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import { SOLUCOES, CASES, DEPOIMENTOS, NUMEROS, SITE } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-mercadologica')!;
+const maCerise = CASES.find((c) => c.cliente === 'Confeitaria Ma Cerise')!;
+const talent = CASES.find((c) => c.cliente === 'Talent Academy')!;
+
+// Os depoimentos dos clientes desta solução aparecem primeiro.
+const daSolucao = [maCerise.cliente, talent.cliente];
+const depoimentos = [...DEPOIMENTOS.filter((d) => daSolucao.includes(d.autor)), ...DEPOIMENTOS.filter((d) => !daSolucao.includes(d.autor))];
+
+const beneficios = [
+	{ titulo: 'Clareza sobre o seu público', texto: 'Você passa a conhecer melhor quem compra de você e entende onde a sua marca se encaixa no mercado.' },
+	{ titulo: 'Marketing sem desperdício', texto: 'As estratégias são escolhidas com critério, entre as mais eficazes para o seu negócio, e o processo otimiza custos.' },
+	{ titulo: 'Lançamentos de alto impacto', texto: 'Antes de lançar um produto ou entrar em um novo mercado, você sabe se há espaço para crescer e tem um plano para chegar lá.' },
+];
+
+// Escopo de pesquisa (4 dos 5 itens de solucao.escopo) explicado como as perguntas que ele responde.
+const perguntas = [
+	{ titulo: 'Quem é o meu cliente?', texto: 'A pesquisa de público-alvo mostra quem compra de você e serve de base para escolher as estratégias de marketing mais eficazes.' },
+	{ titulo: 'Que oportunidades o meu setor oferece?', texto: 'A análise de mercado ajuda a descobrir oportunidades no seu setor e caminhos para crescer.' },
+	{ titulo: 'Onde a minha marca se encaixa?', texto: 'A análise concorrencial compara a sua empresa com os concorrentes e mostra o seu lugar no mercado.' },
+	{ titulo: 'Existe demanda para a minha ideia?', texto: 'A análise de viabilidade indica se há demanda para um produto ou serviço antes do investimento.' },
+];
+
+// Rascunhos feitos só com fatos (validar: true). Sem resposta confirmada = sem `resposta`.
+const faq = [
+	{
+		pergunta: 'O que faz uma consultoria mercadológica?',
+		resposta: 'Ela ajuda a empresa a entender o mercado e o público para escolher, com critério, as estratégias de marketing mais eficazes. Na EJFGV, o projeto pode incluir análise de mercado, análise concorrencial, pesquisa de público-alvo, análise de viabilidade e plano de marketing tradicional e digital.',
+		validar: true,
+	},
+	{
+		pergunta: 'A consultoria mercadológica serve para pequenas empresas?',
+		resposta: `Sim. A ${SITE.nome} é focada em impulsionar o crescimento de pequenas e médias empresas e já atendeu negócios de ${NUMEROS.setores} setores, como a confeitaria Ma Cerise e a Talent Academy.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Quem faz o projeto?',
+		resposta: `Alunos de todos os cursos de graduação da FGV, com orientação de professores da FGV. A ${SITE.nome} é a ${SITE.nomeCompleto} e a primeira empresa júnior da América Latina, fundada em ${NUMEROS.fundacao}.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Quanto tempo dura uma consultoria mercadológica?',
+		resposta: `Os projetos da ${SITE.nome} duram em média ${NUMEROS.prazoMedioMeses} meses. Nesse período, buscamos o maior alinhamento possível com você, num processo intenso de cocriação. O prazo de cada projeto é definido na proposta.`,
+		validar: true,
+	},
+	{
+		pergunta: 'O diagnóstico é gratuito?',
+		resposta: 'Sim. Depois do primeiro contato, fazemos uma reunião de diagnóstico gratuita e sem compromisso para identificar dores, desafios e oportunidades da sua empresa. Em seguida, apresentamos uma proposta com escopo, prazos e soluções personalizadas.',
+		validar: true,
+	},
+	{ pergunta: 'Quanto custa uma consultoria mercadológica?' },
+];
+---
+
+<SolucaoLayout
+	solucao={solucao}
+	titulo="Consultoria Mercadológica para conquistar novos mercados"
+	abertura={`A Consultoria Mercadológica da ${SITE.nome}, a ${SITE.nomeCompleto}, ajuda pequenas e médias empresas a vender mais com pesquisa de mercado, análise de viabilidade e plano de marketing. É consultoria estratégica feita por alunos da FGV, desde ${NUMEROS.fundacao}.`}
+	fotoHeader="equipe da EJFGV em trabalho real de pesquisa de mercado, em grupo"
+	beneficios={beneficios}
+	faq={faq}
+	depoimentos={depoimentos}
+>
+	<section slot="especifico" class="section_icp" aria-label="Consultoria mercadológica na prática">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large mercadologica_linhas">
+				<div class="icp_wrapper">
+					<div>
+						<div class="icp_header">
+							<span class="eyebrow">Entender o mercado</span>
+							<h2 id="pesquisa-de-mercado">Pesquisa de mercado e análise de viabilidade: respostas antes de investir</h2>
+							<p class="mercadologica_texto">A consultoria mercadológica da EJFGV parte de uma compreensão profunda do seu público. Com pesquisa e análise, ajudamos a sua empresa a responder perguntas como estas:</p>
+						</div>
+						<div class="icp_list">
+							{perguntas.map((p) => (
+								<div class="icp_item">
+									<h3>{p.titulo}</h3>
+									<p>{p.texto}</p>
+								</div>
+							))}
+						</div>
+						<p class="mercadologica_links">Quer ir mais fundo? A <a href="/consultoria-business-intelligence/">Consultoria de Business Intelligence</a> analisa o perfil do consumidor com dados, e a <a href="/consultoria-financeira/">Consultoria Financeira</a> estuda a rentabilidade e o tempo de retorno do investimento (payback).</p>
+					</div>
+					<ImagemReservada descricao="consultores analisando dados de mercado com o cliente (trabalho real)" classe="icp_image" />
+				</div>
+
+				<div class="icp_wrapper is-invertida">
+					<div>
+						<div class="icp_header">
+							<span class="eyebrow">Da análise à ação</span>
+							<h2 id="plano-de-marketing">Plano de marketing tradicional e digital para vender mais</h2>
+							<p class="mercadologica_texto">A partir do que descobrimos sobre o seu público e o seu mercado, montamos com você um plano de marketing tradicional e digital para divulgar o seu produto ou serviço e conquistar mais clientes. Você conta com a qualidade de uma consultoria sênior, com a energia e o custo-benefício de jovens talentos orientados por professores da FGV.</p>
+						</div>
+						<p class="mercadologica_prova"><strong>Na prática:</strong> com um plano de marketing, a demanda da <a href={maCerise.url}>confeitaria Ma Cerise</a> cresceu 1154% <span class="preencher">A preencher: confirmar percentual (1124% ou 1154%)</span> nos 3 meses seguintes ao projeto, e o faturamento ficou 10 vezes maior. Na <a href={talent.url}>Talent Academy</a>, o desafio era prospectar clientes: o plano foi do reposicionamento da marca às redes sociais, e o projeto foi 100% implementado.</p>
+						<p class="mercadologica_links">Ainda vai tirar uma ideia do papel? O <a href="/plano-de-negocios/">Plano de Negócios</a> reúne pesquisa de mercado, teste da ideia e os planos operacional, financeiro e de marketing.</p>
+						<div class="mercadologica_acoes">
+							<a href="#formulario" class="button">Quero um plano de marketing</a>
+						</div>
+					</div>
+					<ImagemReservada descricao="equipe apresentando um plano de marketing ao cliente (trabalho real)" classe="icp_image" />
+				</div>
+			</div>
+		</div>
+	</section>
+</SolucaoLayout>
+
+<style>
+	.mercadologica_linhas {
+		display: grid;
+		gap: clamp(3.5rem, 6vw, 5.5rem);
+	}
+
+	.mercadologica_texto {
+		margin-top: 0.85rem;
+		color: var(--gray600);
+		font-size: 1rem;
+		line-height: 1.65;
+	}
+
+	.mercadologica_prova {
+		padding: 1.25rem 1.5rem;
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-left: 4px solid var(--primary600);
+		border-radius: var(--card-radius-md);
+		color: var(--gray700);
+		line-height: 1.65;
+	}
+
+	.mercadologica_links {
+		margin-top: 1.5rem;
+		color: var(--gray600);
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	.mercadologica_prova a,
+	.mercadologica_links a {
+		color: var(--primary700);
+		font-weight: 600;
+		text-decoration: underline;
+	}
+
+	.mercadologica_acoes {
+		margin-top: 1.75rem;
+	}
+
+	/* Z-pattern da LP: na 2ª linha a imagem vai para a esquerda, só no desktop (o texto segue primeiro no HTML) */
+	@media (min-width: 1025px) {
+		.is-invertida {
+			grid-template-columns: 0.85fr 1.15fr;
+		}
+
+		.is-invertida > :first-child {
+			order: 2;
+		}
+	}
+</style>

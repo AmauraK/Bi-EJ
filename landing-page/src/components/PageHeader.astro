@@ -1,0 +1,59 @@
+---
+// Cabeçalho de página (H1 da página). Reaproveita .hero_background, .home-hero_divider, .hero_kicker,
+// .hero_heading, .hero_description e .hero_actions da LP.
+// Slots: "titulo" (substitui o texto do H1, ex.: com <span class="highlight-purpose">), default (conteúdo
+// extra abaixo da descrição), "acoes" (botões) e "midia" (coluna da direita; abaixo do texto se centralizado).
+interface Props {
+	titulo: string;
+	kicker?: string;
+	descricao?: string;
+	escuro?: boolean;
+	centralizado?: boolean;
+}
+
+const { titulo, kicker, descricao, escuro = false, centralizado = false } = Astro.props;
+const temMidia = Astro.slots.has('midia');
+const temAcoes = Astro.slots.has('acoes');
+---
+
+<section class:list={['section_page-header', { 'is-dark': escuro }]} aria-labelledby="page-heading">
+	<div class="hero_background" aria-hidden="true"></div>
+	<div class="page-padding">
+		<div class="container-large">
+			<div class:list={['page-header_wrapper', { 'is-centered': centralizado, 'is-single': !temMidia && !centralizado }]}>
+				<div>
+					<div class="home-hero_divider"></div>
+					{kicker && <span class="hero_kicker">{kicker}</span>}
+					<h1 id="page-heading" class:list={['hero_heading', { 'text-color-gradient-gray': !escuro }]}>
+						<slot name="titulo">{titulo}</slot>
+					</h1>
+					{descricao && <p class="hero_description">{descricao}</p>}
+					<slot />
+					{temAcoes && (
+						<div class="hero_actions">
+							<slot name="acoes" />
+						</div>
+					)}
+				</div>
+				{temMidia && !centralizado && (
+					<div class="home-hero_image-col">
+						<slot name="midia" />
+					</div>
+				)}
+			</div>
+			{temMidia && centralizado && (
+				<div class="page-header_media">
+					<slot name="midia" />
+				</div>
+			)}
+		</div>
+	</div>
+</section>
+
+<style>
+	.page-header_media {
+		position: relative;
+		z-index: 2;
+		margin-top: clamp(2rem, 4vw, 3rem);
+	}
+</style>

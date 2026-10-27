@@ -1,0 +1,227 @@
+---
+// /materiais-ricos/: os 3 e-books do site atual (texto e PDF das páginas de cada e-book em ejfgv.com, publicadas
+// em 11/04/2021, que agora redirecionam para cá), cada um ligado a uma solução, mais a Carta de Serviços.
+// Formulário antes do download: sem endpoint, o main.js avisa que não houve cadastro e mostra o link do PDF.
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import Faq from '../components/Faq.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Newsletter from '../components/conteudo/Newsletter.astro';
+import Solucoes from '../components/conteudo/Solucoes.astro';
+import { SITE, CONTATO, FORMULARIOS, SOLUCOES } from '../consts';
+
+const PDFS = 'https://ejfgv.com/wp-content/uploads/2021/04/';
+const solucao = (slug: string) => SOLUCOES.find((s) => s.slug === slug)!;
+
+const EBOOKS = [
+	{
+		id: 'google-ads',
+		titulo: 'Google Ads: O que você precisa saber para começar',
+		texto: 'Para quem tem dúvidas sobre a plataforma de publicidade Google Ads: o material explica o básico de um jeito fácil de entender. Mostra como criar, segmentar e analisar o desempenho de campanhas e sugere boas práticas para quem quer aumentar os resultados.',
+		pdf: `${PDFS}Material-Rico-1-Ads.pdf`,
+		solucao: solucao('consultoria-mercadologica'),
+		pendente: 'versão reformulada e menos densa do material de Google Ads',
+	},
+	{
+		id: 'power-bi',
+		titulo: 'Power BI: Instruções para iniciante',
+		texto: 'O Power BI é um software de análise de dados com visualizações interativas. Este material é para iniciantes que querem explorar a plataforma e não sabem por onde começar: traz dicas para a modelagem inicial dos dados e mostra os visuais disponíveis e para que serve cada um.',
+		pdf: `${PDFS}Material-Rico-2-Power-BI.pdf`,
+		solucao: solucao('consultoria-business-intelligence'),
+	},
+	{
+		id: 'modelagem-financeira',
+		titulo: 'Projeções e Modelagem Financeira',
+		texto: 'Para quem tem dúvidas sobre como fazer uma projeção financeira. O material aborda Free Cash Flow (fluxo de caixa livre), Valor Presente e diferentes métodos de Valuation, com foco no Discounted Cash Flow (fluxo de caixa descontado), e explica o levantamento de premissas e o passo a passo até o resultado final.',
+		pdf: `${PDFS}Material-Rico-3-Projecoes-e-Modelagem-Financeira.pptx.pdf`,
+		solucao: solucao('consultoria-financeira'),
+	},
+];
+const PUBLICADO = '2021-04-11';
+const publicadoBr = PUBLICADO.split('-').reverse().join('/');
+
+const faq = [
+	{
+		pergunta: 'Os e-books são gratuitos?',
+		resposta: 'Sim. Os e-books da EJFGV são gratuitos: basta informar nome e e-mail para baixar.',
+		validar: true,
+	},
+	{
+		pergunta: 'Para quem são os materiais?',
+		resposta: 'Para empreendedores e gestores que estão começando: o de Google Ads explica o básico da plataforma, o de Power BI é para quem quer começar a explorar a ferramenta e o de Projeções e Modelagem Financeira é para quem tem dúvidas sobre como fazer uma projeção financeira.',
+		validar: true,
+	},
+	{
+		pergunta: 'Qual a relação entre os e-books e as consultorias da EJFGV?',
+		resposta: 'Cada e-book se liga a uma consultoria: o de Google Ads à Consultoria Mercadológica, o de Power BI à Consultoria de Business Intelligence e o de Projeções e Modelagem Financeira à Consultoria Financeira. Para aplicar o tema na sua empresa, solicite um diagnóstico gratuito.',
+		validar: true,
+	},
+	{
+		pergunta: 'O que é a Carta de Serviços?',
+		resposta: 'É o resumo das soluções de consultoria da EJFGV, com o que cada uma entrega e o link para a página de cada solução.',
+		validar: true,
+	},
+	{ pergunta: 'O que acontece com meus dados depois do download?' },
+];
+---
+
+<Layout
+	titulo="Materiais Ricos: e-books gratuitos de gestão - EJFGV"
+	descricao="Baixe grátis os e-books da EJFGV, a Empresa Júnior da FGV, sobre Google Ads, Power BI e projeções financeiras, e conheça a Carta de Serviços."
+>
+	<PageHeader
+		kicker="Materiais Ricos"
+		titulo="E-books gratuitos para a gestão da sua empresa"
+		descricao={`Os Materiais Ricos são e-books gratuitos da ${SITE.nome}, a ${SITE.nomeCompleto}, publicados em 2021 para empreendedores e gestores que estão começando em Google Ads, Power BI ou projeções financeiras. Cada e-book se liga a uma consultoria da ${SITE.nome}: quando quiser aplicar o tema no seu negócio, fale com um especialista.`}
+	>
+		<Fragment slot="acoes">
+			<a href="#ebooks" class="button is-button-large">Escolher um e-book</a>
+			<a href="#carta-de-servicos" class="button-tertiary">Ver a Carta de Serviços →</a>
+		</Fragment>
+	</PageHeader>
+
+	<section id="ebooks" class="materiais_ebooks" aria-labelledby="ebooks-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">E-books</span>
+					<h2 id="ebooks-titulo">Escolha um e-book e baixe grátis</h2>
+					<p>Preencha nome e e-mail no material que quiser. Cada e-book indica a consultoria da EJFGV que aplica o tema na prática.</p>
+					<p class="materiais_contato">Quer conversar sobre como aplicar um tema na sua empresa? Escreva para <a href={`mailto:${CONTATO.email}`}>{CONTATO.email}</a>.</p>
+					<p><span class="preencher">A preencher: novas versões dos PDFs indicando o e-mail {CONTATO.email}</span></p>
+				</div>
+
+				<div class="cases_grid">
+					{EBOOKS.map((m) => (
+						<article class="case_card material_card">
+							<ImagemReservada descricao={`capa do e-book ${m.titulo}`} classe="material_capa" />
+							<div>
+								<span class="case_tag">{m.solucao.rotulo}</span>
+								<h3 id={`${m.id}-titulo`}>{m.titulo}</h3>
+								<p>{m.texto}</p>
+								{m.pendente && <p class="material_linha"><span class="preencher">A preencher: {m.pendente}</span></p>}
+								<p class="material_linha material_data">Publicado em <time datetime={PUBLICADO}>{publicadoBr}</time></p>
+								<p class="material_linha material_solucao">Para aplicar na sua empresa: <a href={m.solucao.url}>{m.solucao.nome} →</a></p>
+							</div>
+
+							<form
+								data-form="material"
+								action={FORMULARIOS.material}
+								method="post"
+								novalidate
+								data-whatsapp={CONTATO.whatsappUrl}
+								data-email={CONTATO.email}
+								data-download={m.pdf}
+								aria-labelledby={`${m.id}-titulo`}
+							>
+								<input type="hidden" name="material" value={m.titulo} />
+								<div class="form-field-wrapper">
+									<label for={`${m.id}-name`} class="field-label">Nome <span class="text-color-primary600">*</span></label>
+									<input class="form-input" maxlength="256" name="name" id={`${m.id}-name`} placeholder="Nome completo" type="text" autocomplete="name" required />
+								</div>
+								<div class="form-field-wrapper">
+									<label for={`${m.id}-email`} class="field-label">E-mail <span class="text-color-primary600">*</span></label>
+									<input class="form-input" maxlength="256" name="Email" id={`${m.id}-email`} placeholder="voce@suaempresa.com.br" type="email" autocomplete="email" required />
+								</div>
+
+								<div class="form-honeypot" aria-hidden="true">
+									<label>Não preencha este campo <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+								</div>
+
+								<label class="form-checkbox" for={`${m.id}-consentimento`}>
+									<input type="checkbox" name="Consentimento" id={`${m.id}-consentimento`} required />
+									<span>Aceito que a EJFGV utilize meus dados para entrar em contato sobre seus conteúdos e soluções, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+								</label>
+
+								<button type="submit" class="button">Baixar e-book grátis</button>
+
+								<div class="form-feedback" role="status" aria-live="polite"></div>
+							</form>
+						</article>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Solucoes
+		id="carta-de-servicos"
+		kicker="Soluções da EJFGV"
+		titulo="Carta de Serviços"
+		texto="As soluções de consultoria da EJFGV em um só lugar, com o que cada uma entrega e o link para conhecer os detalhes. Antes de qualquer proposta, fazemos uma reunião gratuita de diagnóstico."
+	>
+		<div class="frente_mini-card">
+			<span>PDF</span>
+			<h3>Carta de Serviços para baixar</h3>
+			<p><span class="preencher">A preencher: PDF da Carta de Serviços</span></p>
+		</div>
+	</Solucoes>
+
+	<Newsletter />
+
+	<Faq itens={faq} />
+
+	<CtaBanner titulo="Quer ir além do e-book e aplicar o tema na sua empresa?" href="/contato/" rotulo="Fale com um Especialista" escuro />
+</Layout>
+
+<style>
+	.materiais_ebooks {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.icp_header p {
+		margin-top: 0.75rem;
+		color: var(--gray600);
+	}
+
+	.materiais_contato a,
+	.material_solucao a {
+		color: var(--primary700);
+		font-weight: 700;
+		text-decoration: underline;
+	}
+
+	.materiais_ebooks .cases_grid {
+		margin-bottom: 0;
+	}
+
+	/* Card com formulário: não se mexe no hover e alinha os formulários na base */
+	.material_card {
+		justify-content: flex-start;
+	}
+
+	.material_card:hover {
+		transform: none;
+	}
+
+	.material_card :global(.material_capa) {
+		min-height: 0;
+		max-height: 240px;
+		aspect-ratio: 16 / 9;
+	}
+
+	.material_card h3 {
+		margin-bottom: 0.5rem;
+	}
+
+	.material_linha {
+		margin-top: 0.6rem;
+	}
+
+	.material_data {
+		font-size: 0.8rem;
+	}
+
+	.material_card form {
+		margin-top: auto;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--gray200);
+	}
+
+	.material_card .button {
+		width: 100%;
+	}
+</style>

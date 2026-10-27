@@ -1,0 +1,42 @@
+---
+// Credibilidade: FGV, Bain e Brasil Júnior (docx). Só texto: logos de parceiros dependem de autorização.
+// O que o docx não detalha fica como marcador "A preencher".
+interface Props {
+	kicker?: string;
+	titulo?: string;
+}
+
+const { kicker = 'Credibilidade', titulo = 'A força da FGV, da Bain e da Brasil Júnior no seu projeto' } = Astro.props;
+---
+
+<section class="section_icp credibilidade" aria-labelledby="credibilidade-titulo">
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="icp_header">
+				<span class="eyebrow">{kicker}</span>
+				<h2 id="credibilidade-titulo">{titulo}</h2>
+			</div>
+			<div class="cases_grid">
+				<div class="icp_item">
+					<h3>FGV</h3>
+					<p>Somos a Empresa Júnior da Fundação Getulio Vargas: os projetos são feitos por alunos da graduação, com orientação de professores da FGV.</p>
+				</div>
+				<div class="icp_item">
+					<h3>Bain</h3>
+					<p>A EJFGV conta com a assistência da Bain.</p>
+					<p><span class="preencher">A preencher: como funciona a parceria com a Bain</span></p>
+				</div>
+				<div class="icp_item">
+					<h3>Brasil Júnior</h3>
+					<p><span class="preencher">A preencher: informações de credibilidade da Brasil Júnior</span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cases_grid {
+		margin-bottom: 0;
+	}
+</style>

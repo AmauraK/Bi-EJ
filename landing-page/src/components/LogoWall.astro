@@ -1,0 +1,76 @@
+---
+// Faixa contínua de logos reais de clientes (.slider-clientes_* da LP), com botão de pausa.
+// Os logos pedidos no docx que ainda não chegaram aparecem como marcadores "A preencher".
+import { LOGOS, LOGOS_PENDENTES, NUMEROS } from '../consts';
+
+interface Props {
+	titulo?: string;
+	/** mostra os logos pendentes (Docol, Warner Bros, Mandic, Época Cosméticos) como marcadores */
+	pendentes?: boolean;
+	id?: string;
+}
+
+const {
+	titulo = `Mais de ${NUMEROS.projetos} projetos entregues para empresas como`,
+	pendentes = true,
+	id = 'faixa-logos',
+} = Astro.props;
+---
+
+<section class="section_home-quem-somos" aria-label="Clientes da EJFGV">
+	<div class="page-padding">
+		<div class="container-large">
+			<div class="clientes_wrapper">
+				<div class="clientes_title">{titulo}</div>
+				<div class="slider-clientes_component" id={id}>
+					<div class="slider-clientes_logo-wrapper">
+						{LOGOS.map((logo) => <img src={logo.src} loading="lazy" alt={logo.nome} class="client_logo" />)}
+					</div>
+					<div class="slider-clientes_logo-wrapper" aria-hidden="true">
+						{LOGOS.map((logo) => <img src={logo.src} loading="lazy" alt="" class="client_logo" />)}
+					</div>
+				</div>
+				<div class="logos_rodape">
+					{pendentes && (
+						<p class="logos_pendentes">
+							{LOGOS_PENDENTES.map((nome) => <span class="preencher">A preencher: logo {nome}</span>)}
+						</p>
+					)}
+					<button type="button" class="button-tertiary" data-logos-pause aria-controls={id} aria-pressed="false">Pausar logos</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.clientes_wrapper {
+		margin-top: 0;
+		padding-top: 2.5rem;
+		padding-bottom: 2rem;
+		border-top: 0;
+	}
+
+	.logos_rodape {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem 1.25rem;
+		margin-top: 1.25rem;
+	}
+
+	.logos_pendentes {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
+		font-size: 0.8rem;
+		color: var(--gray600);
+	}
+
+	.logos_rodape .button-tertiary {
+		height: 40px;
+		font-size: 0.85rem;
+	}
+</style>

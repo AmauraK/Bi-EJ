@@ -1,0 +1,492 @@
+---
+// Página de cada case (as 8 URLs atuais): capa com o "spoiler", índice fixo Problema Inicial · Nossa Solução ·
+// Resultados Finais com a seção ativa em destaque, texto com efeito de entrada (desligado no modo de menos
+// movimento), depoimento do cliente, "Histórias como essa", CTA para o formulário da solução e JSON-LD Article.
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ImagemReservada from '../../components/ImagemReservada.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import Depoimentos from '../../components/Depoimentos.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import { SITE, NUMEROS, CASES, DEPOIMENTOS, ATUALIZADO_EM, type Case } from '../../consts';
+import { CONTEUDO, solucoesDo, tagDo, type ConteudoCase } from '../../components/cases/conteudo';
+
+export function getStaticPaths() {
+	return CASES.map((c) => ({ params: { slug: c.slug }, props: { caso: c } }));
+}
+
+const { caso } = Astro.props as { caso: Case };
+
+// Case sem texto integral em conteudo.ts: usa as linhas de CASES e mostra o marcador.
+const completo = caso.slug in CONTEUDO;
+const partes: ConteudoCase = CONTEUDO[caso.slug] ?? {
+	para: caso.cliente,
+	resumo: '',
+	problema: [`${caso.problema}.`],
+	solucao: [`${caso.solucao}.`],
+	resultados: [{ titulo: caso.destaque }],
+};
+
+const solucoes = solucoesDo(caso);
+const formulario = `${solucoes[0].url}#formulario`;
+const nomes = new Intl.ListFormat('pt-BR', { type: 'conjunction' }).format(solucoes.map((s) => s.nome));
+const url = new URL(caso.url, SITE.url).href;
+const descricao = `${caso.cliente}, case da ${SITE.nome} (${caso.segmento}). Desafio: ${caso.problema}. Resultado: ${caso.destaque}.`;
+
+const depoimentos = DEPOIMENTOS.filter((d) => d.autor === caso.cliente);
+
+// "Histórias como essa": primeiro os cases que compartilham uma solução; completa com os outros até 3.
+const outros = CASES.filter((c) => c.slug !== caso.slug);
+const parecido = (c: Case) => c.solucoes.some((s) => caso.solucoes.includes(s));
+const historias = [...outros.filter(parecido), ...outros.filter((c) => !parecido(c))].slice(0, 3);
+
+const PARTES = [
+	{ id: 'problema', rotulo: 'Problema Inicial' },
+	{ id: 'solucao', rotulo: 'Nossa Solução' },
+	{ id: 'resultados', rotulo: 'Resultados Finais' },
+];
+
+const artigo = {
+	'@context': 'https://schema.org',
+	'@type': 'Article',
+	headline: caso.titulo,
+	description: descricao,
+	url,
+	mainEntityOfPage: url,
+	inLanguage: 'pt-BR',
+	articleSection: 'Cases de sucesso',
+	datePublished: partes.publicado,
+	dateModified: ATUALIZADO_EM,
+	about: solucoes.map((s) => ({ '@type': 'Service', name: s.nome, url: new URL(s.url, SITE.url).href })),
+	author: { '@type': 'Organization', name: SITE.nome, url: SITE.url },
+	publisher: { '@type': 'Organization', name: SITE.nome, url: SITE.url, logo: { '@type': 'ImageObject', url: SITE.logo } },
+};
+---
+
+<Layout titulo={`${caso.cliente} - Cases de Sucesso - EJFGV`} descricao={descricao} ctaHref={formulario} jsonLd={artigo}>
+	<div class="case-capa">
+		<PageHeader
+			titulo={caso.titulo}
+			kicker={`Case de sucesso · ${caso.segmento}`}
+			descricao={`Case de ${nomes} da ${SITE.nome} para ${partes.para}. A ${SITE.nome} é a ${SITE.nomeCompleto} e faz consultoria desde ${NUMEROS.fundacao}.`}
+			escuro
+		>
+			<div class="case-spoiler">
+				<span class="case-spoiler_rotulo">Resultado</span>
+				<p class="case-spoiler_destaque">{caso.destaque}</p>
+				{partes.resumo && <p class="case-spoiler_resumo">{partes.resumo}</p>}
+			</div>
+			<Fragment slot="acoes">
+				<a href={formulario} class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+				<a href="/cases-de-sucesso/" class="button-tertiary">Ver todos os cases →</a>
+			</Fragment>
+			<figure slot="midia" class="hero-photo-frame">
+				<ImagemReservada descricao={`foto de abertura do case ${caso.cliente}`} classe="home-hero_image" escuro />
+			</figure>
+		</PageHeader>
+	</div>
+
+	<div class="case-corpo" data-case>
+		<div class="page-padding padding-section-medium">
+			<div class="container-large case-layout">
+				<nav class="case-indice" aria-label="Partes do case">
+					<p class="case-indice_titulo">Neste case</p>
+					<ol>
+						{PARTES.map((p, i) => (
+							<li><a href={`#${p.id}`} data-indice><span aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>{p.rotulo}</a></li>
+						))}
+					</ol>
+				</nav>
+
+				<article class="case-texto">
+					{!completo && <p class="revelar"><span class="preencher">A preencher: texto completo do case</span></p>}
+
+					<dl class="case-ficha revelar">
+						<div><dt>Cliente</dt><dd>{caso.cliente}</dd></div>
+						<div><dt>Segmento</dt><dd>{caso.segmento}</dd></div>
+						<div><dt>Desafio</dt><dd>{caso.problema}</dd></div>
+						<div><dt>Solução</dt><dd>{caso.solucao}</dd></div>
+						<div class="case-ficha_largo">
+							<dt>Consultoria</dt>
+							<dd>{solucoes.map((s, i) => <>{i > 0 && ' · '}<a href={s.url}>{s.nome}</a></>)}</dd>
+						</div>
+					</dl>
+
+					<section id="problema" class="case-parte" aria-labelledby="problema-titulo">
+						<span class="eyebrow revelar">Parte 01</span>
+						<h2 id="problema-titulo" class="revelar">Problema Inicial</h2>
+						{partes.problema.map((p) => <p class="revelar">{p}</p>)}
+					</section>
+
+					<section id="solucao" class="case-parte" aria-labelledby="solucao-titulo">
+						<span class="eyebrow revelar">Parte 02</span>
+						<h2 id="solucao-titulo" class="revelar">Nossa Solução</h2>
+						{partes.solucao.map((p) => <p class="revelar">{p}</p>)}
+					</section>
+
+					<section id="resultados" class="case-parte" aria-labelledby="resultados-titulo">
+						<span class="eyebrow revelar">Parte 03</span>
+						<h2 id="resultados-titulo" class="revelar">Resultados Finais</h2>
+						<div class="icp_list case-resultados">
+							{partes.resultados.map((r) => (
+								<div class="icp_item revelar">
+									<h3>{r.titulo}</h3>
+									{(r.texto || r.pendente) && (
+										<p>{r.texto}{r.pendente && <>{' '}<span class="preencher">A preencher: {r.pendente}</span></>}</p>
+									)}
+								</div>
+							))}
+						</div>
+						{depoimentos.length > 0 && (
+							<div class="case-depoimento revelar">
+								<Depoimentos itens={depoimentos} />
+							</div>
+						)}
+					</section>
+				</article>
+			</div>
+		</div>
+	</div>
+
+	<section class="section_home-quem-somos" aria-labelledby="historias-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Outros cases</span>
+					<h2 id="historias-titulo">Histórias como essa</h2>
+				</div>
+				<div class="cases_grid case-historias">
+					{historias.map((c) => (
+						<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} texto={`Desafio: ${c.problema}.`} href={c.url} />
+					))}
+				</div>
+				<a href="/cases-de-sucesso/" class="button-tertiary case-todos">Ver todos os cases →</a>
+			</div>
+		</div>
+	</section>
+
+	<CtaBanner titulo={solucoes[0].chamada} href={formulario} rotulo="Fale com um Especialista" escuro />
+
+<style>
+	/* Capa: os títulos dos cases são longos, então o H1 fica um pouco menor que o das outras páginas */
+	.case-capa :global(.hero_heading) {
+		font-size: clamp(2rem, 3.2vw, 2.85rem);
+	}
+
+	/* O "spoiler": o resultado em destaque já na capa */
+	.case-spoiler {
+		max-width: 36rem;
+		margin-bottom: 1.75rem;
+		padding: 1.15rem 1.35rem;
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		border-left: 4px solid var(--primary600);
+		border-radius: var(--card-radius-md);
+	}
+
+	.case-spoiler_rotulo {
+		display: block;
+		color: var(--text-eyebrow-dark);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.case-spoiler_destaque {
+		margin-top: 0.35rem;
+		color: var(--white);
+		font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+		font-weight: 800;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+	}
+
+	.case-spoiler_resumo {
+		margin-top: 0.6rem;
+		color: var(--graywarm300);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+	}
+
+	/* Corpo: índice fixo à esquerda e texto à direita */
+	.case-layout {
+		display: grid;
+		grid-template-columns: 14rem minmax(0, 1fr);
+		gap: clamp(2.5rem, 5vw, 5rem);
+	}
+
+	.case-indice {
+		position: sticky;
+		top: calc(var(--nav-height) + 2rem);
+		align-self: start;
+	}
+
+	.case-indice_titulo {
+		margin-bottom: 0.75rem;
+		color: var(--gray600);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.case-indice ol {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		border-left: 1px solid var(--gray200);
+	}
+
+	.case-indice a {
+		display: flex;
+		gap: 0.65rem;
+		margin-left: -1px;
+		padding: 0.6rem 0 0.6rem 1rem;
+		border-left: 2px solid transparent;
+		color: var(--gray600);
+		font-size: 0.95rem;
+		font-weight: 600;
+		transition: color 0.25s, border-color 0.25s;
+	}
+
+	.case-indice a span {
+		color: var(--primary700);
+	}
+
+	.case-indice a:hover {
+		color: var(--primary700);
+	}
+
+	.case-indice a[aria-current='true'] {
+		border-color: var(--primary600);
+		color: var(--gray900);
+		font-weight: 700;
+	}
+
+	.case-texto {
+		max-width: 46rem;
+	}
+
+	.case-ficha {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem 1.5rem;
+		margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+		padding: 1.5rem;
+		background: var(--gray50);
+		border: 1px solid var(--gray200);
+		border-radius: var(--card-radius-lg);
+	}
+
+	.case-ficha_largo {
+		grid-column: 1 / -1;
+	}
+
+	.case-ficha dt {
+		color: var(--gray600);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.case-ficha dd {
+		margin-top: 0.2rem;
+		color: var(--gray900);
+		font-size: 0.95rem;
+		font-weight: 600;
+		line-height: 1.45;
+	}
+
+	.case-ficha a {
+		color: var(--primary700);
+		text-decoration: underline;
+	}
+
+	.case-parte {
+		scroll-margin-top: calc(var(--nav-height) + 2rem);
+	}
+
+	.case-parte + .case-parte {
+		margin-top: clamp(3rem, 6vw, 4.5rem);
+	}
+
+	.case-parte h2 {
+		margin-bottom: 1.25rem;
+		color: var(--gray900);
+		font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+		font-weight: 800;
+		line-height: 1.18;
+		letter-spacing: -0.02em;
+	}
+
+	.case-parte > p {
+		color: var(--gray700);
+		font-size: 1.0625rem;
+		line-height: 1.75;
+	}
+
+	.case-parte > p + p {
+		margin-top: 1.1rem;
+	}
+
+	.case-resultados {
+		margin-top: 1.5rem;
+	}
+
+	.case-resultados h3 {
+		font-size: 1.1rem;
+	}
+
+	.case-depoimento {
+		margin-top: 1.25rem;
+	}
+
+	.case-todos {
+		height: auto;
+		padding: 0.35rem 0;
+	}
+
+	.case-todos:hover {
+		background-color: transparent;
+		text-decoration: underline;
+	}
+
+	.case-historias :global(.case_metric) {
+		font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+		line-height: 1.2;
+	}
+
+	/* Efeito de entrada: só com JS ativo (classe .tem-revelar); o que já está na tela não anima */
+	.tem-revelar .revelar {
+		transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo), border-color 0.25s;
+	}
+
+	.tem-revelar .revelar:not(.is-visivel) {
+		opacity: 0;
+		transform: translateY(1.25rem);
+	}
+
+	@media (prefers-reduced-motion: reduce), print {
+		.tem-revelar .revelar:not(.is-visivel) {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	/* Tablet e celular: o índice vira uma barra fixa logo abaixo da navegação */
+	@media (max-width: 1024px) {
+		.case-layout {
+			display: block;
+		}
+
+		.case-indice {
+			z-index: 10;
+			top: var(--nav-height);
+			margin: 0 calc(-1 * clamp(1.25rem, 4vw, 3.5rem)) 2rem;
+			padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+			background: var(--white);
+			border-bottom: 1px solid var(--gray200);
+		}
+
+		.case-indice_titulo {
+			display: none;
+		}
+
+		.case-indice ol {
+			flex-direction: row;
+			gap: 1rem;
+			border-left: 0;
+		}
+
+		.case-indice li {
+			flex: 1;
+		}
+
+		.case-indice a {
+			justify-content: center;
+			height: 100%;
+			margin: 0;
+			padding: 0.8rem 0.25rem;
+			border-left: 0;
+			border-bottom: 2px solid transparent;
+			text-align: center;
+			font-size: 0.9rem;
+		}
+
+		.case-texto {
+			max-width: none;
+		}
+
+		.case-parte {
+			scroll-margin-top: calc(var(--nav-height) + 5rem);
+		}
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		.case-historias {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 767px) {
+		.case-indice a span {
+			display: none;
+		}
+
+		.case-ficha {
+			grid-template-columns: 1fr;
+			padding: 1.25rem;
+		}
+	}
+</style>
+
+<script>
+	// Índice fixo com a seção ativa em destaque e efeito de entrada do texto.
+	const raiz = document.querySelector<HTMLElement>('[data-case]');
+
+	if (raiz && 'IntersectionObserver' in window) {
+		const links = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('[data-indice]'));
+		const ativar = (id: string) =>
+			links.forEach((a) => (a.hash === `#${id}` ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+
+		// Ativa é a seção que cruza a faixa entre 35% e 40% da altura da tela.
+		const indice = new IntersectionObserver(
+			(entradas) => {
+				entradas.forEach((e) => {
+					if (e.isIntersecting) ativar(e.target.id);
+				});
+			},
+			{ rootMargin: '-35% 0px -60% 0px' }
+		);
+		links.forEach((a) => {
+			const secao = document.getElementById(a.hash.slice(1));
+			if (secao) indice.observe(secao);
+			a.addEventListener('click', () => ativar(a.hash.slice(1)));
+		});
+		ativar('problema');
+
+		// Efeito de entrada: desligado no modo de menos movimento (o CSS também não anima).
+		if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			const revelar = new IntersectionObserver(
+				(entradas) => {
+					entradas.forEach((e) => {
+						if (!e.isIntersecting) return;
+						e.target.classList.add('is-visivel');
+						revelar.unobserve(e.target);
+					});
+				},
+				{ rootMargin: '0px 0px -8% 0px' }
+			);
+			raiz.querySelectorAll('.revelar').forEach((el) => {
+				// O que já está na tela aparece sem animação, para não piscar.
+				if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visivel');
+				else revelar.observe(el);
+			});
+			raiz.classList.add('tem-revelar');
+		}
+	}
+</script>
+
+</Layout>
