@@ -1,0 +1,53 @@
+---
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import SecaoMercadologica from '../components/solucoes/consultoria-mercadologica/SecaoMercadologica.astro';
+import { DEPOIMENTOS, NUMEROS, SOLUCOES } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-mercadologica')!;
+
+const depoimentosMercadologicos = [
+  ...DEPOIMENTOS.filter((d) => d.id === 'ma-cerise' || d.id === 'talent-academy'),
+  ...DEPOIMENTOS.filter((d) => d.id !== 'ma-cerise' && d.id !== 'talent-academy'),
+];
+
+const faqItens = [
+  {
+    pergunta: 'Qual a diferença entre Consultoria Mercadológica e uma agência de publicidade?',
+    resposta:
+      'Enquanto uma agência de publicidade foca na execução de peças, anúncios e postagens, a Consultoria Mercadológica da EJFGV atua antes e de forma estratégica: investigamos o seu mercado, analisamos concorrentes, mapeamos o perfil e a jornada de compra do cliente ideal e estruturamos o plano de marketing com canais, orçamento e metas claras para que o investimento comercial gere retorno real.',
+    validar: true,
+  },
+  {
+    pergunta: 'Quando vale a pena contratar uma Pesquisa de Mercado?',
+    resposta:
+      'A Pesquisa de Mercado é recomendada quando a empresa deseja lançar um novo produto ou serviço, entrar em uma nova região, reposicionar a marca, ajustar preços frente à concorrência ou entender por que as vendas estagnaram. O estudo substitui suposições por dados qualitativos e quantitativos coletados diretamente do setor e do público comprador.',
+    validar: true,
+  },
+  {
+    pergunta: 'Como a EJFGV define o público-alvo e a jornada de compra da minha empresa?',
+    resposta:
+      'Combinamos entrevistas em profundidade, questionários estruturados, cliente oculto e análise concorrencial (benchmarking) com metodologias acadêmicas da Fundação Getulio Vargas. Assim, identificamos quem decide a compra, quais dores busca resolver, quais canais utiliza e quais gargalos do funil comercial precisam ser corrigidos.',
+    validar: true,
+  },
+  {
+    pergunta: 'Quanto tempo dura um projeto de Consultoria Mercadológica?',
+    resposta:
+      'Os projetos da EJFGV têm duração média de 3 meses, variando conforme a abrangência da pesquisa de mercado e do plano de marketing. Durante todo o cronograma, trabalhamos em cocriação próxima com a sua equipe e contamos com a orientação técnica de professores da Fundação Getulio Vargas.',
+    validar: true,
+  },
+  {
+    pergunta: 'A EJFGV atende empresas B2B e B2C?',
+    resposta: `Sim. Desde ${NUMEROS.fundacao}, já entregamos ${NUMEROS.projetosFormatado} projetos em mais de ${NUMEROS.setores} setores da economia. Atendemos tanto negócios voltados ao consumidor final (B2C), como a Confeitaria Ma Cerise, quanto empresas que vendem para outras empresas (B2B), como a Talent Academy, adequando a pesquisa e a estratégia comercial à realidade de cada modelo.`,
+    validar: true,
+  },
+];
+---
+
+<SolucaoLayout
+  solucao={solucao}
+  tituloH1="Consultoria Mercadológica e Pesquisa de Mercado para Empresas"
+  depoimentosItens={depoimentosMercadologicos}
+  faqItens={faqItens}
+>
+  <SecaoMercadologica slot="especifico" />
+</SolucaoLayout>

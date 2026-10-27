@@ -1,0 +1,544 @@
+---
+import ImagemReservada from '../../ImagemReservada.astro';
+import { CASES, NUMEROS, SITE } from '../../../consts';
+
+const caseMaCerise = CASES.find((c) => c.id === 'maCerise')!;
+const caseTalent = CASES.find((c) => c.id === 'talent')!;
+---
+
+<!-- 1. Seção SEO: 3 frentes práticas de Consultoria Mercadológica, Pesquisa de Mercado e Marketing -->
+<section class="section_mercadologica-frentes padding-section-medium" id="frentes-mercadologicas">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="merc_intro-grid">
+        <div class="merc_intro-copy">
+          <span class="eyebrow">Estratégia Comercial Orientada por Dados</span>
+          <h2>Como nossa Consultoria Mercadológica e de Marketing impulsiona suas vendas</h2>
+          <p class="merc_lead">
+            Antes de investir em anúncios ou abrir novos canais, sua empresa precisa saber exatamente quem compra, por que compra e como se diferenciar. Realizamos cada <strong>estudo de mercado</strong> e <strong>pesquisa de mercado</strong> de forma personalizada para transformar diagnósticos em crescimento comercial previsível.
+          </p>
+          <p class="merc_sublead">
+            Desde {NUMEROS.fundacao}, apoiamos pequenas, médias e grandes empresas em mais de {NUMEROS.setores} setores com projetos cocriados por graduandos e orientados por professores da Fundação Getulio Vargas.
+          </p>
+        </div>
+
+        <div class="merc_intro-media">
+          <ImagemReservada
+            rotulo="Apresentação de estudo mercadológico e jornada do cliente pela equipe EJFGV"
+            proporcao="16/9"
+          />
+        </div>
+      </div>
+
+      <div class="merc_frentes-grid">
+        <article class="merc_frente-card">
+          <div class="merc_frente-top">
+            <span class="merc_frente-num">Frente 01</span>
+            <span class="merc_frente-tag">Pesquisa de Mercado</span>
+          </div>
+          <h3>Pesquisa de Mercado e Análise de Concorrentes</h3>
+          <p>
+            Investigamos na prática a dinâmica do seu segmento para substituir suposições por evidências concretas sobre demanda, preços e posicionamento competitivo.
+          </p>
+          <ul class="merc_frente-list">
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Entrevistas em profundidade e questionários:</strong> coleta qualitativa e quantitativa com clientes atuais e potenciais compradores.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Cliente oculto:</strong> avaliação prática do atendimento, argumentação de vendas e experiência oferecida pelos concorrentes.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Benchmarking competitivo e tendências:</strong> mapeamento de preços, canais, diferenciais e movimentos do setor.</span>
+            </li>
+          </ul>
+        </article>
+
+        <article class="merc_frente-card">
+          <div class="merc_frente-top">
+            <span class="merc_frente-num">Frente 02</span>
+            <span class="merc_frente-tag">Público e Conversão</span>
+          </div>
+          <h3>Mapeamento da Jornada do Cliente e Persona</h3>
+          <p>
+            Compreendemos passo a passo como o seu cliente ideal descobre, avalia e decide contratar a sua empresa — eliminando gargalos que travam o fechamento de vendas.
+          </p>
+          <ul class="merc_frente-list">
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Canais de aquisição e critérios de compra:</strong> identificação de onde seu público busca soluções e o que mais pesa na decisão.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Pontos de atrito no funil comercial:</strong> diagnóstico de perdas entre o primeiro contato, a proposta e a retenção pós-venda.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Métricas de conversão e carteira:</strong> integração com painéis de acompanhamento comercial para monitorar resultados continuamente.</span>
+            </li>
+          </ul>
+          <a href="/consultoria-business-intelligence/" class="merc_crosslink">
+            Ver análise de métricas e funil em Business Intelligence →
+          </a>
+        </article>
+
+        <article class="merc_frente-card">
+          <div class="merc_frente-top">
+            <span class="merc_frente-num">Frente 03</span>
+            <span class="merc_frente-tag">Consultoria de Marketing</span>
+          </div>
+          <h3>Plano de Marketing e Estratégia de Crescimento</h3>
+          <p>
+            Traduzimos os aprendizados do estudo de mercado em um plano de ação comercial estruturado, alinhando marca, canais de divulgação e orçamento.
+          </p>
+          <ul class="merc_frente-list">
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Posicionamento de marca:</strong> definição clara da proposta de valor, tom de comunicação e diferenciais frente à concorrência.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Canais digitais e offline:</strong> estruturação de redes sociais, busca orgânica, tráfego pago e prospecção ativa B2B ou B2C.</span>
+            </li>
+            <li>
+              <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+              <span><strong>Calendário de ações e metas de retorno:</strong> cronograma prático de execução com indicadores claros de retorno sobre investimento.</span>
+            </li>
+          </ul>
+          <a href="/plano-de-negocios/" class="merc_crosslink">
+            Vai lançar uma nova frente completa? Conheça o Plano de Negócios →
+          </a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Seção de Destaque de Impacto Comercial (Ma Cerise e Talent Academy) -->
+<section class="section_mercadologica-impacto padding-section-medium" id="impacto-comercial">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="merc_impacto-box">
+        <div class="merc_impacto-header">
+          <div>
+            <span class="eyebrow is-dark">Impacto Comercial na Prática</span>
+            <h2>De pesquisas de mercado a saltos reais de demanda e faturamento</h2>
+            <p>
+              Veja como nossa consultoria mercadológica e de marketing ajudou negócios B2C e B2B a entenderem seu público e multiplicarem seus resultados comerciais.
+            </p>
+          </div>
+          <a href="#formulario" class="button is-button-large">
+            Impulsionar minhas vendas
+          </a>
+        </div>
+
+        <div class="merc_impacto-grid">
+          <article class="merc_case-highlight">
+            <div class="merc_case-badges">
+              <span class="merc_badge">{caseMaCerise.segmento} · B2C</span>
+              <span class="merc_badge is-accent">{caseMaCerise.cliente}</span>
+            </div>
+
+            <div class="merc_case-metrics">
+              <div class="merc_metric-item">
+                <strong>+1124%</strong>
+                <span>de aumento na demanda em 3 meses</span>
+              </div>
+              <div class="merc_metric-item">
+                <strong>10x</strong>
+                <span>de crescimento no faturamento</span>
+              </div>
+            </div>
+
+            <p class="merc_case-confirmar">
+              <span class="preencher">{caseMaCerise.notaConfirmar}</span>
+            </p>
+
+            <h3>Pesquisa de público-alvo e plano de marketing para confeitaria delivery</h3>
+            <p>
+              A Confeitaria Ma Cerise precisava atrair pedidos recorrentes em São Paulo. Conduzimos pesquisas qualitativas e quantitativas para mapear hábitos de consumo e entregamos um plano de marketing digital completo com posicionamento, calendário editorial e melhoria na jornada de pedidos.
+            </p>
+
+            <div class="merc_case-actions">
+              <a href={caseMaCerise.url} class="merc_case-link">
+                Ler case da Confeitaria Ma Cerise →
+              </a>
+            </div>
+          </article>
+
+          <article class="merc_case-highlight">
+            <div class="merc_case-badges">
+              <span class="merc_badge">{caseTalent.segmento} · B2B</span>
+              <span class="merc_badge is-accent">{caseTalent.cliente}</span>
+            </div>
+
+            <div class="merc_case-metrics">
+              <div class="merc_metric-item">
+                <strong>NPS 10</strong>
+                <span>nota máxima de satisfação da liderança</span>
+              </div>
+              <div class="merc_metric-item">
+                <strong>B2B</strong>
+                <span>reposicionamento e geração de leads</span>
+              </div>
+            </div>
+
+            <h3>Estudo de mercado, rebranding e estratégia comercial B2B</h3>
+            <p>
+              Residente no Cubo Itaú, a Talent Academy buscava fortalecer sua prospecção corporativa. Realizamos benchmarking competitivo e entrevistas em profundidade com gestores de RH de grandes empresas, estruturando o guia de reposicionamento da marca e o plano de comunicação digital e vendas.
+            </p>
+
+            <div class="merc_case-actions">
+              <a href={caseTalent.url} class="merc_case-link">
+                Ler case da Talent Academy →
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <div class="merc_impacto-footer">
+          <p>
+            Quer descobrir onde estão as maiores oportunidades de vendas no seu mercado com o suporte da Empresa Júnior da Fundação Getulio Vargas?
+          </p>
+          <a href="#formulario" class="button">
+            Solicitar diagnóstico gratuito →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_mercadologica-frentes {
+    background: var(--gray50);
+  }
+
+  .merc_intro-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+    margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem);
+  }
+
+  .merc_intro-copy h2 {
+    font-size: clamp(1.7rem, 2.6vw, 2.35rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 1rem;
+  }
+
+  .merc_lead {
+    font-size: 1.025rem;
+    color: var(--gray700);
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+  }
+
+  .merc_sublead {
+    font-size: 0.925rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .merc_frentes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .merc_frente-card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
+  }
+
+  .merc_frente-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary300);
+  }
+
+  .merc_frente-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .merc_frente-num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary700);
+  }
+
+  .merc_frente-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--primary800);
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .merc_frente-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.28;
+    color: var(--gray900);
+  }
+
+  .merc_frente-card > p {
+    font-size: 0.925rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .merc_frente-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .merc_frente-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.875rem;
+    color: var(--gray700);
+    line-height: 1.55;
+  }
+
+  .merc_frente-list img {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .merc_crosslink {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray200);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary700);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .merc_crosslink:hover {
+    color: var(--primary600);
+  }
+
+  .section_mercadologica-impacto {
+    background: var(--white);
+    border-top: 1px solid var(--gray200);
+  }
+
+  .merc_impacto-box {
+    background: var(--graywarm900);
+    color: var(--white);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border: 1px solid var(--border-hairline-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+  }
+
+  .merc_impacto-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border-hairline-dark);
+  }
+
+  .merc_impacto-header h2 {
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 0.65rem;
+    max-width: 36ch;
+  }
+
+  .merc_impacto-header p {
+    font-size: 0.975rem;
+    color: var(--graywarm300);
+    line-height: 1.6;
+    max-width: 58ch;
+  }
+
+  .merc_impacto-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .merc_case-highlight {
+    background: var(--graywarm950);
+    border: 1px solid var(--border-hairline-dark);
+    border-radius: var(--card-radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .merc_case-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .merc_badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: var(--gray800);
+    color: var(--gray200);
+  }
+
+  .merc_badge.is-accent {
+    background: var(--primary700);
+    color: var(--white);
+  }
+
+  .merc_case-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-hairline-dark);
+    border-bottom: 1px solid var(--border-hairline-dark);
+  }
+
+  .merc_metric-item strong {
+    display: block;
+    font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--primary300);
+    letter-spacing: -0.02em;
+  }
+
+  .merc_metric-item span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--graywarm300);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
+
+  .merc_case-confirmar .preencher {
+    color: var(--primary100);
+    background: var(--primary900);
+    border-color: var(--primary400);
+  }
+
+  .merc_case-highlight h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.32;
+  }
+
+  .merc_case-highlight p {
+    font-size: 0.9rem;
+    color: var(--graywarm300);
+    line-height: 1.6;
+  }
+
+  .merc_case-actions {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .merc_case-link {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary200);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .merc_case-link:hover {
+    color: var(--white);
+  }
+
+  .merc_impacto-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-hairline-dark);
+  }
+
+  .merc_impacto-footer p {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--graywarm300);
+    max-width: 54ch;
+  }
+
+  @media (max-width: 1024px) {
+    .merc_intro-grid,
+    .merc_frentes-grid,
+    .merc_impacto-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .merc_case-metrics {
+      grid-template-columns: 1fr;
+    }
+
+    .merc_impacto-header,
+    .merc_impacto-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .merc_frente-card,
+    .merc_case-highlight {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .merc_frente-card {
+      transition: none;
+    }
+
+    .merc_frente-card:hover {
+      transform: none;
+    }
+  }
+</style>

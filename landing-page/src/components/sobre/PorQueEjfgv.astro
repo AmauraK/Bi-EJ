@@ -1,0 +1,178 @@
+---
+import { CITACAO_PROJETO, NUMEROS } from '../../consts';
+import ImagemReservada from '../ImagemReservada.astro';
+
+const pilares = [
+  {
+    numero: '01',
+    titulo: `Pioneirismo desde ${NUMEROS.fundacao}`,
+    descricao:
+      'Primeira Empresa Júnior do Brasil e da América Latina, unindo tradição institucional e atualização metodológica constante.',
+  },
+  {
+    numero: '02',
+    titulo: 'Excelência Fundação Getulio Vargas',
+    descricao:
+      'Projetos elaborados por graduandos da FGV em São Paulo com acesso a bases de dados, biblioteca técnica e orientação de professores.',
+  },
+  {
+    numero: '03',
+    titulo: 'Soluções 100% personalizadas',
+    descricao:
+      'Não aplicamos pacotes prontos. Cada diagnóstico, modelagem e plano de ação é desenhado sob medida para a realidade do cliente.',
+  },
+  {
+    numero: '04',
+    titulo: 'Cocriação próxima ao cliente',
+    descricao:
+      'Trabalhamos lado a lado com sócios e gestores em alinhamentos semanais para garantir entregas práticas e aplicáveis.',
+  },
+];
+---
+
+<section id="nossa-historia" class="section_home-quem-somos padding-section-medium" aria-labelledby="por-que-titulo">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="quem-somos_wrapper">
+        <div>
+          <span class="eyebrow">Por que a EJFGV?</span>
+          <h2 id="por-que-titulo">Jovens talentos com rigor técnico de uma consultoria sênior</h2>
+          <p class="quem-somos_pillars">
+            Pioneirismo desde {NUMEROS.fundacao} · Excelência FGV · Soluções sob medida · Cocriação
+          </p>
+        </div>
+
+        <div class="por-que_copy">
+          <p class="quem-somos_copy">
+            Somos uma consultoria estratégica composta por alunos dos cursos de graduação da Fundação Getulio Vargas em São Paulo, focada em <strong>impulsionar o crescimento</strong> de pequenas, médias e grandes empresas e gerar <strong>impacto positivo</strong> na sociedade. Nosso objetivo é ambicioso: alcançar a <strong>excelência</strong> de uma consultoria sênior com a energia e a dedicação de jovens empreendedores.
+          </p>
+          <p class="quem-somos_copy">
+            Nossa equipe é formada por estudantes comprometidos com o <strong>crescimento mútuo</strong> e com a determinação de entregar <strong>resultados de qualidade</strong>, satisfação e implementação prática em cada etapa do projeto.
+          </p>
+        </div>
+      </div>
+
+      <div class="por-que_pilares-grid">
+        {pilares.map((pilar) => (
+          <article class="icp_item por-que_pilar-card">
+            <span class="por-que_pilar-num">{pilar.numero}</span>
+            <h3>{pilar.titulo}</h3>
+            <p>{pilar.descricao}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="por-que_destaque">
+        <blockquote class="por-que_citacao">
+          <p>“{CITACAO_PROJETO.texto}”</p>
+          <footer>
+            <strong>{CITACAO_PROJETO.autor}</strong>
+            <span>{CITACAO_PROJETO.cargo}</span>
+          </footer>
+        </blockquote>
+
+        <ImagemReservada
+          rotulo="Fotografia da equipe da EJFGV em reunião de cocriação e diagnóstico com cliente"
+          proporcao="16/10"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .por-que_copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .por-que_copy strong {
+    color: var(--gray900);
+    font-weight: 700;
+  }
+
+  .por-que_pilares-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .por-que_pilar-card {
+    background: var(--white);
+  }
+
+  .por-que_pilar-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    color: var(--primary700);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .por-que_destaque {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.5rem, 3.5vw, 3rem);
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+  }
+
+  .por-que_citacao {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-left: 4px solid var(--primary600);
+    padding-left: 1.5rem;
+  }
+
+  .por-que_citacao p {
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--gray900);
+  }
+
+  .por-que_citacao footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .por-que_citacao strong {
+    font-size: 0.95rem;
+    color: var(--gray900);
+  }
+
+  .por-que_citacao span {
+    font-size: 0.85rem;
+    color: var(--gray600);
+  }
+
+  @media (max-width: 1024px) {
+    .por-que_pilares-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .por-que_destaque {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .por-que_pilares-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

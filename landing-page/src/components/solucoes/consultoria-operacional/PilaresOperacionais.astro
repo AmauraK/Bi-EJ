@@ -1,0 +1,384 @@
+---
+import ImagemReservada from '../../ImagemReservada.astro';
+import { NUMEROS, SITE } from '../../../consts';
+
+const pilares = [
+  {
+    numero: '01',
+    etiqueta: 'Pilar 01 · Processos e BPMN',
+    titulo: 'Mapeamento e Redesenho de Processos (AS-IS / TO-BE)',
+    descricao:
+      'Identificamos gargalos, retrabalho, perdas de tempo e falhas de passagem entre setores no fluxo atual (AS-IS). A partir desse diagnóstico, desenhamos o novo processo otimizado (TO-BE) em notação BPMN, padronizando as rotinas críticas da empresa para ganhar agilidade e facilitar o treinamento da equipe.',
+    entregas: [
+      'Levantamento ponta a ponta das rotinas atuais (AS-IS) e causas de atraso',
+      'Redesenho dos fluxos futuros (TO-BE) com padronização e documentação prática',
+      'Levantamento de requisitos e seleção imparcial de sistemas de gestão (ERP / CRM)',
+    ],
+  },
+  {
+    numero: '02',
+    etiqueta: 'Pilar 02 · Governança e Papéis',
+    titulo: 'Estrutura Organizacional e Clareza de Responsabilidades',
+    descricao:
+      'Eliminamos funções sobrepostas e a sobrecarga nos sócios com o desenho de organograma, descrição detalhada de cargos, alçadas de decisão e rituais de comunicação entre áreas. Cada colaborador passa a ter clareza sobre suas entregas e com quem alinhar cada etapa.',
+    entregas: [
+      'Desenho de organograma e estruturação de áreas alinhados à estratégia da empresa',
+      'Descrição de cargos, atribuições e matriz de responsabilidades por atividade',
+      'Definição de alçadas de decisão e rituais periódicos de alinhamento entre setores',
+    ],
+  },
+  {
+    numero: '03',
+    etiqueta: 'Pilar 03 · Métricas e Controle',
+    titulo: 'Indicadores de Desempenho (KPIs) e Dashboards de Gestão',
+    descricao:
+      'Traduzimos a rotina operacional em metas claras e painéis de acompanhamento para monitorar prazos, qualidade, capacidade produtiva e SLA. Quando sua operação exige automação de relatórios e integração de bases de dados, conectamos o projeto à nossa frente de Business Intelligence.',
+    entregas: [
+      'Definição de metas operacionais e indicadores de desempenho (KPIs) por área',
+      'Construção de dashboards e instrumentos práticos de monitoramento de rotina',
+      'Conexão entre eficiência produtiva, custos e formação de preços da operação',
+    ],
+    linkCruzado: {
+      rotulo: 'Conhecer a Consultoria em Business Intelligence →',
+      href: '/consultoria-business-intelligence/',
+    },
+    linkSecundario: {
+      rotulo: 'Ver integração com Consultoria Financeira →',
+      href: '/consultoria-financeira/',
+    },
+  },
+  {
+    numero: '04',
+    etiqueta: 'Pilar 04 · Pessoas e Cultura',
+    titulo: 'Cultura Organizacional e Gestão de Pessoas',
+    descricao:
+      'Garantimos que os novos processos saiam do papel e façam parte da rotina por meio do alinhamento da equipe aos objetivos estratégicos, estruturação de avaliação de desempenho, fortalecimento da comunicação interna e práticas de engajamento no dia a dia.',
+    entregas: [
+      'Alinhamento de valores, cultura organizacional e expectativas de resultado',
+      'Critérios objetivos de avaliação de desempenho e acompanhamento de metas',
+      'Práticas de incentivo, clima organizacional e comunicação interna estruturada',
+    ],
+  },
+];
+---
+
+<section class="section_pilares-operacionais padding-section-medium" id="pilares-operacionais">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="pilares_header">
+        <span class="eyebrow">Metodologia de Eficiência e Escala</span>
+        <h2>Como organizamos a operação da sua empresa para crescer sem sobrecarga</h2>
+        <p>
+          Desde {NUMEROS.fundacao}, com {NUMEROS.projetosFormatado} projetos entregues em mais de {NUMEROS.setores} setores da economia, apoiamos pequenas e médias empresas a substituir o improviso por processos claros, equipes alinhadas e indicadores confiáveis — sempre com orientação técnica de professores da Fundação Getulio Vargas.
+        </p>
+      </div>
+
+      <div class="pilares_grid">
+        {pilares.map((pilar) => (
+          <article class="pilar_card">
+            <div class="pilar_top">
+              <span class="pilar_badge">{pilar.etiqueta}</span>
+              <span class="pilar_num" aria-hidden="true">{pilar.numero}</span>
+            </div>
+
+            <h3>{pilar.titulo}</h3>
+            <p class="pilar_desc">{pilar.descricao}</p>
+
+            <ul class="pilar_checklist">
+              {pilar.entregas.map((entrega) => (
+                <li>
+                  <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+                  <span>{entrega}</span>
+                </li>
+              ))}
+            </ul>
+
+            {(pilar.linkCruzado || pilar.linkSecundario) && (
+              <div class="pilar_links">
+                {pilar.linkCruzado && (
+                  <a href={pilar.linkCruzado.href} class="pilar_crosslink">
+                    {pilar.linkCruzado.rotulo}
+                  </a>
+                )}
+                {pilar.linkSecundario && (
+                  <a href={pilar.linkSecundario.href} class="pilar_crosslink is-subtle">
+                    {pilar.linkSecundario.rotulo}
+                  </a>
+                )}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <div class="pilares_destaque">
+        <div class="pilares_midia">
+          <ImagemReservada
+            rotulo="Mapeamento de processos e estrutura organizacional conduzido pela equipe EJFGV"
+            proporcao="16/9"
+          />
+        </div>
+
+        <div class="pilares_cta-box">
+          <span class="eyebrow">Da estratégia à execução diária</span>
+          <h3>Menos tempo apagando incêndios, mais tempo liderando o crescimento</h3>
+          <p>
+            Nosso trabalho combina diagnóstico técnico e cocriação com a sua equipe. Foi assim que estruturamos os processos internos, indicadores e precificação do escritório{' '}
+            <a href="/cases/por-que-uma-reestruturacao-operacional-e-financeira-foi-essencial-para-a-menezes-e-emidio-advogados/">
+              Menezes e Emídio Advogados
+            </a>{' '}
+            e desenhamos toda a operação inicial do projeto{' '}
+            <a href="/cases/ajudando-o-rica-vida-a-tirar-um-sonho-do-papel/">
+              Rica Vida
+            </a>.
+          </p>
+          <p>
+            Se sua empresa também precisa de painéis automatizados em Power BI, conheça nossa{' '}
+            <a href="/consultoria-business-intelligence/">
+              Consultoria em Business Intelligence
+            </a>{' '}
+            ou combine a organização interna a um{' '}
+            <a href="/plano-de-negocios/">
+              Plano de Negócios
+            </a>{' '}
+            completo.
+          </p>
+
+          <div class="pilares_cta-actions">
+            <a href="#formulario" class="button is-button-large">
+              Solicitar diagnóstico gratuito
+            </a>
+            <a href="#cases" class="button-tertiary">
+              Ver cases operacionais →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_pilares-operacionais {
+    background: var(--gray50);
+  }
+
+  .pilares_header {
+    max-width: 50rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .pilares_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.16;
+    color: var(--gray900);
+    margin-bottom: 0.85rem;
+  }
+
+  .pilares_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.65;
+  }
+
+  .pilares_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .pilar_card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
+  }
+
+  .pilar_card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary300);
+  }
+
+  .pilar_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .pilar_badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary700);
+    background: var(--primary50);
+    border: 1px solid var(--primary100);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+  }
+
+  .pilar_num {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--gray400);
+  }
+
+  .pilar_card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--gray900);
+    line-height: 1.3;
+  }
+
+  .pilar_desc {
+    font-size: 0.925rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .pilar_checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 0.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray200);
+  }
+
+  .pilar_checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.875rem;
+    color: var(--gray700);
+    line-height: 1.5;
+  }
+
+  .pilar_checklist img {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .pilar_links {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .pilar_crosslink {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary700);
+    transition: color 0.2s;
+  }
+
+  .pilar_crosslink:hover {
+    color: var(--primary600);
+  }
+
+  .pilar_crosslink.is-subtle {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--gray600);
+  }
+
+  .pilar_crosslink.is-subtle:hover {
+    color: var(--primary700);
+  }
+
+  .pilares_destaque {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.75rem, 3.5vw, 3rem);
+    align-items: center;
+  }
+
+  .pilares_cta-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .pilares_cta-box h3 {
+    font-size: clamp(1.35rem, 2vw, 1.65rem);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    color: var(--gray900);
+  }
+
+  .pilares_cta-box p {
+    font-size: 0.925rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .pilares_cta-box p a {
+    color: var(--primary700);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .pilares_cta-box p a:hover {
+    color: var(--primary600);
+  }
+
+  .pilares_cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .pilares_grid,
+    .pilares_destaque {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pilar_card {
+      padding: 1.5rem;
+    }
+
+    .pilares_cta-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .pilares_cta-actions .button,
+    .pilares_cta-actions .button-tertiary {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pilar_card,
+    .pilar_crosslink {
+      transition: none;
+    }
+
+    .pilar_card:hover {
+      transform: none;
+    }
+  }
+</style>

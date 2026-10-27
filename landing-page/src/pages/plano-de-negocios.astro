@@ -1,0 +1,50 @@
+---
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import EtapasPlanoCompleto from '../components/solucoes/plano-de-negocios/EtapasPlanoCompleto.astro';
+import PorQuePlanoEjfgv from '../components/solucoes/plano-de-negocios/PorQuePlanoEjfgv.astro';
+import { SOLUCOES } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'plano-de-negocios')!;
+
+const faqItens = [
+  {
+    pergunta:
+      'Para quem é indicado o Plano de Negócios: apenas para novos negócios ou também para empresas em expansão?',
+    resposta:
+      'O Plano de Negócios da EJFGV atende tanto empreendedores que desejam tirar uma ideia do papel com segurança quanto pequenas e médias empresas já consolidadas que planejam lançar um novo produto, abrir uma nova unidade ou criar uma frente digital — como nos projetos realizados para o Rica Vida e para uma produtora consolidada do setor de áudio.',
+    validar: true,
+  },
+  {
+    pergunta: 'O que é MVP (Produto Mínimo Viável) e por que ele reduz o risco do investimento?',
+    resposta:
+      'Sem jargão técnico, o MVP é uma versão inicial enxuta do seu produto ou serviço, desenhada com os recursos essenciais para testar a aceitação real dos clientes no mercado. Em vez de comprometer um alto capital logo no início, você comprova a demanda na prática, coleta aprendizados reais e aprimora o modelo de negócio antes de realizar investimentos pesados.',
+    validar: true,
+  },
+  {
+    pergunta: 'Qual é a duração média de um projeto de Plano de Negócios na EJFGV?',
+    resposta:
+      'Os projetos têm duração média de cerca de 3 meses, período em que realizamos reuniões periódicas e um processo intenso de cocriação com os sócios e gestores. Em escopos focados em validação ágil e desenho de MVP, a estruturação pode ocorrer em prazos menores, como 30 dias úteis, de acordo com o diagnóstico inicial.',
+    validar: true,
+  },
+  {
+    pergunta: 'O Plano de Negócios serve para apresentar a sócios, investidores e bancos?',
+    resposta:
+      'Sim. Além de orientar a tomada de decisão dos fundadores, o projeto pode contemplar a modelagem financeira completa (investimento inicial, projeção de fluxo de caixa, ponto de equilíbrio, VPL e tempo de retorno) e a elaboração de apresentação executiva (Pitch Deck) estruturada para negociações com sócios, investidores e instituições financeiras.',
+    validar: true,
+  },
+  {
+    pergunta:
+      'Posso contratar apenas uma parte do Plano de Negócios, como a viabilidade financeira ou a pesquisa de mercado?',
+    resposta:
+      'Sim. Todo projeto começa com um diagnóstico gratuito, no qual mapeamos o momento atual da sua empresa. Você pode contratar tanto o Plano de Negócios completo ponta a ponta — unindo pesquisa de mercado, MVP, plano operacional, marketing e finanças — quanto frentes específicas sob medida para a sua necessidade imediata.',
+    validar: true,
+  },
+];
+---
+
+<SolucaoLayout solucao={solucao} faqItens={faqItens}>
+  <div slot="especifico">
+    <EtapasPlanoCompleto />
+    <PorQuePlanoEjfgv />
+  </div>
+</SolucaoLayout>

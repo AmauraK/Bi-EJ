@@ -1,0 +1,337 @@
+---
+import { CONTATO, FORMULARIOS } from '../../consts';
+
+export interface Props {
+  idPrefix?: string;
+  eyebrow?: string;
+  titulo?: string;
+  descricao?: string;
+}
+
+const {
+  idPrefix = 'nl',
+  eyebrow = 'Newsletter EJFGV',
+  titulo = 'Inscreva-se para receber nossos conteúdos e ficar à frente',
+  descricao = 'Receba artigos práticos, novos e-books e análises elaboradas pelos consultores da Empresa Júnior da Fundação Getulio Vargas diretamente no seu e-mail corporativo.',
+} = Astro.props;
+
+const nomeId = `${idPrefix}-nome`;
+const emailId = `${idPrefix}-email`;
+const consentId = `${idPrefix}-consentimento`;
+const hpId = `${idPrefix}-hp`;
+const feedbackId = `${idPrefix}-feedback`;
+---
+
+<section class="section_newsletter padding-section-medium" id="newsletter">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="newsletter_card">
+        <div class="newsletter_copy">
+          <span class="eyebrow is-dark">{eyebrow}</span>
+          <h2>{titulo}</h2>
+          <p>{descricao}</p>
+
+          <ul class="newsletter_highlights" aria-label="Benefícios da newsletter">
+            <li>
+              <span class="newsletter_dot" aria-hidden="true"></span>
+              <span>Guias aplicáveis em Estratégia, Finanças, Marketing, Operações e Business Intelligence</span>
+            </li>
+            <li>
+              <span class="newsletter_dot" aria-hidden="true"></span>
+              <span>Avisos em primeira mão quando lançarmos novos materiais ricos gratuitos</span>
+            </li>
+            <li>
+              <span class="newsletter_dot" aria-hidden="true"></span>
+              <span>Conteúdo objetivo pensado para a rotina de empresários e gestores de PMEs</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="newsletter_form-box">
+          <form
+            class="newsletter_form"
+            data-newsletter-form
+            action={FORMULARIOS.newsletterEndpoint}
+            method="POST"
+          >
+            <div class="hp-field" aria-hidden="true">
+              <label for={hpId}>Não preencha este campo</label>
+              <input
+                type="text"
+                id={hpId}
+                name="website_hp"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form_grid-2">
+              <div class="form-field-wrapper">
+                <label class="field-label" for={nomeId}>Nome completo *</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id={nomeId}
+                  name="name"
+                  placeholder="Seu nome e sobrenome"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+
+              <div class="form-field-wrapper">
+                <label class="field-label" for={emailId}>E-mail corporativo *</label>
+                <input
+                  class="form-input"
+                  type="email"
+                  id={emailId}
+                  name="Email"
+                  placeholder="voce@suaempresa.com.br"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <label class="form-checkbox" for={consentId}>
+              <input
+                type="checkbox"
+                id={consentId}
+                name="Consentimento"
+                value="sim"
+                required
+              />
+              <span>
+                Concordo em receber conteúdos informativos da EJFGV por e-mail, conforme a{' '}
+                <a href="/politica-de-privacidade/" class="newsletter_privacy-link">
+                  Política de Privacidade
+                </a>{' '}
+                (LGPD). *
+              </span>
+            </label>
+
+            <button type="submit" class="button newsletter_submit">
+              Quero receber os conteúdos
+            </button>
+
+            {!FORMULARIOS.newsletterEndpoint && (
+              <p class="newsletter_endpoint-note">
+                <span class="preencher">
+                  Endpoint de automação da newsletter pendente — inscrição assistida via {CONTATO.email}
+                </span>
+              </p>
+            )}
+
+            <div
+              id={feedbackId}
+              class="form-feedback"
+              data-newsletter-feedback
+              role="status"
+              aria-live="polite"
+            ></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const forms = document.querySelectorAll<HTMLFormElement>('form[data-newsletter-form]');
+
+  forms.forEach((form) => {
+    const feedback = form.querySelector<HTMLElement>('[data-newsletter-feedback]');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const hp = form.querySelector<HTMLInputElement>('input[name="website_hp"]');
+      if (hp && hp.value) return;
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const endpoint = (form.getAttribute('action') || '').trim();
+      const formData = new FormData(form);
+      const nome = (formData.get('name') || '').toString().trim();
+      const email = (formData.get('Email') || '').toString().trim();
+
+      const assunto = `Inscrição na Newsletter EJFGV — ${nome || email}`;
+      const corpo = [
+        'Olá, equipe da EJFGV!',
+        '',
+        'Gostaria de cadastrar meu e-mail para receber os artigos e materiais ricos da EJFGV:',
+        nome ? `• Nome: ${nome}` : '',
+        email ? `• E-mail corporativo: ${email}` : '',
+        '• Consentimento LGPD: confirmado no formulário do site.',
+      ]
+        .filter(Boolean)
+        .join('\n');
+
+      const mailtoHref = `mailto:comercial@ejfgv.com?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+
+      if (!endpoint) {
+        if (feedback) {
+          feedback.className = 'form-feedback is-visible is-fallback';
+          feedback.innerHTML = '';
+
+          const msg = document.createElement('p');
+          msg.textContent =
+            'A integração automática da nossa lista de e-mails está em configuração. Para confirmar seu cadastro diretamente com nossa equipe, clique abaixo para enviar seus dados já preenchidos:';
+
+          const actions = document.createElement('div');
+          actions.className = 'form-feedback_actions';
+
+          const mailBtn = document.createElement('a');
+          mailBtn.href = mailtoHref;
+          mailBtn.className = 'button';
+          mailBtn.textContent = 'Confirmar inscrição via comercial@ejfgv.com';
+
+          const contatoBtn = document.createElement('a');
+          contatoBtn.href = '/contato/#formulario';
+          contatoBtn.className = 'button-secondary';
+          contatoBtn.textContent = 'Solicitar diagnóstico gratuito';
+
+          actions.appendChild(mailBtn);
+          actions.appendChild(contatoBtn);
+          feedback.appendChild(msg);
+          feedback.appendChild(actions);
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: formData,
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error('Falha na comunicação com o servidor');
+
+        if (feedback) {
+          feedback.className = 'form-feedback is-visible';
+          feedback.textContent =
+            'Cadastro registrado. Você passará a receber nossos próximos artigos e materiais gratuitos no e-mail informado.';
+        }
+        form.reset();
+      } catch (_err) {
+        if (feedback) {
+          feedback.className = 'form-feedback is-visible is-error';
+          feedback.innerHTML = '';
+
+          const msg = document.createElement('p');
+          msg.textContent =
+            'Não foi possível concluir o cadastro automático neste momento. Confirme sua inscrição diretamente pelo e-mail abaixo:';
+
+          const actions = document.createElement('div');
+          actions.className = 'form-feedback_actions';
+
+          const mailBtn = document.createElement('a');
+          mailBtn.href = mailtoHref;
+          mailBtn.className = 'button';
+          mailBtn.textContent = 'Inscrever-se via comercial@ejfgv.com';
+
+          actions.appendChild(mailBtn);
+          feedback.appendChild(msg);
+          feedback.appendChild(actions);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .section_newsletter {
+    background: var(--gray50);
+    border-top: 1px solid var(--gray200);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .newsletter_card {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+    background: var(--graywarm950);
+    color: var(--white);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(2rem, 4vw, 3.5rem);
+    border: 1px solid var(--border-hairline-dark);
+  }
+
+  .newsletter_copy h2 {
+    font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 0.85rem;
+  }
+
+  .newsletter_copy p {
+    font-size: 0.975rem;
+    line-height: 1.65;
+    color: var(--graywarm300);
+    margin-bottom: 1.5rem;
+  }
+
+  .newsletter_highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--gray200);
+  }
+
+  .newsletter_highlights li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .newsletter_dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary500);
+    margin-top: 0.45rem;
+    flex-shrink: 0;
+  }
+
+  .newsletter_form-box {
+    background: var(--white);
+    color: var(--gray900);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--gray200);
+  }
+
+  .newsletter_privacy-link {
+    color: var(--primary700);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .newsletter_submit {
+    width: 100%;
+  }
+
+  .newsletter_endpoint-note {
+    margin-top: 0.85rem;
+  }
+
+  @media (max-width: 1024px) {
+    .newsletter_card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .newsletter_card {
+      padding: 1.5rem;
+    }
+  }
+</style>

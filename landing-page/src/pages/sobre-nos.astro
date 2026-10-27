@@ -1,0 +1,137 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Credibilidade from '../components/Credibilidade.astro';
+import LogoWall from '../components/LogoWall.astro';
+import Faq from '../components/Faq.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import PorQueEjfgv from '../components/sobre/PorQueEjfgv.astro';
+import PropositoValores from '../components/sobre/PropositoValores.astro';
+import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
+import NossoImpacto from '../components/sobre/NossoImpacto.astro';
+import EquipeGrid from '../components/sobre/EquipeGrid.astro';
+import SolucoesSobre from '../components/sobre/SolucoesSobre.astro';
+import BannerProcessoSeletivo from '../components/sobre/BannerProcessoSeletivo.astro';
+import { CONTATO, NUMEROS, VIDEO_INSTITUCIONAL } from '../consts';
+
+const faqSobre = [
+  {
+    pergunta: 'Quem realiza os projetos da EJFGV?',
+    resposta: `Os projetos são executados por estudantes dos cursos de graduação da Fundação Getulio Vargas em São Paulo, selecionados em processo rigoroso e capacitados continuamente em metodologias de consultoria estratégica. Cada projeto é acompanhado por coordenadores experientes e conta com validação técnica de professores da FGV.`,
+    validar: true,
+  },
+  {
+    pergunta: 'Como funciona a orientação dos professores da Fundação Getulio Vargas?',
+    resposta: `A EJFGV mantém vínculo institucional direto com a Fundação Getulio Vargas em São Paulo. Durante as etapas críticas do projeto — como modelagem financeira, pesquisa de mercado, redesenho de processos ou estruturação de Business Intelligence — nossa equipe consulta professores especialistas da FGV e utiliza as bases de dados e bibliotecas da instituição.`,
+    validar: true,
+  },
+  {
+    pergunta: 'A EJFGV atende empresas de qual porte e segmento?',
+    resposta: `Desde ${NUMEROS.fundacao}, já entregamos ${NUMEROS.projetosFormatado} projetos em ${NUMEROS.setores} setores da economia. Atendemos desde empreendedores validando um novo Plano de Negócios e pequenas e médias empresas buscando profissionalizar sua gestão até grandes corporações que demandam estudos de mercado e inovação.`,
+    validar: true,
+  },
+  {
+    pergunta: 'Como funciona o diagnóstico inicial gratuito?',
+    resposta: `Após o seu contato pelo formulário do site ou pelo e-mail ${CONTATO.email}, nossa equipe comercial agenda uma conversa sem custo em até 1 dia útil. Nessa reunião, ouvimos os desafios atuais da sua empresa e desenhamos uma proposta sob medida com escopo, cronograma de entregas e investimento transparente.`,
+    validar: true,
+  },
+  {
+    pergunta: 'Qual é a duração média de um projeto de consultoria na EJFGV?',
+    resposta: `Os projetos têm duração média de 3 meses, variando conforme a complexidade do escopo contratado. Ao longo de todo o período, realizamos reuniões semanais de alinhamento e cocriação com os gestores da empresa cliente.`,
+    validar: true,
+  },
+];
+---
+
+<Layout
+  titulo="Sobre Nós — A Primeira Empresa Júnior da América Latina | EJFGV"
+  descricao={`Conheça a história da EJFGV, fundada em ${NUMEROS.fundacao} na Fundação Getulio Vargas em São Paulo. Veja nosso propósito, valores, linha do tempo, equipe e impacto em ${NUMEROS.projetosFormatado} projetos.`}
+  canonicalPath="/sobre-nos/"
+>
+  <!-- 1. PageHeader -->
+  <PageHeader
+    breadcrumb={[
+      { rotulo: 'Início', href: '/' },
+      { rotulo: 'Sobre Nós' },
+    ]}
+    eyebrow={`Institucional · Pioneira na América Latina desde ${NUMEROS.fundacao}`}
+    titulo="Sobre a EJFGV: consultoria estratégica com excelência FGV"
+    lead="Nosso objetivo é impulsionar o crescimento de pequenas, médias e grandes empresas por meio da construção colaborativa de soluções e do rigor técnico da Fundação Getulio Vargas."
+    abertura={`A EJFGV é a Empresa Júnior da Fundação Getulio Vargas em São Paulo. Fundada em ${NUMEROS.fundacao} como a primeira Empresa Júnior do Brasil e da América Latina, acumula ${NUMEROS.projetosFormatado} projetos entregues em ${NUMEROS.setores} setores nas frentes de Plano de Negócios, Marketing, Finanças, Operações e Business Intelligence.`}
+    acoes={[
+      {
+        rotulo: 'Fale com um Especialista',
+        href: '/contato/#formulario',
+        variante: 'primary',
+        grande: true,
+      },
+      {
+        rotulo: 'Conhecer nossa história',
+        href: '#nossa-historia',
+        variante: 'secondary',
+        grande: true,
+      },
+    ]}
+    imagemRotulo="Fotografia institucional da equipe da EJFGV reunida na Fundação Getulio Vargas em São Paulo"
+    imagemProporcao="16/10"
+    videoUrl={VIDEO_INSTITUCIONAL}
+    videoRotulo="Assistir vídeo institucional"
+  >
+    <p class="sobre-header_video-nota">
+      <span class="preencher">Vídeo institucional atualizado: a enviar pelo Marketing (vídeo atual mantido provisoriamente)</span>
+    </p>
+  </PageHeader>
+
+  <!-- 2. Por que a EJFGV -->
+  <PorQueEjfgv />
+
+  <!-- 3. Propósito, Visão e 6 Valores -->
+  <PropositoValores />
+
+  <!-- 4. Linha do tempo (1967 → 1988 → Hoje) -->
+  <LinhaDoTempo />
+
+  <!-- 5. Nosso impacto (StatsStrip + X/Y/Z + Projeto Inmar) -->
+  <NossoImpacto />
+
+  <!-- 6. Credibilidade (FGV, Bain & Company, Brasil Júnior + Professores Mentores) -->
+  <Credibilidade
+    eyebrow="Respaldo Institucional e Mentoria"
+    titulo="Apoio acadêmico da Fundação Getulio Vargas, mentoria executiva e rede Brasil Júnior"
+    subtitulo="Unimos a formação de excelência da FGV em São Paulo à orientação de professores doutores e parceiros estratégicos de mercado."
+    mostrarMentoresPendentes={true}
+  />
+
+  <!-- 7. Equipe (Diretoria Executiva e Coordenadores) -->
+  <EquipeGrid />
+
+  <!-- 8. Serviços (Nossas Soluções — 5 cards com links reais) -->
+  <SolucoesSobre />
+
+  <!-- 9. LogoWall -->
+  <LogoWall />
+
+  <!-- 10. Banner "Seja consultor EJFGV" (Processo Seletivo) -->
+  <BannerProcessoSeletivo />
+
+  <!-- 11. FAQ Institucional -->
+  <Faq
+    eyebrow="Dúvidas Frequentes · Institucional"
+    titulo="Perguntas frequentes sobre a EJFGV e nosso modelo de atuação"
+    itens={faqSobre}
+  />
+
+  <!-- 12. CtaBanner -->
+  <CtaBanner
+    titulo="Vamos transformar a realidade do seu negócio com uma solução sob medida?"
+    subtitulo="Converse gratuitamente com nossa equipe comercial e descubra como a EJFGV pode apoiar os próximos passos da sua empresa."
+    rotuloBotao="Solicite seu diagnóstico gratuito"
+    href="/contato/#formulario"
+  />
+</Layout>
+
+<style>
+  .sobre-header_video-nota {
+    margin-top: 1rem;
+  }
+</style>

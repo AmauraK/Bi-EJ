@@ -1,0 +1,110 @@
+---
+import { SOLUCOES } from '../../consts';
+---
+
+<section class="section_icp padding-section-medium" aria-labelledby="solucoes-sobre-titulo">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="solucoes-sobre_header">
+        <div>
+          <span class="eyebrow">Nossas Soluções</span>
+          <h2 id="solucoes-sobre-titulo">Consultoria especializada nas 5 áreas críticas do seu negócio</h2>
+        </div>
+        <p>
+          Explore cada frente de atuação para ver o escopo detalhado, quando contratar e exemplos reais de projetos entregues pela EJFGV.
+        </p>
+      </div>
+
+      <div class="solucoes-sobre_grid">
+        {SOLUCOES.map((solucao) => (
+          <a href={solucao.url} class="case_card solucao-sobre_card">
+            <div class="solucao-sobre_top">
+              <img
+                src={solucao.icone}
+                alt={`Ícone de ${solucao.nome}`}
+                class="icp_icon"
+                loading="lazy"
+              />
+              <span class="case_tag">{solucao.categoria}</span>
+              <h3>{solucao.nome}</h3>
+              <p>{solucao.descricao}</p>
+            </div>
+            <span class="solucao-sobre_link">
+              Conhecer {solucao.nomeCurto} <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .solucoes-sobre_header {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+
+  .solucoes-sobre_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+  }
+
+  .solucoes-sobre_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .solucoes-sobre_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .solucao-sobre_card {
+    background: var(--gray50);
+    text-decoration: none;
+  }
+
+  .solucao-sobre_card:hover {
+    border-color: var(--primary500);
+  }
+
+  .solucao-sobre_top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .solucao-sobre_link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary700);
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .solucoes-sobre_header {
+      grid-template-columns: 1fr;
+    }
+
+    .solucoes-sobre_grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .solucoes-sobre_grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

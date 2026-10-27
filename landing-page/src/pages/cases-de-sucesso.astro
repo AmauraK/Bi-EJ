@@ -1,0 +1,409 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+import CaseCard from '../components/CaseCard.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { CASES, CONTATO, FILTROS_CASES, NUMEROS, SOLUCOES } from '../consts';
+
+const totalCases = CASES.length;
+---
+
+<Layout
+  titulo="Cases de Sucesso — Resultados Reais de Projetos | EJFGV"
+  descricao={`Conheça os cases de sucesso da EJFGV com ${NUMEROS.projetosFormatado} projetos entregues desde ${NUMEROS.fundacao} em Plano de Negócios, Marketing, Finanças, Operações e Business Intelligence.`}
+  canonicalPath="/cases-de-sucesso/"
+  ctaHref="/contato/#formulario"
+>
+  <PageHeader
+    escura={true}
+    eyebrow={`Portfólio de Impacto · Desde ${NUMEROS.fundacao}`}
+    titulo="Cases de Sucesso da EJFGV"
+    lead={`${NUMEROS.projetosFormatado} projetos entregues desde ${NUMEROS.fundacao} pela Empresa Júnior da Fundação Getulio Vargas.`}
+    abertura={`A EJFGV desenvolve projetos de consultoria sob medida para empreendedores, pequenas, médias e grandes empresas em ${NUMEROS.setores} setores da economia. Conheça abaixo como diagnosticamos gargalos reais e construímos soluções práticas com resultados mensuráveis.`}
+    notaExtra={`Satisfação comprovada com NPS ${NUMEROS.nps} (${NUMEROS.npsAno}) e orientação técnica de professores da Fundação Getulio Vargas em São Paulo.`}
+    breadcrumb={[
+      { rotulo: 'Início', href: '/' },
+      { rotulo: 'Cases de Sucesso' },
+    ]}
+    acoes={[
+      {
+        rotulo: 'Solicite seu diagnóstico gratuito',
+        href: '/contato/#formulario',
+        variante: 'primary',
+        grande: true,
+      },
+      {
+        rotulo: 'Explorar estudos de caso',
+        href: '#catalogo-cases',
+        variante: 'secondary',
+        grande: true,
+      },
+    ]}
+    imagemRotulo="Apresentação de resultados de projeto de consultoria da EJFGV"
+    imagemProporcao="16/10"
+  />
+
+  <StatsStrip ariaLabel="Indicadores de projetos e satisfação de clientes da EJFGV" />
+
+  <section class="section_catalogo-cases padding-section-medium" id="catalogo-cases">
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="catalogo_header">
+          <div>
+            <span class="eyebrow">Resultados Comprovados</span>
+            <h2>Projetos que transformaram decisões em resultados concretos</h2>
+            <p class="catalogo_lead">
+              Filtre por área de atuação para ver como apoiamos negócios em diferentes momentos — da validação de um novo empreendimento à reestruturação financeira, operacional, comercial e de Business Intelligence.
+            </p>
+          </div>
+
+          <p class="catalogo_status" id="casesStatusCounter" aria-live="polite">
+            Exibindo <strong>{totalCases}</strong> estudos de caso publicados
+          </p>
+        </div>
+
+        <div
+          class="catalogo_filtros"
+          role="toolbar"
+          aria-label="Filtrar estudos de caso por frente de consultoria"
+        >
+          {FILTROS_CASES.map((filtro, index) => (
+            <button
+              type="button"
+              class:list={['tag-chip', { 'is-active': index === 0 }]}
+              data-case-filter={filtro.slug}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              <span>{filtro.rotulo}</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="cases_grid catalogo_grid" id="casesGrid">
+          {CASES.map((c) => (
+            <CaseCard item={c} />
+          ))}
+
+          <article
+            class="case_card case_card-bi-pendente"
+            data-case-card
+            data-case-placeholder-bi
+            data-solucoes="consultoria-business-intelligence"
+          >
+            <div>
+              <span class="case_tag">Business Intelligence · Dados e IA</span>
+              <div class="case_metric">Dashboards &amp; BI</div>
+              <p class="case_bi-badge">
+                <span class="preencher">Case de Business Intelligence: a preencher pelo Marketing</span>
+              </p>
+              <h3 class="case_bi-title">
+                <a href="/consultoria-business-intelligence/">
+                  Estruturação de indicadores e dashboards executivos em Power BI
+                </a>
+              </h3>
+              <p class="case_bi-highlight">
+                <strong>Resultado:</strong> Centralização de dados dispersos em painéis automáticos para acompanhamento de vendas, margens e operação em tempo real.
+              </p>
+              <p class="case_bi-detail">
+                Espaço reservado para o estudo de caso detalhado de Business Intelligence em validação final com o cliente.
+              </p>
+            </div>
+            <div class="case_bi-footer">
+              <a href="/consultoria-business-intelligence/" class="case_bi-link">
+                Conhecer a Consultoria em Business Intelligence →
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <div class="catalogo_solucoes-bar" aria-label="Atalhos para as páginas de soluções da EJFGV">
+          <div class="catalogo_solucoes-text">
+            <h3>Quer entender o escopo técnico de cada frente?</h3>
+            <p>Acesse diretamente a página da solução mais alinhada ao momento atual da sua empresa:</p>
+          </div>
+          <div class="catalogo_solucoes-links">
+            {SOLUCOES.map((sol) => (
+              <a href={sol.url} class="tag-chip catalogo_solucao-link">
+                <span>{sol.nome}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_depoimentos padding-section-medium" id="depoimentos">
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="depoimentos_header">
+          <span class="eyebrow">A Voz dos Nossos Clientes</span>
+          <h2>Relatos de quem viveu a experiência de projeto com a EJFGV</h2>
+          <p>
+            Mais do que relatórios técnicos, construímos ferramentas práticas em cocriação com os decisores de cada empresa.
+          </p>
+        </div>
+
+        <Depoimentos mostrarVagasPendentes={true} />
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner
+    titulo="Quer construir o próximo case de sucesso da sua empresa?"
+    subtitulo={`Converse gratuitamente com nossa equipe comercial pelo site ou envie uma mensagem para ${CONTATO.email}.`}
+    rotuloBotao="Solicite seu diagnóstico gratuito"
+    href="/contato/#formulario"
+  />
+</Layout>
+
+<script>
+  (function () {
+    const filterButtons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('[data-case-filter]')
+    );
+    const caseCards = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-case-card]')
+    );
+    const statusCounter = document.getElementById('casesStatusCounter');
+
+    if (filterButtons.length === 0 || caseCards.length === 0) return;
+
+    function applyFilter(selectedSlug: string, selectedLabel: string) {
+      filterButtons.forEach((btn) => {
+        const isActive = btn.getAttribute('data-case-filter') === selectedSlug;
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        btn.classList.toggle('is-active', isActive);
+      });
+
+      let visiblePublished = 0;
+
+      caseCards.forEach((card) => {
+        const isBiPlaceholder = card.hasAttribute('data-case-placeholder-bi');
+        const solucoesAttr = card.getAttribute('data-solucoes') || '';
+        const solucoesList = solucoesAttr
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+        let shouldShow = false;
+        if (selectedSlug === 'todos') {
+          shouldShow = true;
+        } else {
+          shouldShow = solucoesList.includes(selectedSlug);
+        }
+
+        if (shouldShow) {
+          card.removeAttribute('hidden');
+          if (!isBiPlaceholder) visiblePublished++;
+        } else {
+          card.setAttribute('hidden', '');
+        }
+      });
+
+      if (statusCounter) {
+        if (selectedSlug === 'todos') {
+          statusCounter.innerHTML = `Exibindo <strong>${visiblePublished}</strong> estudos de caso publicados`;
+        } else if (selectedSlug === 'consultoria-business-intelligence' && visiblePublished === 0) {
+          statusCounter.innerHTML = `Filtro <strong>${selectedLabel}</strong>: case em validação pelo Marketing`;
+        } else {
+          const plural = visiblePublished === 1 ? 'estudo de caso' : 'estudos de caso';
+          statusCounter.innerHTML = `Exibindo <strong>${visiblePublished}</strong> ${plural} em <strong>${selectedLabel}</strong>`;
+        }
+      }
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const slug = btn.getAttribute('data-case-filter') || 'todos';
+        const label = (btn.textContent || 'Todos').trim();
+        applyFilter(slug, label);
+      });
+    });
+  })();
+</script>
+
+<style>
+  .section_catalogo-cases {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .catalogo_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .catalogo_header h2 {
+    font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 0.75rem;
+    max-width: 34ch;
+  }
+
+  .catalogo_lead {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+
+  .catalogo_status {
+    font-size: 0.875rem;
+    color: var(--gray600);
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+  }
+
+  .catalogo_status strong {
+    color: var(--primary700);
+    font-weight: 700;
+  }
+
+  .catalogo_filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 2.25rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .catalogo_grid {
+    margin-bottom: 3rem;
+  }
+
+  .case_card[hidden] {
+    display: none;
+  }
+
+  .case_card-bi-pendente {
+    border-style: dashed;
+    border-color: var(--primary300);
+    background: var(--primary25);
+  }
+
+  .case_bi-badge {
+    margin-top: 0.5rem;
+  }
+
+  .case_bi-title {
+    margin-top: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .case_bi-title a:hover {
+    color: var(--primary600);
+  }
+
+  .case_bi-highlight {
+    margin-bottom: 0.5rem;
+  }
+
+  .case_bi-footer {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray200);
+  }
+
+  .case_bi-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary700);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .case_bi-link:hover {
+    color: var(--primary600);
+  }
+
+  .catalogo_solucoes-bar {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .catalogo_solucoes-text h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--gray900);
+    margin-bottom: 0.25rem;
+  }
+
+  .catalogo_solucoes-text p {
+    font-size: 0.9rem;
+    color: var(--gray600);
+  }
+
+  .catalogo_solucoes-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .catalogo_solucao-link {
+    text-decoration: none;
+  }
+
+  .depoimentos_header {
+    max-width: 44rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .depoimentos_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.18;
+    color: var(--gray900);
+    margin-bottom: 0.65rem;
+  }
+
+  .depoimentos_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .catalogo_header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .catalogo_solucoes-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .catalogo_filtros {
+      gap: 0.5rem;
+    }
+
+    .catalogo_status {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

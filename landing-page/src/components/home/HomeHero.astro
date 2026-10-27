@@ -1,0 +1,194 @@
+---
+import { LOGOS_HERO, NUMEROS, VIDEO_INSTITUCIONAL } from '../../consts';
+import ImagemReservada from '../ImagemReservada.astro';
+---
+
+<section class="section_hero home-hero-centered">
+  <div class="hero_background" aria-hidden="true"></div>
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="home-hero_stack">
+        <div class="home-hero_text-block">
+          <div class="home-hero_divider" aria-hidden="true"></div>
+          <span class="hero_kicker">
+            A primeira Empresa Júnior da América Latina · desde {NUMEROS.fundacao}
+          </span>
+          <h1 class="hero_heading text-color-gradient-gray">
+            Consultoria estratégica feita por alunos da FGV ·{' '}
+            <span class="highlight-purpose">{NUMEROS.projetosFormatado} projetos entregues</span>
+          </h1>
+          <p class="hero_description">
+            A EJFGV é a Empresa Júnior da Fundação Getulio Vargas em São Paulo. Desde 1988, apoiamos empreendedores e pequenas e médias empresas com projetos personalizados em Estratégia, Marketing, Finanças, Operações e Business Intelligence.
+          </p>
+
+          <div class="hero_actions home-hero_actions-centered">
+            <a href="#formulario" class="button is-button-large">
+              Solicite seu diagnóstico gratuito
+            </a>
+            <a href="#solucoes" class="button-secondary is-button-large">
+              Conheça nossas soluções
+            </a>
+          </div>
+
+          <div class="home-hero_grandes-clientes">
+            <p class="grandes-clientes_label">
+              Confiança de organizações de todos os portes desde {NUMEROS.fundacao}
+            </p>
+            <div class="grandes-clientes_row home-hero_logos-centered">
+              {LOGOS_HERO.map((logo) => (
+                <img
+                  src={logo.src}
+                  alt={`Cliente ${logo.nome}`}
+                  class="grandes-clientes_logo"
+                  loading="eager"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="home-hero_media-wide">
+          <ImagemReservada
+            rotulo="Fotografia institucional da equipe de consultores da EJFGV reunida na Fundação Getulio Vargas em São Paulo"
+            proporcao="21/9"
+          >
+            <div class="home-hero_video-bar">
+              <div class="home-hero_video-meta">
+                <span class="hero-photo-dot" aria-hidden="true"></span>
+                <div>
+                  <strong>Conheça a EJFGV por dentro</strong>
+                  <span>Mais de três décadas formando líderes e transformando negócios</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="hero-video-trigger"
+                data-video={VIDEO_INSTITUCIONAL}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                Assistir vídeo institucional
+              </button>
+            </div>
+          </ImagemReservada>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-hero-centered {
+    min-height: auto;
+    padding-top: calc(var(--nav-height) + clamp(2.5rem, 4.5vw, 4rem));
+    padding-bottom: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .home-hero_stack {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2.25rem, 4vw, 3.25rem);
+  }
+
+  .home-hero_text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 56rem;
+    margin: 0 auto;
+  }
+
+  .home-hero_text-block .hero_heading {
+    font-size: clamp(2.15rem, 3.8vw, 3.35rem);
+    max-width: 24ch;
+  }
+
+  .home-hero_text-block .hero_description {
+    max-width: 64ch;
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home-hero_actions-centered {
+    justify-content: center;
+  }
+
+  .home-hero_text-block .home-hero_grandes-clientes {
+    width: 100%;
+  }
+
+  .home-hero_logos-centered {
+    justify-content: center;
+  }
+
+  .home-hero_media-wide {
+    width: 100%;
+  }
+
+  .home-hero_video-bar {
+    margin-top: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: min(100%, 46rem);
+    text-align: left;
+  }
+
+  .home-hero_video-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .home-hero_video-meta strong {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray900);
+  }
+
+  .home-hero_video-meta span {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--gray600);
+  }
+
+  @media (max-width: 1024px) {
+    .home-hero_text-block .hero_heading {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .home-hero_actions-centered {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .home-hero_actions-centered a {
+      width: 100%;
+    }
+
+    .home-hero_video-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .home-hero_video-bar .hero-video-trigger {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

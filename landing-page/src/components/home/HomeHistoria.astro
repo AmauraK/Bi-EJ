@@ -1,0 +1,142 @@
+---
+import { NUMEROS } from '../../consts';
+import ImagemReservada from '../ImagemReservada.astro';
+---
+
+<section class="section_home-quem-somos padding-section-medium" id="historia">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="quem-somos_wrapper home-historia_grid">
+        <div class="home-historia_content">
+          <span class="eyebrow">Nossa Trajetória · Desde {NUMEROS.fundacao}</span>
+          <h2>A PRIMEIRA EMPRESA JÚNIOR DA AMÉRICA LATINA</h2>
+          <p class="quem-somos_pillars home-historia_destaque">
+            Transformando realidades de negócios desde 1988
+          </p>
+
+          <div class="home-historia_copy">
+            <p class="quem-somos_copy">
+              O Movimento Empresa Júnior nasceu em 1967, em Paris, na França, quando alunos da ESSEC fundaram a primeira associação estudantil de consultoria do mundo para colocar em prática nas empresas o conhecimento construído em sala de aula.
+            </p>
+            <p class="quem-somos_copy">
+              Em {NUMEROS.fundacao}, alunos da Fundação Getulio Vargas em São Paulo trouxeram esse modelo pioneiro da França para a América Latina e fundaram a EJFGV. Desde então, somamos {NUMEROS.anosMercado} anos de atuação contínua, {NUMEROS.projetosFormatado} projetos entregues em {NUMEROS.setores} setores da economia e o compromisso de entregar excelência técnica de nível sênior para pequenas, médias e grandes empresas.
+            </p>
+            <p class="home-historia_marker">
+              <span class="preencher">
+                Trecho institucional complementar do documento de revisão: a preencher pelo Marketing
+              </span>
+            </p>
+          </div>
+
+          <div class="home-historia_actions">
+            <a href="/sobre-nos/" class="button">
+              Saiba mais
+            </a>
+            <a href="#formulario" class="button-tertiary">
+              Falar com nossa equipe →
+            </a>
+          </div>
+        </div>
+
+        <div class="home-historia_media">
+          <ImagemReservada
+            rotulo="Registro histórico e equipe atual da EJFGV na Fundação Getulio Vargas em São Paulo"
+            proporcao="16/10"
+          />
+          <div class="home-historia_timeline-mini" aria-label="Marcos principais da história da EJFGV">
+            <div class="historia-marco">
+              <strong>1967 · Paris</strong>
+              <span>Origem do Movimento Empresa Júnior na França (ESSEC Conseil)</span>
+            </div>
+            <div class="historia-marco">
+              <strong>{NUMEROS.fundacao} · São Paulo</strong>
+              <span>Fundação da EJFGV na Fundação Getulio Vargas — 1ª da América Latina</span>
+            </div>
+            <div class="historia-marco">
+              <strong>Hoje · {NUMEROS.projetosFormatado} projetos</strong>
+              <span>Referência nacional em consultoria estratégica com NPS {NUMEROS.nps}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-historia_grid {
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .home-historia_destaque {
+    color: var(--primary700);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+
+  .home-historia_copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .home-historia_marker {
+    margin-top: 0.25rem;
+  }
+
+  .home-historia_actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .home-historia_media {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .home-historia_timeline-mini {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .historia-marco {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-md);
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .historia-marco strong {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary700);
+  }
+
+  .historia-marco span {
+    font-size: 0.78rem;
+    color: var(--gray600);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 1024px) {
+    .home-historia_grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .home-historia_timeline-mini {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

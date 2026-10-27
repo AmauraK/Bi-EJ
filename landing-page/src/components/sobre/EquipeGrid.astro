@@ -1,0 +1,130 @@
+---
+import ImagemReservada from '../ImagemReservada.astro';
+
+const cargos = [
+  {
+    area: 'Presidência Executiva',
+    papel: 'Direção institucional, estratégia de longo prazo e representação junto à Fundação Getulio Vargas e parceiros.',
+  },
+  {
+    area: 'Vice-Presidência',
+    papel: 'Governança interna, integração entre diretorias, cultura organizacional e acompanhamento de metas.',
+  },
+  {
+    area: 'Diretoria de Projetos',
+    papel: 'Garantia de qualidade técnica, alocação de equipes, revisão metodológica e satisfação dos clientes (NPS).',
+  },
+  {
+    area: 'Diretoria Comercial',
+    papel: 'Atendimento consultivo, diagnóstico gratuito com empresas e desenho de propostas sob medida.',
+  },
+  {
+    area: 'Diretoria de Marketing',
+    papel: 'Posicionamento institucional, produção de materiais ricos, eventos e relacionamento com o mercado.',
+  },
+  {
+    area: 'Diretoria de Pessoas e Finanças',
+    papel: 'Processo seletivo, capacitação dos consultores, gestão financeira e conformidade jurídica.',
+  },
+];
+---
+
+<section id="equipe" class="section_home-quem-somos padding-section-medium" aria-labelledby="equipe-titulo">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="equipe_header">
+        <span class="eyebrow">Nossa Liderança</span>
+        <h2 id="equipe-titulo">Diretoria Executiva e Coordenadores da EJFGV</h2>
+        <p>
+          Nossa gestão é formada por alunos de graduação da Fundação Getulio Vargas eleitos anualmente para liderar as frentes de projetos, atendimento comercial e desenvolvimento interno.
+        </p>
+      </div>
+
+      <div class="equipe_grid">
+        {cargos.map((membro) => (
+          <article class="equipe_card">
+            <ImagemReservada
+              rotulo={`Retrato oficial — ${membro.area}`}
+              proporcao="1/1"
+            />
+            <div class="equipe_card-body">
+              <span class="eyebrow">{membro.area}</span>
+              <h3>Membro da Gestão Atual</h3>
+              <p>{membro.papel}</p>
+              <span class="preencher">Nome, cargo e mini-bio da gestão atual: a preencher pelo Marketing</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .equipe_header {
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .equipe_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 0.65rem;
+  }
+
+  .equipe_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .equipe_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .equipe_card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .equipe_card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .equipe_card-body h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--gray900);
+  }
+
+  .equipe_card-body p {
+    font-size: 0.9rem;
+    color: var(--gray600);
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .equipe_grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .equipe_grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

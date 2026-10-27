@@ -1,0 +1,46 @@
+---
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import FrentesFinanceiras from '../components/solucoes/consultoria-financeira/FrentesFinanceiras.astro';
+import { type FaqItem } from '../components/Faq.astro';
+import { NUMEROS, SOLUCOES } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-financeira')!;
+
+const faqItens: FaqItem[] = [
+  {
+    pergunta: 'Quando minha empresa precisa de uma Consultoria Financeira?',
+    resposta:
+      'A Consultoria Financeira é indicada tanto para empresas que faturam bem mas não enxergam o lucro líquido no fim do mês — precisando organizar fluxo de caixa, DRE gerencial e custos — quanto para negócios em momento de expansão, que precisam precificar produtos e serviços com precisão, validar a viabilidade econômica de um novo investimento ou calcular o valor da empresa (Valuation) para entrada de sócios e investidores.',
+    validar: true,
+  },
+  {
+    pergunta: 'Como um estudo de viabilidade financeira evita prejuízos em novos investimentos?',
+    resposta:
+      'Antes de comprometer capital em uma expansão, nova unidade ou aquisição, projetamos o fluxo de caixa futuro em cenários otimista, base e conservador e calculamos indicadores como VPL (Valor Presente Líquido), TIR (Taxa Interna de Retorno) e tempo de retorno (Payback). Em projetos reais da EJFGV — como a avaliação de compra de uma fazenda de café e o plano de expansão de um espaço de eventos em São Paulo — a modelagem comprovou que o formato original traria prejuízos milionários e desenhou alternativas rentáveis com menor necessidade de capital.',
+    validar: true,
+  },
+  {
+    pergunta: 'O que é Valuation e quando devo avaliar o valor da minha empresa?',
+    resposta:
+      'Valuation é o cálculo técnico do valor econômico justo de uma empresa. Na EJFGV, utilizamos metodologias reconhecidas pelo mercado — principalmente o Fluxo de Caixa Descontado (DCF) e múltiplos comparáveis — para estimar quanto o negócio vale a partir da sua capacidade real de gerar caixa no futuro. Ele é essencial antes de negociar a entrada ou saída de sócios, captar recursos com investidores (acompanhado de Pitch Deck executivo) ou avaliar fusões e aquisições.',
+    validar: true,
+  },
+  {
+    pergunta: 'Como a EJFGV ajuda na formação de preços (precificação)?',
+    resposta:
+      'Auditamos a estrutura de custos fixos, custos variáveis, impostos, taxas e comissões da operação para calcular a margem de contribuição real de cada produto, serviço ou contrato. A partir desse diagnóstico, desenvolvemos ferramentas práticas sob medida para que sua equipe forme preços competitivos que cubram todas as despesas e garantam a margem de lucro desejada — como realizado na reestruturação financeira da agência Comunik.',
+    validar: true,
+  },
+  {
+    pergunta: 'As ferramentas financeiras entregues ficam com a minha empresa após o projeto?',
+    resposta: `Sim. Todos os projetos da EJFGV são construídos em cocriação com o cliente ao longo de cerca de 3 meses, com suporte acadêmico de professores da Fundação Getulio Vargas e tradição desde ${NUMEROS.fundacao}. As planilhas de fluxo de caixa, DRE, simuladores de precificação, modelos de viabilidade e painéis são entregues 100% abertos, documentados e acompanhados de treinamento para que sua gestão tenha autonomia total após a conclusão.`,
+    validar: true,
+  },
+];
+---
+
+<SolucaoLayout solucao={solucao} faqItens={faqItens}>
+  <div slot="especifico">
+    <FrentesFinanceiras />
+  </div>
+</SolucaoLayout>

@@ -1,0 +1,617 @@
+---
+import ImagemReservada from '../../ImagemReservada.astro';
+import { MATERIAIS_RICOS, NUMEROS, SITE } from '../../../consts';
+
+const ebookFinanceiro = MATERIAIS_RICOS.find(
+  (m) => m.slug === 'projecoes-e-modelagem-financeira'
+);
+
+const pilares = [
+  {
+    numero: '01',
+    tag: 'Caixa e Liquidez',
+    titulo: 'Organização de Fluxo de Caixa e Capital de Giro',
+    resumo:
+      'Visibilidade diária e mensal de todas as entradas e saídas para eliminar surpresas no caixa e garantir fôlego financeiro à operação.',
+    explicacaoSimples:
+      'Na prática: o Fluxo de Caixa mostra o dinheiro que realmente entra e sai da conta bancária da empresa, enquanto o Capital de Giro indica quanto recurso é necessário para manter o negócio funcionando entre o pagamento de fornecedores e o recebimento dos clientes.',
+    entregas: [
+      'Estruturação e conciliação de entradas e saídas diárias e mensais',
+      'Projeção de fôlego de caixa e necessidade de capital de giro',
+      'Previsibilidade financeira para planejar compras, contratações e retiradas',
+    ],
+  },
+  {
+    numero: '02',
+    tag: 'Resultado e Eficiência',
+    titulo: 'Estrutura de Custos, DRE e Redução de Despesas',
+    resumo:
+      'Separação clara entre custos fixos e variáveis e apuração da margem real por linha de receita para descobrir onde o lucro está sendo consumido.',
+    explicacaoSimples:
+      'Na prática: a DRE (Demonstração do Resultado do Exercício) gerencial revela se a operação dá lucro ou prejuízo mês a mês, separando o que é gasto direto para entregar o produto ou serviço daquilo que é despesa fixa para manter a empresa aberta.',
+    entregas: [
+      'Auditoria detalhada de custos diretos, despesas fixas e gastos ocultos',
+      'Construção de DRE gerencial clara para acompanhamento mensal da liderança',
+      'Plano prático de redução de desperdícios e recuperação de rentabilidade',
+    ],
+    caseRelacionado: {
+      rotulo: 'Ver case real: como a agência Comunik reorganizou custos e retomou o equilíbrio financeiro →',
+      href: '/cases/como-foi-conduzida-a-reestruturacao-financeira-da-comunik-para-melhores-resultados/',
+    },
+  },
+  {
+    numero: '03',
+    tag: 'Margem e Competitividade',
+    titulo: 'Precificação Técnica de Produtos e Serviços',
+    resumo:
+      'Cálculo estruturado de margem de contribuição, impostos, comissões e ponto de equilíbrio para cobrar o preço certo sem perder competitividade nem margem.',
+    explicacaoSimples:
+      'Na prática: a Margem de Contribuição mostra quanto sobra do valor de cada venda após pagar os custos diretos e impostos daquela entrega. A partir dela, calculamos o Ponto de Equilíbrio — o faturamento mínimo para a empresa pagar todas as contas e começar a gerar lucro.',
+    entregas: [
+      'Planilhas e ferramentas sob medida de formação de preços por produto, serviço ou projeto',
+      'Cálculo exato de impostos, taxas, comissões, insumos e horas alocadas',
+      'Simulador de descontos comerciais e definição de ponto de equilíbrio operacional',
+    ],
+    caseRelacionado: {
+      rotulo: 'Conhecer a ferramenta de precificação criada para a Comunik →',
+      href: '/cases/como-foi-conduzida-a-reestruturacao-financeira-da-comunik-para-melhores-resultados/',
+    },
+  },
+  {
+    numero: '04',
+    tag: 'Segurança para Investir',
+    titulo: 'Estudo de Viabilidade Econômica e Valuation',
+    resumo:
+      'Projeção de cenários (otimista, base e conservador), cálculo de VPL, TIR e Payback e avaliação do valor justo da empresa por Fluxo de Caixa Descontado.',
+    explicacaoSimples:
+      'Na prática: antes de investir milhões em uma expansão ou aquisição, simulamos o futuro do negócio. O Payback mostra em quanto tempo o dinheiro investido retorna; o VPL (Valor Presente Líquido) e a TIR (Taxa Interna de Retorno) revelam se o projeto cria riqueza real acima do risco; e o Valuation calcula quanto a empresa vale hoje com base no caixa que ela é capaz de gerar.',
+    entregas: [
+      'Modelagem financeira completa com análise de sensibilidade em 3 cenários (otimista, base e conservador)',
+      'Apuração técnica de VPL, TIR, necessidade de aporte (CAPEX) e tempo de retorno (Payback)',
+      'Valuation por Fluxo de Caixa Descontado (DCF) e múltiplos de mercado para negociação societária',
+    ],
+    casesMultiplos: [
+      {
+        rotulo: 'Case Fazenda de Café: estudo que evitou prejuízo milionário no agronegócio →',
+        href: '/cases/a-analise-de-viabilidade-que-evitou-um-prejuizo-de-milhoes-de-reais-na-compra-de-uma-fazenda-de-cafe/',
+      },
+      {
+        rotulo: 'Case Espaço de Eventos: expansão redesenhada com 50% menos capital e VPL positivo acima de R$ 2 milhões →',
+        href: '/cases/a-analise-de-viabilidade-que-evitou-um-prejuizo-de-milhoes-de-reais-em-um-novo-negocio/',
+      },
+    ],
+  },
+  {
+    numero: '05',
+    tag: 'Captação e Expansão',
+    titulo: 'Pitch Deck e Preparação para Investidores / Sócios',
+    resumo:
+      'Estruturação de apresentação executiva com tese de negócio clara, indicadores de retorno e números auditáveis para rodadas de captação, entrada de sócios ou obtenção de crédito.',
+    explicacaoSimples:
+      'Na prática: traduzimos toda a modelagem financeira em um documento executivo direto ao ponto (Pitch Deck), conectando a estratégia comercial aos números auditáveis que investidores, fundos e instituições financeiras exigem analisar.',
+    entregas: [
+      'Roteiro estratégico e apresentação executiva (Pitch Deck) orientada a investidores e potenciais sócios',
+      'Definição de destinação dos recursos captados, indicadores de tração e tese de retorno',
+      'Integração direta com o planejamento estratégico e com painéis de acompanhamento contínuo',
+    ],
+    linksCruzados: [
+      {
+        rotulo: 'Estruturar estratégia completa em Plano de Negócios →',
+        href: '/plano-de-negocios/',
+      },
+      {
+        rotulo: 'Automatizar painéis financeiros em Consultoria em Business Intelligence →',
+        href: '/consultoria-business-intelligence/',
+      },
+    ],
+  },
+];
+
+const indicadoresSemJargao = [
+  {
+    sigla: 'DRE Gerencial',
+    pergunta: '“Minha operação dá lucro de verdade?”',
+    resposta:
+      'Organiza receitas, custos diretos e despesas fixas mês a mês para mostrar a rentabilidade real do negócio, sem confundir faturamento bruto com lucro líquido.',
+  },
+  {
+    sigla: 'Margem e Ponto de Equilíbrio',
+    pergunta: '“Meus preços cobrem todos os custos?”',
+    resposta:
+      'Revela quanto sobra de cada venda após pagar insumos, impostos e comissões, e qual é o faturamento mínimo mensal para a empresa operar no azul.',
+  },
+  {
+    sigla: 'VPL, TIR e Payback',
+    pergunta: '“Vale a pena fazer este investimento?”',
+    resposta:
+      'Indicam em quanto tempo o capital investido retorna ao caixa (Payback) e se o novo projeto gera valor financeiro superior às alternativas do mercado (VPL e TIR).',
+  },
+  {
+    sigla: 'Valuation (DCF)',
+    pergunta: '“Quanto vale a minha empresa hoje?”',
+    resposta:
+      'Calcula o valor econômico justo do negócio a partir da capacidade futura de geração de caixa trazida a valor presente, embasando entrada ou saída de sócios.',
+  },
+];
+---
+
+<section class="section_pilares-financeiros padding-section-medium" id="frentes-financeiras">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="pilares_intro-grid">
+        <div class="pilares_intro-copy">
+          <span class="eyebrow">Atuação Profunda do Caixa ao Valuation</span>
+          <h2>Frentes de Estruturação e Inteligência Financeira para PMEs</h2>
+          <p>
+            Desde {NUMEROS.fundacao}, a EJFGV traduz a base técnica da Fundação Getulio Vargas em ferramentas financeiras claras e aplicáveis no dia a dia de pequenas e médias empresas. Não entregamos relatórios teóricos: construímos modelos sob medida para que você enxergue suas margens, forme preços corretos e decida sobre investimentos com segurança.
+          </p>
+          <div class="pilares_intro-badges">
+            <div class="pilares_badge-item">
+              <strong>{NUMEROS.projetosFormatado} projetos</strong>
+              <span>Entregues pela EJFGV desde {NUMEROS.fundacao}</span>
+            </div>
+            <div class="pilares_badge-item">
+              <strong>Modelos 100% editáveis</strong>
+              <span>Planilhas e ferramentas sem bloqueios para sua gestão</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pilares_intro-media">
+          <ImagemReservada
+            rotulo="Modelagem financeira e análise de cenários elaborada pelos consultores da EJFGV"
+            proporcao="16/9"
+          />
+        </div>
+      </div>
+
+      <div class="pilares_list">
+        {pilares.map((pilar) => (
+          <article class="pilar_card">
+            <div class="pilar_header">
+              <div class="pilar_meta">
+                <span class="pilar_num">Pilar {pilar.numero}</span>
+                <span class="pilar_tag">{pilar.tag}</span>
+              </div>
+              <h3>{pilar.titulo}</h3>
+              <p class="pilar_resumo">{pilar.resumo}</p>
+              <p class="pilar_explicacao">{pilar.explicacaoSimples}</p>
+            </div>
+
+            <div class="pilar_body">
+              <span class="pilar_entregas-label">O que estruturamos nesta frente:</span>
+              <ul class="pilar_checklist">
+                {pilar.entregas.map((entrega) => (
+                  <li>
+                    <img src={SITE.iconeCheck} alt="" width="20" height="20" loading="lazy" />
+                    <span>{entrega}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {pilar.caseRelacionado && (
+                <div class="pilar_links">
+                  <a href={pilar.caseRelacionado.href} class="pilar_link">
+                    {pilar.caseRelacionado.rotulo}
+                  </a>
+                </div>
+              )}
+
+              {pilar.casesMultiplos && (
+                <div class="pilar_links">
+                  {pilar.casesMultiplos.map((c) => (
+                    <a href={c.href} class="pilar_link">
+                      {c.rotulo}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {pilar.linksCruzados && (
+                <div class="pilar_links">
+                  {pilar.linksCruzados.map((l) => (
+                    <a href={l.href} class="pilar_link">
+                      {l.rotulo}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="glossario_box" aria-label="Indicadores financeiros explicados sem jargão">
+        <div class="glossario_header">
+          <span class="eyebrow is-dark">Finanças sem Jargão</span>
+          <h3>O que cada indicador responde na prática para a gestão da sua empresa</h3>
+          <p>
+            Nos nossos projetos, cada sigla financeira é traduzida em respostas diretas para apoiar a tomada de decisão dos sócios e gestores:
+          </p>
+        </div>
+
+        <div class="glossario_grid">
+          {indicadoresSemJargao.map((ind) => (
+            <div class="glossario_item">
+              <span class="glossario_sigla">{ind.sigla}</span>
+              <strong>{ind.pergunta}</strong>
+              <p>{ind.resposta}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {ebookFinanceiro && (
+        <aside class="ebook_callout" aria-label="Material educativo gratuito sobre modelagem financeira">
+          <div class="ebook_callout-copy">
+            <span class="eyebrow">{ebookFinanceiro.tipo} · Conteúdo Educativo EJFGV</span>
+            <h3>E-book: {ebookFinanceiro.titulo}</h3>
+            <p>{ebookFinanceiro.descricao}</p>
+            <ul class="ebook_topics">
+              {ebookFinanceiro.topicos.map((topico) => (
+                <li>
+                  <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+                  <span>{topico}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="ebook_callout-actions">
+            <a href="/materiais-ricos/" class="button is-button-large">
+              Acessar e-book gratuito →
+            </a>
+            <a href="#formulario" class="button-tertiary">
+              Ou agendar diagnóstico financeiro gratuito
+            </a>
+          </div>
+        </aside>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_pilares-financeiros {
+    background: var(--gray50);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .pilares_intro-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+    margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem);
+  }
+
+  .pilares_intro-copy h2 {
+    font-size: clamp(1.65rem, 2.6vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.16;
+    color: var(--gray900);
+    margin-bottom: 0.95rem;
+  }
+
+  .pilares_intro-copy p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  .pilares_intro-badges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .pilares_badge-item {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .pilares_badge-item strong {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--primary700);
+  }
+
+  .pilares_badge-item span {
+    font-size: 0.825rem;
+    color: var(--gray600);
+    line-height: 1.45;
+  }
+
+  .pilares_list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem);
+  }
+
+  .pilar_card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(1.5rem, 3vw, 2.75rem);
+    align-items: start;
+    transition: border-color 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo);
+  }
+
+  .pilar_card:hover {
+    border-color: var(--primary300);
+    transform: translateY(-2px);
+  }
+
+  .pilar_meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .pilar_num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary700);
+    background: var(--primary50);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+  }
+
+  .pilar_tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gray600);
+  }
+
+  .pilar_header h3 {
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+    font-weight: 800;
+    color: var(--gray900);
+    letter-spacing: -0.015em;
+    margin-bottom: 0.65rem;
+  }
+
+  .pilar_resumo {
+    font-size: 0.975rem;
+    font-weight: 600;
+    color: var(--gray800);
+    line-height: 1.55;
+    margin-bottom: 0.75rem;
+  }
+
+  .pilar_explicacao {
+    font-size: 0.9rem;
+    color: var(--gray600);
+    line-height: 1.6;
+    background: var(--gray50);
+    border-left: 3px solid var(--primary500);
+    padding: 0.85rem 1rem;
+    border-radius: 0 var(--btn-radius) var(--btn-radius) 0;
+  }
+
+  .pilar_body {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-md);
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .pilar_entregas-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray700);
+  }
+
+  .pilar_checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .pilar_checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--gray700);
+    line-height: 1.5;
+  }
+
+  .pilar_checklist img {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .pilar_links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray200);
+  }
+
+  .pilar_link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary700);
+    line-height: 1.45;
+    transition: color 0.2s;
+  }
+
+  .pilar_link:hover {
+    color: var(--primary600);
+    text-decoration: underline;
+  }
+
+  .glossario_box {
+    background: var(--graywarm900);
+    color: var(--white);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+    border: 1px solid var(--border-hairline-dark);
+  }
+
+  .glossario_header {
+    max-width: 46rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .glossario_header h3 {
+    font-size: clamp(1.35rem, 2.1vw, 1.85rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.015em;
+    margin-bottom: 0.5rem;
+  }
+
+  .glossario_header p {
+    font-size: 0.95rem;
+    color: var(--graywarm300);
+    line-height: 1.6;
+  }
+
+  .glossario_grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.15rem;
+  }
+
+  .glossario_item {
+    background: var(--graywarm950);
+    border: 1px solid var(--border-hairline-dark);
+    border-radius: var(--card-radius-md);
+    padding: 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .glossario_sigla {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary200);
+  }
+
+  .glossario_item strong {
+    font-size: 0.975rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.35;
+  }
+
+  .glossario_item p {
+    font-size: 0.85rem;
+    color: var(--graywarm300);
+    line-height: 1.55;
+  }
+
+  .ebook_callout {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-left: 5px solid var(--primary600);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.75rem, 3.2vw, 2.5rem);
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: center;
+  }
+
+  .ebook_callout-copy h3 {
+    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    font-weight: 800;
+    color: var(--gray900);
+    margin-bottom: 0.55rem;
+  }
+
+  .ebook_callout-copy p {
+    font-size: 0.95rem;
+    color: var(--gray600);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .ebook_topics {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ebook_topics li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--gray700);
+    line-height: 1.45;
+  }
+
+  .ebook_topics img {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ebook_callout-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  @media (max-width: 1024px) {
+    .pilares_intro-grid,
+    .pilar_card,
+    .ebook_callout {
+      grid-template-columns: 1fr;
+    }
+
+    .glossario_grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pilares_intro-badges,
+    .glossario_grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pilar_card,
+    .pilar_link {
+      transition: none;
+    }
+
+    .pilar_card:hover {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import PilaresOperacionais from '../components/solucoes/consultoria-operacional/PilaresOperacionais.astro';
+import type { FaqItem } from '../components/Faq.astro';
+import { SOLUCOES } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-operacional')!;
+
+const faqItens: FaqItem[] = [
+  {
+    pergunta: 'Quais sinais indicam que minha empresa precisa de uma Consultoria Operacional?',
+    resposta:
+      'Os sinais mais frequentes são sobrecarga constante dos sócios com problemas do dia a dia, retrabalho recorrente, atrasos nas entregas, falhas de comunicação entre setores, funções sobrepostas na equipe e dificuldade para treinar novos colaboradores por falta de processos documentados. Também é recomendada quando a empresa planeja crescer e precisa padronizar sua operação para ganhar escala sem perder qualidade.',
+    validar: true,
+  },
+  {
+    pergunta: 'Qual a diferença entre mapear processos (AS-IS) e redesenhar processos (TO-BE)?',
+    resposta:
+      'O mapeamento de processos (AS-IS) é o diagnóstico fiel de como as rotinas funcionam hoje na empresa, permitindo enxergar gargalos, etapas desnecessárias, retrabalhos e perdas de tempo. Já o redesenho de processos (TO-BE) é a construção do novo fluxo otimizado em notação BPMN, com responsáveis claros, regras definidas e padronização das atividades críticas.',
+    validar: true,
+  },
+  {
+    pergunta: 'Como garantir que a equipe realmente adote os novos processos no dia a dia?',
+    resposta:
+      'Trabalhamos em cocriação próxima com os gestores e as equipes do cliente durante todo o projeto. Em vez de relatórios engessados, construímos fluxos práticos aderentes à rotina real do negócio, definimos matrizes claras de responsabilidades, estruturamos rituais de comunicação entre áreas e apoiamos o alinhamento cultural e o engajamento das pessoas.',
+    validar: true,
+  },
+  {
+    pergunta: 'A Consultoria Operacional inclui criação de indicadores e dashboards?',
+    resposta:
+      'Sim. Definimos metas operacionais e indicadores de desempenho (KPIs) para monitorar prazos, qualidade, capacidade produtiva e SLA de cada área, entregando dashboards e instrumentos práticos de gestão. Quando a empresa busca automatizar relatórios e integrar múltiplas bases de dados em tempo real, conectamos o escopo à nossa Consultoria em Business Intelligence.',
+    validar: true,
+  },
+  {
+    pergunta: 'Quanto tempo dura um projeto de reestruturação operacional na EJFGV?',
+    resposta:
+      'Os projetos da EJFGV têm duração média de 3 meses, variando de acordo com o porte da operação e a quantidade de áreas ou processos contemplados no escopo. Todo projeto se inicia com um diagnóstico gratuito para priorizar os principais gargalos do negócio, contando com acompanhamento próximo e orientação técnica de professores da Fundação Getulio Vargas.',
+    validar: true,
+  },
+];
+---
+
+<SolucaoLayout solucao={solucao} faqItens={faqItens}>
+  <div slot="especifico">
+    <PilaresOperacionais />
+  </div>
+</SolucaoLayout>

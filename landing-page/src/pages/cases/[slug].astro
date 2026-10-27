@@ -1,0 +1,866 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import ImagemReservada from '../../components/ImagemReservada.astro';
+import {
+  CASES,
+  CITACAO_PROJETO,
+  CONTATO,
+  NUMEROS,
+  SITE,
+  SOLUCOES,
+  type CaseItem,
+} from '../../consts';
+
+export function getStaticPaths() {
+  return CASES.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+interface Props {
+  item: CaseItem;
+}
+
+const { item } = Astro.props;
+
+const solucaoPrincipalSlug = item.solucoes[0] || 'plano-de-negocios';
+const ctaSolucaoHref = `/${solucaoPrincipalSlug}/#formulario`;
+
+const solucoesRelacionadas = SOLUCOES.filter((s) =>
+  item.solucoes.includes(s.slug)
+);
+const nomesSolucoes =
+  solucoesRelacionadas.map((s) => s.nome).join(' + ') || item.solucao;
+
+const outrosCases = CASES.filter((c) => c.slug !== item.slug)
+  .map((c) => {
+    const mesmaSolucao = c.solucoes.some((s) => item.solucoes.includes(s));
+    const mesmoSegmento = c.segmento === item.segmento;
+    const score = (mesmaSolucao ? 2 : 0) + (mesmoSegmento ? 1 : 0);
+    return { caseItem: c, score };
+  })
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((entry) => entry.caseItem);
+
+const canonicalUrl = new URL(item.url, SITE.url).toString();
+const descricaoSeo = `Estudo de caso EJFGV (${item.segmento} — ${item.cliente}): ${item.destaque}. Veja o problema inicial, a solução aplicada e os resultados finais.`;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: item.titulo,
+  description: descricaoSeo,
+  url: canonicalUrl,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+  },
+  about: {
+    '@type': 'Thing',
+    name: `${nomesSolucoes} — ${item.segmento}`,
+  },
+  author: {
+    '@type': 'Organization',
+    name: SITE.nome,
+    alternateName: SITE.nomeCompleto,
+    url: SITE.url,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.nome,
+    alternateName: SITE.nomeCompleto,
+    url: SITE.url,
+    logo: {
+      '@type': 'ImageObject',
+      url: SITE.logoLight,
+    },
+  },
+  inLanguage: 'pt-BR',
+};
+---
+
+<Layout
+  titulo={`${item.titulo} | Case de Sucesso EJFGV`}
+  descricao={descricaoSeo}
+  canonicalPath={item.url}
+  ctaHref={ctaSolucaoHref}
+  jsonLd={articleJsonLd}
+>
+  <PageHeader
+    escura={true}
+    eyebrow={`${item.segmento} · ${nomesSolucoes}`}
+    titulo={item.titulo}
+    lead={item.destaque}
+    abertura={`Estudo de caso real conduzido pela EJFGV — Empresa Júnior da Fundação Getulio Vargas (desde ${NUMEROS.fundacao}) — junto a ${item.cliente} no setor de ${item.segmento}, com foco em ${item.solucao.toLowerCase()}.`}
+    notaExtra={`Impacto registrado: ${item.metricaCurta} · Cocriação com orientação docente da Fundação Getulio Vargas.`}
+    breadcrumb={[
+      { rotulo: 'Início', href: '/' },
+      { rotulo: 'Cases de Sucesso', href: '/cases-de-sucesso/' },
+      { rotulo: item.cliente },
+    ]}
+    acoes={[
+      {
+        rotulo: 'Solicitar projeto semelhante',
+        href: ctaSolucaoHref,
+        variante: 'primary',
+        grande: true,
+      },
+      {
+        rotulo: 'Ler estudo de caso',
+        href: '#problema-inicial',
+        variante: 'secondary',
+        grande: true,
+      },
+    ]}
+    imagemRotulo={`Fotografia ou capa do projeto ${item.cliente} (${item.segmento})`}
+    imagemProporcao="16/10"
+  />
+
+  <section class="section_case-article padding-section-medium">
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="case-article_grid">
+          <aside class="case-article_sidebar" aria-label="Índice do estudo de caso e informações rápidas">
+            <div class="case-sidebar_sticky">
+              <nav class="case-toc" aria-label="Etapas deste estudo de caso">
+                <span class="case-toc_label">Neste Estudo de Caso</span>
+                <ol class="case-toc_list">
+                  <li>
+                    <a
+                      href="#problema-inicial"
+                      class="case-toc_link is-active"
+                      data-toc-link="problema-inicial"
+                      aria-current="location"
+                    >
+                      <span class="case-toc_num">01</span>
+                      <span>Problema Inicial</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#nossa-solucao"
+                      class="case-toc_link"
+                      data-toc-link="nossa-solucao"
+                    >
+                      <span class="case-toc_num">02</span>
+                      <span>Nossa Solução</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#resultados-finais"
+                      class="case-toc_link"
+                      data-toc-link="resultados-finais"
+                    >
+                      <span class="case-toc_num">03</span>
+                      <span>Resultados Finais</span>
+                    </a>
+                  </li>
+                </ol>
+              </nav>
+
+              <div class="case-sidebar_card">
+                <span class="eyebrow">Frente Aplicada</span>
+                <h3>{nomesSolucoes}</h3>
+                <p>
+                  Quer aplicar a mesma metodologia da Fundação Getulio Vargas aos desafios de {item.segmento.toLowerCase()} ou do seu mercado?
+                </p>
+                <div class="case-sidebar_links">
+                  {solucoesRelacionadas.map((sol) => (
+                    <a href={sol.url} class="case-sidebar_solucao-link">
+                      <span>Conhecer {sol.nome}</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  ))}
+                </div>
+                <a href={ctaSolucaoHref} class="button case-sidebar_cta">
+                  Agendar diagnóstico gratuito
+                </a>
+              </div>
+            </div>
+          </aside>
+
+          <div class="case-article_main">
+            <div class="case-summary-box" data-case-reveal>
+              <div class="case-summary_header">
+                <span class="eyebrow">Resumo Executivo do Projeto</span>
+                <span class="case-summary_badge">{item.metricaCurta}</span>
+              </div>
+
+              <dl class="case-summary_grid">
+                <div class="case-summary_item">
+                  <dt>Cliente</dt>
+                  <dd>{item.cliente}</dd>
+                </div>
+                <div class="case-summary_item">
+                  <dt>Segmento</dt>
+                  <dd>{item.segmento}</dd>
+                </div>
+                <div class="case-summary_item">
+                  <dt>Solução Aplicada</dt>
+                  <dd>{item.solucao}</dd>
+                </div>
+                <div class="case-summary_item">
+                  <dt>Resultado Alcançado</dt>
+                  <dd>{item.destaque}</dd>
+                </div>
+              </dl>
+
+              {item.notaConfirmar && (
+                <p class="case-summary_nota">
+                  <span class="preencher">{item.notaConfirmar}</span>
+                </p>
+              )}
+            </div>
+
+            <article
+              id="problema-inicial"
+              class="case-section"
+              data-case-section
+              data-case-reveal
+            >
+              <div class="case-section_header">
+                <span class="eyebrow">01 · Contexto e Desafio</span>
+                <h2>Problema Inicial</h2>
+                <p class="case-section_subtitle">
+                  <strong>Desafio central:</strong> {item.problema}.
+                </p>
+              </div>
+
+              <div class="case-section_body">
+                {item.problemaTexto.map((paragrafo) => (
+                  <p>{paragrafo}</p>
+                ))}
+              </div>
+            </article>
+
+            <article
+              id="nossa-solucao"
+              class="case-section"
+              data-case-section
+              data-case-reveal
+            >
+              <div class="case-section_header">
+                <span class="eyebrow">02 · Metodologia e Execução</span>
+                <h2>Nossa Solução</h2>
+                <p class="case-section_subtitle">
+                  <strong>Entrega estruturada:</strong> {item.solucao}.
+                </p>
+              </div>
+
+              <div class="case-section_body">
+                {item.solucaoTexto.map((paragrafo) => (
+                  <p>{paragrafo}</p>
+                ))}
+              </div>
+
+              <div class="case-section_solucoes">
+                <h3>Consultoria da EJFGV envolvida neste projeto</h3>
+                <div class="case-section_solucoes-grid">
+                  {solucoesRelacionadas.map((sol) => (
+                    <div class="case-solucao-pill">
+                      <div>
+                        <span class="eyebrow">{sol.categoria}</span>
+                        <h4>{sol.nome}</h4>
+                        <p>{sol.lead}</p>
+                      </div>
+                      <a href={sol.url} class="button-tertiary">
+                        Ver escopo da solução →
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
+
+            <article
+              id="resultados-finais"
+              class="case-section"
+              data-case-section
+              data-case-reveal
+            >
+              <div class="case-section_header">
+                <span class="eyebrow">03 · Impacto Mensurável</span>
+                <h2>Resultados Finais</h2>
+              </div>
+
+              <div class="case-result-banner">
+                <div class="case-result-banner_metric">{item.metricaCurta}</div>
+                <div class="case-result-banner_copy">
+                  <strong>Impacto principal alcançado</strong>
+                  <p>{item.destaque}</p>
+                </div>
+              </div>
+
+              <div class="case-section_body">
+                {item.resultadosTexto.map((paragrafo) => (
+                  <p>{paragrafo}</p>
+                ))}
+              </div>
+
+              <div class="case-media-slot">
+                <ImagemReservada
+                  rotulo={`Registro visual de entregas ou depoimento do projeto ${item.cliente}`}
+                  proporcao="16/9"
+                />
+                <p class="case-media-slot_note">
+                  <span class="preencher">
+                    A preencher: validar citação nominal complementar ou indicadores adicionais autorizados por {item.cliente}
+                  </span>
+                </p>
+              </div>
+            </article>
+
+            <blockquote class="case-methodology-quote" data-case-reveal>
+              <p>“{CITACAO_PROJETO.texto}”</p>
+              <footer>
+                <strong>{CITACAO_PROJETO.autor}</strong> — <span>{CITACAO_PROJETO.cargo}</span>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section_historias-semelhantes padding-section-medium">
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="historias_header">
+          <div>
+            <span class="eyebrow">Portfólio EJFGV</span>
+            <h2>Histórias como essa</h2>
+            <p>
+              Conheça outros projetos desenvolvidos pela Empresa Júnior da Fundação Getulio Vargas em desafios e setores semelhantes.
+            </p>
+          </div>
+          <a href="/cases-de-sucesso/" class="button-secondary">
+            Ver todos os cases de sucesso →
+          </a>
+        </div>
+
+        <div class="cases_grid">
+          {outrosCases.map((outro) => (
+            <CaseCard item={outro} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner
+    titulo={`Quer alcançar resultados como os de ${item.cliente} na sua empresa?`}
+    subtitulo={`Agende um diagnóstico gratuito com nossos especialistas em ${nomesSolucoes} ou fale diretamente pelo e-mail ${CONTATO.email}.`}
+    rotuloBotao="Solicite seu diagnóstico gratuito"
+    href={ctaSolucaoHref}
+  />
+</Layout>
+
+<script>
+  (function () {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-case-section]')
+    );
+    const tocLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')
+    );
+    const revealItems = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-case-reveal]')
+    );
+
+    function setActiveToc(sectionId: string) {
+      tocLinks.forEach((link) => {
+        const isMatch = link.getAttribute('data-toc-link') === sectionId;
+        link.classList.toggle('is-active', isMatch);
+        if (isMatch) {
+          link.setAttribute('aria-current', 'location');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
+    if (sections.length > 0 && tocLinks.length > 0 && 'IntersectionObserver' in window) {
+      const tocObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.target.id) {
+              setActiveToc(entry.target.id);
+            }
+          });
+        },
+        {
+          rootMargin: '-20% 0px -60% 0px',
+          threshold: 0.05,
+        }
+      );
+
+      sections.forEach((sec) => tocObserver.observe(sec));
+    }
+
+    if (!reduceMotion && revealItems.length > 0 && 'IntersectionObserver' in window) {
+      revealItems.forEach((el) => el.classList.add('is-reveal-pending'));
+
+      const revealObserver = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            entry.target.classList.remove('is-reveal-pending');
+            obs.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.12,
+        }
+      );
+
+      revealItems.forEach((el) => revealObserver.observe(el));
+    }
+  })();
+</script>
+
+<style>
+  .section_case-article {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .case-article_grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .case-sidebar_sticky {
+    position: sticky;
+    top: calc(var(--nav-height) + 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .case-toc {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 1.5rem;
+  }
+
+  .case-toc_label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray500);
+    margin-bottom: 1rem;
+  }
+
+  .case-toc_list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .case-toc_link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: var(--gray600);
+    border-left: 3px solid transparent;
+    transition: all 0.2s var(--ease-out-expo);
+  }
+
+  .case-toc_link:hover {
+    background: var(--gray100);
+    color: var(--gray900);
+  }
+
+  .case-toc_link.is-active {
+    background: var(--primary50);
+    color: var(--primary700);
+    border-left-color: var(--primary600);
+    font-weight: 700;
+  }
+
+  .case-toc_num {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--primary600);
+  }
+
+  .case-sidebar_card {
+    background: var(--graywarm950);
+    color: var(--white);
+    border: 1px solid var(--border-hairline-dark);
+    border-radius: var(--card-radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .case-sidebar_card h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .case-sidebar_card p {
+    font-size: 0.875rem;
+    color: var(--graywarm300);
+    line-height: 1.55;
+  }
+
+  .case-sidebar_links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-top: 0.35rem;
+  }
+
+  .case-sidebar_solucao-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary200);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border-hairline-dark);
+  }
+
+  .case-sidebar_solucao-link:hover {
+    color: var(--white);
+  }
+
+  .case-sidebar_cta {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .case-article_main {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  .case-summary-box {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .case-summary_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .case-summary_header .eyebrow {
+    margin-bottom: 0;
+  }
+
+  .case-summary_badge {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--primary700);
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  .case-summary_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 2rem;
+  }
+
+  .case-summary_item dt {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray500);
+    margin-bottom: 0.25rem;
+  }
+
+  .case-summary_item dd {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray900);
+    line-height: 1.45;
+  }
+
+  .case-summary_nota {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--gray300);
+  }
+
+  .case-section {
+    scroll-margin-top: calc(var(--nav-height) + 2rem);
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .case-section_header h2 {
+    font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 0.5rem;
+  }
+
+  .case-section_subtitle {
+    font-size: 1rem;
+    color: var(--gray700);
+    line-height: 1.55;
+  }
+
+  .case-section_body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .case-section_body p {
+    font-size: 1.05rem;
+    color: var(--gray700);
+    line-height: 1.75;
+  }
+
+  .case-section_solucoes {
+    margin-top: 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray200);
+  }
+
+  .case-section_solucoes h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray600);
+    margin-bottom: 1rem;
+  }
+
+  .case-section_solucoes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .case-solucao-pill {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-md);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .case-solucao-pill h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--gray900);
+    margin-bottom: 0.25rem;
+  }
+
+  .case-solucao-pill p {
+    font-size: 0.9rem;
+    color: var(--gray600);
+  }
+
+  .case-result-banner {
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    border-left: 4px solid var(--primary600);
+    border-radius: var(--card-radius-md);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .case-result-banner_metric {
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 900;
+    color: var(--primary700);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .case-result-banner_copy strong {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary800);
+    margin-bottom: 0.2rem;
+  }
+
+  .case-result-banner_copy p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray900);
+    line-height: 1.45;
+  }
+
+  .case-media-slot {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .case-media-slot_note {
+    margin-top: 0.25rem;
+  }
+
+  .case-methodology-quote {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-left: 4px solid var(--primary600);
+    border-radius: var(--card-radius-md);
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .case-methodology-quote p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray900);
+    line-height: 1.6;
+  }
+
+  .case-methodology-quote footer {
+    font-size: 0.85rem;
+    color: var(--gray600);
+  }
+
+  /* Efeito sutil de entrada via IntersectionObserver */
+  .is-reveal-pending {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.45s var(--ease-out-expo),
+      transform 0.45s var(--ease-out-expo);
+  }
+
+  .is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.45s var(--ease-out-expo),
+      transform 0.45s var(--ease-out-expo);
+  }
+
+  .section_historias-semelhantes {
+    background: var(--gray50);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .historias_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .historias_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 0.5rem;
+  }
+
+  .historias_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    max-width: 54ch;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .case-article_grid {
+      grid-template-columns: 1fr;
+    }
+
+    .case-sidebar_sticky {
+      position: static;
+    }
+
+    .case-toc_list {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .case-summary_grid {
+      grid-template-columns: 1fr;
+    }
+
+    .case-toc_list {
+      flex-direction: column;
+    }
+
+    .case-result-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .historias_header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .is-reveal-pending,
+    .is-revealed {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,176 @@
+---
+import StatsStrip from '../StatsStrip.astro';
+import ImagemReservada from '../ImagemReservada.astro';
+
+const indicadoresExtras = [
+  {
+    sigla: 'Indicador X',
+    titulo: 'Impacto econômico e social gerado',
+    marcador: 'Indicador X de impacto social/econômico: a preencher pelo Marketing',
+    descricao:
+      'Volume financeiro movimentado, economizado ou reinvestido em educação e desenvolvimento por meio dos projetos da EJFGV.',
+  },
+  {
+    sigla: 'Indicador Y',
+    titulo: 'Empresas e empreendedores transformados',
+    marcador: 'Indicador Y de empresas transformadas: a preencher pelo Marketing',
+    descricao:
+      'Negócios de diferentes portes que profissionalizaram sua gestão, expandiram operações ou lançaram novos produtos conosco.',
+  },
+  {
+    sigla: 'Indicador Z',
+    titulo: 'Lideranças e ex-membros no mercado',
+    marcador: 'Indicador Z de ex-membros no mercado: a preencher pelo Marketing',
+    descricao:
+      'Rede de alumni da EJFGV atuando na liderança de grandes empresas, consultorias estratégicas, instituições financeiras e startups.',
+  },
+];
+---
+
+<section class="section_impacto" aria-labelledby="nosso-impacto-titulo">
+  <div class="impacto_intro padding-section-medium">
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="impacto_header">
+          <span class="eyebrow">Nosso Impacto</span>
+          <h2 id="nosso-impacto-titulo">Resultados reais para empresas e formação de lideranças para o Brasil</h2>
+          <p>
+            Medimos nossa trajetória pela transformação prática nos clientes atendidos e pelo compromisso social da comunidade FGV.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <StatsStrip ariaLabel="Indicadores principais de impacto da EJFGV" />
+
+    <div class="page-padding">
+      <div class="container-large">
+        <div class="impacto_xyz-grid">
+          {indicadoresExtras.map((item) => (
+            <article class="resultados_card impacto_xyz-card">
+              <span class="eyebrow">{item.sigla}</span>
+              <h3>{item.titulo}</h3>
+              <p>{item.descricao}</p>
+              <div class="impacto_badge">
+                <span class="preencher">{item.marcador}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <article class="inmar_card">
+          <div class="inmar_content">
+            <span class="eyebrow">Iniciativa de Impacto · Destaque Institucional</span>
+            <h3>Projeto Inmar</h3>
+            <p>
+              Espaço dedicado à apresentação do Projeto Inmar, seus objetivos, frentes de atuação e resultados alcançados junto à comunidade e parceiros.
+            </p>
+            <div class="inmar_badges">
+              <span class="preencher">Projeto Inmar — descrição e resultados: a preencher pelo Marketing</span>
+              <span class="preencher">Selos e reconhecimentos institucionais vigentes: a preencher pelo Marketing</span>
+            </div>
+          </div>
+
+          <div class="inmar_media">
+            <ImagemReservada
+              rotulo="Fotografia ou registro visual do Projeto Inmar em atividade"
+              proporcao="16/10"
+            />
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_impacto {
+    background: var(--white);
+  }
+
+  .impacto_header {
+    max-width: 48rem;
+    margin-bottom: 2rem;
+  }
+
+  .impacto_header h2 {
+    font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+    margin-bottom: 0.65rem;
+  }
+
+  .impacto_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .impacto_xyz-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .impacto_xyz-card {
+    background: var(--gray50);
+    gap: 0.5rem;
+  }
+
+  .impacto_xyz-card h3 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--gray900);
+  }
+
+  .impacto_badge {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .inmar_card {
+    margin-top: 2rem;
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(1.75rem, 3.2vw, 2.75rem);
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(1.5rem, 3.5vw, 3rem);
+    align-items: center;
+  }
+
+  .inmar_content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .inmar_content h3 {
+    font-size: clamp(1.4rem, 2.1vw, 1.85rem);
+    font-weight: 800;
+    color: var(--gray900);
+  }
+
+  .inmar_content p {
+    font-size: 0.975rem;
+    color: var(--gray600);
+    line-height: 1.65;
+  }
+
+  .inmar_badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .impacto_xyz-grid,
+    .inmar_card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

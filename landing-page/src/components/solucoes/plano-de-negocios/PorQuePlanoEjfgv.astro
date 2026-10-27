@@ -1,0 +1,342 @@
+---
+import { NUMEROS, SITE } from '../../../consts';
+
+const pilares = [
+  {
+    etiqueta: 'Pilar 01 · Nosso Diferencial',
+    titulo: 'Projetos 100% personalizados para a realidade do cliente',
+    resumo:
+      'Não utilizamos planilhas prontas, pacotes genéricos nem modelos engessados de prateleira.',
+    texto:
+      'Cada negócio possui restrições de capital, maturidade operacional e dinâmica setorial próprias. Por isso, construímos todas as premissas mercadológicas, operacionais e financeiras sob medida para o porte e o momento da sua empresa — entregando recomendações práticas que cabem no seu orçamento e na rotina da sua equipe.',
+    destaques: [
+      'Escopo moldado após diagnóstico gratuito do seu desafio real',
+      'Modelos financeiros e operacionais adaptados ao porte de PMEs',
+      'Recomendações aplicáveis de imediato, sem complexidade desnecessária',
+    ],
+  },
+  {
+    etiqueta: 'Pilar 02 · Nossa Expertise',
+    titulo: `Tradição desde ${NUMEROS.fundacao} com respaldo da Fundação Getulio Vargas`,
+    resumo: `Mais de três décadas (${NUMEROS.anosMercado} anos) de atuação, ${NUMEROS.projetosFormatado} projetos entregues e orientação de professores da FGV.`,
+    texto: `Como a primeira Empresa Júnior da América Latina, acumulamos repertório prático em ${NUMEROS.setores} setores da economia e índice de satisfação NPS ${NUMEROS.nps} (${NUMEROS.npsAno}). Nossos consultores contam com o acompanhamento técnico de docentes e coordenadores da Fundação Getulio Vargas em São Paulo para garantir rigor analítico em cada entrega.`,
+    destaques: [
+      `${NUMEROS.projetosFormatado} projetos estratégicos entregues desde ${NUMEROS.fundacao}`,
+      'Revisão metodológica com respaldo acadêmico da Fundação Getulio Vargas',
+      `Experiência comprovada em ${NUMEROS.setores} segmentos de mercado`,
+    ],
+  },
+  {
+    etiqueta: 'Pilar 03 · Nossa Metodologia',
+    titulo: 'Cocriação intensa para um plano acionável e pronto para investidores',
+    resumo:
+      'Cerca de 3 meses de imersão conjunta, unindo mercado, operações e finanças em uma única direção.',
+    texto:
+      'Não entregamos apenas um documento extenso que fica na gaveta. Realizamos reuniões periódicas de alinhamento e cocriação com os sócios e gestores, integrando pesquisa de mercado, MVP, processos e viabilidade financeira. Ao final, você recebe um plano de ação claro e material executivo pronto para orientar a gestão ou apresentar a sócios e investidores.',
+    destaques: [
+      'Alinhamento contínuo com os fundadores ao longo de cerca de 3 meses',
+      'Visão multidisciplinar conectando comercial, operação, finanças e Business Intelligence',
+      'Entrega executiva preparada para tomada de decisão e captação de recursos',
+    ],
+  },
+] as const;
+---
+
+<section class="section_por-que-ejfgv padding-section-medium" id="por-que-ejfgv">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="por-que_header">
+        <span class="eyebrow">Diferencial, Expertise e Metodologia</span>
+        <h2>Por que estruturar seu Plano de Negócios com a EJFGV</h2>
+        <p>
+          Unimos o rigor analítico da Fundação Getulio Vargas a uma abordagem próxima e personalizada para pequenas e médias empresas que precisam decidir com segurança.
+        </p>
+      </div>
+
+      <div class="pilares_grid">
+        {pilares.map((pilar) => (
+          <article class="pilar_card">
+            <span class="pilar_tag">{pilar.etiqueta}</span>
+            <h3>{pilar.titulo}</h3>
+            <p class="pilar_lead">{pilar.resumo}</p>
+            <p class="pilar_text">{pilar.texto}</p>
+
+            <ul class="pilar_list">
+              {pilar.destaques.map((item) => (
+                <li>
+                  <img src={SITE.iconeCheck} alt="" width="18" height="18" loading="lazy" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <div class="perfis_box">
+        <div class="perfis_intro">
+          <span class="eyebrow is-dark">Aplicação na Prática</span>
+          <h3>Dois momentos em que o Plano de Negócios evita erros caros</h3>
+          <p>
+            Seja para começar do zero ou para abrir uma nova frente dentro de uma empresa já consolidada, estruturamos o caminho com dados reais e acompanhamento próximo.
+          </p>
+          <a href="#formulario" class="button is-button-large">
+            Agendar diagnóstico gratuito
+          </a>
+        </div>
+
+        <div class="perfis_cards">
+          <article class="perfil_card">
+            <span class="perfil_badge">Para novos empreendimentos</span>
+            <h3>Tirar um novo negócio do papel com segurança</h3>
+            <p>
+              Ideal para empreendedores que desejam validar a demanda real do mercado, estruturar processos iniciais e calcular o investimento necessário antes de abrir as portas.
+            </p>
+            <a
+              href="/cases/ajudando-o-rica-vida-a-tirar-um-sonho-do-papel/"
+              class="perfil_case-link"
+            >
+              Ver case real: Rica Vida (Viabilidade + Operação) →
+            </a>
+          </article>
+
+          <article class="perfil_card">
+            <span class="perfil_badge">Para empresas consolidadas</span>
+            <h3>Lançar uma nova unidade, produto ou plataforma</h3>
+            <p>
+              Ideal para PMEs em operação que buscam diversificar receitas, testar um MVP em novo mercado ou validar a viabilidade econômica de uma expansão antes de investir pesado.
+            </p>
+            <a
+              href="/cases/um-novo-plano-de-negocios-para-uma-empresa-de-audio-consolidada-no-mercado/"
+              class="perfil_case-link"
+            >
+              Ver case real: Empresa de Áudio (Plano de Negócios e MVP em 30 dias úteis) →
+            </a>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_por-que-ejfgv {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .por-que_header {
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .por-que_header h2 {
+    font-size: clamp(1.75rem, 2.7vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--gray900);
+    margin-bottom: 0.75rem;
+  }
+
+  .por-que_header p {
+    font-size: 1rem;
+    color: var(--gray600);
+    line-height: 1.65;
+  }
+
+  .pilares_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .pilar_card {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo);
+  }
+
+  .pilar_card:hover {
+    border-color: var(--primary300);
+    transform: translateY(-2px);
+  }
+
+  .pilar_tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--primary700);
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+  }
+
+  .pilar_card h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--gray900);
+    line-height: 1.28;
+    letter-spacing: -0.015em;
+  }
+
+  .pilar_lead {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--gray800);
+    line-height: 1.5;
+  }
+
+  .pilar_text {
+    font-size: 0.9rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  .pilar_list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray200);
+  }
+
+  .pilar_list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray700);
+    line-height: 1.45;
+  }
+
+  .pilar_list img {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .perfis_box {
+    background: var(--graywarm900);
+    color: var(--white);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(1.75rem, 3.5vw, 3rem);
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: clamp(1.75rem, 3.5vw, 3rem);
+    align-items: center;
+  }
+
+  .perfis_intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .perfis_intro h3 {
+    font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .perfis_intro p {
+    font-size: 0.95rem;
+    color: var(--graywarm300);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+
+  .perfis_cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .perfil_card {
+    background: var(--graywarm950);
+    border: 1px solid var(--border-hairline-dark);
+    border-radius: var(--card-radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .perfil_badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary200);
+  }
+
+  .perfil_card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--white);
+  }
+
+  .perfil_card p {
+    font-size: 0.875rem;
+    color: var(--graywarm300);
+    line-height: 1.55;
+  }
+
+  .perfil_case-link {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary200);
+    transition: color 0.2s;
+  }
+
+  .perfil_case-link:hover {
+    color: var(--white);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 1024px) {
+    .pilares_grid {
+      grid-template-columns: 1fr;
+    }
+
+    .perfis_box {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pilar_card {
+      padding: 1.5rem;
+    }
+
+    .perfis_intro a {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pilar_card {
+      transition: none;
+    }
+
+    .pilar_card:hover {
+      transform: none;
+    }
+  }
+</style>

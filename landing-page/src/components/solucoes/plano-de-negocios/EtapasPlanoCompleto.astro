@@ -1,0 +1,430 @@
+---
+import ImagemReservada from '../../ImagemReservada.astro';
+
+const etapasPlano = [
+  {
+    numero: '01',
+    etapa: 'Etapa 01 · Mercado e Demanda',
+    titulo: 'Pesquisa de Mercado e Análise Competitiva',
+    perguntaChave: 'Existe demanda real e espaço no mercado para a sua solução?',
+    descricao:
+      'Antes de comprometer capital em estrutura ou estoque, investigamos o tamanho da oportunidade, o perfil e os hábitos de compra do público-alvo, os fornecedores disponíveis e o posicionamento dos concorrentes diretos e indiretos.',
+    entregas: [
+      'Mapeamento de demanda real, tendências do setor e barreiras de entrada',
+      'Pesquisa de perfil, dores e disposição de pagamento do público comprador',
+      'Análise comparativa de concorrentes (benchmarking) e diferenciais competitivos',
+    ],
+    linkHref: '/consultoria-mercadologica/',
+    linkRotulo: 'Conhecer Consultoria Mercadológica →',
+  },
+  {
+    numero: '02',
+    etapa: 'Etapa 02 · Validação Prática sem Desperdício',
+    titulo: 'Desenho de MVP (Produto Mínimo Viável)',
+    perguntaChave: 'Como testar a aceitação real dos clientes antes de fazer investimentos pesados?',
+    descricao:
+      'Sem jargão técnico, o MVP é uma versão inicial enxuta do seu produto ou serviço, estruturada com os recursos essenciais para colocar a ideia à prova no mercado real. Assim, sua empresa valida o interesse do comprador e ajusta o modelo com baixo custo antes de escalar.',
+    entregas: [
+      'Definição das funcionalidades ou entregas essenciais para o primeiro teste comercial',
+      'Roteiro prático de validação e métricas para medir a receptividade do cliente',
+      'Economia de tempo e recursos ao corrigir premissas antes do investimento total',
+    ],
+  },
+  {
+    numero: '03',
+    etapa: 'Etapa 03 · Estrutura e Rotina Produtiva',
+    titulo: 'Plano Operacional',
+    perguntaChave: 'Como a empresa vai funcionar no dia a dia para entregar com qualidade?',
+    descricao:
+      'Com a proposta validada, desenhamos o funcionamento prático do negócio ponta a ponta: processos essenciais, divisão de responsabilidades da equipe, seleção de fornecedores, recursos necessários e capacidade produtiva ou de atendimento.',
+    entregas: [
+      'Mapeamento dos fluxos operacionais iniciais e jornada de entrega ao cliente',
+      'Dimensionamento de equipe, funções, rotinas de gestão e parceiros-chave',
+      'Planejamento de capacidade operacional para começar e crescer sem improvisos',
+    ],
+    linkHref: '/consultoria-operacional/',
+    linkRotulo: 'Conhecer Consultoria Operacional →',
+  },
+  {
+    numero: '04',
+    etapa: 'Etapa 04 · Atração de Clientes e Vendas',
+    titulo: 'Plano de Marketing e Posicionamento',
+    perguntaChave: 'Como a marca vai atrair clientes e gerar receita de forma previsível?',
+    descricao:
+      'Construímos a estratégia comercial para levar sua solução ao mercado certo. Definimos o posicionamento da marca, os canais de aquisição mais eficientes para o seu público e o funil de vendas para transformar interesse em faturamento.',
+    entregas: [
+      'Proposta de valor, identidade comunicacional e posicionamento estratégico',
+      'Seleção de canais de aquisição (digitais e presenciais) e plano de lançamento',
+      'Estruturação do funil comercial e metas de captação de clientes',
+    ],
+    linkHref: '/consultoria-mercadologica/',
+    linkRotulo: 'Conhecer Consultoria Mercadológica →',
+  },
+  {
+    numero: '05',
+    etapa: 'Etapa 05 · Números, Riscos e Retorno',
+    titulo: 'Plano Financeiro e Análise de Viabilidade',
+    perguntaChave: 'Quanto custa implementar o plano e em quanto tempo o investimento retorna?',
+    descricao:
+      'Traduzimos todas as decisões de mercado, operação e marketing em uma modelagem financeira clara. Projetamos o investimento inicial, custos fixos e variáveis, fluxo de caixa, ponto de equilíbrio e múltiplos cenários para garantir segurança econômica.',
+    entregas: [
+      'Levantamento de investimento inicial (CAPEX), capital de giro e estrutura de custos',
+      'Projeção de fluxo de caixa, ponto de equilíbrio e retorno esperado (payback e VPL)',
+      'Simulação de cenários (otimista, base e conservador) e apresentação para investidores',
+    ],
+    linkHref: '/consultoria-financeira/',
+    linkRotulo: 'Conhecer Consultoria Financeira →',
+  },
+] as const;
+---
+
+<section class="section_plano-completo padding-section-medium" id="plano-completo">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="plano-completo_top">
+        <div class="plano-completo_intro">
+          <span class="eyebrow">Serviço Completo Ponta a Ponta</span>
+          <h2>O que é necessário para um Plano de Negócios completo</h2>
+          <p class="plano-completo_lead">
+            Tirar uma ideia do papel ou expandir uma empresa já existente exige mais do que boas intenções: exige conectar mercado, operação e finanças em uma sequência lógica. Na EJFGV, estruturamos as <strong>5 etapas fundamentais do Plano de Negócios</strong> para que cada passo valide o próximo e evite o desperdício de capital.
+          </p>
+          <p class="plano-completo_sub">
+            Você pode contratar o ciclo completo ponta a ponta — da pesquisa inicial até o plano financeiro pronto para investidores — ou focar nas etapas prioritárias identificadas no diagnóstico gratuito da sua empresa.
+          </p>
+          <div class="plano-completo_actions">
+            <a href="#formulario" class="button is-button-large">
+              Estruturar meu Plano de Negócios
+            </a>
+            <a href="#por-que-ejfgv" class="button-tertiary">
+              Por que fazer com a EJFGV ↓
+            </a>
+          </div>
+        </div>
+
+        <div class="plano-completo_media">
+          <ImagemReservada
+            rotulo="Esquema visual ou consultores estruturando as 5 etapas do Plano de Negócios"
+            proporcao="16/9"
+          />
+          <div class="plano-completo_media-note">
+            <strong>Visão integrada para evitar investimentos às cegas</strong>
+            <p>
+              Da confirmação de que existe público comprador até o cálculo exato do ponto de equilíbrio e do retorno sobre o capital investido.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="etapas_timeline" role="list" aria-label="As 5 etapas de um Plano de Negócios completo">
+        {etapasPlano.map((item) => (
+          <article class="etapa_card" role="listitem">
+            <div class="etapa_num-col">
+              <span class="etapa_badge">{item.numero}</span>
+              <span class="etapa_kicker">{item.etapa}</span>
+            </div>
+
+            <div class="etapa_body">
+              <h3>{item.titulo}</h3>
+              <p class="etapa_question">{item.perguntaChave}</p>
+              <p class="etapa_desc">{item.descricao}</p>
+
+              <ul class="etapa_deliverables">
+                {item.entregas.map((entrega) => (
+                  <li>{entrega}</li>
+                ))}
+              </ul>
+
+              {item.linkHref && (
+                <div class="etapa_footer">
+                  <a href={item.linkHref} class="etapa_crosslink">
+                    {item.linkRotulo}
+                  </a>
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="plano-completo_cta-strip">
+        <div>
+          <h3>Quer entender quais dessas 5 etapas são essenciais para o seu momento atual?</h3>
+          <p>
+            No diagnóstico gratuito, nossos consultores avaliam o estágio do seu projeto e desenham um escopo sob medida — sem custo e sem compromisso.
+          </p>
+        </div>
+        <a href="#formulario" class="button is-button-large">
+          Solicitar diagnóstico gratuito
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section_plano-completo {
+    background: var(--gray50);
+    border-bottom: 1px solid var(--gray200);
+  }
+
+  .plano-completo_top {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: center;
+    margin-bottom: clamp(2.5rem, 4.5vw, 3.75rem);
+  }
+
+  .plano-completo_intro h2 {
+    font-size: clamp(1.75rem, 2.7vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--gray900);
+    margin-bottom: 1rem;
+  }
+
+  .plano-completo_lead {
+    font-size: 1.025rem;
+    color: var(--gray700);
+    line-height: 1.65;
+    margin-bottom: 0.85rem;
+  }
+
+  .plano-completo_sub {
+    font-size: 0.95rem;
+    color: var(--gray600);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .plano-completo_actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .plano-completo_media {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .plano-completo_media-note {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-left: 4px solid var(--primary600);
+    border-radius: var(--card-radius-md);
+    padding: 1.15rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .plano-completo_media-note strong {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--gray900);
+  }
+
+  .plano-completo_media-note p {
+    font-size: 0.85rem;
+    color: var(--gray600);
+    line-height: 1.5;
+  }
+
+  .etapas_timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .etapa_card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 2.8vw, 2.25rem);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+    transition: border-color 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo);
+  }
+
+  .etapa_card:hover {
+    border-color: var(--primary300);
+    transform: translateY(-2px);
+  }
+
+  .etapa_num-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 1rem;
+    border-right: 1px solid var(--gray200);
+  }
+
+  .etapa_badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    background: var(--primary50);
+    border: 1px solid var(--primary200);
+    color: var(--primary700);
+    font-size: 1.15rem;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+
+  .etapa_kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary700);
+    line-height: 1.4;
+  }
+
+  .etapa_body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .etapa_body h3 {
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+    font-weight: 800;
+    color: var(--gray900);
+    letter-spacing: -0.015em;
+  }
+
+  .etapa_question {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary700);
+  }
+
+  .etapa_desc {
+    font-size: 0.95rem;
+    color: var(--gray600);
+    line-height: 1.65;
+  }
+
+  .etapa_deliverables {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--gray100);
+  }
+
+  .etapa_deliverables li {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray700);
+    line-height: 1.45;
+  }
+
+  .etapa_footer {
+    margin-top: 0.35rem;
+  }
+
+  .etapa_crosslink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--primary700);
+    transition: color 0.2s;
+  }
+
+  .etapa_crosslink:hover {
+    color: var(--primary600);
+    text-decoration: underline;
+  }
+
+  .plano-completo_cta-strip {
+    background: var(--white);
+    border: 1px solid var(--primary200);
+    border-radius: var(--card-radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .plano-completo_cta-strip h3 {
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+    font-weight: 800;
+    color: var(--gray900);
+    margin-bottom: 0.35rem;
+  }
+
+  .plano-completo_cta-strip p {
+    font-size: 0.925rem;
+    color: var(--gray600);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  @media (max-width: 1024px) {
+    .plano-completo_top {
+      grid-template-columns: 1fr;
+    }
+
+    .etapa_card {
+      grid-template-columns: 1fr;
+    }
+
+    .etapa_num-col {
+      flex-direction: row;
+      align-items: center;
+      padding-right: 0;
+      padding-bottom: 0.75rem;
+      border-right: none;
+      border-bottom: 1px solid var(--gray200);
+    }
+
+    .etapa_deliverables {
+      grid-template-columns: 1fr;
+    }
+
+    .plano-completo_cta-strip {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .plano-completo_actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .plano-completo_actions a,
+    .plano-completo_cta-strip a {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .etapa_card {
+      transition: none;
+    }
+
+    .etapa_card:hover {
+      transform: none;
+    }
+  }
+</style>

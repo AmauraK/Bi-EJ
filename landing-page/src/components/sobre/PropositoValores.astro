@@ -1,0 +1,248 @@
+---
+const proposito = 'Transformar realidades de negócios e formar lideranças que impactam o Brasil';
+
+const visao =
+  'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
+
+const valores = [
+  {
+    titulo: 'Compromisso com o resultado do cliente',
+    orig: 'Foco no cliente',
+    descricao:
+      'Mergulhamos na realidade de cada empresa para entregar recomendações viáveis, mensuráveis e orientadas ao retorno sobre o investimento.',
+    tom: 'is-primary600',
+  },
+  {
+    titulo: 'Excelência técnica',
+    orig: 'Ir além',
+    descricao:
+      'Aplicamos metodologias rigorosas da Fundação Getulio Vargas e buscamos superar expectativas em cada análise e entregável.',
+    tom: 'is-primary700',
+  },
+  {
+    titulo: 'Ética e transparência',
+    orig: 'Integridade institucional',
+    descricao:
+      'Atuamos com confidencialidade, clareza de escopo e honestidade técnica sobre premissas, riscos e viabilidade.',
+    tom: 'is-gray900',
+  },
+  {
+    titulo: 'Protagonismo e dedicação',
+    orig: 'Sentimento de dono',
+    descricao:
+      'Assumimos responsabilidade ponta a ponta pelo sucesso do projeto, tratando o desafio do cliente como nosso.',
+    tom: 'is-primary500',
+  },
+  {
+    titulo: 'Colaboração e cocriação',
+    orig: 'Comunidade',
+    descricao:
+      'Construímos soluções em conjunto com a equipe do cliente, professores orientadores e rede de ex-membros da EJFGV.',
+    tom: 'is-gray800',
+  },
+  {
+    titulo: 'Inovação',
+    orig: 'Inconformismo e tecnologia',
+    descricao:
+      'Questionamos respostas prontas e incorporamos Business Intelligence, dados e novas ferramentas para resolver problemas complexos.',
+    tom: 'is-primary600',
+  },
+];
+---
+
+<section class="section_icp padding-section-medium" aria-labelledby="proposito-titulo">
+  <div class="page-padding">
+    <div class="container-large">
+      <div class="bussola_top">
+        <div class="bussola_proposito-card">
+          <span class="eyebrow is-dark">Nosso Propósito</span>
+          <h2 id="proposito-titulo" class="bussola_proposito-heading">
+            {proposito}
+          </h2>
+        </div>
+
+        <div class="bussola_visao-card">
+          <span class="eyebrow">Nossa Visão</span>
+          <h3>Impacto duradouro para clientes, membros e parceiros</h3>
+          <p>{visao}</p>
+        </div>
+      </div>
+
+      <div class="valores_header">
+        <span class="eyebrow">Nossos 6 Valores</span>
+        <h3>Os princípios que guiam cada decisão e projeto da EJFGV</h3>
+      </div>
+
+      <ul class="valores_grid">
+        {valores.map((valor) => (
+          <li class="valor_card">
+            <div class="valor_top">
+              <span class:list={['valor_quadradinho', valor.tom]} aria-hidden="true"></span>
+              <span class="valor_tag">{valor.orig}</span>
+            </div>
+            <h3>{valor.titulo}</h3>
+            <p>{valor.descricao}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bussola_top {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .bussola_proposito-card {
+    background: var(--graywarm950);
+    color: var(--white);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(2rem, 3.5vw, 3rem);
+    border: 1px solid var(--border-hairline-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .bussola_proposito-heading {
+    font-size: clamp(1.65rem, 2.6vw, 2.35rem);
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .bussola_visao-card {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-xl);
+    padding: clamp(2rem, 3.5vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.65rem;
+  }
+
+  .bussola_visao-card h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--gray900);
+    line-height: 1.25;
+  }
+
+  .bussola_visao-card p {
+    font-size: 0.975rem;
+    color: var(--gray600);
+    line-height: 1.65;
+  }
+
+  .valores_header {
+    margin-bottom: 1.75rem;
+  }
+
+  .valores_header h3 {
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--gray900);
+  }
+
+  .valores_grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .valor_card {
+    background: var(--gray50);
+    border: 1px solid var(--gray200);
+    border-radius: var(--card-radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
+  }
+
+  .valor_card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary300);
+  }
+
+  .valor_top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .valor_quadradinho {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.35rem;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .valor_quadradinho.is-primary600 {
+    background: var(--primary600);
+  }
+
+  .valor_quadradinho.is-primary700 {
+    background: var(--primary700);
+  }
+
+  .valor_quadradinho.is-primary500 {
+    background: var(--primary500);
+  }
+
+  .valor_quadradinho.is-gray900 {
+    background: var(--gray900);
+  }
+
+  .valor_quadradinho.is-gray800 {
+    background: var(--gray800);
+  }
+
+  .valor_tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray500);
+  }
+
+  .valor_card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--gray900);
+    line-height: 1.3;
+  }
+
+  .valor_card p {
+    font-size: 0.9rem;
+    color: var(--gray600);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .bussola_top {
+      grid-template-columns: 1fr;
+    }
+
+    .valores_grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .valores_grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
