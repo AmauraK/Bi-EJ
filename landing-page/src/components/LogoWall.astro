@@ -8,12 +8,15 @@ interface Props {
 	/** mostra os logos pendentes (Docol, Warner Bros, Mandic, Época Cosméticos) como marcadores */
 	pendentes?: boolean;
 	id?: string;
+	/** Logos da faixa (padrão: LOGOS). */
+	logos?: { nome: string; src: string }[];
 }
 
 const {
 	titulo = `Mais de ${NUMEROS.projetos} projetos entregues para empresas como`,
 	pendentes = true,
 	id = 'faixa-logos',
+	logos = LOGOS,
 } = Astro.props;
 ---
 
@@ -24,10 +27,10 @@ const {
 				<div class="clientes_title">{titulo}</div>
 				<div class="slider-clientes_component" id={id}>
 					<div class="slider-clientes_logo-wrapper">
-						{LOGOS.map((logo) => <img src={logo.src} loading="lazy" alt={logo.nome} class="client_logo" />)}
+						{logos.map((logo) => <img src={logo.src} loading="lazy" alt={logo.nome} class="client_logo" />)}
 					</div>
 					<div class="slider-clientes_logo-wrapper" aria-hidden="true">
-						{LOGOS.map((logo) => <img src={logo.src} loading="lazy" alt="" class="client_logo" />)}
+						{logos.map((logo) => <img src={logo.src} loading="lazy" alt="" class="client_logo" />)}
 					</div>
 				</div>
 				<div class="logos_rodape">
@@ -72,5 +75,26 @@ const {
 	.logos_rodape .button-tertiary {
 		height: 40px;
 		font-size: 0.85rem;
+	}
+
+	/* Sem animação, a faixa parada cortaria os logos: vira grade com todos eles */
+	@media (prefers-reduced-motion: reduce) {
+		.slider-clientes_component {
+			mask-image: none;
+			-webkit-mask-image: none;
+		}
+
+		.slider-clientes_logo-wrapper {
+			flex: 1;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 1.5rem 2.5rem;
+			padding-right: 0;
+		}
+
+		.slider-clientes_logo-wrapper[aria-hidden],
+		[data-logos-pause] {
+			display: none;
+		}
 	}
 </style>

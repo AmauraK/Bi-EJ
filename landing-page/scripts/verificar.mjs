@@ -13,6 +13,9 @@ const IGNORAR = new Set(['/kit/']); // página temporária da Fase 0
 
 const SOLUCOES = ['/plano-de-negocios/', '/consultoria-mercadologica/', '/consultoria-financeira/', '/consultoria-operacional/', '/consultoria-business-intelligence/'];
 const PROIBIDOS = [/data science/i, /work hard/i, /\bUSP\b/, /gemini/i, /unsplash/i, /700 clientes/i, /\+500/, /Getúlio/, /contato@ejfgv/i, /maior faculdade/i, /Astro Basics/, /enviada com sucesso/i];
+// Exceções por página (pelo .source do termo). "+700 clientes" é o selo da landing de BI de referência,
+// pedido pelo Bruno no PRO-19; nas outras páginas continua proibido.
+const LIBERADOS = { '/consultoria-business-intelligence/': ['700 clientes'] };
 
 if (!existsSync(DIST)) {
 	console.error('dist/ não existe. Rode antes: npm run build');
@@ -101,6 +104,7 @@ for (const [rota, html] of paginas) {
 	// Texto e atributos (ex.: src de imagem), sem o conteúdo de <script> e <style>.
 	const visivel = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
 	for (const termo of PROIBIDOS) {
+		if (LIBERADOS[rota]?.includes(termo.source)) continue;
 		if (termo.test(visivel)) falha(rota, `termo proibido: ${termo}`);
 	}
 

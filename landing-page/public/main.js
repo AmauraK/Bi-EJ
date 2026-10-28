@@ -210,8 +210,12 @@
     const data = new FormData(form);
     const lines = ["Olá! Vim pelo site da EJFGV."];
     if (data.get("name")) lines.push(`Nome: ${data.get("name")}`);
-    const service = form.querySelector("select[name=servico]");
-    if (service && service.value) lines.push(`Serviço: ${service.selectedOptions[0].textContent.trim()}`);
+    if (data.get("Empresa")) lines.push(`Empresa: ${data.get("Empresa")}`);
+    // Serviço vem de um <select> ou de um campo oculto com data-nome (landing de BI)
+    const service = form.querySelector("[name=servico]");
+    const serviceName = service && service.value
+      && (service.selectedOptions ? service.selectedOptions[0].textContent.trim() : service.getAttribute("data-nome"));
+    if (serviceName) lines.push(`Serviço: ${serviceName}`);
     if (data.get("Mensagem")) lines.push(`Mensagem: ${data.get("Mensagem")}`);
     const whatsapp = form.getAttribute("data-whatsapp");
     const email = form.getAttribute("data-email");

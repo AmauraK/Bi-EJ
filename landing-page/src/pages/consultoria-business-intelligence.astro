@@ -1,366 +1,322 @@
 ---
-// Consultoria de Business Intelligence. A moldura (cabeçalho, números, prova social, método, FAQ, formulário)
-// vem do SolucaoLayout; aqui ficam só "Para quem é" e "O que entra no projeto".
-// Escopo e dores vêm de consts.ts (escopo, quandoFazSentido); formatos de entrega, da LP original.
-import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import { CDN, NUMEROS, SOLUCOES, DEPOIMENTOS } from '../consts';
+// Consultoria de Business Intelligence: landing com a estrutura e a copy de conteudo.ejfgv.com/business-intelligence-dados
+// (PRO-19). Não usa o SolucaoLayout porque a ordem das seções é outra:
+// hero → formulário → serviços → método → para quem é → CTA → quem somos → logos → depoimentos → números.
+// Fotos da referência são de banco/IA: viram ImagemReservada. Logos, ícones e vídeos são os reais da EJ.
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Metodo from '../components/Metodo.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import LogoWall from '../components/LogoWall.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+import { CDN, SITE, NUMEROS, SOLUCOES, DEPOIMENTOS, LOGOS_LP_BI, VIDEO_INSTITUCIONAL } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
-const sol = (slug: string) => SOLUCOES.find((s) => s.slug === slug)!;
-
 const CHECK = `${CDN}/671c665a9c8c2a788c93dd9b_check-icon.svg`;
 
-const abertura = 'Organizamos os dados que a sua empresa já tem e os transformamos em painéis e análises que mostram o que vender, onde cortar custos e quem é o seu cliente. Para pequenas e médias empresas que querem parar de decidir no feeling.';
-
-// Rascunhos feitos só com fatos de consts.ts e da LP (validar: true). Preço não tem fonte: fica a preencher.
-const faq = [
-	{
-		pergunta: 'O que faz a consultoria de Business Intelligence da EJFGV?',
-		resposta: 'Transforma os dados da sua empresa em decisões. Conforme a necessidade, o projeto inclui painéis para acompanhar vendas, custos e indicadores, projeções de vendas e demanda, a divisão dos clientes em grupos e a análise do perfil e da opinião dos consumidores. É feito por alunos da FGV, com orientação de professores da FGV.',
-		validar: true,
-	},
-	{
-		pergunta: 'Preciso ter os dados organizados antes de contratar?',
-		resposta: 'Não. A consultoria também atende empresas que dependem de planilhas soltas ou de sistemas desconectados. Nesses casos, o projeto pode começar pela centralização dos dados, conectando vendas, financeiro e operação em uma base única e confiável.',
-		validar: true,
-	},
-	{
-		pergunta: 'Vocês trabalham com Power BI?',
-		resposta: 'Sim. Construímos dashboards em Power BI, personalizados para a rotina da sua empresa, além de organizar bancos de dados e automatizar processos.',
-		validar: true,
-	},
-	{
-		pergunta: 'Quanto tempo dura um projeto?',
-		resposta: `Os projetos da EJFGV têm em média ${NUMEROS.prazoMedioMeses} meses. O prazo de cada projeto é apresentado na proposta, junto com o escopo.`,
-		validar: true,
-	},
-	{
-		pergunta: 'Como o projeto começa? O diagnóstico é gratuito?',
-		resposta: 'Sim, o diagnóstico é gratuito. Depois do primeiro contato com o nosso time comercial, fazemos uma reunião de diagnóstico para identificar dores, desafios e oportunidades. Em seguida, apresentamos uma proposta com escopo, prazos e soluções personalizadas para a sua empresa.',
-		validar: true,
-	},
-	{ pergunta: 'Quanto custa um projeto de Business Intelligence?' },
+// "Aprovada por grandes clientes" do hero: os mesmos 5 logos (monocromáticos) da referência.
+const logosHero = [
+	{ nome: 'TAM', src: `${CDN}/671c2d9484628304be3f5708_cliente%20Tam.svg` },
+	{ nome: 'Samsung', src: `${CDN}/671c2d948395ab38d815c7d5_cliente%20Samsung.svg` },
+	{ nome: 'Faber-Castell', src: `${CDN}/671c71ac84628304be5df12e_cliente%20faber%20castell.png` },
+	{ nome: 'Vigor', src: `${CDN}/671c2d94c0a6d8654b98ddf9_cliente%20vigor.svg` },
+	{ nome: 'Natura', src: `${CDN}/671c2d944980a82d647af545_cliente%20natura.svg` },
 ];
 
-// Dores do dono de PME, a partir de quandoFazSentido e do "Para quem é" da LP.
-const dores = [
-	{ icone: `${CDN}/672a37ae2d2e20a904bf4c11_pme-icon.svg`, titulo: 'Dados espalhados', texto: 'Vendas numa planilha, financeiro em outra, estoque no sistema. Fechar o mês consome horas da equipe.' },
-	{ icone: `${CDN}/672a37aed9b0d27f7453d2a3_novas-icon.svg`, titulo: 'Decisões no feeling', texto: 'Preço, compras e metas saem da intuição, sem olhar o histórico do próprio negócio.' },
-	{ icone: `${CDN}/671c65bc0ece9976827460a6_speed-icon.svg`, titulo: 'Custos que não fecham', texto: 'Você sabe que dá para ganhar eficiência, mas não sabe quais fatores mais pesam no resultado.' },
-	{ icone: `${CDN}/672a37ae7609689739689139_transformacao-digital-icon.svg`, titulo: 'Cliente desconhecido', texto: 'Não está claro quem compra mais, quem parou de comprar e o que falam da sua marca.' },
+// Os 3 blocos de serviço, com texto, bullets e ícones da referência.
+const servicos = [
+	{
+		icone: `${CDN}/672a37aed9b0d27f7453d2a3_novas-icon.svg`,
+		titulo: 'Painéis de Dashboards & Agilidade para o seu Negócio',
+		texto: 'Com dashboards personalizados e ferramentas estratégicas de monitoramento, você acompanha em tempo real as métricas mais relevantes para o seu negócio, promovendo ajustes rápidos e decisões embasadas. Nossas soluções integram a análise de dados à tomada de decisões diária, garantindo um processo contínuo de melhoria e otimização.',
+		itens: [
+			'Visibilidade completa através de dashboards intuitivos e personalizados',
+			'Monitoramento em tempo real para ajustes estratégicos imediatos',
+			'Integração entre análise de desempenho e execução estratégica',
+			'Decisões embasadas com dados precisos e atualizados',
+			'Clareza de dados para otimizar eficiência e crescimento',
+		],
+		foto: 'painel de dashboards em uso por um cliente',
+	},
+	{
+		icone: `${CDN}/671c65bc0ece9976827460a6_speed-icon.svg`,
+		titulo: 'Centralização e Organização de Dados',
+		texto: 'Chega de dados espalhados em dez planilhas. Conectamos suas fontes — vendas, financeiro, operação — em uma estrutura única e confiável, que alimenta seus painéis automaticamente.',
+		itens: [
+			'Fim da consolidação manual de relatórios',
+			'Uma única fonte de verdade para toda a empresa',
+			'Experiência mais profissional para sua tomada de decisão',
+			'Base pronta para análises e projeções dos seus recursos',
+			'Dados atualizados sem retrabalho',
+		],
+		foto: 'base de dados centralizada de um projeto real',
+	},
+	{
+		icone: `${CDN}/671c65bcad794eb512f4b579_visibility-icon.svg`,
+		titulo: 'Indicadores e análise para decisão',
+		texto: 'Definimos com você os KPIs que realmente importam pro seu negócio e transformamos números em leitura clara: onde está o gargalo, o que está crescendo, onde agir primeiro.',
+		itens: [
+			'KPIs certos para o seu segmento',
+			'Comparativos e tendências, não só números soltos',
+			'Identificação de gargalos antes que cresçam',
+			'Relatórios que a diretoria entende em 5 minutos',
+			'Clareza de dados para tomada de decisões',
+		],
+		foto: 'relatório de indicadores (KPIs) de um projeto real',
+	},
 ];
 
-// Cada frente do escopo (consts) traduzida na pergunta de negócio que ela responde.
-const detalhes: Record<string, { pergunta: string; texto: string; entrega: string; veja?: { texto: string; slug: string } }> = {
-	'Análises descritivas': {
-		pergunta: 'O que está acontecendo na minha empresa?',
-		texto: 'Organizamos o histórico de vendas, custos e operação para mostrar o que vende mais, onde a margem aperta e como cada número evolui mês a mês.',
-		entrega: 'os indicadores certos para o seu negócio, em painéis fáceis de acompanhar.',
-		veja: { texto: 'Se o problema for margem, veja também a', slug: 'consultoria-financeira' },
+// Método na ordem da jornada (a referência mostra a lista invertida); textos e "Solução" da referência.
+const etapas = [
+	{ nome: 'Contato', texto: 'Onde ocorre o primeiro alinhamento com o cliente com nosso time comercial.' },
+	{ nome: 'Diagnóstico', texto: 'Identificamos dores, desafios e oportunidades através de uma reunião para diagnóstico.' },
+	{ nome: 'Proposta', texto: 'Apresentação de soluções personalizadas para atender às necessidades da sua empresa.' },
+	{ nome: 'Solução', texto: 'Escopo da consultoria estratégica que envolve a implementação das melhorias acordadas.' },
+];
+
+// Para quem é: os 4 perfis e ícones da referência.
+const perfis = [
+	{
+		icone: `${CDN}/672a37ae2d2e20a904bf4c11_pme-icon.svg`,
+		titulo: 'Para pequenas e médias empresas que tomam decisões sem dados centralizados',
+		texto: 'Empresas que dependem de planilhas, sistemas desconectados ou controles manuais para acompanhar vendas, custos, operação e resultados.',
 	},
-	'Análises preditivas': {
-		pergunta: 'O que deve acontecer nos próximos meses?',
-		texto: 'Com o histórico da empresa e, quando faz sentido, dados de fora dela, como os do seu mercado, estimamos tendências de vendas e demanda para você planejar compras, estoque e equipe com antecedência.',
-		entrega: 'projeções e cenários explicados em linguagem simples, prontos para o planejamento.',
+	{
+		icone: `${CDN}/672a37aed9b0d27f7453d2a3_novas-icon.svg`,
+		titulo: 'Para negócios que perdem tempo com relatórios manuais',
+		texto: 'Equipes que gastam horas organizando informações, atualizando arquivos e consolidando dados antes de conseguir analisar o desempenho da empresa.',
 	},
-	'Clusterização': {
-		pergunta: 'Que tipos de cliente eu tenho?',
-		texto: 'Clusterização é separar clientes (ou produtos) em grupos parecidos entre si: os fiéis, os que só compram em promoção, os que sumiram. Cada grupo pede uma ação diferente, e você para de tratar todo mundo igual.',
-		entrega: 'os grupos mapeados, com o perfil de cada um e o que fazer com ele.',
+	{
+		icone: `${CDN}/672a37ae7609689739689139_transformacao-digital-icon.svg`,
+		titulo: 'Para gestores que precisam tomar decisões com mais segurança',
+		texto: 'Líderes que querem acompanhar indicadores importantes em painéis claros, visuais e atualizados, reduzindo achismos na tomada de decisão.',
 	},
-	'Análise do perfil do consumidor': {
-		pergunta: 'Quem é o meu cliente e o que ele pensa da minha marca?',
-		texto: 'Traçamos o perfil de quem compra de você a partir dos dados de compra. Com análise de sentimentos, lemos comentários e avaliações em volume para separar o que agrada do que incomoda.',
-		entrega: 'o retrato do seu cliente e os pontos que mais pesam na satisfação dele.',
-		veja: { texto: 'Para transformar esse perfil em campanha, conheça a', slug: 'consultoria-mercadologica' },
+	{
+		icone: `${CDN}/672a37adab06278a78107c4a_expansao-icon.svg`,
+		titulo: 'Para empresas em crescimento que precisam de mais controle',
+		texto: 'Negócios que estão aumentando sua operação e precisam visualizar gargalos, comparar resultados e acompanhar a evolução da empresa com mais clareza.',
 	},
+];
+
+// Números e legendas da referência (os valores vêm de NUMEROS).
+const numeros = [
+	{ valor: `${NUMEROS.projetos}+`, count: NUMEROS.projetos, sufixo: '+', rotulo: 'Projetos atendidos', texto: `Colaboramos com mais de ${NUMEROS.projetos} projetos incríveis` },
+	{ valor: String(NUMEROS.anos), count: NUMEROS.anos, rotulo: 'Anos de mercado', texto: 'Anos de experiência e suporte dos melhores professores do mercado.' },
+	{ valor: String(NUMEROS.setores), count: NUMEROS.setores, rotulo: 'Setores atendidos', texto: 'Conhecimento profundo de segmentos e nichos.' },
+	{ valor: String(NUMEROS.nps), count: NUMEROS.nps, rotulo: 'NPS score', texto: 'Orgulhoso índice de aprovação dos clientes.' },
+];
+
+const servico = {
+	'@context': 'https://schema.org',
+	'@type': 'Service',
+	name: solucao.nome,
+	serviceType: solucao.nome,
+	description: solucao.seo.descricao,
+	url: new URL(solucao.url, SITE.url).href,
+	provider: { '@type': 'ProfessionalService', name: SITE.nome, url: SITE.url },
 };
-
-// Formatos de entrega (LP original: Power BI, base única, plano de ação, treinamento).
-const formatos = [
-	{ titulo: 'Seus dados em um só lugar', texto: 'Vendas, financeiro e operação reunidos em uma base confiável, sem consolidar planilhas toda semana.' },
-	{ titulo: 'Painéis em Power BI', texto: 'Personalizados para a sua rotina, para acompanhar vendas, custos e metas sem montar relatório.' },
-	{ titulo: 'Plano de ação', texto: 'Os números traduzidos em prioridades: onde está o gargalo e onde agir primeiro.' },
-	{ titulo: 'Equipe treinada', texto: 'Treinamento prático para o seu time manter os painéis funcionando depois do projeto.' },
-];
 ---
 
-<SolucaoLayout
-	solucao={solucao}
-	abertura={abertura}
-	faq={faq}
-	kicker="Dados que viram decisão"
-	fotoHeader="trabalho real em grupo: consultores da EJFGV analisando dados com o cliente"
-	depoimentos={DEPOIMENTOS.slice(0, 2)}
->
-	<section id="para-quem" class="section_icp" aria-labelledby="bi-para-quem-titulo">
-		<div class="page-padding padding-section-medium">
-			<div class="container-large">
-				<div class="icp_header">
-					<span class="eyebrow">Para quem é</span>
-					<h2 id="bi-para-quem-titulo">Os números existem. Só não ajudam você a decidir.</h2>
-				</div>
-				<ul class="bi_dores">
-					{dores.map((d) => (
-						<li class="icp_item">
-							<img src={d.icone} loading="lazy" alt="" class="icp_icon" />
-							<h3>{d.titulo}</h3>
-							<p>{d.texto}</p>
-						</li>
-					))}
-				</ul>
-				<div class="bi_aviso">
-					<p><strong>Não precisa chegar com tudo organizado.</strong> O projeto pode começar pelas planilhas e sistemas que você já usa.</p>
-					<a href="#formulario" class="button-tertiary">Contar como estão meus dados →</a>
-				</div>
+<Layout titulo={solucao.seo.titulo} descricao={solucao.seo.descricao} ctaHref="#formulario" ctaRotulo="Quero obter resultados" jsonLd={servico}>
+	<!-- 1. Hero: proposta de valor, CTA, logos de destaque e vídeo de introdução -->
+	<PageHeader
+		kicker="Consultoria de Business Intelligence para PMEs"
+		titulo="Transforme planilhas em dashboards estratégicos — com consultoria orientada por professores da FGV."
+		descricao="Se sua empresa ainda depende de planilhas desconectadas e horas de consolidação manual antes de cada decisão, está perdendo tempo e oportunidades. A EJFGV constrói dashboards e estruturas de BI sob medida para você acompanhar vendas, custos e resultados em tempo real — e decidir com dados."
+	>
+		<div class="hero_actions">
+			<a href="#formulario" class="button is-button-large">Quero obter resultados</a>
+		</div>
+		<div class="home-hero_grandes-clientes">
+			<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
+			<div class="grandes-clientes_row">
+				{logosHero.map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
 			</div>
 		</div>
-	</section>
+		<figure slot="midia" class="hero-photo-frame">
+			<ImagemReservada classe="home-hero_image" escuro descricao="capa do vídeo de introdução da EJFGV" />
+			<figcaption class="hero-photo-caption">
+				<div class="hero-photo-caption-left">
+					<span class="hero-photo-dot" aria-hidden="true"></span>
+					<div>
+						<strong>Conheça a EJFGV</strong>
+						<span>Orientação de professores da FGV</span>
+					</div>
+				</div>
+				<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
+					<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg>
+					Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
+				</button>
+			</figcaption>
+		</figure>
+	</PageHeader>
 
-	<section id="o-que-entra" class="section_beneficios" aria-labelledby="bi-escopo-titulo">
+	<!-- 2. Formulário de captação logo depois do hero -->
+	<LeadForm
+		lp
+		servico={solucao.slug}
+		titulo="Agende um diagnóstico gratuito para transformar dados e tecnologia em vantagem competitiva para a sua empresa"
+		texto="Após o preenchimento do formulário, um consultor da nossa equipe comercial entrará em contato com você por telefone para tirar suas dúvidas e fornecer mais detalhes sobre como podemos ajudar. Nossa equipe retorna em até 1 dia útil."
+	/>
+
+	<!-- 3. Serviços e benefícios: 3 blocos em Z e o fecho com CTA -->
+	<section id="servicos" class="section_beneficios" aria-labelledby="servicos-titulo">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large">
 				<div class="beneficios_wrapper">
 					<div class="beneficios_title">
-						<span class="eyebrow">O que entra no projeto</span>
-						<h2 id="bi-escopo-titulo">Cada análise responde a uma pergunta do seu negócio</h2>
-						<p>O escopo é montado com você no diagnóstico gratuito, só com o que a sua empresa precisa. Abra cada frente para ver o que ela entrega.</p>
+						<h2 id="servicos-titulo">Nossos serviços de Consultoria em Business Intelligence (BI)</h2>
+						<p class="bi_subtitulo">Decida com mais clareza e identifique gargalos antes que eles cresçam</p>
+						<p>Consultoria focada nas suas necessidades. Soluções personalizadas para ganhar eficiência no dia a dia, acompanhar resultados e oferecer um atendimento mais ágil para seus clientes com uso de Inteligência Artificial (IA).</p>
 					</div>
 
-					<div class="bi_escopo">
-						<!-- name= deixa só uma frente aberta por vez (acordeão nativo, sem JS) -->
-						<div class="bi_frentes">
-							{solucao.escopo.map((e, i) => {
-								const d = detalhes[e.item];
-								return (
-									<details class="bi_frente" name="bi-escopo" open={i === 0}>
-										<summary>
-											<span class="bi_frente-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-											<h3>
-												<span class="bi_frente-nome">{e.item}</span>
-												{d?.pergunta}
-											</h3>
-										</summary>
-										{d && (
-											<div class="bi_frente-corpo">
-												<p>{d.texto}</p>
-												<p class="bi_frente-entrega"><strong>Você recebe:</strong> {d.entrega}</p>
-												{d.veja && <p>{d.veja.texto} <a href={sol(d.veja.slug).url}>{sol(d.veja.slug).nome}</a>.</p>}
-												{e.href && <p><a href={e.href}>Conheça a consultoria →</a></p>}
-											</div>
-										)}
-									</details>
-								);
-							})}
-						</div>
+					<div class="beneficios_list">
+						{servicos.map((s, i) => (
+							<div class:list={['beneficios_item', { 'bi_item-invertido': i % 2 === 1 }]}>
+								<div>
+									<img src={s.icone} loading="lazy" alt="" class="vantagens_icon" />
+									<h3>{s.titulo}</h3>
+									<p>{s.texto}</p>
+									<ul class="vantagens_list">
+										{s.itens.map((item) => (
+											<li class="vantagens_list-item">
+												<img src={CHECK} loading="lazy" alt="" />
+												<span>{item}</span>
+											</li>
+										))}
+									</ul>
+								</div>
+								<ImagemReservada classe="vantagens_image" escuro descricao={s.foto} />
+							</div>
+						))}
+					</div>
 
-						<div class="bi_entrega">
-							<h3>Como o resultado chega até você</h3>
-							<ul class="vantagens_list">
-								{formatos.map((f) => (
-									<li class="vantagens_list-item">
-										<img src={CHECK} loading="lazy" alt="" />
-										<span><strong>{f.titulo}.</strong> {f.texto}</span>
-									</li>
-								))}
-							</ul>
-							<a href="#formulario" class="button">Quero analisar meus dados</a>
-						</div>
+					<div class="beneficios_banner">
+						<p class="beneficios-banner_title">Quanto tempo sua equipe perde reunindo planilhas antes de conseguir decidir?</p>
+						<a href="#formulario" class="button-secondary">Quero uma análise dos meus dados</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-</SolucaoLayout>
+
+	<!-- 4. Metodologia -->
+	<Metodo etapas={etapas} />
+
+	<!-- 5. Dores / público-alvo -->
+	<section id="para-quem" class="section_icp" aria-labelledby="para-quem-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Para quem é</span>
+					<h2 id="para-quem-titulo">Sua empresa precisa de BI se os dados ainda não ajudam a decidir:</h2>
+				</div>
+				<ul class="bi_perfis">
+					{perfis.map((p) => (
+						<li class="icp_item">
+							<img src={p.icone} loading="lazy" alt="" class="icp_icon" />
+							<h3>{p.titulo}</h3>
+							<p>{p.texto}</p>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 6. CTA intermediário -->
+	<CtaBanner
+		titulo="Conquiste mais resultados com a EJFGV"
+		texto="Preencha o formulário e converse com nossa equipe para entender como seus dados podem apoiar decisões melhores. Sem compromisso."
+		href="#formulario"
+		rotulo="Quero obter resultados →"
+	/>
+
+	<!-- 7. Quem somos / diferenciais -->
+	<section id="quem-somos" class="section_icp" aria-labelledby="quem-somos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="quem-somos_wrapper bi_quem-somos">
+					<div>
+						<span class="eyebrow">Quem somos?</span>
+						<h2 id="quem-somos-titulo">Por que escolher a EJFGV?</h2>
+						<p class="quem-somos_pillars">Custo-benefício, Inovação, Dedicação e Suporte acadêmico</p>
+						<p class="quem-somos_copy">Somos uma consultoria estratégica composta por alunos de todos os cursos de graduação da FGV, focada em impulsionar o crescimento de pequenas e médias empresas, gerando impacto positivo na sociedade. Nosso objetivo é ambicioso: aspiramos alcançar a excelência de uma empresa sênior mesmo sendo jovens empreendedores.</p>
+					</div>
+					<ImagemReservada classe="vantagens_image" descricao="foto real da equipe EJFGV" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 8. Prova social I: grade extensa de logos -->
+	<LogoWall titulo={`Aprovada por mais de ${NUMEROS.clientes} clientes`} logos={LOGOS_LP_BI} />
+
+	<!-- 9. Prova social II: depoimentos em vídeo -->
+	<section id="depoimentos" class="section_depoimentos" aria-labelledby="depoimentos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Depoimentos</span>
+					<h2 id="depoimentos-titulo">O que dizem os clientes da {SITE.nome}</h2>
+				</div>
+				<Depoimentos itens={DEPOIMENTOS.slice(0, 2)} />
+			</div>
+		</div>
+	</section>
+
+	<!-- 10. Track record -->
+	<StatsStrip
+		titulo="Estrutura Sólida, Resultados Inabaláveis"
+		texto="Oferecemos consultoria de qualidade sênior com a agilidade de uma empresa júnior, unindo inovação e impacto social. Com práticas de mercado atualizadas e suporte técnico dos professores da Fundação Getulio Vargas, garantimos soluções modernas e resultados confiáveis."
+		itens={numeros}
+	/>
+</Layout>
 
 <style>
-	/* Para quem é: 4 dores lado a lado no desktop */
-	.bi_dores {
+	.bi_subtitulo {
+		margin-bottom: 0.5rem;
+		color: var(--white);
+		font-weight: 600;
+	}
+
+	/* Z-pattern: no desktop, a imagem do bloco do meio fica à esquerda */
+	.bi_item-invertido > :global(.image-placeholder) {
+		order: -1;
+	}
+
+	.bi_perfis {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 1.25rem;
 		list-style: none;
 	}
 
-	.bi_aviso {
-		display: flex;
-		flex-wrap: wrap;
+	.bi_quem-somos {
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.5rem 2rem;
-		margin-top: 1.5rem;
-		padding: 1rem 1.5rem;
-		background: var(--white);
-		border: 1px solid var(--gray200);
-		border-left: 4px solid var(--primary600);
-		border-radius: var(--card-radius-md);
+		margin-bottom: 0;
 	}
 
-	.bi_aviso p {
-		color: var(--gray700);
-		line-height: 1.5;
-	}
-
-	.bi_aviso strong {
-		color: var(--gray900);
-	}
-
-	.bi_aviso .button-tertiary {
-		padding-left: 0;
-		padding-right: 0;
-	}
-
-	/* O que entra: perguntas (acordeão) à esquerda, formato da entrega à direita */
-	.bi_escopo {
-		display: grid;
-		grid-template-columns: 1.35fr 0.9fr;
-		gap: clamp(2rem, 4vw, 3.5rem);
-		align-items: start;
-	}
-
-	.bi_frentes {
-		border-top: 1px solid var(--border-hairline-dark);
-	}
-
-	.bi_frente {
-		border-bottom: 1px solid var(--border-hairline-dark);
-	}
-
-	.bi_frente summary {
-		display: grid;
-		grid-template-columns: 1.5rem 1fr auto;
-		gap: 1.25rem;
-		align-items: center;
-		padding: 1.5rem 0;
-		list-style: none;
-		cursor: pointer;
-	}
-
-	.bi_frente summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.bi_frente summary::after {
-		content: "+";
-		color: var(--primary200);
-		font-size: 1.75rem;
-		line-height: 1;
-		transition: transform 0.3s var(--ease-out-expo);
-	}
-
-	.bi_frente[open] summary::after {
-		transform: rotate(45deg);
-	}
-
-	.bi_frente-num {
-		color: var(--graywarm300);
-		font-size: 0.85rem;
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.bi_frente[open] .bi_frente-num {
-		color: var(--primary200);
-	}
-
-	.bi_frente h3 {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		color: var(--white);
-		font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-		font-weight: 700;
-		line-height: 1.25;
-		letter-spacing: -0.015em;
-		transition: color 0.2s;
-	}
-
-	.bi_frente summary:hover h3 {
-		color: var(--primary100);
-	}
-
-	.bi_frente-nome {
-		color: var(--primary200);
-		font-size: 0.72rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-	}
-
-	.bi_frente-corpo {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		max-width: 62ch;
-		padding: 0 0 1.75rem 2.75rem;
-		color: var(--graywarm300);
-		line-height: 1.6;
-	}
-
-	.bi_frente-entrega {
-		padding: 0.85rem 1rem;
-		color: var(--white);
-		background: rgba(255, 255, 255, 0.04);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: 0.75rem;
-	}
-
-	.bi_frente-corpo a {
-		color: var(--primary200);
-		font-weight: 600;
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-
-	.bi_entrega {
-		position: sticky;
-		top: calc(var(--nav-height) + 1.5rem);
-		padding: clamp(1.5rem, 3vw, 2.25rem);
-		background: var(--graywarm950);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-lg);
-	}
-
-	.bi_entrega h3 {
-		color: var(--white);
-		font-size: 1.25rem;
-		font-weight: 800;
-		line-height: 1.25;
-	}
-
-	.bi_entrega strong {
-		color: var(--white);
-	}
-
-	.bi_entrega .button {
-		width: 100%;
-		margin-top: 1.75rem;
+	.bi_quem-somos .quem-somos_pillars {
+		margin-bottom: 1rem;
 	}
 
 	@media (max-width: 1024px) {
-		.bi_dores {
+		.bi_item-invertido > :global(.image-placeholder) {
+			order: 0;
+		}
+
+		.bi_perfis {
 			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.bi_escopo {
-			grid-template-columns: 1fr;
-		}
-
-		.bi_entrega {
-			position: static;
 		}
 	}
 
 	@media (max-width: 767px) {
-		.bi_dores {
+		.bi_perfis {
 			grid-template-columns: 1fr;
-		}
-
-		.bi_frente summary {
-			gap: 0.85rem;
-		}
-
-		.bi_frente-corpo {
-			padding-left: 0;
 		}
 	}
 </style>

@@ -11,6 +11,9 @@ interface Props {
 	kicker?: string;
 	titulo?: string;
 	texto?: string;
+	/** Campos da landing de BI (como a referência): Nome, E-mail corporativo, Empresa, Telefone e Mensagem.
+	 *  O serviço vai oculto e o aceite, com o texto da referência, é opcional (consentimento para ofertas). */
+	lp?: boolean;
 }
 
 const {
@@ -19,7 +22,9 @@ const {
 	kicker = 'Diagnóstico Gratuito · Sem Compromisso',
 	titulo = 'Agende um diagnóstico gratuito para transformar dados e gestão em resultados na sua empresa.',
 	texto = 'Após o preenchimento do formulário, um consultor da nossa equipe comercial entrará em contato por telefone para entender seu momento e explicar como podemos ajudar.',
+	lp = false,
 } = Astro.props;
+const nomeServico = SOLUCOES.find((s) => s.slug === servico)?.nome;
 ---
 
 <section id={id} class="section_form" aria-labelledby={`${id}-titulo`}>
@@ -73,24 +78,33 @@ const {
 								<input class="form-input" maxlength="256" name="name" id={`${id}-name`} placeholder="Nome completo" type="text" autocomplete="name" required />
 							</div>
 							<div class="form-field-wrapper">
-								<label for={`${id}-email`} class="field-label">E-mail <span class="text-color-primary600">*</span></label>
+								<label for={`${id}-email`} class="field-label">{lp ? 'E-mail corporativo' : 'E-mail'} <span class="text-color-primary600">*</span></label>
 								<input class="form-input" maxlength="256" name="Email" id={`${id}-email`} placeholder="voce@suaempresa.com.br" type="email" autocomplete="email" required />
 							</div>
 						</div>
 
 						<div class="form_grid-2">
+							{lp && (
+								<div class="form-field-wrapper">
+									<label for={`${id}-empresa`} class="field-label">Empresa</label>
+									<input class="form-input" maxlength="256" name="Empresa" id={`${id}-empresa`} placeholder="Nome da sua empresa" type="text" autocomplete="organization" />
+								</div>
+							)}
 							<div class="form-field-wrapper">
-								<label for={`${id}-phone`} class="field-label">WhatsApp <span class="text-color-primary600">*</span></label>
+								<label for={`${id}-phone`} class="field-label">{lp ? 'Telefone' : 'WhatsApp'} <span class="text-color-primary600">*</span></label>
 								<input class="form-input" maxlength="20" name="mobile_phone" id={`${id}-phone`} placeholder="(11) 99999-9999" type="tel" autocomplete="tel" required />
 							</div>
-							<div class="form-field-wrapper">
-								<label for={`${id}-servico`} class="field-label">Serviço de interesse</label>
-								<select class="form-input" name="servico" id={`${id}-servico`}>
-									<option value="">Ainda não sei</option>
-									{SOLUCOES.map((s) => <option value={s.slug} selected={s.slug === servico}>{s.nome}</option>)}
-								</select>
-							</div>
+							{!lp && (
+								<div class="form-field-wrapper">
+									<label for={`${id}-servico`} class="field-label">Serviço de interesse</label>
+									<select class="form-input" name="servico" id={`${id}-servico`}>
+										<option value="">Ainda não sei</option>
+										{SOLUCOES.map((s) => <option value={s.slug} selected={s.slug === servico}>{s.nome}</option>)}
+									</select>
+								</div>
+							)}
 						</div>
+						{lp && nomeServico && <input type="hidden" name="servico" value={servico} data-nome={nomeServico} />}
 
 						<div class="form-field-wrapper">
 							<label for={`${id}-mensagem`} class="field-label">Mensagem (opcional)</label>
@@ -102,8 +116,12 @@ const {
 						</div>
 
 						<label class="form-checkbox" for={`${id}-consentimento`}>
-							<input type="checkbox" name="Consentimento" id={`${id}-consentimento`} required />
-							<span>Aceito que a EJFGV utilize meus dados para entrar em contato sobre o diagnóstico, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+							<input type="checkbox" name="Consentimento" id={`${id}-consentimento`} required={!lp} />
+							{lp ? (
+								<span>Aceito que a EJFGV utilize meus dados para me enviar informações e ofertas personalizadas, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+							) : (
+								<span>Aceito que a EJFGV utilize meus dados para entrar em contato sobre o diagnóstico, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+							)}
 						</label>
 
 						<button type="submit" class="button is-button-large">Solicitar diagnóstico gratuito →</button>

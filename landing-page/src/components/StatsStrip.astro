@@ -14,9 +14,14 @@ interface Item {
 
 interface Props {
 	itens?: Item[];
+	/** Título (H2) e texto opcionais acima dos números. */
+	titulo?: string;
+	texto?: string;
 }
 
 const {
+	titulo,
+	texto,
 	itens = [
 		{ valor: `+${NUMEROS.projetos}`, count: NUMEROS.projetos, prefixo: '+', rotulo: 'Projetos entregues', texto: 'Soluções práticas desenvolvidas para empresas em todo o Brasil.' },
 		{ valor: String(NUMEROS.nps), count: NUMEROS.nps, rotulo: `NPS (${NUMEROS.npsAno})`, texto: 'Índice de aprovação e recomendação direta dos nossos clientes.' },
@@ -26,9 +31,15 @@ const {
 } = Astro.props;
 ---
 
-<section class="section_resultados-strip" aria-label="Números da EJFGV">
+<section class="section_resultados-strip" aria-label={titulo ? undefined : 'Números da EJFGV'} aria-labelledby={titulo ? 'numeros-titulo' : undefined}>
 	<div class="page-padding">
 		<div class="container-large">
+			{titulo && (
+				<div class="icp_header">
+					<h2 id="numeros-titulo">{titulo}</h2>
+					{texto && <p class="numeros_texto">{texto}</p>}
+				</div>
+			)}
 			<div class="resultados_grid">
 				{itens.map((item) => (
 					<div class="resultados_card">
@@ -41,3 +52,11 @@ const {
 		</div>
 	</div>
 </section>
+
+<style>
+	.numeros_texto {
+		margin-top: 0.75rem;
+		color: var(--gray600);
+		line-height: 1.6;
+	}
+</style>

@@ -33,6 +33,9 @@ export const NUMEROS = {
   professores: 40, // site atual: "+40 professores renomados da FGV"; a confirmar
   prazoMedioMeses: 3, // citação de Thiago Caruso (legado)
   retornoDiasUteis: 1, // LP: "retorno em até 1 dia útil"
+  // Selo "Aprovada por mais de 700 clientes" de conteudo.ejfgv.com/business-intelligence-dados. Só na landing
+  // de BI (PRO-19): é outra métrica, que convive com os +800 projetos; a confirmar com a EJ.
+  clientes: 700,
 };
 
 export interface ItemEscopo {
@@ -172,9 +175,10 @@ export const SOLUCOES: Solucao[] = [
     nome: 'Consultoria de Business Intelligence',
     rotulo: 'Business Intelligence',
     descricao: 'Fazemos análises descritivas e preditivas para embasar decisões estratégicas. Com experiência em clusterização e análise de sentimentos, ajudamos sua empresa a chegar a resultados orientados por dados.',
+    // Alinhado à landing de referência (conteudo.ejfgv.com/business-intelligence-dados).
     seo: {
-      titulo: 'Consultoria de Business Intelligence - EJFGV',
-      descricao: 'Compreenda as principais variáveis do seu negócio e obtenha insights pela análise de dados. Conheça a consultoria em Business Intelligence da EJFGV.',
+      titulo: 'Consultoria de Business Intelligence para PMEs: transforme dados em decisões - EJFGV',
+      descricao: 'Transforme planilhas em dashboards estratégicos com a consultoria de Business Intelligence da EJFGV, orientada por professores da FGV. Agende um diagnóstico gratuito.',
     },
     quandoFazSentido: [
       { titulo: 'Decidir com respaldo de dados', texto: 'Para quem quer crescer com planos de ação embasados na análise de dados, inclusive de fontes externas ao negócio.' },
@@ -363,6 +367,31 @@ export const LOGOS = [
   { nome: 'Natura', src: `${CDN}/672a0fa8038f40e48b590c3b_natura-cor.svg` },
   { nome: 'Faber-Castell', src: `${CDN}/672a0faa28416fb4936c0982_faber%20castell-cor.svg` },
   { nome: 'Mondelez', src: `${CDN}/672a0faa796590697d979385_mondelez-cor.svg` },
+];
+
+// Grade extensa da landing de BI: LOGOS mais os outros logos "-cor" de conteudo.ejfgv.com/business-intelligence-dados
+// (CDN Webflow da EJ, conferidos em 28/10/2026).
+export const LOGOS_LP_BI = [
+  ...LOGOS,
+  { nome: 'Pilão', src: `${CDN}/671f957f9115bc124701bbca_pilao-cor.svg` },
+  { nome: 'Target', src: `${CDN}/671fe227e623e682baa5d995_target-cor.svg` },
+  { nome: 'Talent Academy', src: `${CDN}/671fe227a9c4904ca05dda95_talent-cor.avif` },
+  { nome: 'Les Cinq', src: `${CDN}/672a0fa62520358e08f13bc3_lescinq-cor.png` },
+  { nome: 'Black Tie', src: `${CDN}/672a0fa6796590697d979234_black%20tie-cor.png` },
+  { nome: 'Alchemypet', src: `${CDN}/672a0fa78ef1272bcbfc2c2c_alchemypet-cor.png` },
+  { nome: 'Abrasel', src: `${CDN}/672a0fa75fce87be2cbd743f_abrasel-cor.svg` },
+  { nome: 'Cittamobi', src: `${CDN}/672a0fa7a7564935dd080788_cittamobi-cor.png` },
+  { nome: 'Pirecal', src: `${CDN}/672a0fa751adb46944d51ac2_pirecal-cor.png` },
+  { nome: 'TPM', src: `${CDN}/672a0fa88407bf8b696ba8f4_tpm-cor.png` },
+  { nome: 'Fairfax Seguros', src: `${CDN}/672a0fa9a675b3716ec12b11_Fairfax-cor.svg` },
+  { nome: 'São Paulo FC', src: `${CDN}/672a0fa9161566bbd8a2c297_SPFC-cor.svg` },
+  { nome: 'Lundin Mining', src: `${CDN}/672a0fa928416fb4936c08a5_lundin%20mining-cor.svg` },
+  { nome: 'Siberiann Alimentos', src: `${CDN}/672a0fa901b7c53c355952c2_siberian%20alimentos-cor.png` },
+  { nome: 'Dias Munhoz Advogados', src: `${CDN}/672a0faa91a17c895ea693cd_dias%20munhoz-cor.png` },
+  { nome: 'DTCOM', src: `${CDN}/672a0faa91a17c895ea693eb_dtcom-cor.svg` },
+  { nome: 'Itamedi', src: `${CDN}/672a0faa796590697d9793b7_itamedi-cor.png` },
+  { nome: 'Buona', src: `${CDN}/672a0faba75716e89f87bc45_buona-cor.png` },
+  { nome: 'RecurSus', src: `${CDN}/672a0fab161566bbd8a2c365_ecursus-cor.png` },
 ];
 
 // docx: logos a incluir, com fundo transparente. Arquivos ainda não recebidos.

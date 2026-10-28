@@ -6,16 +6,25 @@ interface Props {
 	href: string;
 	rotulo: string;
 	escuro?: boolean;
+	/** Frase de apoio abaixo do título. */
+	texto?: string;
 }
 
-const { titulo, href, rotulo, escuro = false } = Astro.props;
+const { titulo, href, rotulo, escuro = false, texto } = Astro.props;
 ---
 
 <section class="cta-banner" aria-label={titulo}>
 	<div class="page-padding">
 		<div class="container-large">
 			<div class:list={['beneficios_banner', { 'is-dark': escuro }]}>
-				<p class="beneficios-banner_title">{titulo}</p>
+				{texto ? (
+					<div>
+						<p class="beneficios-banner_title">{titulo}</p>
+						<p class="cta-banner_texto">{texto}</p>
+					</div>
+				) : (
+					<p class="beneficios-banner_title">{titulo}</p>
+				)}
 				<a href={href} class:list={[escuro ? 'button' : 'button-secondary']}>{rotulo}</a>
 			</div>
 		</div>
@@ -25,5 +34,11 @@ const { titulo, href, rotulo, escuro = false } = Astro.props;
 <style>
 	.cta-banner {
 		padding: clamp(2.5rem, 5vw, 4rem) 0;
+	}
+
+	.cta-banner_texto {
+		max-width: 56ch;
+		margin-top: 0.75rem;
+		line-height: 1.55;
 	}
 </style>

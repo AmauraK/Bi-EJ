@@ -9,12 +9,14 @@ interface Props {
 	descricao: string;
 	/** Destino do botão "Fale com um Especialista". Nas soluções, '#formulario'. */
 	ctaHref?: string;
+	/** Texto desse botão (a landing de BI usa "Quero obter resultados", como a referência). */
+	ctaRotulo?: string;
 	/** JSON-LD extra da página (Service, FAQPage, Article...). */
 	jsonLd?: object | object[];
 	noindex?: boolean;
 }
 
-const { titulo, descricao, ctaHref = '/contato/', jsonLd, noindex = false } = Astro.props;
+const { titulo, descricao, ctaHref = '/contato/', ctaRotulo = 'Fale com um Especialista', jsonLd, noindex = false } = Astro.props;
 const caminho = Astro.url.pathname;
 const canonical = new URL(caminho, Astro.site).href;
 
@@ -88,7 +90,7 @@ const ano = new Date().getFullYear();
 				)}
 			</div>
 			<div class="nav-actions">
-				<a href={ctaHref} class="buy">Fale com um Especialista</a>
+				<a href={ctaHref} class="buy">{ctaRotulo}</a>
 				<button type="button" class="menu-toggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
 			</div>
 		</nav>

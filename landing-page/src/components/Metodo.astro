@@ -5,9 +5,11 @@ import { METODO } from '../consts';
 interface Props {
 	kicker?: string;
 	titulo?: string;
+	/** Etapas na mesma ordem dos ícones (padrão: METODO). */
+	etapas?: { nome: string; texto: string }[];
 }
 
-const { kicker = 'Passo a Passo Simples', titulo = 'Nosso método para resolver o seu problema' } = Astro.props;
+const { kicker = 'Passo a Passo Simples', titulo = 'Nosso método para resolver o seu problema', etapas = METODO } = Astro.props;
 
 // Ícones de traço (SVG inline), na ordem Contato, Diagnóstico, Proposta, Projeto.
 const icones = [
@@ -27,7 +29,7 @@ const icones = [
 			</div>
 
 			<ol class="metodo_cards">
-				{METODO.map((etapa, i) => (
+				{etapas.map((etapa, i) => (
 					<li class="metodo_card">
 						<span class="metodo_icon" aria-hidden="true">
 							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icones[i]} />
