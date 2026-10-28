@@ -16,7 +16,15 @@ import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL } from '../consts
 
 const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
 // Os 6 valores do legado; "Inovação" ocupa o lugar do 5º valor antigo (docx).
-const VALORES = ['Foco no cliente', 'Ir além', 'Sentimento de dono', 'Comunidade', 'Inovação', 'Inconformismo'];
+// `texto`: explicação que aparece ao clicar no card. Vazio = mostra o marcador "A preencher".
+const VALORES = [
+	{ nome: 'Foco no cliente', texto: '' },
+	{ nome: 'Ir além', texto: '' },
+	{ nome: 'Sentimento de dono', texto: '' },
+	{ nome: 'Comunidade', texto: '' },
+	{ nome: 'Inovação', texto: '' },
+	{ nome: 'Inconformismo', texto: '' },
+];
 // Benefícios citados no docx para o banner "Seja consultor EJ FGV".
 const BENEFICIOS_CONSULTOR = ['Experiência prática em projetos de consultoria estratégica', 'Network FGV', 'Mentoria de professores da FGV'];
 const ICONE_CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
@@ -136,8 +144,14 @@ const faq = [
 						<ul class="sobre-valores">
 							{VALORES.map((valor, i) => (
 								<li class="sobre-valor">
-									<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-									{valor}
+									<button type="button" class="sobre-valor_botao" aria-expanded="false" aria-controls={`valor-${i}`}>
+										<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+										<span class="sobre-valor_nome">{valor.nome}</span>
+										<span class="sobre-valor_seta" aria-hidden="true"></span>
+									</button>
+									<div class="sobre-valor_painel" id={`valor-${i}`}>
+										<p>{valor.texto || <span class="preencher">A preencher: explicação de “{valor.nome}”</span>}</p>
+									</div>
 								</li>
 							))}
 						</ul>
@@ -302,6 +316,24 @@ const faq = [
 	<CtaBanner titulo="Vamos transformar a realidade do seu negócio?" href="/contato/" rotulo="Fale com um Especialista" />
 </Layout>
 
+<script>
+	// Accordion dos valores: um card aberto por vez; clicar no aberto fecha.
+	const botoes = document.querySelectorAll<HTMLButtonElement>('.sobre-valor_botao');
+	botoes.forEach((botao) => {
+		botao.addEventListener('click', () => {
+			const abrir = botao.getAttribute('aria-expanded') !== 'true';
+			botoes.forEach((b) => {
+				b.setAttribute('aria-expanded', 'false');
+				b.classList.remove('is-aberto');
+			});
+			if (abrir) {
+				botao.setAttribute('aria-expanded', 'true');
+				botao.classList.add('is-aberto');
+			}
+		});
+	});
+</script>
+
 <style>
 	/* Texto de apoio abaixo dos títulos */
 	.sobre-intro {
@@ -389,11 +421,11 @@ const faq = [
 		gap: 1rem;
 	}
 
+	.sobre-valores {
+		align-items: start; /* o card aberto cresce sem esticar os vizinhos da linha */
+	}
+
 	.sobre-valor {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1.15rem 1.25rem;
 		background: var(--graywarm950);
 		border: 1px solid var(--border-hairline-dark);
 		border-radius: var(--card-radius-md);
@@ -401,6 +433,76 @@ const faq = [
 		font-size: 1.05rem;
 		font-weight: 700;
 		line-height: 1.3;
+		transition: border-color 0.3s ease;
+	}
+
+	.sobre-valor:has(.is-aberto) {
+		border-color: var(--primary600);
+	}
+
+	.sobre-valor_botao {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		width: 100%;
+		padding: 1.15rem 1.25rem;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.sobre-valor_nome {
+		flex: 1;
+	}
+
+	.sobre-valor_seta {
+		width: 0.55rem;
+		height: 0.55rem;
+		border-right: 2px solid var(--graywarm300);
+		border-bottom: 2px solid var(--graywarm300);
+		transform: rotate(45deg);
+		transition: transform 0.3s ease;
+	}
+
+	.sobre-valor_botao.is-aberto .sobre-valor_seta {
+		transform: rotate(-135deg);
+	}
+
+	/* Abre/fecha animando a altura: a linha do grid vai de 0fr a 1fr */
+	.sobre-valor_painel {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 0.3s ease;
+	}
+
+	.sobre-valor_painel > p {
+		overflow: hidden;
+		padding: 0 1.25rem;
+		color: var(--graywarm300);
+		font-size: 0.95rem;
+		font-weight: 400;
+		line-height: 1.6;
+		opacity: 0;
+		transition: opacity 0.3s ease, padding 0.3s ease;
+	}
+
+	.sobre-valor_botao.is-aberto + .sobre-valor_painel {
+		grid-template-rows: 1fr;
+	}
+
+	.sobre-valor_botao.is-aberto + .sobre-valor_painel > p {
+		padding-bottom: 1.15rem;
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sobre-valor,
+		.sobre-valor_seta,
+		.sobre-valor_painel,
+		.sobre-valor_painel > p {
+			transition: none;
+		}
 	}
 
 	/* Os "quadradinhos" (docx): cores do DS, alternadas */

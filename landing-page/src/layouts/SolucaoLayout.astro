@@ -1,18 +1,17 @@
 ---
 // Moldura comum das 5 landings de solução (fundo geral --gray50). O layout cuida só do que se repete:
-// cabeçalho escuro com credenciais e logos → números → [corpo da página, slot padrão] → prova social →
+// cabeçalho escuro com credenciais e logos → [corpo da página, slot padrão] → prova social →
 // método → FAQ → formulário (serviço pré-selecionado) → outras soluções.
 // O corpo (para quem é, o que entra no projeto, diferencial) é de cada página.
 import Layout from './Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
-import StatsStrip from '../components/StatsStrip.astro';
 import CaseCard from '../components/CaseCard.astro';
 import Depoimentos from '../components/Depoimentos.astro';
 import Metodo from '../components/Metodo.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
-import { SITE, CONTATO, NUMEROS, SOLUCOES, CASES, DEPOIMENTOS, LOGOS, type Solucao, type Depoimento } from '../consts';
+import { SITE, NUMEROS, SOLUCOES, CASES, DEPOIMENTOS, LOGOS, type Solucao, type Depoimento } from '../consts';
 
 interface Props {
 	solucao: Solucao;
@@ -61,15 +60,14 @@ const servico = {
 
 <Layout titulo={solucao.seo.titulo} descricao={solucao.seo.descricao} ctaHref="#formulario" jsonLd={servico}>
 	<div class="solucao">
-		<!-- 1. Cabeçalho escuro: H1, abertura curta, credenciais, CTA e logos de clientes à frente -->
+		<!-- 1. Cabeçalho escuro: H1, abertura curta, CTA logo abaixo, credenciais e logos de clientes à frente -->
 		<PageHeader titulo={titulo} kicker={kicker} descricao={abertura} escuro>
+			<div class="hero_actions">
+				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+			</div>
 			<ul class="solucao_credenciais" aria-label={`Por que a ${SITE.nome}`}>
 				{credenciais.map((c) => <li>{c}</li>)}
 			</ul>
-			<Fragment slot="acoes">
-				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
-				<a href={CONTATO.whatsappUrl} class="button-tertiary" target="_blank" rel="noopener">Conversar no WhatsApp →</a>
-			</Fragment>
 			<figure slot="midia" class="hero-photo-frame">
 				<ImagemReservada descricao={fotoHeader} classe="home-hero_image" escuro />
 			</figure>
@@ -85,13 +83,10 @@ const servico = {
 			</div>
 		</div>
 
-		<!-- 2. Números -->
-		<StatsStrip />
-
-		<!-- 3. Corpo próprio de cada solução -->
+		<!-- 2. Corpo próprio de cada solução -->
 		<slot />
 
-		<!-- 4. Prova social -->
+		<!-- 3. Prova social -->
 		<section class="section_depoimentos" aria-labelledby="prova-social-titulo">
 			<div class="page-padding padding-section-medium">
 				<div class="container-large">
@@ -117,16 +112,16 @@ const servico = {
 			</div>
 		</section>
 
-		<!-- 5. Método -->
+		<!-- 4. Método -->
 		<Metodo />
 
-		<!-- 6. FAQ -->
+		<!-- 5. FAQ -->
 		<Faq itens={faq} titulo={`Perguntas frequentes sobre ${solucao.nome}`} />
 
-		<!-- 7. Formulário com o serviço pré-selecionado -->
+		<!-- 6. Formulário com o serviço pré-selecionado -->
 		<LeadForm servico={solucao.slug} titulo="Agende um diagnóstico gratuito e descubra como podemos ajudar a sua empresa." />
 
-		<!-- 8. Outras soluções -->
+		<!-- 7. Outras soluções -->
 		<nav class="solucao_outras" aria-labelledby="outras-solucoes">
 			<div class="page-padding">
 				<div class="container-large">
@@ -168,7 +163,6 @@ const servico = {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		margin-top: 1.5rem;
 		list-style: none;
 	}
 
