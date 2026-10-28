@@ -1,34 +1,68 @@
 ---
-// Consultoria Financeira: props do SolucaoLayout e a seção própria (slot "especifico"), que explica as
-// frentes do escopo sem jargão e mostra os resultados reais dos cases (CASES), sem números novos.
-// Fontes: consts.ts (descrição, escopo, cases), legado (site/conteudo/solucoes.mjs e site/modelos/servico.mjs),
-// LP original e o texto do site atual sobre caixa, custos, preços, valuation e pitch.
+// Consultoria Financeira: props do SolucaoLayout e o corpo próprio (slot padrão) em duas seções:
+// 1. Para quem é: as perguntas do dono (base: solucao.quandoFazSentido), cada uma com âncora para a frente que a responde.
+// 2. O que entra no projeto: cada item de solucao.escopo com uma frase do que é entregue, sem jargão.
+// Cases, números, credenciais, método, FAQ e formulário já vêm do layout. Fontes: consts.ts (descrição, escopo, cases).
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import ImagemReservada from '../components/ImagemReservada.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES, type Case } from '../consts';
+import { SITE, NUMEROS, SOLUCOES } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-financeira')!;
 
-function caso(slug: string) {
-	const c = CASES.find((item) => item.slug === slug);
-	if (!c) throw new Error(`Case "${slug}" não existe em CASES (consts.ts)`);
-	return c;
-}
+const abertura = 'Organizamos o caixa, cortamos custos, acertamos o preço e mostramos se um investimento vale a pena. Para donos de pequenas e médias empresas que querem decidir com números, não no achismo.';
 
-const abertura = `A Consultoria Financeira da ${SITE.nome} ajuda pequenas e médias empresas a organizar o caixa, cortar custos, definir preços e se preparar para investir ou buscar investidores. Somos a ${SITE.nomeCompleto}, fundada em ${NUMEROS.fundacao}: os projetos são feitos por alunos de graduação e orientados por professores da FGV.`;
+// O que cada frente entrega. Chave = item de solucao.escopo (consts.ts).
+const entregas: Record<string, { id: string; texto: string; link?: { texto: string; rotulo: string; href: string } }> = {
+	'Gestão de caixa': {
+		id: 'financeira-caixa',
+		texto: 'Organizamos as entradas e saídas para você saber quanto dinheiro tem e evitar aperto no fim do mês.',
+	},
+	'Corte de custos': {
+		id: 'financeira-custos',
+		texto: 'Mapeamos os gastos e apontamos onde dá para economizar, para sobrar mais em cada venda.',
+	},
+	'Precificação': {
+		id: 'financeira-precificacao',
+		texto: 'Calculamos quanto cobrar para o preço ser competitivo e cobrir as despesas do negócio.',
+	},
+	'Análise financeira': {
+		id: 'financeira-analise',
+		texto: 'Lemos os demonstrativos de receitas, despesas e resultado e montamos relatórios de gestão para acompanhar a saúde da empresa.',
+		link: { texto: 'Quer esses números em um painel?', rotulo: 'Conheça a Consultoria de Business Intelligence', href: '/consultoria-business-intelligence/' },
+	},
+	'Modelagem financeira': {
+		id: 'financeira-modelagem',
+		texto: 'Antes de uma decisão grande, projetamos a rentabilidade e o payback do investimento: em quanto tempo o dinheiro volta.',
+	},
+	'Valuation e pitch para investidores': {
+		id: 'financeira-valuation',
+		texto: 'Estimamos quanto vale a empresa e preparamos o pitch, a apresentação do negócio para investidores.',
+		link: { texto: 'Ainda vai tirar a ideia do papel?', rotulo: 'Conheça o Plano de Negócios', href: '/plano-de-negocios/' },
+	},
+};
 
-const beneficios = [
+const frentes = solucao.escopo.map((e) => {
+	const entrega = entregas[e.item];
+	if (!entrega) throw new Error(`Frente "${e.item}" (consts.ts) sem texto em consultoria-financeira.astro`);
+	return { ...e, ...entrega };
+});
+
+// Os dois momentos de solucao.quandoFazSentido, em perguntas do dia a dia. Cada pergunta leva à primeira frente.
+const momentos = [
 	{
-		titulo: 'Clareza sobre a saúde financeira',
-		texto: 'Analisamos os demonstrativos financeiros e organizamos a gestão de caixa para você entender a saúde da empresa e decidir com números, sem achismo.',
+		titulo: 'Controlar melhor as finanças',
+		texto: 'Para entender a saúde da empresa e melhorar as margens.',
+		perguntas: [
+			{ pergunta: 'Para onde está indo o dinheiro da empresa?', frentes: ['Gestão de caixa', 'Corte de custos', 'Análise financeira'] },
+			{ pergunta: 'Quanto devo cobrar pelo meu produto ou serviço?', frentes: ['Precificação'] },
+		],
 	},
 	{
-		titulo: 'Margens melhores',
-		texto: 'Encontramos oportunidades de redução de custos e apoiamos a precificação de produtos e serviços, para que o preço seja competitivo e cubra as despesas do negócio.',
-	},
-	{
-		titulo: 'Segurança para investir e captar',
-		texto: 'Antes de investir, projeções financeiras detalhadas mostram se o investimento vale a pena e em quanto tempo o dinheiro volta. Para buscar investidores, estimamos o valor da empresa e preparamos o pitch.',
+		titulo: 'Entender rentabilidade e valor',
+		texto: 'Para decidir um investimento grande ou se preparar para buscar investidores.',
+		perguntas: [
+			{ pergunta: 'Vale a pena fazer este investimento?', frentes: ['Modelagem financeira'] },
+			{ pergunta: 'Quanto vale a minha empresa?', frentes: ['Valuation e pitch para investidores'] },
+		],
 	},
 ];
 
@@ -57,109 +91,69 @@ const faq = [
 	},
 	{ pergunta: 'Quanto custa a Consultoria Financeira?' },
 ];
-
-interface Pergunta {
-	frentes: string[];
-	pergunta: string;
-	texto: string;
-	casos?: Case[];
-	link?: { texto: string; rotulo: string; href: string };
-}
-
-// Uma pergunta prática para cada grupo de frentes do escopo (solucao.escopo).
-const perguntas: Pergunta[] = [
-	{
-		frentes: ['Gestão de caixa', 'Corte de custos', 'Análise financeira'],
-		pergunta: 'Para onde está indo o dinheiro da empresa?',
-		texto: 'Analisamos os demonstrativos financeiros, os relatórios de receitas, despesas e resultado, para encontrar melhorias e oportunidades de redução de custos. Com a gestão de caixa e os demonstrativos de gestão estruturados, fica mais fácil acompanhar a saúde da empresa e melhorar as margens.',
-		link: {
-			texto: 'Quer acompanhar vendas, custos e indicadores em um painel?',
-			rotulo: 'Conheça a Consultoria de Business Intelligence →',
-			href: '/consultoria-business-intelligence/',
-		},
-	},
-	{
-		frentes: ['Precificação'],
-		pergunta: 'Quanto cobrar pelo meu produto ou serviço?',
-		texto: 'Apoiamos a precificação de produtos e serviços para que o preço seja competitivo e condizente com as despesas do negócio, com foco em redução de custos.',
-		casos: [
-			caso('como-foi-conduzida-a-reestruturacao-financeira-da-comunik-para-melhores-resultados'),
-			caso('por-que-uma-reestruturacao-operacional-e-financeira-foi-essencial-para-a-menezes-e-emidio-advogados'),
-		],
-	},
-	{
-		frentes: ['Modelagem financeira'],
-		pergunta: 'Vale a pena fazer este investimento?',
-		texto: 'Antes de uma decisão grande, como comprar uma fazenda ou abrir um novo negócio, montamos a modelagem financeira: projeções detalhadas que mostram a rentabilidade e o payback, ou seja, em quanto tempo o dinheiro investido volta.',
-		casos: [
-			caso('a-analise-de-viabilidade-que-evitou-um-prejuizo-de-milhoes-de-reais-na-compra-de-uma-fazenda-de-cafe'),
-			caso('a-analise-de-viabilidade-que-evitou-um-prejuizo-de-milhoes-de-reais-em-um-novo-negocio'),
-		],
-	},
-	{
-		frentes: ['Valuation e pitch para investidores'],
-		pergunta: 'Quanto vale a minha empresa?',
-		texto: 'Estimamos o valor da empresa, o chamado valuation, e preparamos os materiais para captar investimento, incluindo o pitch: a apresentação do negócio para investidores.',
-		link: {
-			texto: 'Ainda vai tirar a ideia do papel? O Plano de Negócios inclui o plano financeiro e a apresentação para investidores.',
-			rotulo: 'Conheça o Plano de Negócios →',
-			href: '/plano-de-negocios/',
-		},
-	},
-];
 ---
 
 <SolucaoLayout
 	solucao={solucao}
 	abertura={abertura}
-	beneficios={beneficios}
 	faq={faq}
+	kicker="Caixa · Custos · Preço · Valuation"
 	fotoHeader="trabalho real em grupo: consultores e cliente analisando os números da empresa"
 >
-	<section slot="especifico" class="section_icp financeira" aria-labelledby="financeira-titulo">
+	<!-- 1. Para quem é: a pergunta do dono leva à frente que a responde -->
+	<section class="section_icp" aria-labelledby="financeira-para-quem">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large">
-				<div class="financeira_wrapper">
-					<div class="financeira_intro">
-						<div class="icp_header">
-							<span class="eyebrow">Dos números à clareza</span>
-							<h2 id="financeira-titulo">As perguntas que a Consultoria Financeira ajuda a responder</h2>
-							<p class="financeira_lead">Caixa, custos, preço, investimento e valor da empresa: cada frente do projeto responde a uma pergunta prática do dia a dia, sempre com números claros para você decidir com segurança.</p>
-						</div>
-						<a href="#formulario" class="button">Solicite seu diagnóstico gratuito</a>
-						<ImagemReservada descricao="dados na foto: consultores e cliente analisando caixa, custos e preços" classe="vantagens_image" />
-					</div>
+				<div class="icp_header">
+					<span class="eyebrow">Para quem é</span>
+					<h2 id="financeira-para-quem">{solucao.chamada}</h2>
+					<p class="financeira_lead">Escolha a sua pergunta e veja como o projeto responde.</p>
+				</div>
+				<div class="financeira_momentos">
+					{momentos.map((m) => (
+						<article class="icp_item financeira_momento">
+							<h3>{m.titulo}</h3>
+							<p>{m.texto}</p>
+							<ul class="financeira_perguntas">
+								{m.perguntas.map((p) => (
+									<li>
+										<a href={`#${entregas[p.frentes[0]].id}`}>
+											<span class="financeira_pergunta">{p.pergunta}</span>
+											<span class="financeira_frentes">{p.frentes.join(' · ')}</span>
+											<span class="financeira_seta" aria-hidden="true">↓</span>
+										</a>
+									</li>
+								))}
+							</ul>
+						</article>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
 
-					<ol class="financeira_lista">
-						{perguntas.map((p, i) => (
-							<li class="financeira_item">
-								<span class="financeira_numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-								<div>
-									<ul class="financeira_frentes" aria-label="Frentes do projeto">
-										{p.frentes.map((f) => <li class="case_tag">{f}</li>)}
-									</ul>
-									<h3>{p.pergunta}</h3>
-									<p class="financeira_texto">{p.texto}</p>
-									{p.casos && (
-										<div class="financeira_pratica">
-											<p class="financeira_pratica-titulo">Na prática</p>
-											<ul>
-												{p.casos.map((c) => (
-													<li class="financeira_caso">
-														<span class="financeira_caso-cliente">{c.cliente} · {c.segmento}</span>
-														<strong><span class="financeira_seta" aria-hidden="true">↗</span> {c.destaque}</strong>
-														<span class="financeira_caso-detalhe">Desafio: {c.problema}. Solução: {c.solucao}.</span>
-														<a href={c.url} aria-label={`Ver case completo: ${c.cliente}`}>Ver case completo →</a>
-													</li>
-												))}
-											</ul>
-										</div>
-									)}
-									{p.link && <p class="financeira_link">{p.link.texto} <a href={p.link.href}>{p.link.rotulo}</a></p>}
-								</div>
-							</li>
-						))}
-					</ol>
+	<!-- 2. O que entra no projeto: uma frase por frente do escopo -->
+	<section class="section_beneficios" aria-labelledby="financeira-escopo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="beneficios_title">
+					<span class="eyebrow">O que entra no projeto</span>
+					<h2 id="financeira-escopo">Do caixa do mês ao valor da empresa</h2>
+					<p>Você não precisa contratar tudo: na proposta, combinamos só as frentes que fazem sentido para o seu momento.</p>
+				</div>
+				<ol class="financeira_grid">
+					{frentes.map((f, i) => (
+						<li id={f.id} class="frente_mini-card financeira_frente">
+							<span class="financeira_numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+							<h3>{f.item}</h3>
+							<p>{f.texto}</p>
+							{f.link && <p class="financeira_link">{f.link.texto} <a href={f.link.href}>{f.link.rotulo}</a></p>}
+						</li>
+					))}
+				</ol>
+				<div class="financeira_cta">
+					<p>Não sabe por onde começar? O diagnóstico gratuito mostra quais frentes fazem diferença na sua empresa.</p>
+					<a href="#formulario" class="button">Solicite seu diagnóstico gratuito</a>
 				</div>
 			</div>
 		</div>
@@ -167,182 +161,175 @@ const perguntas: Pergunta[] = [
 </SolucaoLayout>
 
 <style>
-	.financeira_wrapper {
-		display: grid;
-		grid-template-columns: 0.9fr 1.1fr;
-		gap: clamp(2rem, 5vw, 4.5rem);
-		align-items: start;
-	}
-
-	.financeira_intro .icp_header {
-		margin-bottom: 1.5rem;
-	}
-
 	.financeira_lead {
-		margin-top: 0.85rem;
+		margin-top: 0.75rem;
 		color: var(--gray600);
-		font-size: 1rem;
+		font-size: 1.05rem;
 		line-height: 1.6;
 	}
 
-	.financeira_intro .button {
-		margin-bottom: 2rem;
-	}
-
-	.financeira_lista,
-	.financeira_frentes,
-	.financeira_pratica ul {
-		list-style: none;
-	}
-
-	.financeira_item {
+	/* 1. Momentos e perguntas */
+	.financeira_momentos {
 		display: grid;
-		grid-template-columns: 3.25rem 1fr;
-		gap: 1rem;
-		padding: clamp(1.75rem, 3vw, 2.5rem) 0;
-		border-top: 1px solid var(--gray200);
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem;
 	}
 
-	.financeira_item:first-child {
-		padding-top: 0;
-		border-top: 0;
+	.financeira_momento {
+		padding: clamp(1.5rem, 3vw, 2.25rem);
 	}
 
-	.financeira_numero {
-		color: var(--gray500);
-		font-size: clamp(1.75rem, 2.6vw, 2.25rem);
-		font-weight: 900;
-		line-height: 1;
-		letter-spacing: -0.03em;
-	}
-
-	.financeira_frentes {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin-bottom: 0.75rem;
-	}
-
-	.financeira_frentes .case_tag {
-		margin-bottom: 0;
-	}
-
-	.financeira_item h3 {
-		margin-bottom: 0.6rem;
-		color: var(--gray900);
-		font-size: clamp(1.3rem, 2vw, 1.6rem);
+	.financeira_momento h3 {
+		font-size: clamp(1.2rem, 1.8vw, 1.4rem);
 		font-weight: 800;
-		line-height: 1.22;
 		letter-spacing: -0.015em;
 	}
 
-	.financeira_texto {
-		color: var(--gray600);
-		font-size: 1rem;
-		line-height: 1.6;
+	.financeira_momento > p {
+		font-size: 0.95rem;
 	}
 
-	.financeira_pratica {
-		margin-top: 1.25rem;
-		padding: 1.1rem 1.25rem 0.35rem;
-		background: var(--white);
-		border: 1px solid var(--gray200);
-		border-radius: var(--card-radius-md);
+	.financeira_perguntas {
+		margin-top: 1rem;
+		list-style: none;
 	}
 
-	.financeira_pratica-titulo {
-		color: var(--gray600);
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-	}
-
-	.financeira_caso {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.3rem;
-		padding: 0.9rem 0;
-	}
-
-	.financeira_caso + .financeira_caso {
+	.financeira_perguntas a {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		column-gap: 1rem;
+		padding: 1.1rem 0;
 		border-top: 1px solid var(--gray200);
 	}
 
-	.financeira_caso-cliente {
-		color: var(--gray600);
-		font-size: 0.75rem;
+	.financeira_pergunta {
+		color: var(--gray900);
+		font-size: clamp(1.05rem, 1.5vw, 1.2rem);
 		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		line-height: 1.3;
+		transition: color 0.2s;
 	}
 
-	.financeira_caso strong {
-		color: var(--gray900);
-		font-size: 1.05rem;
-		line-height: 1.35;
+	.financeira_frentes {
+		grid-row: 2;
+		margin-top: 0.3rem;
+		color: var(--gray500);
+		font-size: 0.8rem;
+		font-weight: 600;
 	}
 
 	.financeira_seta {
-		color: var(--success700);
-	}
-
-	.financeira_caso-detalhe {
-		color: var(--gray600);
-		font-size: 0.875rem;
-		line-height: 1.5;
-	}
-
-	.financeira_caso a,
-	.financeira_link a {
-		color: var(--primary700);
+		grid-row: 1 / span 2;
+		align-self: center;
+		color: var(--primary600);
+		font-size: 1.25rem;
 		font-weight: 700;
+		transition: transform 0.25s var(--ease-out-expo);
 	}
 
-	.financeira_caso a {
-		font-size: 0.9rem;
+	.financeira_perguntas a:hover .financeira_pergunta,
+	.financeira_perguntas a:focus-visible .financeira_pergunta {
+		color: var(--primary700);
 	}
 
-	.financeira_caso a:hover {
-		text-decoration: underline;
+	.financeira_perguntas a:hover .financeira_seta {
+		transform: translateY(3px);
+	}
+
+	/* 2. Frentes do escopo (seção escura) */
+	.financeira_grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+		margin-top: clamp(2.5rem, 4vw, 3.5rem);
+		list-style: none;
+	}
+
+	.financeira_frente {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		padding: clamp(1.5rem, 2.5vw, 2rem);
+		scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+	}
+
+	.financeira_frente .financeira_numero {
+		margin: 0;
+		color: var(--graywarm600);
+		font-size: 2rem;
+		font-weight: 900;
+		letter-spacing: -0.03em;
+		line-height: 1;
+		transition: color 0.25s;
+	}
+
+	.financeira_frente h3 {
+		color: var(--white);
+		font-size: 1.15rem;
+		font-weight: 700;
+		line-height: 1.3;
+	}
+
+	.financeira_frente p {
+		font-size: 0.95rem;
+	}
+
+	/* Frente aberta pela pergunta da seção 1 (âncora) fica em destaque */
+	.financeira_frente:hover .financeira_numero,
+	.financeira_frente:target .financeira_numero {
+		color: var(--primary200);
+	}
+
+	.financeira_frente:target {
+		border-color: var(--primary500);
 	}
 
 	.financeira_link {
-		margin-top: 1rem;
-		color: var(--gray600);
-		font-size: 0.95rem;
-		line-height: 1.55;
+		margin-top: auto;
+		padding-top: 0.5rem;
 	}
 
 	/* Link dentro do texto: sublinhado para não depender só da cor */
 	.financeira_link a {
+		color: var(--primary200);
+		font-weight: 700;
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 	}
 
-	/* A coluna da esquerda acompanha a leitura só quando cabe inteira na tela */
-	@media (min-width: 1025px) and (min-height: 800px) {
-		.financeira_intro {
-			position: sticky;
-			top: calc(var(--nav-height) + 2rem);
-		}
+	.financeira_cta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		margin-top: clamp(2rem, 4vw, 3rem);
+		padding-top: clamp(1.5rem, 3vw, 2rem);
+		border-top: 1px solid var(--border-hairline-dark);
+	}
+
+	.financeira_cta p {
+		max-width: 36rem;
+		color: var(--white);
+		font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+		font-weight: 700;
+		line-height: 1.4;
 	}
 
 	@media (max-width: 1024px) {
-		.financeira_wrapper {
-			grid-template-columns: 1fr;
+		.financeira_grid {
+			grid-template-columns: 1fr 1fr;
 		}
 	}
 
 	@media (max-width: 767px) {
-		.financeira_item {
+		.financeira_momentos,
+		.financeira_grid {
 			grid-template-columns: 1fr;
-			gap: 0.5rem;
 		}
 
-		.financeira_numero {
-			font-size: 1.5rem;
+		.financeira_cta {
+			flex-direction: column;
+			align-items: flex-start;
 		}
 	}
 </style>

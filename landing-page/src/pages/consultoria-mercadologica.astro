@@ -1,32 +1,75 @@
 ---
 // Consultoria Mercadológica. URL, title e description iguais aos do WordPress (a página ranqueia):
-// vêm de solucao.seo e não mudam. Os termos de busca ficam no H1 e nos H2 do slot "especifico".
-// Fontes: consts.ts (solução, cases, depoimentos), legado (solucoes.mjs, sobre.mjs), LP e docx.
+// vêm de solucao.seo e não mudam. Os termos de busca ficam no H1, no H2 do escopo e nos H3 das frentes.
+// O layout já mostra credenciais, números, cases, depoimentos, método, FAQ e formulário.
+// Corpo desta página: 1. para quem é (dores do dono de PME) → 2. o que entra no projeto (frentes do escopo).
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import ImagemReservada from '../components/ImagemReservada.astro';
 import { SOLUCOES, CASES, DEPOIMENTOS, NUMEROS, SITE } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-mercadologica')!;
-const maCerise = CASES.find((c) => c.cliente === 'Confeitaria Ma Cerise')!;
-const talent = CASES.find((c) => c.cliente === 'Talent Academy')!;
+const outra = (slug: string) => SOLUCOES.find((s) => s.slug === slug)!;
 
 // Os depoimentos dos clientes desta solução aparecem primeiro.
-const daSolucao = [maCerise.cliente, talent.cliente];
+const daSolucao = CASES.filter((c) => solucao.cases.includes(c.slug)).map((c) => c.cliente);
 const depoimentos = [...DEPOIMENTOS.filter((d) => daSolucao.includes(d.autor)), ...DEPOIMENTOS.filter((d) => !daSolucao.includes(d.autor))];
 
-const beneficios = [
-	{ titulo: 'Clareza sobre o seu público', texto: 'Você passa a conhecer melhor quem compra de você e entende onde a sua marca se encaixa no mercado.' },
-	{ titulo: 'Marketing sem desperdício', texto: 'As estratégias são escolhidas com critério, entre as mais eficazes para o seu negócio, e o processo otimiza custos.' },
-	{ titulo: 'Lançamentos de alto impacto', texto: 'Antes de lançar um produto ou entrar em um novo mercado, você sabe se há espaço para crescer e tem um plano para chegar lá.' },
-];
+// Frentes de solucao.escopo (mesma ordem), em linguagem leiga: a pergunta que cada uma responde e o que entrega.
+// `rel` = navegação cruzada para a consultoria que aprofunda o tema.
+interface Detalhe {
+	id: string;
+	titulo?: string;
+	fase: string;
+	pergunta: string;
+	texto: string;
+	rel?: { antes: string; slug: string; depois: string };
+}
 
-// Escopo de pesquisa (4 dos 5 itens de solucao.escopo) explicado como as perguntas que ele responde.
-const perguntas = [
-	{ titulo: 'Quem é o meu cliente?', texto: 'A pesquisa de público-alvo mostra quem compra de você e serve de base para escolher as estratégias de marketing mais eficazes.' },
-	{ titulo: 'Que oportunidades o meu setor oferece?', texto: 'A análise de mercado ajuda a descobrir oportunidades no seu setor e caminhos para crescer.' },
-	{ titulo: 'Onde a minha marca se encaixa?', texto: 'A análise concorrencial compara a sua empresa com os concorrentes e mostra o seu lugar no mercado.' },
-	{ titulo: 'Existe demanda para a minha ideia?', texto: 'A análise de viabilidade indica se há demanda para um produto ou serviço antes do investimento.' },
-];
+const detalhes: Record<string, Detalhe> = {
+	'Análise de mercado': {
+		id: 'analise-de-mercado',
+		fase: 'Entender o mercado',
+		pergunta: 'Que oportunidades o meu setor oferece?',
+		texto: 'Estudamos o seu setor para mostrar as oportunidades e os caminhos para a sua empresa crescer.',
+	},
+	'Análise concorrencial': {
+		id: 'analise-concorrencial',
+		fase: 'Entender o mercado',
+		pergunta: 'Onde a minha marca se encaixa?',
+		texto: 'Comparamos a sua empresa com os concorrentes e mostramos o seu lugar no mercado.',
+	},
+	'Pesquisa de público-alvo': {
+		id: 'pesquisa-de-publico-alvo',
+		fase: 'Entender o mercado',
+		pergunta: 'Quem é o meu cliente?',
+		texto: 'Investigamos quem compra de você. É a base para escolher, com critério, as estratégias de marketing mais eficazes.',
+		rel: { antes: 'Quer ir mais fundo com dados? A', slug: 'consultoria-business-intelligence', depois: 'analisa o perfil do consumidor.' },
+	},
+	'Análise de viabilidade': {
+		id: 'analise-de-viabilidade',
+		fase: 'Validar a ideia',
+		pergunta: 'Existe demanda para o que eu quero lançar?',
+		texto: 'Antes de você lançar um produto ou entrar em um novo mercado, verificamos se há demanda para ele.',
+		rel: { antes: 'Para saber se a conta fecha, a', slug: 'consultoria-financeira', depois: 'estuda a rentabilidade e o tempo de retorno do investimento (payback).' },
+	},
+	'Plano de marketing': {
+		id: 'plano-de-marketing',
+		titulo: 'Plano de marketing tradicional e digital',
+		fase: 'Vender mais',
+		pergunta: 'Como eu chego até esse cliente?',
+		texto: 'Com o que a pesquisa revelou, montamos com você as ações para divulgar o seu produto ou serviço e conquistar clientes. O plano pode ir do reposicionamento da marca às redes sociais.',
+		rel: { antes: 'Ainda vai tirar a ideia do papel? O', slug: 'plano-de-negocios', depois: 'junta este plano aos planos financeiro e operacional.' },
+	},
+};
+
+const frentes = solucao.escopo.map((e) => ({ ...e, ...detalhes[e.item] }));
+
+// Dores reconhecíveis (base: solucao.quandoFazSentido e solucao.descricao), cada uma ligada à frente que a resolve.
+const dores = [
+	{ frase: 'Não sei direito quem compra de mim.', ganho: 'Você descobre quem é o seu cliente e passa a falar com ele.', frente: 'Pesquisa de público-alvo' },
+	{ frase: 'Não sei onde a minha marca se encaixa no mercado.', ganho: 'Você entende o seu lugar entre os concorrentes e as oportunidades do seu setor.', frente: 'Análise concorrencial' },
+	{ frase: 'Quero lançar um produto, mas não sei se vai vender.', ganho: 'Você só investe depois de saber se existe demanda.', frente: 'Análise de viabilidade' },
+	{ frase: 'Preciso de mais clientes e não sei onde investir em divulgação.', ganho: 'Você ganha um plano de marketing tradicional e digital feito para o seu público.', frente: 'Plano de marketing' },
+].map((d) => ({ ...d, href: `#${detalhes[d.frente].id}` }));
 
 // Rascunhos feitos só com fatos (validar: true). Sem resposta confirmada = sem `resposta`.
 const faq = [
@@ -62,104 +105,311 @@ const faq = [
 <SolucaoLayout
 	solucao={solucao}
 	titulo="Consultoria Mercadológica para conquistar novos mercados"
-	abertura={`A Consultoria Mercadológica da ${SITE.nome}, a ${SITE.nomeCompleto}, ajuda pequenas e médias empresas a vender mais com pesquisa de mercado, análise de viabilidade e plano de marketing. É consultoria estratégica feita por alunos da FGV, desde ${NUMEROS.fundacao}.`}
+	kicker="Para pequenas e médias empresas"
+	abertura="Pesquisa de mercado, análise de viabilidade e plano de marketing para você conhecer o seu público, achar o seu espaço no mercado e vender mais."
 	fotoHeader="equipe da EJFGV em trabalho real de pesquisa de mercado, em grupo"
-	beneficios={beneficios}
 	faq={faq}
 	depoimentos={depoimentos}
 >
-	<section slot="especifico" class="section_icp" aria-label="Consultoria mercadológica na prática">
+	<!-- 1. Para quem é: dores em primeira pessoa, cada uma leva à frente que a resolve -->
+	<section class="section_icp" aria-labelledby="merc-para-quem">
 		<div class="page-padding padding-section-medium">
-			<div class="container-large mercadologica_linhas">
-				<div class="icp_wrapper">
-					<div>
-						<div class="icp_header">
-							<span class="eyebrow">Entender o mercado</span>
-							<h2 id="pesquisa-de-mercado">Pesquisa de mercado e análise de viabilidade: respostas antes de investir</h2>
-							<p class="mercadologica_texto">A consultoria mercadológica da EJFGV parte de uma compreensão profunda do seu público. Com pesquisa e análise, ajudamos a sua empresa a responder perguntas como estas:</p>
-						</div>
-						<div class="icp_list">
-							{perguntas.map((p) => (
-								<div class="icp_item">
-									<h3>{p.titulo}</h3>
-									<p>{p.texto}</p>
-								</div>
-							))}
-						</div>
-						<p class="mercadologica_links">Quer ir mais fundo? A <a href="/consultoria-business-intelligence/">Consultoria de Business Intelligence</a> analisa o perfil do consumidor com dados, e a <a href="/consultoria-financeira/">Consultoria Financeira</a> estuda a rentabilidade e o tempo de retorno do investimento (payback).</p>
+			<div class="container-large">
+				<div class="mercadologica_cabecalho">
+					<div class="icp_header">
+						<span class="eyebrow">Para quem é</span>
+						<h2 id="merc-para-quem">Você se reconhece em alguma destas frases?</h2>
 					</div>
-					<ImagemReservada descricao="consultores analisando dados de mercado com o cliente (trabalho real)" classe="icp_image" />
+					<p>A consultoria mercadológica é para pequenas e médias empresas que querem posicionar a marca, lançar algo novo ou vender mais, decidindo com base no mercado, e não no achismo.</p>
 				</div>
+				<ul class="mercadologica_dores" role="list">
+					{dores.map((d) => (
+						<li class="icp_item mercadologica_dor">
+							<span class="mercadologica_aspas" aria-hidden="true">“</span>
+							<h3>{d.frase}</h3>
+							<p>{d.ganho}</p>
+							<a href={d.href} class="mercadologica_dor-link">Como resolvemos: {d.frente} <span aria-hidden="true">↓</span></a>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
 
-				<div class="icp_wrapper is-invertida">
-					<div>
-						<div class="icp_header">
-							<span class="eyebrow">Da análise à ação</span>
-							<h2 id="plano-de-marketing">Plano de marketing tradicional e digital para vender mais</h2>
-							<p class="mercadologica_texto">A partir do que descobrimos sobre o seu público e o seu mercado, montamos com você um plano de marketing tradicional e digital para divulgar o seu produto ou serviço e conquistar mais clientes. Você conta com a qualidade de uma consultoria sênior, com a energia e o custo-benefício de jovens talentos orientados por professores da FGV.</p>
-						</div>
-						<p class="mercadologica_prova"><strong>Na prática:</strong> com um plano de marketing, a demanda da <a href={maCerise.url}>confeitaria Ma Cerise</a> cresceu 1154% <span class="preencher">A preencher: confirmar percentual (1124% ou 1154%)</span> nos 3 meses seguintes ao projeto, e o faturamento ficou 10 vezes maior. Na <a href={talent.url}>Talent Academy</a>, o desafio era prospectar clientes: o plano foi do reposicionamento da marca às redes sociais, e o projeto foi 100% implementado.</p>
-						<p class="mercadologica_links">Ainda vai tirar uma ideia do papel? O <a href="/plano-de-negocios/">Plano de Negócios</a> reúne pesquisa de mercado, teste da ideia e os planos operacional, financeiro e de marketing.</p>
-						<div class="mercadologica_acoes">
-							<a href="#formulario" class="button">Quero um plano de marketing</a>
-						</div>
-					</div>
-					<ImagemReservada descricao="equipe apresentando um plano de marketing ao cliente (trabalho real)" classe="icp_image" />
+	<!-- 2. O que entra no projeto: introdução fixa à esquerda, frentes em linha do tempo à direita -->
+	<section id="o-que-entra" class="section_beneficios mercadologica_escopo" aria-labelledby="merc-escopo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large mercadologica_escopo-grid">
+				<div class="mercadologica_escopo-intro">
+					<span class="eyebrow">O que entra no projeto</span>
+					<h2 id="merc-escopo">Da pesquisa de mercado ao plano de marketing</h2>
+					<p>Primeiro entendemos o seu mercado e o seu público. Só então escolhemos, com critério, as estratégias de marketing mais eficazes, sem gastar com o que não serve para o seu negócio.</p>
+					<p class="mercadologica_nota">Cada projeto é sob medida: as frentes são definidas com você na proposta, depois do diagnóstico gratuito.</p>
+					<a href="#formulario" class="button">Quero meu diagnóstico gratuito</a>
 				</div>
+				<ol class="mercadologica_frentes" role="list">
+					{frentes.map((f, i) => (
+						<li id={f.id} class="mercadologica_frente">
+							<span class="mercadologica_num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+							<div class="frente_mini-card">
+								<span>{f.fase}</span>
+								<h3>{f.titulo ?? f.item}</h3>
+								<p class="mercadologica_pergunta">{f.pergunta}</p>
+								<p class="mercadologica_texto">{f.texto}</p>
+								{f.href && (
+									<p class="mercadologica_rel"><a href={f.href}>Conheça a consultoria completa</a></p>
+								)}
+								{f.rel && (
+									<p class="mercadologica_rel">
+										{f.rel.antes} <a href={outra(f.rel.slug).url}>{outra(f.rel.slug).nome}</a> {f.rel.depois}
+									</p>
+								)}
+							</div>
+						</li>
+					))}
+				</ol>
 			</div>
 		</div>
 	</section>
 </SolucaoLayout>
 
 <style>
-	.mercadologica_linhas {
+	/* Títulos das duas seções do corpo, um degrau acima do padrão para dar impacto */
+	.mercadologica_cabecalho h2,
+	.mercadologica_escopo-intro h2 {
+		font-size: clamp(1.85rem, 3vw, 2.6rem);
+		line-height: 1.12;
+		text-wrap: balance;
+	}
+
+	/* 1. Para quem é */
+	.mercadologica_cabecalho {
 		display: grid;
-		gap: clamp(3.5rem, 6vw, 5.5rem);
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem clamp(2rem, 5vw, 5rem);
+		align-items: end;
+		margin-bottom: 2.75rem;
 	}
 
-	.mercadologica_texto {
-		margin-top: 0.85rem;
+	.mercadologica_cabecalho .icp_header {
+		max-width: none;
+		margin-bottom: 0;
+	}
+
+	.mercadologica_cabecalho > p {
 		color: var(--gray600);
-		font-size: 1rem;
+		font-size: 1.05rem;
 		line-height: 1.65;
 	}
 
-	.mercadologica_prova {
-		padding: 1.25rem 1.5rem;
-		background: var(--white);
-		border: 1px solid var(--gray200);
-		border-left: 4px solid var(--primary600);
-		border-radius: var(--card-radius-md);
-		color: var(--gray700);
+	.mercadologica_dores {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.25rem;
+		list-style: none;
+	}
+
+	.mercadologica_dor {
+		gap: 0.75rem;
+		padding: 1.75rem 1.5rem 1.5rem;
+	}
+
+	.mercadologica_aspas {
+		height: 1.5rem;
+		color: var(--primary600);
+		font-size: 3.25rem;
+		font-weight: 900;
+		line-height: 1;
+	}
+
+	.mercadologica_dor h3 {
+		font-size: 1.15rem;
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.mercadologica_dor p {
+		font-size: 0.925rem;
+	}
+
+	.mercadologica_dor-link {
+		margin-top: auto;
+		padding-top: 1rem;
+		color: var(--primary700);
+		font-size: 0.875rem;
+		font-weight: 700;
+		border-top: 1px solid var(--gray200);
+	}
+
+	.mercadologica_dor-link:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	/* 2. O que entra no projeto (seção escura) */
+	.mercadologica_escopo {
+		overflow: clip; /* o .section_beneficios usa overflow: hidden, que impediria o sticky */
+	}
+
+	.mercadologica_escopo-grid {
+		display: grid;
+		grid-template-columns: 0.85fr 1.15fr;
+		gap: clamp(2.5rem, 5vw, 5rem);
+		align-items: start;
+	}
+
+	.mercadologica_escopo-intro h2 {
+		margin-top: 0.4rem;
+		color: var(--white);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+	}
+
+	.mercadologica_escopo-intro p {
+		margin-top: 1rem;
+		color: var(--graywarm300);
+		font-size: 1.05rem;
 		line-height: 1.65;
 	}
 
-	.mercadologica_links {
+	.mercadologica_escopo-intro p.mercadologica_nota {
 		margin-top: 1.5rem;
-		color: var(--gray600);
+		padding-left: 1rem;
+		font-size: 0.95rem;
+		border-left: 2px solid var(--primary500);
+	}
+
+	.mercadologica_escopo-intro .button {
+		margin-top: 2rem;
+	}
+
+	/* Linha do tempo: número em círculo + card, ligados por uma linha vertical */
+	.mercadologica_frentes {
+		display: grid;
+		gap: 1.25rem;
+		list-style: none;
+	}
+
+	.mercadologica_frente {
+		position: relative;
+		display: grid;
+		grid-template-columns: 3rem 1fr;
+		gap: 1.25rem;
+		scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+	}
+
+	.mercadologica_frente:not(:last-child)::before {
+		content: "";
+		position: absolute;
+		top: 3rem;
+		bottom: -1.25rem;
+		left: 1.5rem;
+		width: 1px;
+		background: var(--border-hairline-dark);
+	}
+
+	.mercadologica_num {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		color: var(--primary200);
+		font-size: 0.95rem;
+		font-weight: 800;
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: 50%;
+		transition: background 0.25s, border-color 0.25s, color 0.25s;
+	}
+
+	.mercadologica_frente h3 {
+		color: var(--white);
+		font-size: 1.2rem;
+		font-weight: 700;
+		line-height: 1.25;
+	}
+
+	.mercadologica_frente p.mercadologica_pergunta {
+		margin-top: 0.5rem;
+		color: var(--white);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.mercadologica_frente p.mercadologica_texto {
+		margin-top: 0.35rem;
 		font-size: 0.95rem;
 		line-height: 1.6;
 	}
 
-	.mercadologica_prova a,
-	.mercadologica_links a {
-		color: var(--primary700);
+	.mercadologica_frente p.mercadologica_rel {
+		margin-top: 1rem;
+		padding-top: 0.9rem;
+		font-size: 0.875rem;
+		border-top: 1px solid var(--border-hairline-dark);
+	}
+
+	.mercadologica_rel a {
+		color: var(--primary200);
 		font-weight: 600;
 		text-decoration: underline;
+		text-underline-offset: 2px;
 	}
 
-	.mercadologica_acoes {
-		margin-top: 1.75rem;
+	/* Vindo de um link de dor (âncora), a frente correspondente fica em destaque */
+	.mercadologica_frente:target .frente_mini-card {
+		border-color: var(--primary500);
 	}
 
-	/* Z-pattern da LP: na 2ª linha a imagem vai para a esquerda, só no desktop (o texto segue primeiro no HTML) */
+	.mercadologica_frente:target .mercadologica_num {
+		color: var(--white);
+		background: var(--primary600);
+		border-color: var(--primary600);
+	}
+
 	@media (min-width: 1025px) {
-		.is-invertida {
-			grid-template-columns: 0.85fr 1.15fr;
+		.mercadologica_escopo-intro {
+			position: sticky;
+			top: calc(var(--nav-height) + 2rem);
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.mercadologica_cabecalho,
+		.mercadologica_escopo-grid {
+			grid-template-columns: 1fr;
 		}
 
-		.is-invertida > :first-child {
-			order: 2;
+		.mercadologica_dores {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.mercadologica_dores {
+			grid-template-columns: 1fr;
+		}
+
+		.mercadologica_frente {
+			grid-template-columns: 2.25rem 1fr;
+			gap: 0.85rem;
+		}
+
+		.mercadologica_frente:not(:last-child)::before {
+			top: 2.25rem;
+			left: 1.125rem;
+		}
+
+		.mercadologica_num {
+			width: 2.25rem;
+			height: 2.25rem;
+			font-size: 0.8rem;
+		}
+
+		.mercadologica_frente .frente_mini-card {
+			padding: 1.25rem;
 		}
 	}
 </style>

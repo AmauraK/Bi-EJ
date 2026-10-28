@@ -1,52 +1,98 @@
 ---
-// Consultoria Operacional (/consultoria-operacional/). O SolucaoLayout monta o esqueleto comum; aqui ficam
-// a abertura, os benefícios, o FAQ e o conteúdo próprio (slot "especifico"): processos, responsabilidades,
-// dashboards (com link para BI) e cultura.
-// Fontes: consts.ts (SOLUCOES, CASES, NUMEROS, CITACAO_PROJETO), legado (site/conteudo/solucoes.mjs:
-// "Menos obstáculos. Mais espaço para crescer." / "Fazer a operação fluir"), a LP original e a descrição do
-// site atual ("Conduzimos uma análise interna detalhada…").
+// Consultoria Operacional (/consultoria-operacional/). O SolucaoLayout monta a moldura (cabeçalho, números,
+// cases, método, FAQ, formulário); aqui ficam o texto do cabeçalho, o FAQ e o corpo próprio, em 2 dobras:
+// 1. sinais de que é hora de contratar, cada um apontando para a frente que resolve (âncoras + :target)
+// 2. o que entra no projeto: as frentes do escopo em linguagem do dia a dia (Dashboards → BI).
+// Fontes: consts.ts (SOLUCOES: descrição, quandoFazSentido e escopo; CASES; NUMEROS) e o legado
+// (site/conteudo/solucoes.mjs: "Menos obstáculos. Mais espaço para crescer.").
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import ImagemReservada from '../components/ImagemReservada.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES } from '../consts';
+import { SITE, NUMEROS, SOLUCOES } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-operacional')!;
 const bi = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
-const caso = (slug: string) => CASES.find((c) => c.slug === slug)!;
-const menezes = caso('por-que-uma-reestruturacao-operacional-e-financeira-foi-essencial-para-a-menezes-e-emidio-advogados');
-const ricaVida = caso('ajudando-o-rica-vida-a-tirar-um-sonho-do-papel');
+const financeira = SOLUCOES.find((s) => s.slug === 'consultoria-financeira')!;
+const escopo = Object.fromEntries(solucao.escopo.map((e) => [e.item, e]));
 
-// Cada frente: sinal (quandoFazSentido, problema do case ou LP) → o que fazemos (descrição e escopo) → ganho.
+// Ícones de traço (SVG inline, mesmo estilo do Método).
+const icones = {
+	processos: '<rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a3 3 0 0 1 3 3v6"/>',
+	areas: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
+	sistema: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+	dashboards: '<path d="M3 21h18"/><rect x="5" y="11" width="3" height="7"/><rect x="10.5" y="5" width="3" height="13"/><rect x="16" y="13" width="3" height="5"/>',
+	cultura: '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5 4.8"/>',
+	benchmarks: '<path d="M12 3v18M8 21h8M5 7h14"/><path d="m5 7-3 7a3 3 0 0 0 6 0z"/><path d="m19 7-3 7a3 3 0 0 0 6 0z"/>',
+};
+
+// Frentes do escopo (consts) traduzidas para o que muda no dia a dia. A ordem conta a história:
+// como o trabalho flui → quem faz o quê → onde a informação fica → como acompanhar → equipe → referências.
 const frentes = [
 	{
-		tema: 'Processos',
-		titulo: 'Processos claros, do começo ao fim',
-		sinal: 'Processos mal definidos travam o dia a dia da empresa.',
-		fazemos: 'Fazemos o mapeamento de processos: desenhamos, etapa por etapa, como o trabalho acontece hoje e redesenhamos o que precisa mudar.',
-		ganho: 'Processos redesenhados e uma operação que flui, com menos obstáculos.',
-		link: { href: menezes.url, rotulo: `Veja o case da ${menezes.cliente}` },
+		item: 'Mapeamento de processos',
+		id: 'frente-processos',
+		icone: icones.processos,
+		titulo: 'Todo mundo trabalha do mesmo jeito',
+		texto: 'Desenhamos com a sua equipe como cada tarefa é feita hoje, etapa por etapa, e redesenhamos o que trava o dia a dia.',
 	},
 	{
-		tema: 'Responsabilidades',
+		item: 'Estruturação de áreas',
+		id: 'frente-areas',
+		icone: icones.areas,
 		titulo: 'Cada pessoa sabe o seu papel',
-		sinal: 'Funções sobrepostas ou mal divididas: fica difícil saber quem cuida do quê.',
-		fazemos: 'Montamos a matriz de responsabilidades, um quadro simples que mostra quem cuida de cada tarefa, e fazemos a estruturação das áreas da empresa.',
-		ganho: 'Funções bem definidas e áreas organizadas, sem sobreposição.',
-		link: { href: ricaVida.url, rotulo: `Veja como estruturamos a operação do ${ricaVida.cliente}` },
+		texto: 'Organizamos as áreas da empresa e montamos um quadro simples de quem faz, quem aprova e quem acompanha cada tarefa.',
 	},
 	{
-		tema: 'Dashboards',
-		titulo: 'Os números da operação à vista',
-		sinal: 'Informações espalhadas em planilhas soltas ou sistemas desconectados dificultam acompanhar a operação.',
-		fazemos: 'Entregamos dashboards, painéis visuais com os principais indicadores, e instrumentos de controle. Também indicamos o sistema de gestão mais adequado para a sua empresa.',
-		ganho: 'Indicadores claros para acompanhar a operação e decidir com segurança.',
-		link: { href: bi.url, rotulo: `Quer ir além dos painéis? Conheça a ${bi.nome}` },
+		item: 'Definição de sistema',
+		id: 'frente-sistema',
+		icone: icones.sistema,
+		titulo: 'A ferramenta certa para a sua realidade',
+		texto: 'Indicamos o sistema de gestão mais adequado para a sua empresa, para a informação ficar em um só lugar.',
 	},
 	{
-		tema: 'Cultura',
-		titulo: 'Uma cultura que motiva a equipe',
-		sinal: 'Equipe desmotivada e a sensação de estar perdendo o controle da empresa.',
-		fazemos: 'Conduzimos a reformulação cultural, que trata do jeito como a equipe trabalha e se relaciona. Também fazemos benchmarks com especialistas, comparando a sua operação com boas práticas.',
-		ganho: 'Uma cultura motivadora e inclusiva, alinhada à estratégia da empresa.',
+		item: 'Dashboards',
+		id: 'frente-dashboards',
+		icone: icones.dashboards,
+		titulo: 'Os números da operação em uma tela',
+		texto: 'Montamos painéis e instrumentos de controle com os indicadores que importam, para você acompanhar a empresa sem caçar planilhas.',
+		link: `Quer ir além dos painéis? Conheça a ${bi.nome}`,
+	},
+	{
+		item: 'Reformulação cultural',
+		id: 'frente-cultura',
+		icone: icones.cultura,
+		titulo: 'Uma equipe que rema junto',
+		texto: 'Revemos com você o jeito como a equipe trabalha e se relaciona, para criar uma cultura motivadora e inclusiva, alinhada à estratégia.',
+	},
+	{
+		item: 'Benchmarks com especialistas',
+		id: 'frente-benchmarks',
+		icone: icones.benchmarks,
+		titulo: 'Aprender com quem já faz bem',
+		texto: 'Comparamos a sua operação com boas práticas do mercado, com apoio de especialistas, e trazemos o que funciona para o seu caso.',
+	},
+].map((f) => ({ ...f, href: escopo[f.item]?.href }));
+
+const frente = (item: string) => frentes.find((f) => f.item === item)!;
+
+// Os dois momentos de quandoFazSentido, cada um com frases que o dono reconhece.
+const [controle, crescer] = solucao.quandoFazSentido;
+const momentos = [
+	{
+		titulo: controle.titulo,
+		resumo: 'Para quem sente que está perdendo o controle da empresa.',
+		sinais: [
+			{ frase: 'Ninguém sabe direito quem cuida do quê.', frente: frente('Estruturação de áreas') },
+			{ frase: 'Cada um faz de um jeito, e os mesmos erros se repetem.', frente: frente('Mapeamento de processos') },
+			{ frase: 'A equipe anda desmotivada.', frente: frente('Reformulação cultural') },
+		],
+	},
+	{
+		titulo: crescer.titulo,
+		resumo: 'Para quem quer rever cada detalhe da operação antes de expandir.',
+		sinais: [
+			{ frase: 'Para saber como a empresa está, preciso juntar várias planilhas.', frente: frente('Dashboards') },
+			{ frase: 'Não sei qual sistema de gestão faz sentido para nós.', frente: frente('Definição de sistema') },
+			{ frase: 'Quero saber como as empresas que fazem melhor se organizam.', frente: frente('Benchmarks com especialistas') },
+		],
 	},
 ];
 ---
@@ -54,22 +100,18 @@ const frentes = [
 <SolucaoLayout
 	solucao={solucao}
 	titulo="Consultoria Operacional para a sua operação fluir"
+	kicker="Processos, equipe e controle"
 	fotoHeader="trabalho real em grupo: consultores e equipe do cliente mapeando processos"
-	abertura={`A Consultoria Operacional da ${SITE.nome} organiza processos, funções e controles de pequenas e médias empresas, para a operação ter menos obstáculos e mais espaço para crescer. A ${SITE.nome} é a ${SITE.nomeCompleto}: desde ${NUMEROS.fundacao}, alunos da FGV fazem consultoria com orientação de professores.`}
-	beneficios={[
-		{ titulo: 'Mais eficiência no dia a dia', texto: 'Processos mapeados e redesenhados tiram obstáculos do caminho e deixam a operação mais eficiente.' },
-		{ titulo: 'Equipe alinhada e motivada', texto: 'Funções bem divididas e uma cultura motivadora e inclusiva fazem a equipe trabalhar na mesma direção.' },
-		{ titulo: 'Controle para crescer', texto: 'Dashboards, instrumentos de controle e o sistema de gestão mais adequado dão visão da operação e a deixam pronta para expandir.' },
-	]}
+	abertura="Organizamos processos, funções e controles de pequenas e médias empresas: menos obstáculos no dia a dia e mais espaço para crescer."
 	faq={[
 		{
 			pergunta: 'O que faz a Consultoria Operacional da EJFGV?',
-			resposta: `Organiza processos, funções e controles de pequenas e médias empresas. O projeto pode incluir mapeamento de processos, matriz de responsabilidades, estruturação de áreas, dashboards e instrumentos de controle, indicação do sistema de gestão mais adequado, reformulação cultural e benchmarks com especialistas. O trabalho é feito por alunos da FGV, com orientação de professores.`,
+			resposta: `Organiza o dia a dia de pequenas e médias empresas: processos, divisão de funções, controles e cultura. Conforme a necessidade, o projeto inclui mapeamento de processos, estruturação de áreas com um quadro de responsabilidades, dashboards e instrumentos de controle, indicação do sistema de gestão mais adequado, reformulação cultural e benchmarks com especialistas. O trabalho é feito por alunos da FGV, com orientação de professores.`,
 			validar: true,
 		},
 		{
 			pergunta: 'Quando vale a pena contratar uma consultoria operacional?',
-			resposta: 'Quando você sente que está perdendo o controle da empresa, com equipe desmotivada ou funções sobrepostas e mal divididas. Também quando quer rever cada detalhe da operação e deixá-la pronta para expandir e aumentar os resultados.',
+			resposta: 'Quando você sente que está perdendo o controle da empresa: equipe desmotivada, funções sobrepostas ou mal divididas, processos mal definidos. E também quando quer rever cada detalhe da operação para deixá-la pronta para expandir.',
 			validar: true,
 		},
 		{
@@ -79,70 +121,83 @@ const frentes = [
 		},
 		{
 			pergunta: 'Quanto tempo dura um projeto?',
-			resposta: `Os projetos da ${SITE.nome} duram em média ${NUMEROS.prazoMedioMeses} meses. Durante esse período, buscamos o maior alinhamento possível com a sua empresa, num processo intenso de cocriação.`,
+			resposta: `Os projetos da ${SITE.nome} duram em média ${NUMEROS.prazoMedioMeses} meses, em cocriação com a sua equipe.`,
 			validar: true,
 		},
 		{
 			pergunta: 'Como começar?',
-			resposta: `Preencha o formulário desta página ou chame no WhatsApp: o tempo médio de retorno da equipe é de até ${NUMEROS.retornoDiasUteis} dia útil. O primeiro passo é uma reunião de diagnóstico gratuita para identificar dores, desafios e oportunidades. Depois, apresentamos uma proposta com escopo, prazos e soluções personalizadas para a realidade da sua empresa.`,
+			resposta: `Preencha o formulário desta página ou chame no WhatsApp: respondemos em até ${NUMEROS.retornoDiasUteis} dia útil. O primeiro passo é uma reunião de diagnóstico gratuita; depois, apresentamos uma proposta com escopo, prazos e soluções para a realidade da sua empresa.`,
 			validar: true,
 		},
 		{ pergunta: 'Quanto custa uma consultoria operacional?' },
 	]}
 >
-	<section slot="especifico" class="section_icp" aria-labelledby="na-pratica-titulo">
+	<!-- 1. Quando contratar: frases que o dono reconhece, cada uma ligada à frente que resolve -->
+	<section class="section_icp operacional_sinais" aria-labelledby="sinais-titulo">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large">
-				<div class="operacional_intro">
-					<div class="icp_header">
-						<span class="eyebrow">Consultoria operacional na prática</span>
-						<h2 id="na-pratica-titulo">Como organizamos a sua operação</h2>
-						<p>Conduzimos uma análise interna detalhada da sua empresa e propomos soluções sob medida para alinhar estratégia e cultura, com mais eficiência na operação e melhores resultados.</p>
-						<p>O trabalho acontece lado a lado com a sua equipe e passa por quatro pontos: processos, responsabilidades, dashboards e cultura.</p>
-					</div>
-					<figure class="hero-photo-frame operacional_foto">
-						<ImagemReservada descricao="entregável real: consultor apresentando ao cliente um dashboard da operação" classe="home-hero_image" escuro />
-						<figcaption class="hero-photo-caption">
-							<div class="hero-photo-caption-left">
-								<span class="hero-photo-dot" aria-hidden="true"></span>
+				<div class="icp_header">
+					<span class="eyebrow">Quando contratar</span>
+					<h2 id="sinais-titulo">Alguma destas frases soa familiar?</h2>
+					<p>Cada uma tem uma frente do projeto pensada para resolver.</p>
+				</div>
+				<div class="operacional_momentos">
+					{momentos.map((m, i) => (
+						<div class="icp_item operacional_momento">
+							<div class="operacional_momento-topo">
+								<span class="operacional_momento-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
 								<div>
-									<strong>Projetos de {NUMEROS.prazoMedioMeses} meses em média</strong>
-									<span>Cocriação com a sua equipe e orientação de professores da FGV</span>
+									<h3>{m.titulo}</h3>
+									<p>{m.resumo}</p>
 								</div>
 							</div>
-						</figcaption>
-					</figure>
-				</div>
-
-				<ul class="operacional_frentes">
-					{frentes.map((f) => (
-						<li class="icp_item operacional_frente">
-							<span class="eyebrow">{f.tema}</span>
-							<h3>{f.titulo}</h3>
-							<dl class="operacional_dl">
-								<div>
-									<dt>Sinal de alerta</dt>
-									<dd>{f.sinal}</dd>
-								</div>
-								<div>
-									<dt>O que fazemos</dt>
-									<dd>{f.fazemos}</dd>
-								</div>
-								<div class="is-ganho">
-									<dt>O que você ganha</dt>
-									<dd>{f.ganho}</dd>
-								</div>
-							</dl>
-							{f.link && (
-								<a class="button-tertiary operacional_link" href={f.link.href}>{f.link.rotulo}&nbsp;<span aria-hidden="true">→</span></a>
-							)}
-						</li>
+							<ul class="operacional_sinais-lista">
+								{m.sinais.map((s) => (
+									<li class="operacional_sinal">
+										<p class="operacional_sinal-frase">“{s.frase}”</p>
+										<p class="operacional_sinal-resolve">
+											Resolvemos com <a href={`#${s.frente.id}`}>{s.frente.item}</a>&nbsp;<span aria-hidden="true">↓</span>
+										</p>
+									</li>
+								))}
+							</ul>
+						</div>
 					))}
-				</ul>
+				</div>
+			</div>
+		</div>
+	</section>
 
-				<div class="operacional_cta">
-					<p>Não sabe por onde começar? O diagnóstico é gratuito e sem compromisso.</p>
-					<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+	<!-- 2. O que entra no projeto: cada frente do escopo com o que muda no dia a dia -->
+	<section id="o-que-entra" class="section_beneficios operacional_escopo" aria-labelledby="escopo-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="beneficios_wrapper">
+					<div class="beneficios_title">
+						<span class="eyebrow">O que entra no projeto</span>
+						<h2 id="escopo-titulo">{frentes.length} frentes para colocar a operação em ordem</h2>
+						<p>Você não precisa de todas: no <a href="#formulario">diagnóstico gratuito</a>, definimos juntos quais fazem sentido para a sua empresa.</p>
+					</div>
+
+					<ul class="operacional_frentes">
+						{frentes.map((f) => (
+							<li id={f.id} class="frente_mini-card operacional_frente">
+								<div class="operacional_frente-icone" aria-hidden="true">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={f.icone} />
+								</div>
+								<span>{f.item}</span>
+								<h3>{f.titulo}</h3>
+								<p>{f.texto}</p>
+								{f.href && f.link && (
+									<a class="operacional_frente-link" href={f.href}>{f.link}&nbsp;<span class="operacional_seta" aria-hidden="true">→</span></a>
+								)}
+							</li>
+						))}
+					</ul>
+
+					<div class="operacional_nota">
+						<p>Operação e finanças costumam andar juntas: nos cases logo abaixo, o projeto organizou as duas. Se o aperto também está no caixa, conheça a <a href={financeira.url}>{financeira.nome}</a>.</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -150,117 +205,204 @@ const frentes = [
 </SolucaoLayout>
 
 <style>
-	.operacional_intro {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: clamp(2rem, 4vw, 3.5rem);
-		align-items: center;
-		margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
-	}
-
-	.operacional_intro .icp_header {
-		margin-bottom: 0;
-	}
-
-	.operacional_intro p {
-		margin-top: 1rem;
-		font-size: 1rem;
-		line-height: 1.65;
+	/* 1. Sinais */
+	.operacional_sinais .icp_header p {
+		margin-top: 0.75rem;
 		color: var(--gray600);
+		font-size: 1.05rem;
+		line-height: 1.6;
 	}
 
-	/* Dados sobre a foto (referência Insper Jr): o rótulo do espaço reservado sobe para não ficar sob a legenda */
-	.operacional_foto :global(.image-placeholder) {
+	.operacional_momentos {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+	}
+
+	.operacional_sinais .operacional_momento {
+		gap: 1.5rem;
+		padding: clamp(1.5rem, 3vw, 2.25rem);
+	}
+
+	/* O card não "pula" no hover: ele tem links dentro */
+	.operacional_sinais .operacional_momento:hover {
+		transform: none;
+	}
+
+	.operacional_momento-topo {
+		display: flex;
 		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.operacional_momento-num {
+		display: grid;
+		flex-shrink: 0;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		color: var(--primary700);
+		font-size: 0.85rem;
+		font-weight: 800;
+		background: var(--primary50);
+		border-radius: 999px;
+	}
+
+	.operacional_sinais .operacional_momento h3 {
+		font-size: clamp(1.25rem, 1.9vw, 1.5rem);
+		font-weight: 800;
+		letter-spacing: -0.015em;
+		line-height: 1.2;
+	}
+
+	.operacional_sinais .operacional_momento-topo p {
+		margin-top: 0.3rem;
+		font-size: 0.95rem;
+	}
+
+	.operacional_sinais-lista {
+		display: grid;
+		gap: 0.75rem;
+		list-style: none;
+	}
+
+	.operacional_sinal {
+		padding: 1rem 1.15rem;
+		background: var(--gray50);
+		border-left: 3px solid var(--gray300);
+		border-radius: 0.75rem;
+		transition: border-color 0.25s;
+	}
+
+	.operacional_sinal:hover,
+	.operacional_sinal:focus-within {
+		border-left-color: var(--primary600);
+	}
+
+	.operacional_sinais .operacional_sinal-frase {
+		color: var(--gray900);
+		font-size: 1.05rem;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+
+	.operacional_sinais .operacional_sinal-resolve {
+		margin-top: 0.35rem;
+		color: var(--gray600);
+		font-size: 0.875rem;
+	}
+
+	.operacional_sinal-resolve a {
+		color: var(--primary700);
+		font-weight: 700;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	/* 2. Frentes (seção escura) */
+	.operacional_escopo .beneficios_title p a,
+	.operacional_nota a {
+		color: var(--white);
+		font-weight: 700;
+		text-decoration: underline;
+		text-decoration-color: var(--primary300);
+		text-underline-offset: 3px;
 	}
 
 	.operacional_frentes {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		gap: 1.25rem;
 		list-style: none;
 	}
 
 	.operacional_frente {
-		gap: 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
 		padding: clamp(1.5rem, 2.5vw, 2rem);
+		scroll-margin-top: calc(var(--nav-height) + 1.5rem);
 	}
 
-	.operacional_frente h3 {
-		font-size: 1.2rem;
-		font-weight: 800;
-		letter-spacing: -0.01em;
+	/* Frente aberta por um link dos sinais */
+	.operacional_frente:target {
+		border-color: var(--primary500);
+		box-shadow: 0 0 0 1px var(--primary500);
 	}
 
-	.operacional_dl {
+	.operacional_frente-icone {
 		display: grid;
-		gap: 0.85rem;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-bottom: 0.85rem;
+		color: var(--primary200);
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: 0.75rem;
 	}
 
-	.operacional_dl dt {
-		margin-bottom: 0.2rem;
-		font-size: 0.72rem;
+	.operacional_frente-icone svg {
+		width: 1.4rem;
+		height: 1.4rem;
+	}
+
+	.operacional_frentes .operacional_frente h3 {
+		color: var(--white);
+		font-size: 1.2rem;
 		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--gray500);
+		letter-spacing: -0.01em;
+		line-height: 1.3;
 	}
 
-	.operacional_dl dd {
+	.operacional_frentes .operacional_frente p {
+		margin-top: 0.25rem;
 		font-size: 0.925rem;
 		line-height: 1.55;
-		color: var(--gray700);
 	}
 
-	.operacional_dl .is-ganho {
-		padding-left: 0.85rem;
-		border-left: 3px solid var(--primary600);
-	}
-
-	.operacional_dl .is-ganho dd {
-		font-weight: 600;
-		color: var(--gray900);
-	}
-
-	/* inline-block (e não o inline-flex do .button-tertiary): a seta acompanha o texto quando ele quebra */
-	.operacional_link {
-		display: inline-block;
-		align-self: flex-start;
-		height: auto;
+	.operacional_frente-link {
 		margin-top: auto;
-		padding: 0.35rem 0;
-		white-space: normal;
-		text-align: left;
-	}
-
-	.operacional_link:hover {
-		background-color: transparent;
+		padding-top: 1rem;
+		color: var(--primary200);
+		font-size: 0.9rem;
+		font-weight: 700;
 		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 
-	.operacional_cta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: 1rem 1.5rem;
-		margin-top: clamp(2.5rem, 4vw, 3.5rem);
+	/* A seta não herda o estilo de rótulo do .frente_mini-card span */
+	.operacional_frentes .operacional_seta {
+		display: inline;
+		margin: 0;
+		color: inherit;
+		font-size: inherit;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.operacional_nota {
+		padding-top: clamp(1.75rem, 3vw, 2.5rem);
+		border-top: 1px solid var(--border-hairline-dark);
+	}
+
+	.operacional_nota p {
+		max-width: 46rem;
+		margin: 0 auto;
+		color: var(--graywarm300);
+		font-size: 1.05rem;
+		line-height: 1.6;
 		text-align: center;
 	}
 
-	.operacional_cta p {
-		font-size: clamp(1.1rem, 1.6vw, 1.3rem);
-		font-weight: 700;
-		color: var(--gray900);
-	}
-
 	@media (max-width: 1024px) {
-		.operacional_intro {
-			grid-template-columns: 1fr;
+		.operacional_frentes {
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	@media (max-width: 767px) {
+		.operacional_momentos,
 		.operacional_frentes {
 			grid-template-columns: 1fr;
 		}
