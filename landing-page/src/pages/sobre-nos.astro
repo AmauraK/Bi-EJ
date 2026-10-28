@@ -145,9 +145,13 @@ const faq = [
 							{VALORES.map((valor, i) => (
 								<li class="sobre-valor">
 									<button type="button" class="sobre-valor_botao" aria-expanded="false" aria-controls={`valor-${i}`}>
-										<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+										<span class="sobre-valor_topo" aria-hidden="true">
+											<span class="sobre-valor_bloco"></span>
+											<span class="sobre-valor_rotulo">Valor {String(i + 1).padStart(2, '0')}</span>
+											<span class="sobre-valor_icone"></span>
+										</span>
 										<span class="sobre-valor_nome">{valor.nome}</span>
-										<span class="sobre-valor_seta" aria-hidden="true"></span>
+										<span class="sobre-valor_numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
 									</button>
 									<div class="sobre-valor_painel" id={`valor-${i}`}>
 										<p>{valor.texto || <span class="preencher">A preencher: explicação de “{valor.nome}”</span>}</p>
@@ -414,77 +418,201 @@ const faq = [
 		line-height: 1.6;
 	}
 
+	/* Valores: cada card carrega a sua cor do DS em --cor (os "quadradinhos" do docx) */
 	.sobre-valores {
 		list-style: none;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 1rem;
-	}
-
-	.sobre-valores {
 		align-items: start; /* o card aberto cresce sem esticar os vizinhos da linha */
 	}
 
 	.sobre-valor {
+		--cor: var(--primary600);
+		position: relative;
+		overflow: hidden; /* corta o número gigante no canto do card */
 		background: var(--graywarm950);
 		border: 1px solid var(--border-hairline-dark);
 		border-radius: var(--card-radius-md);
-		color: var(--white);
-		font-size: 1.05rem;
-		font-weight: 700;
-		line-height: 1.3;
-		transition: border-color 0.3s ease;
+		transition: border-color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
 	}
 
-	.sobre-valor:has(.is-aberto) {
-		border-color: var(--primary600);
+	.sobre-valor:nth-child(3n + 2) {
+		--cor: var(--primary200);
+	}
+
+	.sobre-valor:nth-child(3n) {
+		--cor: var(--graywarm300);
 	}
 
 	.sobre-valor_botao {
 		display: flex;
-		align-items: center;
-		gap: 1rem;
+		flex-direction: column;
+		gap: 2rem;
 		width: 100%;
-		padding: 1.15rem 1.25rem;
-		color: inherit;
-		font: inherit;
+		min-height: 11rem;
+		padding: 1.35rem 1.35rem 1.5rem;
+		background: none;
+		border: 0;
+		color: var(--white);
 		text-align: left;
 		cursor: pointer;
 	}
 
-	.sobre-valor_nome {
+	/* O overflow do card cortaria o anel de foco do botão, então o anel vai para o card */
+	.sobre-valor_botao:focus-visible {
+		outline: none;
+	}
+
+	.sobre-valor:has(.sobre-valor_botao:focus-visible) {
+		outline: 2px solid var(--primary200);
+		outline-offset: 3px;
+	}
+
+	.sobre-valor_topo {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	/* O quadradinho estica até virar a barra do hero (.home-hero_divider) */
+	.sobre-valor_bloco {
+		width: var(--hero-divider-h);
+		height: var(--hero-divider-h);
+		background: var(--cor);
+		border-radius: 2px;
+		transition: width 0.6s var(--ease-out-expo);
+	}
+
+	.sobre-valor_rotulo {
 		flex: 1;
+		color: var(--graywarm300);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
 	}
 
-	.sobre-valor_seta {
-		width: 0.55rem;
-		height: 0.55rem;
-		border-right: 2px solid var(--graywarm300);
-		border-bottom: 2px solid var(--graywarm300);
-		transform: rotate(45deg);
-		transition: transform 0.3s ease;
+	/* "+" que gira para "×", como no FAQ */
+	.sobre-valor_icone {
+		position: relative;
+		flex-shrink: 0;
+		width: 2rem;
+		height: 2rem;
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: 50%;
+		transition: background 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
 	}
 
-	.sobre-valor_botao.is-aberto .sobre-valor_seta {
-		transform: rotate(-135deg);
+	.sobre-valor_icone::before,
+	.sobre-valor_icone::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0.7rem;
+		height: 2px;
+		background: var(--white);
+		transform: translate(-50%, -50%);
+		transition: background 0.3s;
+	}
+
+	.sobre-valor_icone::after {
+		transform: translate(-50%, -50%) rotate(90deg);
+	}
+
+	/* Mesmo jogo de peso variável do wordmark da navegação: do 800 ao fino e largo */
+	.sobre-valor_nome {
+		position: relative;
+		z-index: 1;
+		max-width: 11ch;
+		margin-top: auto;
+		font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+		font-weight: 800;
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+		font-variation-settings: 'wght' 800, 'wdth' 100;
+		transition: font-variation-settings 0.6s var(--ease-out-expo);
+	}
+
+	/* Número gigante vazado; preenche com a cor do card no hover e quando aberto */
+	.sobre-valor_numero {
+		position: absolute;
+		right: -0.04em;
+		bottom: -0.3em;
+		color: transparent;
+		font-size: 7.5rem;
+		font-weight: 900;
+		line-height: 1;
+		letter-spacing: -0.05em;
+		-webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
+		pointer-events: none;
+		transition: color 0.6s var(--ease-out-expo), -webkit-text-stroke-color 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+	}
+
+	.sobre-valor:has(.is-aberto) {
+		border-color: var(--cor);
+	}
+
+	.sobre-valor_botao.is-aberto .sobre-valor_bloco {
+		width: var(--hero-divider-w);
+	}
+
+	.sobre-valor_botao.is-aberto .sobre-valor_icone {
+		background: var(--cor);
+		border-color: var(--cor);
+		transform: rotate(135deg);
+	}
+
+	.sobre-valor_botao.is-aberto .sobre-valor_icone::before,
+	.sobre-valor_botao.is-aberto .sobre-valor_icone::after {
+		background: var(--graywarm950);
+	}
+
+	.sobre-valor_botao.is-aberto .sobre-valor_numero {
+		color: color-mix(in srgb, var(--cor) 16%, transparent);
+		-webkit-text-stroke-color: var(--cor);
+	}
+
+	@media (hover: hover) {
+		.sobre-valor:hover {
+			border-color: var(--cor);
+			transform: translateY(-3px);
+		}
+
+		.sobre-valor:hover .sobre-valor_bloco {
+			width: var(--hero-divider-w);
+		}
+
+		.sobre-valor:hover .sobre-valor_nome {
+			font-variation-settings: 'wght' 300, 'wdth' 115;
+		}
+
+		.sobre-valor:hover .sobre-valor_numero {
+			color: color-mix(in srgb, var(--cor) 16%, transparent);
+			-webkit-text-stroke-color: var(--cor);
+			transform: translateY(-0.08em);
+		}
 	}
 
 	/* Abre/fecha animando a altura: a linha do grid vai de 0fr a 1fr */
 	.sobre-valor_painel {
+		position: relative;
+		z-index: 1;
 		display: grid;
 		grid-template-rows: 0fr;
-		transition: grid-template-rows 0.3s ease;
+		transition: grid-template-rows 0.4s var(--ease-out-expo);
 	}
 
 	.sobre-valor_painel > p {
 		overflow: hidden;
-		padding: 0 1.25rem;
+		max-width: 30ch;
+		padding: 0 1.35rem;
 		color: var(--graywarm300);
 		font-size: 0.95rem;
-		font-weight: 400;
 		line-height: 1.6;
 		opacity: 0;
-		transition: opacity 0.3s ease, padding 0.3s ease;
+		transition: opacity 0.4s ease, padding 0.4s var(--ease-out-expo);
 	}
 
 	.sobre-valor_botao.is-aberto + .sobre-valor_painel {
@@ -492,40 +620,22 @@ const faq = [
 	}
 
 	.sobre-valor_botao.is-aberto + .sobre-valor_painel > p {
-		padding-bottom: 1.15rem;
+		padding-bottom: 1.5rem;
 		opacity: 1;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.sobre-valor,
-		.sobre-valor_seta,
-		.sobre-valor_painel,
-		.sobre-valor_painel > p {
+		.sobre-valor *,
+		.sobre-valor *::before,
+		.sobre-valor *::after {
 			transition: none;
 		}
-	}
 
-	/* Os "quadradinhos" (docx): cores do DS, alternadas */
-	.sobre-valor_bloco {
-		display: grid;
-		place-items: center;
-		flex-shrink: 0;
-		width: 2.75rem;
-		height: 2.75rem;
-		border-radius: 0.5rem;
-		background: var(--primary600);
-		color: var(--graywarm950);
-		font-size: 0.8rem;
-		font-weight: 800;
-		letter-spacing: 0.04em;
-	}
-
-	.sobre-valor:nth-child(3n + 2) .sobre-valor_bloco {
-		background: var(--primary200);
-	}
-
-	.sobre-valor:nth-child(3n) .sobre-valor_bloco {
-		background: var(--graywarm300);
+		.sobre-valor:hover,
+		.sobre-valor:hover .sobre-valor_numero {
+			transform: none;
+		}
 	}
 
 	/* 5. Nosso impacto */
@@ -743,6 +853,15 @@ const faq = [
 		.sobre-cards.is-tres,
 		.sobre-cards.is-dois {
 			grid-template-columns: 1fr;
+		}
+
+		.sobre-valor_botao {
+			min-height: 8.5rem;
+			gap: 1.5rem;
+		}
+
+		.sobre-valor_numero {
+			font-size: 6rem;
 		}
 
 		.sobre-cards {
