@@ -1,0 +1,29 @@
+---
+// Banner de conversão (.beneficios_banner da LP). Laranja: texto escuro e .button-secondary (nunca laranja
+// sobre laranja). Escuro (.is-dark): botão primário.
+interface Props {
+	titulo: string;
+	href: string;
+	rotulo: string;
+	escuro?: boolean;
+}
+
+const { titulo, href, rotulo, escuro = false } = Astro.props;
+---
+
+<section class="cta-banner" aria-label={titulo}>
+	<div class="page-padding">
+		<div class="container-large">
+			<div class:list={['beneficios_banner', { 'is-dark': escuro }]}>
+				<p class="beneficios-banner_title">{titulo}</p>
+				<a href={href} class:list={[escuro ? 'button' : 'button-secondary']}>{rotulo}</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cta-banner {
+		padding: clamp(2.5rem, 5vw, 4rem) 0;
+	}
+</style>

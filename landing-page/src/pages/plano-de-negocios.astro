@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
 import EtapasPlanoCompleto from '../components/solucoes/plano-de-negocios/EtapasPlanoCompleto.astro';
 import PorQuePlanoEjfgv from '../components/solucoes/plano-de-negocios/PorQuePlanoEjfgv.astro';
@@ -48,3 +49,314 @@ const faqItens = [
     <PorQuePlanoEjfgv />
   </div>
 </SolucaoLayout>
+=======
+// Plano de Negócios (/plano-de-negocios/). O SolucaoLayout monta o esqueleto comum; aqui ficam a abertura,
+// os benefícios, o FAQ e o conteúdo próprio (slot "especifico", pedido no docx):
+// "O que é necessário para um Plano de Negócios completo" (pesquisa, MVP sem jargão e os planos operacional,
+// financeiro e de marketing, cada um com link) e "Por que fazer o seu plano com a EJFGV" (diferencial,
+// expertise e metodologia).
+// Fontes: consts.ts (SOLUCOES, CASES, NUMEROS, METODO, CITACAO_PROJETO), o legado (site/conteudo/solucoes.mjs:
+// "Tirar uma ideia do papel"; site/modelos/servico.mjs: "O escopo de cada projeto é definido na proposta"),
+// a LP original e o docx.
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import { SITE, NUMEROS, SOLUCOES, CASES, METODO } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'plano-de-negocios')!;
+const solucaoDe = (slug: string) => SOLUCOES.find((s) => s.slug === slug)!;
+const caseAudio = CASES.find((c) => c.slug.includes('empresa-de-audio'))!;
+const etapas = new Intl.ListFormat('pt-BR', { type: 'conjunction' }).format(METODO.map((e) => e.nome));
+
+// Ícones do CDN da EJ (os mesmos da LP original).
+const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
+const CHECK = `${CDN}/671c665a9c8c2a788c93dd9b_check-icon.svg`;
+
+// As partes de um plano completo, cada uma respondendo a uma pergunta de quem empreende (escopo da solução).
+const partes = [
+	{
+		parte: 'Pesquisa de mercado',
+		pergunta: 'A sua ideia tem público?',
+		texto: 'Antes de colocar dinheiro no negócio, a pesquisa de mercado mostra se existe demanda para o seu produto ou serviço e se a ideia é viável.',
+	},
+	{
+		parte: 'MVP',
+		pergunta: 'Dá para testar antes de investir?',
+		texto: 'Dá, com um MVP. A sigla vem do inglês e significa “produto mínimo viável”: uma primeira versão, simples, do seu produto ou serviço, feita para testar a ideia na prática antes do investimento. A EJFGV elabora e acompanha esse teste com você.',
+	},
+	{
+		parte: 'Plano operacional',
+		pergunta: 'Como a empresa vai funcionar no dia a dia?',
+		texto: 'O plano operacional organiza as atividades iniciais, os processos e quem faz o quê, para a empresa começar a operar sem improviso.',
+		link: solucaoDe('consultoria-operacional'),
+	},
+	{
+		parte: 'Plano financeiro',
+		pergunta: 'A conta fecha?',
+		texto: 'O plano financeiro coloca os números na ponta do lápis: quanto será preciso investir, quanto custa manter a operação e se o negócio se paga.',
+		link: solucaoDe('consultoria-financeira'),
+	},
+	{
+		parte: 'Plano de marketing',
+		pergunta: 'Como os clientes vão chegar até você?',
+		texto: 'O plano de marketing define como o seu público vai conhecer e escolher a sua marca, com ações de marketing tradicional e digital para divulgar o produto ou serviço.',
+		link: solucaoDe('consultoria-mercadologica'),
+	},
+	{
+		parte: 'Apresentação para investidores',
+		pergunta: 'E se o negócio precisar de investimento?',
+		texto: 'Quando o próximo passo é buscar recursos, o plano vira uma apresentação clara para investidores, com a estratégia e os números do negócio.',
+	},
+];
+
+// Por que a EJFGV: diferencial, expertise e metodologia (docx), só com fatos de consts e do legado.
+const motivos = [
+	{
+		rotulo: 'Diferencial',
+		icone: `${CDN}/672a37aed9b0d27f7453d2a3_novas-icon.svg`,
+		titulo: 'Um plano completo, em um só projeto',
+		texto: `Pesquisa, teste da ideia, operação, finanças e marketing são construídos juntos, para que cada parte do plano converse com as outras. E, como a ${SITE.nome} também faz consultoria operacional, financeira, mercadológica e de Business Intelligence, você pode se aprofundar em qualquer área quando o negócio pedir.`,
+		itens: [
+			'Escopo sob medida, definido na proposta depois de entendermos o seu momento',
+			'Para ideias novas e para empresas já consolidadas',
+			'Direcionadores de curto a longo prazo, como missão, visão e valores',
+		],
+		foto: 'consultores e cliente montando juntos o plano de negócios',
+	},
+	{
+		rotulo: 'Expertise',
+		icone: `${CDN}/671c65bcad794eb512f4b579_visibility-icon.svg`,
+		titulo: 'Alunos da FGV, com orientação de professores',
+		texto: 'Quem constrói o seu plano são alunos da graduação da FGV, com orientação de professores da FGV, instituição reconhecida internacionalmente pela excelência em ensino, pesquisa e consultoria.',
+		itens: [
+			`+${NUMEROS.projetos} projetos entregues desde ${NUMEROS.fundacao}`,
+			`${NUMEROS.setores} setores atendidos, de diferentes segmentos e portes`,
+			'A primeira empresa júnior da América Latina',
+		],
+		pendente: 'como os consultores são capacitados (FGV, Bain e Brasil Júnior)',
+		foto: 'alunos-consultores da FGV trabalhando com um professor orientador',
+	},
+	{
+		rotulo: 'Metodologia',
+		icone: `${CDN}/671c65bc0ece9976827460a6_speed-icon.svg`,
+		titulo: 'Um método claro, do diagnóstico gratuito à entrega',
+		texto: `Todo projeto segue ${METODO.length} etapas: ${etapas}. Os projetos duram em média ${NUMEROS.prazoMedioMeses} meses, com muito alinhamento e cocriação com você.`,
+		itens: [
+			'Diagnóstico gratuito e sem compromisso',
+			'Proposta com escopo e prazos sob medida para a realidade da sua empresa',
+			'Execução acompanhada por professores da FGV, com implementação prática',
+		],
+		pendente: 'ferramentas e entregáveis do plano de negócios (o que o cliente recebe no fim)',
+		foto: 'reunião de diagnóstico com o cliente',
+	},
+];
+---
+
+<SolucaoLayout
+	solucao={solucao}
+	titulo="Plano de Negócios para tirar sua ideia do papel"
+	fotoHeader="trabalho real: consultores da EJFGV e cliente montando o plano de negócios"
+	abertura={`O Plano de Negócios da ${SITE.nome}, a ${SITE.nomeCompleto}, reúne em um só projeto tudo o que é necessário para uma ideia virar negócio: pesquisa de mercado, teste da ideia e os planos operacional, financeiro e de marketing. É para pequenas e médias empresas, novas ou já consolidadas, e é feito por alunos da FGV com orientação de professores. Desde ${NUMEROS.fundacao}, a ${SITE.nome} transforma realidades de negócios.`}
+	beneficios={[
+		{ titulo: 'Saber se a ideia se sustenta antes de investir', texto: 'A pesquisa de mercado e um primeiro teste do produto ou serviço mostram se existe demanda antes de você colocar dinheiro no negócio.' },
+		{ titulo: 'O negócio inteiro em um só plano', texto: 'Operação, finanças e marketing pensados juntos, com direcionadores de curto a longo prazo, como missão, visão e valores.' },
+		{ titulo: 'Uma estratégia pronta para o mercado', texto: 'Você sai do projeto com uma estratégia clara e sustentável para começar a operar e, se precisar, com uma apresentação para investidores.' },
+	]}
+	faq={[
+		{
+			pergunta: 'O que é um plano de negócios?',
+			resposta: `É o documento que mostra o caminho de uma ideia ou empresa: se existe mercado, como a operação vai funcionar, como ficam as finanças e como o produto ou serviço vai ser divulgado. O plano da ${SITE.nome} também traz direcionadores estratégicos de curto a longo prazo, como missão, visão e valores.`,
+			validar: true,
+		},
+		{
+			pergunta: `Minha ideia ainda não saiu do papel. A ${SITE.nome} pode ajudar?`,
+			resposta: 'Sim. O projeto pode começar do zero: organizamos a ideia, analisamos se ela é viável e pesquisamos o mercado. Depois, um MVP (uma primeira versão simples do produto ou serviço) testa a ideia antes do investimento.',
+			validar: true,
+		},
+		{
+			pergunta: 'Minha empresa já existe. O plano de negócios também serve para mim?',
+			resposta: `Sim. O serviço atende negócios novos e consolidados. Em um dos nossos cases, uma empresa de áudio já consolidada no mercado planejou um novo negócio com a ${SITE.nome}: “${caseAudio.destaque}”.`,
+			validar: true,
+		},
+		{
+			pergunta: 'Quem faz o plano de negócios?',
+			resposta: `Alunos da graduação da FGV, com orientação de professores da FGV. A ${SITE.nome} é a ${SITE.nomeCompleto}, a primeira empresa júnior da América Latina, fundada em ${NUMEROS.fundacao} e com mais de ${NUMEROS.projetos} projetos entregues.`,
+			validar: true,
+		},
+		{
+			pergunta: 'Quanto tempo leva um plano de negócios?',
+			resposta: `Os projetos da ${SITE.nome} duram, em média, ${NUMEROS.prazoMedioMeses} meses. O escopo e os prazos de cada plano são definidos na proposta, depois do diagnóstico gratuito.`,
+			validar: true,
+		},
+		{ pergunta: 'Quanto custa um plano de negócios?' },
+	]}
+>
+	<Fragment slot="especifico">
+		<section class="section_plano-completo" aria-labelledby="plano-completo-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="plano-completo_grid">
+						<div class="icp_header plano-completo_intro">
+							<span class="eyebrow">Serviço completo</span>
+							<h2 id="plano-completo-titulo">O que é necessário para um Plano de Negócios completo</h2>
+							<p>Um plano de negócios completo responde, com pesquisa e números, às perguntas que todo empreendedor se faz antes de investir. Na {SITE.nome}, essas respostas são construídas juntas, em um só projeto e lado a lado com você.</p>
+							<p>Nada de peças soltas: você sai com um caminho claro, do teste da ideia ao negócio pronto para operar.</p>
+							<a href="#formulario" class="button is-button-large">Quero meu plano de negócios</a>
+						</div>
+						<ol class="plano-completo_lista">
+							{partes.map((p, i) => (
+								<li class="icp_item plano-completo_item">
+									<span class="plano-completo_num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+									<div>
+										<span class="eyebrow">{p.parte}</span>
+										<h3>{p.pergunta}</h3>
+										<p>{p.texto}</p>
+										{p.link && <a class="plano-completo_link" href={p.link.url}>Conheça a {p.link.nome}&nbsp;→</a>}
+									</div>
+								</li>
+							))}
+						</ol>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="section_beneficios" aria-labelledby="por-que-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="beneficios_wrapper">
+						<div class="beneficios_title">
+							<span class="beneficios_eyebrow">Diferencial, expertise e metodologia</span>
+							<h2 id="por-que-titulo">Por que fazer o seu plano de negócios com a {SITE.nome}</h2>
+							<p>Um bom plano depende de quem faz e de como faz. Veja o que a {SITE.nomeCompleto} coloca em cada projeto.</p>
+						</div>
+						<div class="beneficios_list">
+							{motivos.map((m) => (
+								<div class="beneficios_item por-que_item">
+									<div>
+										<img src={m.icone} loading="lazy" alt="" class="vantagens_icon" />
+										<span class="eyebrow">{m.rotulo}</span>
+										<h3>{m.titulo}</h3>
+										<p>{m.texto}</p>
+										<ul class="vantagens_list">
+											{m.itens.map((item) => (
+												<li class="vantagens_list-item">
+													<img src={CHECK} loading="lazy" alt="" />
+													<span>{item}</span>
+												</li>
+											))}
+										</ul>
+										{m.pendente && <p class="por-que_pendente"><span class="preencher">A preencher: {m.pendente}</span></p>}
+									</div>
+									<ImagemReservada descricao={m.foto} classe="vantagens_image" escuro />
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</Fragment>
+</SolucaoLayout>
+
+<style>
+	#plano-completo-titulo,
+	#por-que-titulo {
+		text-wrap: balance;
+	}
+
+	.plano-completo_grid {
+		display: grid;
+		grid-template-columns: 0.85fr 1.15fr;
+		gap: clamp(2rem, 5vw, 4.5rem);
+		align-items: start;
+	}
+
+	/* A introdução e o botão ficam à vista enquanto a lista rola (desktop). */
+	.plano-completo_intro {
+		position: sticky;
+		top: calc(var(--nav-height) + 1.5rem);
+		margin-bottom: 0;
+	}
+
+	.plano-completo_intro p {
+		margin-top: 1rem;
+		font-size: 1rem;
+		line-height: 1.65;
+		color: var(--gray600);
+	}
+
+	.plano-completo_intro .button {
+		margin-top: 1.75rem;
+	}
+
+	.plano-completo_lista {
+		display: grid;
+		gap: 1rem;
+		list-style: none;
+	}
+
+	.plano-completo_item {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.5rem 1.25rem;
+		align-items: start;
+	}
+
+	.plano-completo_num {
+		font-size: 1.5rem;
+		font-weight: 900;
+		line-height: 1.25;
+		letter-spacing: -0.03em;
+		color: var(--gray500);
+	}
+
+	.plano-completo_item h3 {
+		margin-bottom: 0.35rem;
+		font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+		line-height: 1.3;
+	}
+
+	.plano-completo_item p {
+		font-size: 0.95rem;
+	}
+
+	.plano-completo_link {
+		display: inline-block;
+		margin-top: 0.75rem;
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: var(--primary700);
+	}
+
+	.plano-completo_link:hover {
+		text-decoration: underline;
+	}
+
+	.por-que_pendente {
+		margin-top: 1rem;
+	}
+
+	/* Z-pattern da LP: no desktop, as linhas pares põem a foto à esquerda; no celular, o texto vem sempre antes. */
+	@media (min-width: 1025px) {
+		.por-que_item:nth-child(even) > :first-child {
+			order: 1;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.plano-completo_grid {
+			grid-template-columns: 1fr;
+		}
+
+		.plano-completo_intro {
+			position: static;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.plano-completo_item {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5

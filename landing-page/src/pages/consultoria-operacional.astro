@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
 import PilaresOperacionais from '../components/solucoes/consultoria-operacional/PilaresOperacionais.astro';
 import type { FaqItem } from '../components/Faq.astro';
@@ -45,3 +46,272 @@ const faqItens: FaqItem[] = [
     <PilaresOperacionais />
   </div>
 </SolucaoLayout>
+=======
+// Consultoria Operacional (/consultoria-operacional/). O SolucaoLayout monta o esqueleto comum; aqui ficam
+// a abertura, os benefícios, o FAQ e o conteúdo próprio (slot "especifico"): processos, responsabilidades,
+// dashboards (com link para BI) e cultura.
+// Fontes: consts.ts (SOLUCOES, CASES, NUMEROS, CITACAO_PROJETO), legado (site/conteudo/solucoes.mjs:
+// "Menos obstáculos. Mais espaço para crescer." / "Fazer a operação fluir"), a LP original e a descrição do
+// site atual ("Conduzimos uma análise interna detalhada…").
+import SolucaoLayout from '../layouts/SolucaoLayout.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import { SITE, NUMEROS, SOLUCOES, CASES } from '../consts';
+
+const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-operacional')!;
+const bi = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
+const caso = (slug: string) => CASES.find((c) => c.slug === slug)!;
+const menezes = caso('por-que-uma-reestruturacao-operacional-e-financeira-foi-essencial-para-a-menezes-e-emidio-advogados');
+const ricaVida = caso('ajudando-o-rica-vida-a-tirar-um-sonho-do-papel');
+
+// Cada frente: sinal (quandoFazSentido, problema do case ou LP) → o que fazemos (descrição e escopo) → ganho.
+const frentes = [
+	{
+		tema: 'Processos',
+		titulo: 'Processos claros, do começo ao fim',
+		sinal: 'Processos mal definidos travam o dia a dia da empresa.',
+		fazemos: 'Fazemos o mapeamento de processos: desenhamos, etapa por etapa, como o trabalho acontece hoje e redesenhamos o que precisa mudar.',
+		ganho: 'Processos redesenhados e uma operação que flui, com menos obstáculos.',
+		link: { href: menezes.url, rotulo: `Veja o case da ${menezes.cliente}` },
+	},
+	{
+		tema: 'Responsabilidades',
+		titulo: 'Cada pessoa sabe o seu papel',
+		sinal: 'Funções sobrepostas ou mal divididas: fica difícil saber quem cuida do quê.',
+		fazemos: 'Montamos a matriz de responsabilidades, um quadro simples que mostra quem cuida de cada tarefa, e fazemos a estruturação das áreas da empresa.',
+		ganho: 'Funções bem definidas e áreas organizadas, sem sobreposição.',
+		link: { href: ricaVida.url, rotulo: `Veja como estruturamos a operação do ${ricaVida.cliente}` },
+	},
+	{
+		tema: 'Dashboards',
+		titulo: 'Os números da operação à vista',
+		sinal: 'Informações espalhadas em planilhas soltas ou sistemas desconectados dificultam acompanhar a operação.',
+		fazemos: 'Entregamos dashboards, painéis visuais com os principais indicadores, e instrumentos de controle. Também indicamos o sistema de gestão mais adequado para a sua empresa.',
+		ganho: 'Indicadores claros para acompanhar a operação e decidir com segurança.',
+		link: { href: bi.url, rotulo: `Quer ir além dos painéis? Conheça a ${bi.nome}` },
+	},
+	{
+		tema: 'Cultura',
+		titulo: 'Uma cultura que motiva a equipe',
+		sinal: 'Equipe desmotivada e a sensação de estar perdendo o controle da empresa.',
+		fazemos: 'Conduzimos a reformulação cultural, que trata do jeito como a equipe trabalha e se relaciona. Também fazemos benchmarks com especialistas, comparando a sua operação com boas práticas.',
+		ganho: 'Uma cultura motivadora e inclusiva, alinhada à estratégia da empresa.',
+	},
+];
+---
+
+<SolucaoLayout
+	solucao={solucao}
+	titulo="Consultoria Operacional para a sua operação fluir"
+	fotoHeader="trabalho real em grupo: consultores e equipe do cliente mapeando processos"
+	abertura={`A Consultoria Operacional da ${SITE.nome} organiza processos, funções e controles de pequenas e médias empresas, para a operação ter menos obstáculos e mais espaço para crescer. A ${SITE.nome} é a ${SITE.nomeCompleto}: desde ${NUMEROS.fundacao}, alunos da FGV fazem consultoria com orientação de professores.`}
+	beneficios={[
+		{ titulo: 'Mais eficiência no dia a dia', texto: 'Processos mapeados e redesenhados tiram obstáculos do caminho e deixam a operação mais eficiente.' },
+		{ titulo: 'Equipe alinhada e motivada', texto: 'Funções bem divididas e uma cultura motivadora e inclusiva fazem a equipe trabalhar na mesma direção.' },
+		{ titulo: 'Controle para crescer', texto: 'Dashboards, instrumentos de controle e o sistema de gestão mais adequado dão visão da operação e a deixam pronta para expandir.' },
+	]}
+	faq={[
+		{
+			pergunta: 'O que faz a Consultoria Operacional da EJFGV?',
+			resposta: `Organiza processos, funções e controles de pequenas e médias empresas. O projeto pode incluir mapeamento de processos, matriz de responsabilidades, estruturação de áreas, dashboards e instrumentos de controle, indicação do sistema de gestão mais adequado, reformulação cultural e benchmarks com especialistas. O trabalho é feito por alunos da FGV, com orientação de professores.`,
+			validar: true,
+		},
+		{
+			pergunta: 'Quando vale a pena contratar uma consultoria operacional?',
+			resposta: 'Quando você sente que está perdendo o controle da empresa, com equipe desmotivada ou funções sobrepostas e mal divididas. Também quando quer rever cada detalhe da operação e deixá-la pronta para expandir e aumentar os resultados.',
+			validar: true,
+		},
+		{
+			pergunta: 'A consultoria operacional inclui dashboards?',
+			resposta: `Sim. Dashboards e instrumentos de controle fazem parte do escopo. Para análises de dados mais aprofundadas, como análises descritivas e preditivas, a ${SITE.nome} oferece a ${bi.nome}.`,
+			validar: true,
+		},
+		{
+			pergunta: 'Quanto tempo dura um projeto?',
+			resposta: `Os projetos da ${SITE.nome} duram em média ${NUMEROS.prazoMedioMeses} meses. Durante esse período, buscamos o maior alinhamento possível com a sua empresa, num processo intenso de cocriação.`,
+			validar: true,
+		},
+		{
+			pergunta: 'Como começar?',
+			resposta: `Preencha o formulário desta página ou chame no WhatsApp: o tempo médio de retorno da equipe é de até ${NUMEROS.retornoDiasUteis} dia útil. O primeiro passo é uma reunião de diagnóstico gratuita para identificar dores, desafios e oportunidades. Depois, apresentamos uma proposta com escopo, prazos e soluções personalizadas para a realidade da sua empresa.`,
+			validar: true,
+		},
+		{ pergunta: 'Quanto custa uma consultoria operacional?' },
+	]}
+>
+	<section slot="especifico" class="section_icp" aria-labelledby="na-pratica-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="operacional_intro">
+					<div class="icp_header">
+						<span class="eyebrow">Consultoria operacional na prática</span>
+						<h2 id="na-pratica-titulo">Como organizamos a sua operação</h2>
+						<p>Conduzimos uma análise interna detalhada da sua empresa e propomos soluções sob medida para alinhar estratégia e cultura, com mais eficiência na operação e melhores resultados.</p>
+						<p>O trabalho acontece lado a lado com a sua equipe e passa por quatro pontos: processos, responsabilidades, dashboards e cultura.</p>
+					</div>
+					<figure class="hero-photo-frame operacional_foto">
+						<ImagemReservada descricao="entregável real: consultor apresentando ao cliente um dashboard da operação" classe="home-hero_image" escuro />
+						<figcaption class="hero-photo-caption">
+							<div class="hero-photo-caption-left">
+								<span class="hero-photo-dot" aria-hidden="true"></span>
+								<div>
+									<strong>Projetos de {NUMEROS.prazoMedioMeses} meses em média</strong>
+									<span>Cocriação com a sua equipe e orientação de professores da FGV</span>
+								</div>
+							</div>
+						</figcaption>
+					</figure>
+				</div>
+
+				<ul class="operacional_frentes">
+					{frentes.map((f) => (
+						<li class="icp_item operacional_frente">
+							<span class="eyebrow">{f.tema}</span>
+							<h3>{f.titulo}</h3>
+							<dl class="operacional_dl">
+								<div>
+									<dt>Sinal de alerta</dt>
+									<dd>{f.sinal}</dd>
+								</div>
+								<div>
+									<dt>O que fazemos</dt>
+									<dd>{f.fazemos}</dd>
+								</div>
+								<div class="is-ganho">
+									<dt>O que você ganha</dt>
+									<dd>{f.ganho}</dd>
+								</div>
+							</dl>
+							{f.link && (
+								<a class="button-tertiary operacional_link" href={f.link.href}>{f.link.rotulo}&nbsp;<span aria-hidden="true">→</span></a>
+							)}
+						</li>
+					))}
+				</ul>
+
+				<div class="operacional_cta">
+					<p>Não sabe por onde começar? O diagnóstico é gratuito e sem compromisso.</p>
+					<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</SolucaoLayout>
+
+<style>
+	.operacional_intro {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(2rem, 4vw, 3.5rem);
+		align-items: center;
+		margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+	}
+
+	.operacional_intro .icp_header {
+		margin-bottom: 0;
+	}
+
+	.operacional_intro p {
+		margin-top: 1rem;
+		font-size: 1rem;
+		line-height: 1.65;
+		color: var(--gray600);
+	}
+
+	/* Dados sobre a foto (referência Insper Jr): o rótulo do espaço reservado sobe para não ficar sob a legenda */
+	.operacional_foto :global(.image-placeholder) {
+		align-items: flex-start;
+	}
+
+	.operacional_frentes {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+		list-style: none;
+	}
+
+	.operacional_frente {
+		gap: 0.75rem;
+		padding: clamp(1.5rem, 2.5vw, 2rem);
+	}
+
+	.operacional_frente h3 {
+		font-size: 1.2rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+	}
+
+	.operacional_dl {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.operacional_dl dt {
+		margin-bottom: 0.2rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--gray500);
+	}
+
+	.operacional_dl dd {
+		font-size: 0.925rem;
+		line-height: 1.55;
+		color: var(--gray700);
+	}
+
+	.operacional_dl .is-ganho {
+		padding-left: 0.85rem;
+		border-left: 3px solid var(--primary600);
+	}
+
+	.operacional_dl .is-ganho dd {
+		font-weight: 600;
+		color: var(--gray900);
+	}
+
+	/* inline-block (e não o inline-flex do .button-tertiary): a seta acompanha o texto quando ele quebra */
+	.operacional_link {
+		display: inline-block;
+		align-self: flex-start;
+		height: auto;
+		margin-top: auto;
+		padding: 0.35rem 0;
+		white-space: normal;
+		text-align: left;
+	}
+
+	.operacional_link:hover {
+		background-color: transparent;
+		text-decoration: underline;
+	}
+
+	.operacional_cta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem 1.5rem;
+		margin-top: clamp(2.5rem, 4vw, 3.5rem);
+		text-align: center;
+	}
+
+	.operacional_cta p {
+		font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+		font-weight: 700;
+		color: var(--gray900);
+	}
+
+	@media (max-width: 1024px) {
+		.operacional_intro {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.operacional_frentes {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5

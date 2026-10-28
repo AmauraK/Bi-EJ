@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import StatsStrip from '../components/StatsStrip.astro';
@@ -407,3 +408,181 @@ const totalCases = CASES.length;
     }
   }
 </style>
+=======
+// Listagem de cases: capa reservada, filtros por tipo de consultoria (sem JS, todos aparecem),
+// cards com o resultado em destaque (o "spoiler"), logos, depoimentos e CTA.
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import CaseCard from '../components/CaseCard.astro';
+import LogoWall from '../components/LogoWall.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { SITE, NUMEROS, SOLUCOES, CASES } from '../consts';
+import { tagDo } from '../components/cases/conteudo';
+
+// Ordem dos filtros decidida em 26/10/2026.
+const FILTROS = ['plano-de-negocios', 'consultoria-business-intelligence', 'consultoria-operacional', 'consultoria-mercadologica', 'consultoria-financeira'].map(
+	(slug) => SOLUCOES.find((s) => s.slug === slug)!
+);
+const BI = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
+
+const descricao = 'Cases de sucesso da EJFGV, a Empresa Júnior da Fundação Getulio Vargas: projetos reais com o problema inicial, a solução e os resultados. Filtre por tipo de consultoria.';
+
+const colecao = {
+	'@context': 'https://schema.org',
+	'@type': 'CollectionPage',
+	name: 'Cases de sucesso da EJFGV',
+	description: descricao,
+	url: new URL('/cases-de-sucesso/', SITE.url).href,
+	mainEntity: {
+		'@type': 'ItemList',
+		itemListElement: CASES.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.titulo, url: new URL(c.url, SITE.url).href })),
+	},
+};
+---
+
+<Layout titulo="Cases de Sucesso - EJFGV" descricao={descricao} jsonLd={colecao}>
+	<PageHeader
+		titulo="Cases de sucesso: histórias transformadas pela EJFGV"
+		kicker={`${SITE.nome} · Empresa Júnior da FGV desde ${NUMEROS.fundacao}`}
+		descricao={`Os cases de sucesso da ${SITE.nome}, a ${SITE.nomeCompleto}, são projetos reais de consultoria feitos por alunos da FGV para empresas de diferentes setores e portes. Desde ${NUMEROS.fundacao}, já são mais de ${NUMEROS.projetos} projetos entregues. Em cada case, você vê o problema inicial, a nossa solução e os resultados finais.`}
+		escuro
+	>
+		<Fragment slot="titulo">Cases de sucesso: <span class="highlight-purpose">histórias transformadas</span> pela EJFGV</Fragment>
+		<p class="hero_description">Veja como o seu negócio pode ser o próximo.</p>
+		<Fragment slot="acoes">
+			<a href="/contato/#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+			<a href="#lista-cases" class="button-tertiary">Ver os cases ↓</a>
+		</Fragment>
+		<figure slot="midia" class="hero-photo-frame">
+			<ImagemReservada descricao="foto de abertura dos cases: equipe EJFGV em projeto com cliente" classe="home-hero_image" escuro />
+		</figure>
+	</PageHeader>
+
+	<section id="lista-cases" class="section_depoimentos casos" aria-labelledby="lista-cases-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Cases por tipo de consultoria</span>
+					<h2 id="lista-cases-titulo">Veja o resultado de cada projeto</h2>
+				</div>
+
+				<div class="tag-chips casos_filtros" role="group" aria-label="Filtrar cases por tipo de consultoria" data-filtros>
+					<button type="button" class="tag-chip" aria-pressed="true" data-filtro="todos">Todos</button>
+					{FILTROS.map((s) => <button type="button" class="tag-chip" aria-pressed="false" data-filtro={s.slug}>{s.rotulo}</button>)}
+				</div>
+				<p class="casos_status" aria-live="polite" data-filtro-status></p>
+
+				<ul class="cases_grid casos_lista">
+					{CASES.map((c) => (
+						<li data-solucoes={c.solucoes.join(' ')}>
+							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} texto={`Desafio: ${c.problema}.`} href={c.url} />
+						</li>
+					))}
+					<li data-solucoes={BI.slug}>
+						<article class="case_card">
+							<div>
+								<span class="case_tag">{BI.rotulo}</span>
+								<div class="case_metric"><span class="preencher">A preencher: resultado</span></div>
+							</div>
+							<div>
+								<h3><span class="preencher">Case de {BI.rotulo}: a preencher</span></h3>
+								<p><a class="casos_link" href={BI.url}>Conheça a {BI.nome} →</a></p>
+							</div>
+						</article>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<LogoWall />
+
+	<section class="section_depoimentos" aria-labelledby="depoimentos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Depoimentos</span>
+					<h2 id="depoimentos-titulo">Veja o que falam sobre nós</h2>
+				</div>
+				<Depoimentos />
+			</div>
+		</div>
+	</section>
+
+	<CtaBanner titulo="Seu negócio pode ser o próximo case de sucesso da EJFGV." href="/contato/#formulario" rotulo="Fale com um Especialista" escuro />
+
+<style>
+	.casos_filtros {
+		margin-bottom: 2rem;
+	}
+
+	/* Só para leitores de tela: anuncia o filtro aplicado */
+	.casos_status {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.casos_lista {
+		list-style: none;
+		margin-bottom: 0;
+	}
+
+	.casos_lista > li {
+		display: flex;
+	}
+
+	.casos_lista > li[hidden] {
+		display: none;
+	}
+
+	.casos_lista :global(.case_card) {
+		flex: 1;
+	}
+
+	/* Resultados em texto: a fonte grande do .case_metric é para números curtos */
+	.casos_lista :global(.case_metric) {
+		font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+		line-height: 1.2;
+	}
+
+	.casos_link {
+		color: var(--primary700);
+		font-weight: 600;
+		text-decoration: underline;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		.casos_lista {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>
+
+<script>
+	// Filtro por tipo de consultoria. Sem JS, todos os cases ficam visíveis.
+	const grupo = document.querySelector<HTMLElement>('[data-filtros]');
+	const status = document.querySelector<HTMLElement>('[data-filtro-status]');
+	const itens = document.querySelectorAll<HTMLElement>('[data-solucoes]');
+
+	if (grupo) {
+		grupo.addEventListener('click', (e) => {
+			const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filtro]');
+			if (!chip) return;
+			const filtro = chip.dataset.filtro!;
+			grupo.querySelectorAll('[data-filtro]').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+			itens.forEach((item) => {
+				item.hidden = filtro !== 'todos' && !item.dataset.solucoes!.split(' ').includes(filtro);
+			});
+			if (status) status.textContent = filtro === 'todos' ? 'Mostrando todos os cases' : `Mostrando cases de ${chip.textContent}`;
+		});
+	}
+</script>
+
+</Layout>
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5

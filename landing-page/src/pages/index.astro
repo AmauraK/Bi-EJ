@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import LeadForm from '../components/LeadForm.astro';
@@ -27,3 +28,544 @@ import LeadForm from '../components/LeadForm.astro';
   </section>
   <LeadForm />
 </Layout>
+=======
+// Home (/). Ordem do plano: hero centralizado → números → história → soluções em abas → método → banner →
+// logos → prova social → credibilidade → resultados → FAQ → formulário.
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+import Metodo from '../components/Metodo.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import LogoWall from '../components/LogoWall.astro';
+import CaseCard from '../components/CaseCard.astro';
+import Depoimentos from '../components/Depoimentos.astro';
+import Credibilidade from '../components/Credibilidade.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { SITE, NUMEROS, SOLUCOES, CASES, LOGOS, VIDEO_INSTITUCIONAL } from '../consts';
+
+// Ícone de check do CDN da EJ (o mesmo da LP original).
+const CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
+
+const buscarCase = (slug: string) => CASES.find((c) => c.slug === slug)!;
+const maCerise = buscarCase('como-a-confeitaria-ma-cerise-aumentou-em-1124-sua-demanda');
+const talent = buscarCase('como-auxiliamos-a-talent-academy-a-alavancar-sua-area-de-marketing-e-comunicacao');
+
+// "Resultados": o 1º case de cada solução (Business Intelligence ainda não tem case).
+const resultados = SOLUCOES.filter((s) => s.cases.length).map((s) => ({ solucao: s, caso: buscarCase(s.cases[0]) }));
+
+const nomesSolucoes = new Intl.ListFormat('pt-BR', { type: 'conjunction' }).format(SOLUCOES.map((s) => s.nome));
+
+// Rascunhos feitos só com fatos confirmados (docx, consts e LP). O Marketing valida antes de publicar.
+const faq = [
+	{
+		pergunta: 'O que é a EJFGV?',
+		resposta: `A ${SITE.nome} é a ${SITE.nomeCompleto}, a primeira empresa júnior da América Latina, fundada em ${NUMEROS.fundacao}. Fazemos consultoria estratégica para pequenas e médias empresas, com projetos feitos por alunos da graduação da FGV e orientação de professores.`,
+		validar: true,
+	},
+	{
+		pergunta: 'O diagnóstico é gratuito?',
+		resposta: 'Sim. O primeiro passo é uma reunião de diagnóstico gratuita e sem compromisso, em que identificamos as dores, os desafios e as oportunidades da sua empresa.',
+		validar: true,
+	},
+	{
+		pergunta: 'Quem faz os projetos?',
+		resposta: 'Alunos da graduação da FGV. A execução de cada projeto é acompanhada por professores da FGV.',
+		validar: true,
+	},
+	{
+		pergunta: 'Quais soluções a EJFGV oferece?',
+		resposta: `São ${SOLUCOES.length}: ${nomesSolucoes}. Todas são personalizadas para a realidade da sua empresa.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Quanto tempo dura um projeto?',
+		resposta: `Os projetos têm em média ${NUMEROS.prazoMedioMeses} meses. Nesse período, buscamos o maior alinhamento possível com a sua empresa, num processo intenso de cocriação.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Em quanto tempo a EJFGV dá retorno?',
+		resposta: `Depois que você envia o formulário, um consultor da nossa equipe comercial liga em até ${NUMEROS.retornoDiasUteis} dia útil para entender o momento da sua empresa.`,
+		validar: true,
+	},
+	{
+		pergunta: 'A EJFGV atende empresas de todo o Brasil?',
+		resposta: `Já desenvolvemos soluções para empresas em todo o Brasil, de ${NUMEROS.setores} setores diferentes.`,
+		validar: true,
+	},
+	{ pergunta: 'Quanto custa um projeto?' },
+];
+---
+
+<Layout
+	titulo="Consultoria Estratégica da Empresa Júnior FGV - EJFGV"
+	descricao={`${SITE.nome}, a ${SITE.nomeCompleto}: consultoria estratégica feita por alunos da FGV desde ${NUMEROS.fundacao}, com +${NUMEROS.projetos} projetos. Diagnóstico gratuito.`}
+	ctaHref="#formulario"
+>
+	<div class="home">
+		<!-- 1. Hero centralizado: selo, H1, abertura "resposta primeiro", 2 CTAs grandes, logos e foto larga -->
+		<PageHeader
+			centralizado
+			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
+			titulo={`Consultoria estratégica feita por alunos da FGV +${NUMEROS.projetos} projetos entregues`}
+			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
+		>
+			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
+			<Fragment slot="acoes">
+				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
+			</Fragment>
+			<Fragment slot="midia">
+				<div class="home-hero_grandes-clientes home-hero_logos">
+					<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
+					<div class="grandes-clientes_row">
+						{LOGOS.slice(0, 6).map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
+					</div>
+				</div>
+				<figure class="hero-photo-frame">
+					<ImagemReservada classe="home-hero_image" escuro descricao="foto dinâmica da equipe ou de projeto em ação" />
+					<figcaption class="hero-photo-caption">
+						<div class="hero-photo-caption-left">
+							<span class="hero-photo-dot" aria-hidden="true"></span>
+							<div>
+								<strong>Equipe EJFGV · Projetos Personalizados</strong>
+								<span>Orientação de professores da FGV · Retorno em até {NUMEROS.retornoDiasUteis} dia útil</span>
+							</div>
+						</div>
+						<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
+							<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg>
+							Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
+						</button>
+					</figcaption>
+				</figure>
+			</Fragment>
+		</PageHeader>
+
+		<!-- 2. Números (+800 e NPS sobem animados) -->
+		<StatsStrip />
+		<div class="page-padding">
+			<p class="container-large home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
+		</div>
+
+		<!-- 3. História curta -->
+		<section id="historia" class="section_icp" aria-labelledby="historia-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="quem-somos_wrapper home-historia">
+						<div>
+							<span class="eyebrow">Nossa história</span>
+							<h2 id="historia-titulo" class="home-historia_titulo">A primeira Empresa Júnior da América Latina</h2>
+							<p class="home-historia_frase">Transformando realidades de negócios desde {NUMEROS.fundacao}</p>
+						</div>
+						<div>
+							<p class="quem-somos_copy">
+								Fundada em {NUMEROS.fundacao}, a {SITE.nome} é a {SITE.nomeCompleto}, instituição reconhecida internacionalmente como centro de excelência em ensino, pesquisa e consultoria.{' '}
+								<span class="preencher">A preencher: completar a frase “Somos vanguarda e criadores…” (o texto do docx está cortado)</span>
+							</p>
+							<a href="/sobre-nos/" class="button-secondary home-historia_botao">Saiba mais sobre a EJFGV</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 4. Soluções em abas (sem JS, todos os painéis aparecem) -->
+		<section id="solucoes" class="section_beneficios" aria-labelledby="solucoes-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="beneficios_wrapper">
+						<div class="beneficios_title">
+							<span class="beneficios_eyebrow">Nossos serviços são personalizados de acordo com suas demandas</span>
+							<h2 id="solucoes-titulo">Soluções para cada momento da sua empresa</h2>
+							<p>Escolha uma área para ver o que fazemos, quando vale a pena contratar e o que pode entrar no projeto. Todas começam com um diagnóstico gratuito.</p>
+						</div>
+
+						<div class="frentes_tabs" role="tablist" aria-label="Soluções da EJFGV" data-abas>
+							{SOLUCOES.map((s, i) => (
+								<button
+									type="button"
+									role="tab"
+									id={`aba-${s.slug}`}
+									class:list={['frente_tab', { 'is-active': i === 0 }]}
+									aria-selected={i === 0 ? 'true' : 'false'}
+									aria-controls={`painel-${s.slug}`}
+									tabindex={i === 0 ? undefined : '-1'}
+								>{s.rotulo}</button>
+							))}
+						</div>
+
+						<div class="beneficios_list">
+							{SOLUCOES.map((s) => (
+								<div class="beneficios_item home-solucao" role="tabpanel" id={`painel-${s.slug}`} aria-labelledby={`aba-${s.slug}`} tabindex="0">
+									<div>
+										<img src={s.icone} alt="" class="vantagens_icon" loading="lazy" />
+										<h3>{s.nome}</h3>
+										<p>{s.descricao}</p>
+										<a href={s.url} class="button is-button-large home-solucao_cta" aria-label={`Quero saber mais sobre ${s.nome}`}>Quero saber mais</a>
+									</div>
+									<div>
+										<h4>Quando contratar</h4>
+										<ul class="home-solucao_quando">
+											{s.quandoFazSentido.map((q) => (
+												<li>
+													<strong>{q.titulo}</strong>
+													<p>{q.texto}</p>
+												</li>
+											))}
+										</ul>
+										<h4>O que pode entrar no projeto</h4>
+										<ul class="vantagens_list">
+											{s.escopo.map((e) => (
+												<li class="vantagens_list-item">
+													<img src={CHECK} alt="" loading="lazy" />
+													{e.href ? <a href={e.href}>{e.item}</a> : <span>{e.item}</span>}
+												</li>
+											))}
+										</ul>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<script>
+			// Abas das soluções (padrão WAI-ARIA): clique, setas, Home e End. Só o script esconde os painéis.
+			const lista = document.querySelector<HTMLElement>('[data-abas]');
+			if (lista) {
+				const abas = Array.from(lista.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+				const ativar = (alvo: HTMLButtonElement) => {
+					for (const aba of abas) {
+						const ativa = aba === alvo;
+						aba.setAttribute('aria-selected', String(ativa));
+						aba.tabIndex = ativa ? 0 : -1;
+						aba.classList.toggle('is-active', ativa);
+						const painel = document.getElementById(aba.getAttribute('aria-controls') ?? '');
+						if (painel) painel.hidden = !ativa;
+					}
+				};
+				abas.forEach((aba, i) => {
+					aba.addEventListener('click', () => ativar(aba));
+					aba.addEventListener('keydown', (e) => {
+						const n = abas.length;
+						const destino = ({ ArrowRight: i + 1, ArrowLeft: i - 1 + n, Home: 0, End: n - 1 } as Record<string, number>)[e.key];
+						if (destino === undefined) return;
+						e.preventDefault();
+						ativar(abas[destino % n]);
+						abas[destino % n].focus();
+					});
+				});
+				ativar(abas.find((a) => a.getAttribute('aria-selected') === 'true') ?? abas[0]);
+			}
+		</script>
+
+		<!-- 5. Método, logo depois de Soluções (um ícone por etapa) -->
+		<Metodo kicker="Como funciona" />
+
+		<!-- 6. Banner de conversão -->
+		<CtaBanner
+			titulo="Sua empresa pode ser o próximo case de sucesso. O primeiro passo é um diagnóstico gratuito."
+			href="#formulario"
+			rotulo="Solicite seu diagnóstico gratuito"
+		/>
+
+		<!-- 7. Logos reais + os 4 pendentes do docx como marcadores -->
+		<LogoWall />
+
+		<!-- 8. Prova social: resultados reais dos depoimentos da home atual -->
+		<section id="prova-social" class="section_depoimentos" aria-labelledby="prova-social-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="icp_header">
+						<span class="eyebrow">Cases e depoimentos</span>
+						<h2 id="prova-social-titulo">Resultados reais, nas palavras de quem contratou</h2>
+					</div>
+					<div class="cases_grid home-cases">
+						<CaseCard
+							tag={`${maCerise.segmento} · ${maCerise.solucao}`}
+							metrica="10x o faturamento"
+							titulo={maCerise.cliente}
+							texto="Plano de marketing para expandir a clientela da confeitaria delivery: +1154% de demanda nos 3 meses seguintes ao projeto."
+							href={maCerise.url}
+						/>
+						<CaseCard
+							tag="Depoimento do cliente"
+							metrica="Quase 20% a mais"
+							titulo="M Cassavia"
+							texto="A garra e a motivação dos consultores contagiaram a empresa: faturamento quase 20% maior, com ganho imediato."
+						/>
+						<CaseCard
+							tag={`${talent.segmento} · ${talent.solucao}`}
+							metrica="100% implementado"
+							titulo={talent.cliente}
+							texto="Do reposicionamento da marca às redes sociais: cada plano de ação entregue foi colocado em prática."
+							href={talent.url}
+						/>
+					</div>
+					<p class="home-nota home-nota_cases">
+						<span class="preencher">A preencher: confirmar a Ma Cerise em +1154% (docx e depoimento) ou +1124% (página do case)</span>
+						<span class="preencher">A preencher: segmento e solução do projeto da M Cassavia</span>
+					</p>
+					<Depoimentos pendentes={2} />
+					<div class="home-prova_rodape">
+						<a href="/cases-de-sucesso/" class="button-secondary">Ver todos os cases de sucesso</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 9. Credibilidade: FGV, Bain e Brasil Júnior -->
+		<Credibilidade />
+
+		<!-- 10. Resultados: ícone, um resultado real por solução e CTA -->
+		<section id="resultados" class="section_beneficios" aria-labelledby="resultados-titulo">
+			<div class="page-padding padding-section-medium">
+				<div class="container-large">
+					<div class="beneficios_wrapper">
+						<div class="beneficios_title">
+							<span class="home-resultados_icone" aria-hidden="true">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 14 4-4 3 3 6-6"></path><path d="M15 7h5v5"></path></svg>
+							</span>
+							<span class="beneficios_eyebrow">Resultados</span>
+							<h2 id="resultados-titulo">Um resultado real para cada desafio da sua empresa</h2>
+							<p>Tirar uma ideia do papel, conquistar novos mercados, decidir com segurança ou fazer a operação fluir: veja o que a EJFGV já entregou em cada área.</p>
+						</div>
+						<div class="frentes_cards-grid">
+							{resultados.map(({ solucao, caso }) => (
+								<a class="frente_mini-card" href={caso.url}>
+									<span>{solucao.rotulo}</span>
+									<h3>{caso.destaque}</h3>
+									<p>{caso.cliente} · Ver case →</p>
+								</a>
+							))}
+						</div>
+						<div class="home-resultados_cta">
+							<a href="#formulario" class="button is-button-large">Quero resultados como esses</a>
+							<p>Diagnóstico gratuito e retorno em até {NUMEROS.retornoDiasUteis} dia útil.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 11. FAQ (rascunhos a validar) -->
+		<Faq itens={faq} />
+
+		<!-- 12. Formulário, com a prova social (+800 projetos, NPS, retorno) na coluna ao lado -->
+		<LeadForm titulo="Solicite seu diagnóstico gratuito e descubra como transformar a realidade da sua empresa." />
+	</div>
+</Layout>
+
+<style>
+	/* 1. Hero: selo, destaque do H1 em linha própria, logos centralizados e foto larga */
+	.home :global(.hero_kicker) {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.45rem 0.95rem;
+		margin-bottom: 1.1rem;
+		background: var(--primary50);
+		border: 1px solid var(--primary200);
+		border-radius: var(--card-radius-md);
+		line-height: 1.4;
+	}
+
+	.home :global(.hero_kicker::before) {
+		content: "";
+		flex-shrink: 0;
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--primary600);
+	}
+
+	.home :global(.hero_heading) {
+		text-wrap: balance;
+	}
+
+	.home-hero_destaque {
+		display: block;
+	}
+
+	.home-hero_logos {
+		max-width: 56rem;
+		margin: 0 auto clamp(2rem, 4vw, 3rem);
+		text-align: center;
+	}
+
+	.home-hero_logos .grandes-clientes_row {
+		justify-content: center;
+	}
+
+	/* A legenda cobre a base da foto: o rótulo do espaço reservado sobe para o topo. */
+	.hero-photo-frame :global(.image-placeholder) {
+		align-items: flex-start;
+	}
+
+	@media (min-width: 768px) {
+		.hero-photo-frame :global(.home-hero_image) {
+			aspect-ratio: 21 / 9;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.home :global(.hero_heading) {
+			font-size: 2rem;
+		}
+	}
+
+	.home-nota {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-top: 1rem;
+		font-size: 0.8rem;
+		color: var(--gray600);
+	}
+
+	/* 3. História */
+	.home-historia {
+		margin-bottom: 0;
+	}
+
+	.home-historia_titulo {
+		text-transform: uppercase;
+		letter-spacing: 0;
+		line-height: 1.15;
+	}
+
+	.home-historia_frase {
+		margin-top: 0.75rem;
+		color: var(--primary700);
+		font-size: 1.1rem;
+		font-weight: 700;
+	}
+
+	.home-historia_botao {
+		margin-top: 1.5rem;
+	}
+
+	/* 4. Soluções em abas (cores da aba ativa: as do DS, .frente_tab.is-active). */
+	.home-solucao {
+		align-items: start;
+	}
+
+	.home-solucao[hidden] {
+		display: none;
+	}
+
+	.home-solucao h4 {
+		margin: 1.75rem 0 0.75rem;
+		color: var(--text-eyebrow-dark);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.home-solucao h4:first-child {
+		margin-top: 0;
+	}
+
+	.home-solucao_quando {
+		display: grid;
+		gap: 0.75rem;
+		list-style: none;
+	}
+
+	.home-solucao_quando li {
+		padding: 1.1rem 1.25rem;
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+	}
+
+	.home-solucao_quando strong {
+		display: block;
+		margin-bottom: 0.25rem;
+		color: var(--white);
+	}
+
+	.home-solucao .vantagens_list {
+		margin-top: 0;
+	}
+
+	.home-solucao .vantagens_list-item a {
+		color: var(--primary200);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.home-solucao_cta {
+		margin-top: 1.75rem;
+	}
+
+	/* 8. Prova social */
+	.home-cases :global(.case_metric) {
+		font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+		line-height: 1.1;
+	}
+
+	.home-nota_cases {
+		margin: -1.25rem 0 2.5rem;
+	}
+
+	.home-prova_rodape {
+		display: flex;
+		justify-content: center;
+		margin-top: 2.5rem;
+	}
+
+	/* 9. Credibilidade em cinza, para separar da prova social (as duas seriam brancas) */
+	.home :global(.credibilidade) {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+	}
+
+	.home :global(.credibilidade .icp_item) {
+		background: var(--white);
+	}
+
+	/* 10. Resultados */
+	.home-resultados_icone {
+		display: grid;
+		place-items: center;
+		width: 4rem;
+		height: 4rem;
+		margin: 0 auto 1.25rem;
+		border-radius: var(--card-radius-md);
+		background: var(--primary600);
+		color: var(--white);
+	}
+
+	.home-resultados_icone svg {
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.frente_mini-card h3 {
+		margin-bottom: 0.5rem;
+		color: var(--white);
+		font-size: 1.05rem;
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+	.home-resultados_cta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+		text-align: center;
+	}
+
+	.home-resultados_cta p {
+		color: var(--graywarm300);
+		font-size: 0.9rem;
+	}
+</style>
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5

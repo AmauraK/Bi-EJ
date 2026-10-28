@@ -1,0 +1,61 @@
+---
+// Perguntas frequentes com <details>. Sem `resposta`, mostra o marcador "A preencher".
+// `validar: true` = rascunho feito só com fatos confirmados, que o Marketing ainda precisa aprovar.
+// O JSON-LD FAQPage só inclui respostas já preenchidas e aprovadas.
+interface Item {
+	pergunta: string;
+	resposta?: string;
+	validar?: boolean;
+}
+
+interface Props {
+	itens: Item[];
+	kicker?: string;
+	titulo?: string;
+	id?: string;
+}
+
+const { itens, kicker = 'Dúvidas frequentes', titulo = 'Perguntas frequentes', id = 'faq' } = Astro.props;
+
+const prontas = itens.filter((i) => i.resposta && !i.validar);
+const faqPage = prontas.length
+	? {
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: prontas.map((i) => ({
+				'@type': 'Question',
+				name: i.pergunta,
+				acceptedAnswer: { '@type': 'Answer', text: i.resposta },
+			})),
+		}
+	: null;
+---
+
+<section class="section_faq" id={id} aria-labelledby={`${id}-titulo`}>
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="metodo_header">
+				<span class="eyebrow">{kicker}</span>
+				<h2 id={`${id}-titulo`}>{titulo}</h2>
+			</div>
+			<div class="faq_list">
+				{itens.map((item) => (
+					<details class="faq_item">
+						<summary class="faq_question">{item.pergunta}</summary>
+						<div class="faq_answer">
+							{item.resposta ? (
+								<p>
+									{item.resposta}
+									{item.validar && <> <span class="preencher">A preencher: validar resposta</span></>}
+								</p>
+							) : (
+								<p><span class="preencher">A preencher: resposta</span></p>
+							)}
+						</div>
+					</details>
+				))}
+			</div>
+		</div>
+	</div>
+	{faqPage && <script type="application/ld+json" set:html={JSON.stringify(faqPage)} />}
+</section>

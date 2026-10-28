@@ -1,0 +1,43 @@
+---
+// Faixa de números (.section_resultados-strip da LP). O valor final já vem no HTML; itens com `count`
+// sobem animados ao aparecer na tela (docx: +800 e NPS 90 crescendo de forma dinâmica).
+import { NUMEROS } from '../consts';
+
+interface Item {
+	valor: string;
+	rotulo: string;
+	texto: string;
+	count?: number;
+	prefixo?: string;
+	sufixo?: string;
+}
+
+interface Props {
+	itens?: Item[];
+}
+
+const {
+	itens = [
+		{ valor: `+${NUMEROS.projetos}`, count: NUMEROS.projetos, prefixo: '+', rotulo: 'Projetos entregues', texto: 'Soluções práticas desenvolvidas para empresas em todo o Brasil.' },
+		{ valor: String(NUMEROS.nps), count: NUMEROS.nps, rotulo: `NPS (${NUMEROS.npsAno})`, texto: 'Índice de aprovação e recomendação direta dos nossos clientes.' },
+		{ valor: String(NUMEROS.anos), rotulo: 'Anos de mercado', texto: `Desde ${NUMEROS.fundacao}: a 1ª Empresa Júnior da América Latina, com suporte dos professores da FGV.` },
+		{ valor: String(NUMEROS.setores), rotulo: 'Setores atendidos', texto: 'Conhecimento prático aplicado a diferentes segmentos e portes.' },
+	],
+} = Astro.props;
+---
+
+<section class="section_resultados-strip" aria-label="Números da EJFGV">
+	<div class="page-padding">
+		<div class="container-large">
+			<div class="resultados_grid">
+				{itens.map((item) => (
+					<div class="resultados_card">
+						<div class="resultados_big-number" data-count={item.count} data-prefix={item.count ? item.prefixo : undefined} data-suffix={item.count ? item.sufixo : undefined}>{item.valor}</div>
+						<strong>{item.rotulo}</strong>
+						<p>{item.texto}</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,10 +1,22 @@
 ---
+<<<<<<< HEAD
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
+=======
+// Página Sobre (/sobre-nos/), na ordem do PLANO-NOVO-SITE.md: cabeçalho com foto reservada e vídeo → por que a
+// EJFGV → propósito, visão e valores → linha do tempo → nosso impacto → credibilidade e professores mentores →
+// equipe → serviços → logos → seja consultor → FAQ → banner final.
+// Textos: ../site/conteudo/sobre.mjs (legado), o docx e consts.ts. O que falta fica como marcador "A preencher".
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ImagemReservada from '../components/ImagemReservada.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 import Credibilidade from '../components/Credibilidade.astro';
 import LogoWall from '../components/LogoWall.astro';
 import Faq from '../components/Faq.astro';
 import CtaBanner from '../components/CtaBanner.astro';
+<<<<<<< HEAD
 import PorQueEjfgv from '../components/sobre/PorQueEjfgv.astro';
 import PropositoValores from '../components/sobre/PropositoValores.astro';
 import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
@@ -40,10 +52,57 @@ const faqSobre = [
     resposta: `Os projetos têm duração média de 3 meses, variando conforme a complexidade do escopo contratado. Ao longo de todo o período, realizamos reuniões semanais de alinhamento e cocriação com os gestores da empresa cliente.`,
     validar: true,
   },
+=======
+import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
+import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL } from '../consts';
+
+const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
+// Os 6 valores do legado; "Inovação" ocupa o lugar do 5º valor antigo (docx).
+const VALORES = ['Foco no cliente', 'Ir além', 'Sentimento de dono', 'Comunidade', 'Inovação', 'Inconformismo'];
+// Benefícios citados no docx para o banner "Seja consultor EJ FGV".
+const BENEFICIOS_CONSULTOR = ['Experiência prática em projetos de consultoria estratégica', 'Network FGV', 'Mentoria de professores da FGV'];
+const ICONE_CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
+
+// Rascunhos feitos só com fatos de consts.ts e do legado (validar: true). Sem fato confirmado, fica sem resposta.
+const faq = [
+	{
+		pergunta: 'O que é a EJFGV?',
+		resposta: `A ${SITE.nome} é a ${SITE.nomeCompleto}, uma consultoria estratégica formada por alunos de todos os cursos de graduação da FGV. Fundada em ${NUMEROS.fundacao}, foi a primeira empresa júnior da América Latina.`,
+		validar: true,
+	},
+	{
+		pergunta: 'O que é uma empresa júnior?',
+		resposta: 'É uma empresa formada por alunos da graduação, que colocam em prática o que aprendem em sala de aula. A primeira do mundo foi a ESSEC Conseil, fundada em 1967 por alunos da ESSEC, em Paris.',
+		validar: true,
+	},
+	{
+		pergunta: 'Quem faz os projetos?',
+		resposta: 'Alunos da graduação da FGV, com orientação de professores da FGV.',
+		validar: true,
+	},
+	{
+		pergunta: 'Que tipo de empresa a EJFGV atende?',
+		resposta: `Nosso foco é impulsionar o crescimento de pequenas e médias empresas. São mais de ${NUMEROS.projetos} projetos entregues, para empresas de ${NUMEROS.setores} setores.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Quanto tempo dura um projeto?',
+		resposta: `Os projetos têm em média ${NUMEROS.prazoMedioMeses} meses.`,
+		validar: true,
+	},
+	{
+		pergunta: 'Como contratar a EJFGV?',
+		resposta: `Fale com o nosso time comercial pelo formulário de contato, pelo WhatsApp ou pelo e-mail ${CONTATO.email}. Depois do primeiro contato, fazemos uma reunião gratuita de diagnóstico e apresentamos uma proposta com escopo e prazos.`,
+		validar: true,
+	},
+	{ pergunta: 'Quanto custa um projeto?' },
+	{ pergunta: 'Como faço para ser consultor da EJFGV?' },
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 ];
 ---
 
 <Layout
+<<<<<<< HEAD
   titulo="Sobre Nós — A Primeira Empresa Júnior da América Latina | EJFGV"
   descricao={`Conheça a história da EJFGV, fundada em ${NUMEROS.fundacao} na Fundação Getulio Vargas em São Paulo. Veja nosso propósito, valores, linha do tempo, equipe e impacto em ${NUMEROS.projetosFormatado} projetos.`}
   canonicalPath="/sobre-nos/"
@@ -134,4 +193,603 @@ const faqSobre = [
   .sobre-header_video-nota {
     margin-top: 1rem;
   }
+=======
+	titulo="Sobre nós - EJFGV"
+	descricao={`Conheça a Empresa Júnior FGV: alunos da FGV que fazem consultoria estratégica para pequenas e médias empresas desde ${NUMEROS.fundacao}.`}
+>
+	<!-- 1. Cabeçalho: o que é, para quem e desde quando; foto reservada e vídeo -->
+	<PageHeader
+		titulo="Conheça a EJFGV, a primeira empresa júnior da América Latina"
+		kicker={`Sobre nós · Desde ${NUMEROS.fundacao}`}
+		descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}: desde ${NUMEROS.fundacao}, alunos de todos os cursos de graduação da FGV fazem consultoria estratégica para pequenas e médias empresas.`}
+	>
+		<Fragment slot="titulo">Conheça a EJFGV, a <span class="highlight-purpose">primeira empresa júnior da América Latina</span></Fragment>
+		<Fragment slot="acoes">
+			<a href="/contato/" class="button is-button-large">Fale com um Especialista</a>
+			<a href="#historia" class="button-tertiary">Conheça nossa história ↓</a>
+		</Fragment>
+		<Fragment slot="midia">
+			<figure class="hero-photo-frame">
+				<ImagemReservada classe="home-hero_image" escuro descricao="foto atualizada da equipe atual" />
+				<figcaption class="hero-photo-caption">
+					<div class="hero-photo-caption-left">
+						<span class="hero-photo-dot" aria-hidden="true"></span>
+						<div>
+							<strong>Equipe EJFGV</strong>
+							<span>Alunos da graduação da FGV · Orientação de professores da FGV</span>
+						</div>
+					</div>
+					<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
+						<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg> Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
+					</button>
+				</figcaption>
+			</figure>
+			<p class="sobre-hero_nota"><span class="preencher">A preencher: vídeo institucional novo (FGV e Bain logo no início)</span></p>
+		</Fragment>
+	</PageHeader>
+
+	<!-- 2. Por que a EJFGV (texto do legado; os trechos em negrito eram destaque no site atual) -->
+	<section class="section_home-quem-somos" aria-labelledby="porque-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="quem-somos_wrapper sobre-porque">
+					<div>
+						<span class="eyebrow">Quem somos</span>
+						<h2 id="porque-titulo">Por que a EJFGV?</h2>
+						<p class="quem-somos_pillars">Custo-benefício, Inovação, Dedicação e Suporte acadêmico</p>
+					</div>
+					<div>
+						<p class="quem-somos_copy">Somos uma consultoria estratégica composta por alunos de todos os cursos de graduação da FGV, focada em <strong>impulsionar o crescimento</strong> de pequenas e médias empresas, gerando <strong>impacto positivo</strong> na sociedade. Nosso objetivo é ambicioso: aspiramos alcançar a <strong>excelência</strong> de uma empresa sênior mesmo sendo jovens empreendedores.</p>
+						<p class="quem-somos_copy">Nossa equipe é formada por indivíduos apaixonados, preocupados com o <strong>crescimento mútuo</strong>, e com a determinação de entregar <strong>resultados de qualidade</strong>, satisfação e implementação comparáveis ao nível de qualquer outra empresa sênior.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 3. Propósito, visão e valores. Os "quadradinhos" dos valores usam as cores do DS (docx) -->
+	<section class="section_beneficios" aria-labelledby="identidade-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="beneficios_wrapper">
+					<div class="beneficios_title">
+						<span class="eyebrow">Nossa identidade</span>
+						<h2 id="identidade-titulo">Propósito, visão e valores</h2>
+					</div>
+					<div class="sobre-identidade">
+						<div class="sobre-painel">
+							<h3 class="sobre-rotulo">Propósito</h3>
+							<p class="sobre-proposito">{SITE.proposito}.</p>
+						</div>
+						<div class="sobre-painel">
+							<h3 class="sobre-rotulo">Visão</h3>
+							<p class="sobre-visao">{VISAO}</p>
+						</div>
+					</div>
+					<div>
+						<h3 class="sobre-rotulo">Valores</h3>
+						<ul class="sobre-valores">
+							{VALORES.map((valor, i) => (
+								<li class="sobre-valor">
+									<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+									{valor}
+								</li>
+							))}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 4. Linha do tempo: 1967 → 1988 → marcos a preencher → hoje -->
+	<LinhaDoTempo />
+
+	<!-- 5. Nosso impacto: números confirmados (StatsStrip) e os que o docx pede, ainda sem dado -->
+	<section aria-labelledby="impacto-titulo">
+		<div class="page-padding">
+			<div class="container-large sobre-impacto_topo">
+				<div class="icp_header">
+					<span class="eyebrow">Resultados</span>
+					<h2 id="impacto-titulo">Nosso impacto</h2>
+					<p class="sobre-intro">Desde {NUMEROS.fundacao}, a EJFGV já entregou mais de {NUMEROS.projetos} projetos para empresas de {NUMEROS.setores} setores.</p>
+				</div>
+			</div>
+		</div>
+		<StatsStrip />
+		<div class="page-padding">
+			<div class="container-large sobre-impacto_base">
+				<div class="resultados_grid">
+					<div class="resultados_card">
+						<strong>Empresas apoiadas</strong>
+						<p><span class="preencher">A preencher: número de empresas apoiadas (X)</span></p>
+					</div>
+					<div class="resultados_card">
+						<strong>Empregos gerados</strong>
+						<p><span class="preencher">A preencher: número de empregos gerados (Y)</span></p>
+					</div>
+					<div class="resultados_card">
+						<strong>Crescimento médio</strong>
+						<p><span class="preencher">A preencher: crescimento médio, em % (Z)</span></p>
+					</div>
+					<article class="resultados_card sobre-inmar">
+						<span class="case_tag">Projeto de alto impacto</span>
+						<h3>Inmar</h3>
+						<p><span class="preencher">A preencher: desafio, solução e resultado do projeto Inmar</span></p>
+					</article>
+				</div>
+				<a class="button-tertiary sobre-impacto_link" href="/cases-de-sucesso/">Ver os cases de sucesso →</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- 6. Credibilidade (FGV, Bain e Brasil Júnior), professores mentores e selos -->
+	<div class="sobre-credibilidade">
+		<Credibilidade />
+		<section aria-labelledby="mentores-titulo">
+			<div class="page-padding">
+				<div class="container-large sobre-mentores">
+					<div class="icp_header">
+						<span class="eyebrow">Parceiros acadêmicos</span>
+						<h2 id="mentores-titulo">Professores da FGV como mentores</h2>
+						<p class="sobre-intro"><strong>+{NUMEROS.professores} professores da FGV</strong> acompanham os projetos da EJFGV. <span class="preencher">A preencher: confirmar o número de professores</span></p>
+					</div>
+					<ul class="sobre-cards is-tres">
+						{[1, 2, 3].map(() => (
+							<li class="sobre-card">
+								<h3><span class="preencher">A preencher: nome do professor mentor</span></h3>
+								<p><span class="preencher">A preencher: área ou departamento na FGV</span></p>
+							</li>
+						))}
+					</ul>
+					<p class="sobre-selos"><strong>Selos e prêmios:</strong> <span class="preencher">A preencher: selos e prêmios (logos de associações e reconhecimentos)</span></p>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<!-- 7. Equipe: fotos e mini-bios a receber (formato do docx: curso na FGV e área em que atua) -->
+	<section aria-labelledby="equipe-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Conhecimento FGV. Energia para ir além.</span>
+					<h2 id="equipe-titulo">Nossa equipe</h2>
+					<p class="sobre-intro">Alunos de todos os cursos de graduação da FGV, orientados por professores da FGV.</p>
+				</div>
+				<ul class="sobre-cards">
+					{[1, 2, 3, 4].map(() => (
+						<li class="sobre-card">
+							<ImagemReservada descricao="foto de um integrante da equipe" />
+							<h3><span class="preencher">A preencher: nome</span></h3>
+							<p><span class="preencher">A preencher: mini-bio (curso na FGV e área em que atua na EJFGV)</span></p>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 8. Serviços: cada card leva à página da solução (no site atual pareciam clicáveis e não levavam a lugar nenhum) -->
+	<section class="section_beneficios" aria-labelledby="servicos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="beneficios_title">
+					<span class="eyebrow">O que fazemos</span>
+					<h2 id="servicos-titulo">Nossos serviços</h2>
+					<p>Cinco frentes de consultoria estratégica. Escolha uma para ver o escopo do projeto e pedir um diagnóstico gratuito.</p>
+				</div>
+				<ul class="frentes_cards-grid sobre-servicos">
+					{SOLUCOES.map((s) => (
+						<li>
+							<a class="frente_mini-card sobre-servico" href={s.url}>
+								<img src={s.icone} alt="" loading="lazy" class="sobre-servico_icone" />
+								<h3>{s.nome}</h3>
+								<p>{s.descricao}</p>
+								<span class="sobre-servico_mais">Quero saber mais →</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 9. Logos de clientes -->
+	<LogoWall />
+
+	<!-- 10. Seja consultor EJFGV (docx): benefícios citados; link do processo seletivo e depoimentos a receber -->
+	<section aria-labelledby="consultor-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="beneficios_banner is-dark">
+					<div>
+						<span class="eyebrow">Para alunos da FGV</span>
+						<h2 id="consultor-titulo" class="beneficios-banner_title">Seja consultor EJFGV</h2>
+						<p class="sobre-consultor_texto">A EJFGV é formada por alunos de todos os cursos de graduação da FGV. Quem faz parte do time ganha:</p>
+						<ul class="vantagens_list">
+							{BENEFICIOS_CONSULTOR.map((beneficio) => (
+								<li class="vantagens_list-item"><img src={ICONE_CHECK} alt="" loading="lazy" /><span>{beneficio}</span></li>
+							))}
+						</ul>
+					</div>
+					<p class="sobre-consultor_acao"><span class="preencher">A preencher: link do processo seletivo</span></p>
+				</div>
+				<h3 class="sobre-consultor_subtitulo">Quem já passou pela EJFGV</h3>
+				<ul class="sobre-cards is-dois">
+					{[1, 2].map(() => (
+						<li class="sobre-card">
+							<p><span class="preencher">A preencher: mini depoimento de ex-consultor</span></p>
+							<p><span class="preencher">A preencher: nome, curso e onde trabalha hoje ou negócio que abriu</span></p>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 11. Perguntas frequentes -->
+	<div class="sobre-faq">
+		<Faq itens={faq} titulo="Perguntas frequentes sobre a EJFGV" />
+	</div>
+
+	<!-- 12. Banner final -->
+	<CtaBanner titulo="Vamos transformar a realidade do seu negócio?" href="/contato/" rotulo="Fale com um Especialista" />
+</Layout>
+
+<style>
+	/* Texto de apoio abaixo dos títulos */
+	.sobre-intro {
+		margin-top: 0.75rem;
+		color: var(--gray600);
+		font-size: 1rem;
+		line-height: 1.6;
+	}
+
+	.sobre-intro strong {
+		color: var(--gray900);
+	}
+
+	/* 1. Cabeçalho: a legenda cobre a base da foto, então o rótulo do espaço reservado sobe */
+	.hero-photo-frame :global(.image-placeholder) {
+		align-items: flex-start;
+		padding-top: 1.5rem;
+	}
+
+	/* Sem isto, o max-width: 100% global deixa o ícone encolher até sumir dentro do botão */
+	.hero-video-trigger svg {
+		max-width: none;
+	}
+
+	.sobre-hero_nota {
+		margin-top: 0.75rem;
+		color: var(--gray600);
+		font-size: 0.8rem;
+	}
+
+	/* 2. Por que a EJFGV */
+	.sobre-porque {
+		margin-bottom: 0;
+	}
+
+	.sobre-porque .quem-somos_copy + .quem-somos_copy {
+		margin-top: 1rem;
+	}
+
+	.sobre-porque strong {
+		color: var(--gray900);
+	}
+
+	/* 3. Propósito, visão e valores */
+	.sobre-identidade {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem;
+	}
+
+	.sobre-painel {
+		padding: clamp(1.5rem, 3vw, 2.25rem);
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-lg);
+	}
+
+	.sobre-rotulo {
+		margin-bottom: 0.85rem;
+		color: var(--primary200);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.sobre-proposito {
+		color: var(--white);
+		font-size: clamp(1.75rem, 3vw, 2.5rem);
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+	}
+
+	.sobre-visao {
+		color: var(--graywarm300);
+		font-size: 1.05rem;
+		line-height: 1.6;
+	}
+
+	.sobre-valores {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.sobre-valor {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.15rem 1.25rem;
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+		color: var(--white);
+		font-size: 1.05rem;
+		font-weight: 700;
+		line-height: 1.3;
+	}
+
+	/* Os "quadradinhos" (docx): cores do DS, alternadas */
+	.sobre-valor_bloco {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 0.5rem;
+		background: var(--primary600);
+		color: var(--graywarm950);
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+	}
+
+	.sobre-valor:nth-child(3n + 2) .sobre-valor_bloco {
+		background: var(--primary200);
+	}
+
+	.sobre-valor:nth-child(3n) .sobre-valor_bloco {
+		background: var(--graywarm300);
+	}
+
+	/* 5. Nosso impacto */
+	.sobre-impacto_topo {
+		padding-top: clamp(3.75rem, 6.5vw, 6rem);
+		padding-bottom: 2.5rem;
+	}
+
+	.sobre-impacto_topo .icp_header {
+		margin-bottom: 0;
+	}
+
+	.sobre-impacto_base {
+		padding-top: 2.5rem;
+		padding-bottom: clamp(3.75rem, 6.5vw, 6rem);
+	}
+
+	.sobre-inmar {
+		background: var(--graywarm950);
+		border-color: var(--graywarm950);
+	}
+
+	.sobre-inmar .case_tag {
+		align-self: flex-start;
+	}
+
+	.sobre-inmar h3 {
+		color: var(--white);
+		font-size: 1.35rem;
+		font-weight: 800;
+	}
+
+	.sobre-inmar p {
+		color: var(--graywarm300);
+	}
+
+	/* Link de texto alinhado à grade (mesmo padrão do .case_link do CaseCard) */
+	.sobre-impacto_link {
+		height: auto;
+		margin-top: 1.5rem;
+		padding: 0.35rem 0;
+	}
+
+	.sobre-impacto_link:hover {
+		background-color: transparent;
+		text-decoration: underline;
+	}
+
+	/* 6. Credibilidade e professores mentores: um bloco cinza contínuo */
+	.sobre-credibilidade {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.sobre-credibilidade :global(.section_icp) {
+		background: transparent;
+	}
+
+	.sobre-credibilidade :global(.icp_item) {
+		background: var(--white);
+	}
+
+	.sobre-mentores {
+		padding-bottom: clamp(3.75rem, 6.5vw, 6rem);
+	}
+
+	.sobre-selos {
+		margin-top: 2rem;
+		color: var(--gray700);
+		font-size: 0.95rem;
+	}
+
+	/* Cards de pessoas: equipe (4), mentores (3) e ex-consultores (2) */
+	.sobre-cards {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1.25rem;
+	}
+
+	.sobre-cards.is-tres {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.sobre-cards.is-dois {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.sobre-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.25rem;
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: var(--card-radius-lg);
+	}
+
+	.sobre-card :global(.image-placeholder) {
+		min-height: 0;
+		aspect-ratio: 4 / 5;
+		margin-bottom: 0.5rem;
+		border-radius: var(--card-radius-md);
+	}
+
+	.sobre-card h3 {
+		color: var(--gray900);
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+	.sobre-card p {
+		color: var(--graywarm600);
+		font-size: 0.875rem;
+		line-height: 1.55;
+	}
+
+	/* 8. Serviços: 3 + 2 cards, a segunda linha centralizada */
+	.sobre-servicos {
+		list-style: none;
+		margin-top: 2.5rem;
+		grid-template-columns: repeat(6, 1fr);
+	}
+
+	.sobre-servicos li {
+		grid-column: span 2;
+	}
+
+	.sobre-servicos li:nth-child(4) {
+		grid-column: 2 / span 2;
+	}
+
+	.sobre-servico {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.sobre-servico_icone {
+		width: 2.5rem;
+		height: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.sobre-servico h3 {
+		margin-bottom: 0.5rem;
+		color: var(--white);
+		font-size: 1.1rem;
+		font-weight: 700;
+		line-height: 1.3;
+	}
+
+	.sobre-servico .sobre-servico_mais {
+		margin-top: auto;
+		margin-bottom: 0;
+		padding-top: 1.25rem;
+	}
+
+	/* 10. Seja consultor EJFGV */
+	.sobre-consultor_texto {
+		max-width: 52ch;
+		margin-top: 0.75rem;
+		color: var(--graywarm300);
+		line-height: 1.6;
+	}
+
+	.sobre-consultor_acao {
+		flex-shrink: 0;
+		max-width: 22rem;
+	}
+
+	.sobre-consultor_subtitulo {
+		margin: 2.5rem 0 1rem;
+		color: var(--gray900);
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	/* 11. FAQ em fundo cinza, para separar do bloco anterior */
+	.sobre-faq :global(.section_faq) {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.sobre-faq :global(.faq_item) {
+		background: var(--white);
+	}
+
+	@media (max-width: 1024px) {
+		.sobre-valores {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.sobre-servicos {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.sobre-servicos li,
+		.sobre-servicos li:nth-child(4) {
+			grid-column: auto;
+		}
+
+		.sobre-servicos li:last-child {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.sobre-identidade,
+		.sobre-valores,
+		.sobre-servicos,
+		.sobre-cards.is-tres,
+		.sobre-cards.is-dois {
+			grid-template-columns: 1fr;
+		}
+
+		.sobre-cards {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.75rem;
+		}
+
+		.sobre-card {
+			padding: 0.85rem;
+		}
+
+		.sobre-consultor_acao {
+			max-width: none;
+		}
+	}
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 </style>

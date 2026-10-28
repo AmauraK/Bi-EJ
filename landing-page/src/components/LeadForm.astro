@@ -1,0 +1,136 @@
+---
+// Formulário de diagnóstico (.section_form / .form_* da LP). O endpoint vem de FORMULARIOS.contato:
+// vazio = sem envio; o main.js mostra WhatsApp e e-mail e nunca uma mensagem de sucesso falsa.
+// Os `name` dos campos são os da LP (name, Email, mobile_phone, Mensagem, Consentimento).
+import { CONTATO, FORMULARIOS, NUMEROS, SOLUCOES } from '../consts';
+
+interface Props {
+	/** slug da solução pré-selecionada */
+	servico?: string;
+	id?: string;
+	kicker?: string;
+	titulo?: string;
+	texto?: string;
+}
+
+const {
+	servico,
+	id = 'formulario',
+	kicker = 'Diagnóstico Gratuito · Sem Compromisso',
+	titulo = 'Agende um diagnóstico gratuito para transformar dados e gestão em resultados na sua empresa.',
+	texto = 'Após o preenchimento do formulário, um consultor da nossa equipe comercial entrará em contato por telefone para entender seu momento e explicar como podemos ajudar.',
+} = Astro.props;
+---
+
+<section id={id} class="section_form" aria-labelledby={`${id}-titulo`}>
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="form_wrapper">
+				<div class="form_info-col">
+					<div>
+						<div class="home-hero_divider"></div>
+						<span class="eyebrow">{kicker}</span>
+						<h2 id={`${id}-titulo`}>{titulo}</h2>
+						<p>{texto}</p>
+						<p class="form_whatsapp">
+							Prefere conversar agora? <a href={CONTATO.whatsappUrl} target="_blank" rel="noopener">Chame no WhatsApp</a>{' '}
+							ou escreva para <a href={`mailto:${CONTATO.email}`}>{CONTATO.email}</a>.
+						</p>
+					</div>
+
+					<div class="form_sla-badges">
+						<div>
+							<strong>+{NUMEROS.projetos} projetos</strong>
+							<span>Entregues desde {NUMEROS.fundacao}</span>
+						</div>
+						<div>
+							<strong>NPS {NUMEROS.nps}</strong>
+							<span>Recomendação dos clientes ({NUMEROS.npsAno})</span>
+						</div>
+						<div>
+							<strong>Até {NUMEROS.retornoDiasUteis} dia útil</strong>
+							<span>Tempo médio de retorno da equipe</span>
+						</div>
+						<div>
+							<strong>100% Sob Medida</strong>
+							<span>Orientação de professores da FGV</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form_component">
+					<form
+						data-form="contato"
+						action={FORMULARIOS.contato}
+						method="post"
+						novalidate
+						data-whatsapp={CONTATO.whatsappUrl}
+						data-email={CONTATO.email}
+					>
+						<div class="form_grid-2">
+							<div class="form-field-wrapper">
+								<label for={`${id}-name`} class="field-label">Nome <span class="text-color-primary600">*</span></label>
+								<input class="form-input" maxlength="256" name="name" id={`${id}-name`} placeholder="Nome completo" type="text" autocomplete="name" required />
+							</div>
+							<div class="form-field-wrapper">
+								<label for={`${id}-email`} class="field-label">E-mail <span class="text-color-primary600">*</span></label>
+								<input class="form-input" maxlength="256" name="Email" id={`${id}-email`} placeholder="voce@suaempresa.com.br" type="email" autocomplete="email" required />
+							</div>
+						</div>
+
+						<div class="form_grid-2">
+							<div class="form-field-wrapper">
+								<label for={`${id}-phone`} class="field-label">WhatsApp <span class="text-color-primary600">*</span></label>
+								<input class="form-input" maxlength="20" name="mobile_phone" id={`${id}-phone`} placeholder="(11) 99999-9999" type="tel" autocomplete="tel" required />
+							</div>
+							<div class="form-field-wrapper">
+								<label for={`${id}-servico`} class="field-label">Serviço de interesse</label>
+								<select class="form-input" name="servico" id={`${id}-servico`}>
+									<option value="">Ainda não sei</option>
+									{SOLUCOES.map((s) => <option value={s.slug} selected={s.slug === servico}>{s.nome}</option>)}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-field-wrapper">
+							<label for={`${id}-mensagem`} class="field-label">Mensagem (opcional)</label>
+							<textarea id={`${id}-mensagem`} name="Mensagem" maxlength="5000" placeholder="Conte de forma simples o que sua empresa busca hoje..." class="form-input text-area"></textarea>
+						</div>
+
+						<div class="form-honeypot" aria-hidden="true">
+							<label>Não preencha este campo <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+						</div>
+
+						<label class="form-checkbox" for={`${id}-consentimento`}>
+							<input type="checkbox" name="Consentimento" id={`${id}-consentimento`} required />
+							<span>Aceito que a EJFGV utilize meus dados para entrar em contato sobre o diagnóstico, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+						</label>
+
+						<button type="submit" class="button is-button-large">Solicitar diagnóstico gratuito →</button>
+
+						<div class="form-feedback" role="status" aria-live="polite"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.form_whatsapp {
+		margin-top: 1rem;
+	}
+
+	.form_whatsapp a {
+		color: var(--primary200);
+		font-weight: 700;
+		text-decoration: underline;
+	}
+
+	.form_component .button {
+		width: 100%;
+		height: auto;
+		min-height: 64px;
+		white-space: normal;
+	}
+</style>

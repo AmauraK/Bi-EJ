@@ -1,0 +1,49 @@
+---
+// Método em 4 etapas (.section_metodo / .metodo_* da LP), com um ícone por etapa (docx).
+import { METODO } from '../consts';
+
+interface Props {
+	kicker?: string;
+	titulo?: string;
+}
+
+const { kicker = 'Passo a Passo Simples', titulo = 'Nosso método para resolver o seu problema' } = Astro.props;
+
+// Ícones de traço (SVG inline), na ordem Contato, Diagnóstico, Proposta, Projeto.
+const icones = [
+	'<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/>',
+	'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+	'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+	'<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
+];
+---
+
+<section class="section_metodo" aria-labelledby="metodo-heading">
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="metodo_header">
+				<span class="eyebrow">{kicker}</span>
+				<h2 id="metodo-heading">{titulo}</h2>
+			</div>
+
+			<ol class="metodo_cards">
+				{METODO.map((etapa, i) => (
+					<li class="metodo_card">
+						<span class="metodo_icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icones[i]} />
+						</span>
+						<span class="metodo_step-badge">Etapa {String(i + 1).padStart(2, '0')}</span>
+						<h3>{etapa.nome}</h3>
+						<p>{etapa.texto}</p>
+					</li>
+				))}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.metodo_cards {
+		list-style: none;
+	}
+</style>

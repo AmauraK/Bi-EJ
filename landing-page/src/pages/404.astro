@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+
+<Layout titulo="Página não encontrada - EJFGV" descricao="Esta página não existe no site da EJFGV." noindex>
+	<PageHeader kicker="Erro 404" titulo="Esta página não existe." descricao="O endereço pode ter mudado. Você encontra as soluções da EJFGV na página inicial." centralizado>
+		<Fragment slot="acoes">
+			<a href="/" class="button">Ir para a página inicial ↗</a>
+			<a href="/mapa-do-site/" class="button-tertiary">Ver o mapa do site →</a>
+		</Fragment>
+	</PageHeader>
+</Layout>

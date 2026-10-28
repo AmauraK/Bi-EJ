@@ -1,9 +1,15 @@
 ---
+<<<<<<< HEAD
+=======
+// /blog/: vitrine do blog. Os posts continuam no WordPress (links absolutos); a migração fica para outra etapa.
+// Posts, categorias e total vêm do inventário do site atual (27/09/2026, posts até 22/09/2026).
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
 import Faq from '../components/Faq.astro';
 import CtaBanner from '../components/CtaBanner.astro';
+<<<<<<< HEAD
 import NewsletterBox from '../components/conteudo/NewsletterBox.astro';
 import { NUMEROS, POSTS_BLOG, SOLUCOES } from '../consts';
 
@@ -39,10 +45,67 @@ const faqBlog = [
       'Sim. Na nossa página de Materiais Ricos disponibilizamos gratuitamente e-books passo a passo sobre Google Ads, Power BI e Projeções e Modelagem Financeira, além da Carta de Serviços institucional da EJFGV.',
     validar: true,
   },
+=======
+import Newsletter from '../components/conteudo/Newsletter.astro';
+import Solucoes from '../components/conteudo/Solucoes.astro';
+import { SITE, NUMEROS, SOLUCOES } from '../consts';
+
+const TOTAL_POSTS = 356;
+const BLOG = 'https://ejfgv.com/category/blog/';
+
+// O rótulo "Business Intelligence" substitui o nome antigo da categoria; o endereço no WordPress não muda.
+const CATEGORIAS = [
+	{ nome: 'Gestão', url: `${BLOG}gestao/` },
+	{ nome: 'Empreendedorismo', url: `${BLOG}empreendedorismo/` },
+	{ nome: 'Consultoria', url: `${BLOG}consultoria/` },
+	{ nome: 'Business Intelligence', url: `${BLOG}data-science-blog/` },
+	{ nome: 'Oportunidades', url: `${BLOG}oportunidades/` },
+	{ nome: 'Liderança', url: `${BLOG}lideranca/` },
+];
+
+const POSTS = [
+	{ data: '2026-09-22', titulo: 'Mês do Cliente: como reconquistar compradores inativos da marca', url: 'https://ejfgv.com/blog/dia-do-cliente-reconquistar-compradores-inativos/', categorias: ['Gestão'] },
+	{ data: '2026-09-11', titulo: 'Simples Nacional híbrido: quando a escolha compensa no B2B', url: 'https://ejfgv.com/blog/simples-nacional-hibrido-b2b/', categorias: ['Gestão'] },
+	{ data: '2026-09-09', titulo: 'Conteúdo com IA: como ganhar escala sem perder confiança', url: 'https://ejfgv.com/blog/conteudo-com-ia-como-ganhar-escala-sem-perder-confianca/', categorias: ['Consultoria', 'Gestão'] },
+	{ data: '2026-09-01', titulo: 'Marketing de influência: como escolher criadores que vendem', url: 'https://ejfgv.com/blog/marketing-de-influencia-como-escolher-criadores-que-vendem/', categorias: ['Gestão'] },
+	{ data: '2026-08-22', titulo: 'WhatsApp com IA: como transformar atendimento em vendas', url: 'https://ejfgv.com/blog/whatsapp-com-ia-atendimento-vendas/', categorias: ['Gestão'] },
+	{ data: '2026-08-14', titulo: 'Eleições 2026: como proteger sua marca nas redes sociais', url: 'https://ejfgv.com/blog/eleicoes-2026-proteger-marca-redes-sociais/', categorias: ['Gestão'] },
+	{ data: '2026-08-07', titulo: 'Vale a pena vender no TikTok Shop: 7 pontos para decidir', url: 'https://ejfgv.com/blog/vale-a-pena-vender-no-tiktok-shop/', categorias: ['Gestão'] },
+	{ data: '2026-07-23', titulo: 'Como vender no Dia dos Pais sem depender só de desconto', url: 'https://ejfgv.com/blog/como-vender-no-dia-dos-pais-sem-desconto/', categorias: ['Gestão'] },
+	{ data: '2026-07-16', titulo: 'Reforma tributária: como ajustar preços sem perder margem', url: 'https://ejfgv.com/blog/reforma-tributaria-ajustar-precos-sem-perder-margem/', categorias: ['Gestão'] },
+];
+
+const dataBr = (iso: string) => iso.split('-').reverse().join('/');
+const lista = (itens: string[]) => new Intl.ListFormat('pt-BR').format(itens);
+
+const faq = [
+	{
+		pergunta: 'Os conteúdos do blog são gratuitos?',
+		resposta: 'Sim. Os artigos do blog e os e-books da página de Materiais Ricos são gratuitos.',
+		validar: true,
+	},
+	{
+		pergunta: 'Sobre quais temas a EJFGV escreve?',
+		resposta: `Os artigos estão organizados nos temas ${lista(CATEGORIAS.map((c) => c.nome))}. São ${TOTAL_POSTS} artigos publicados desde 2018 (levantamento de 27/09/2026).`,
+		validar: true,
+	},
+	{
+		pergunta: 'Como recebo os novos conteúdos?',
+		resposta: 'Inscreva-se na newsletter desta página com seu nome e e-mail.',
+		validar: true,
+	},
+	{ pergunta: 'Quem escreve os artigos do blog?' },
+	{
+		pergunta: 'Como levo um tema do blog para a minha empresa?',
+		resposta: `Solicite um diagnóstico gratuito pela página de contato ou pelo WhatsApp. Depois dele, a equipe apresenta uma proposta com escopo e prazos. As soluções da EJFGV são ${lista(SOLUCOES.map((s) => s.nome))}.`,
+		validar: true,
+	},
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 ];
 ---
 
 <Layout
+<<<<<<< HEAD
   titulo="Blog da EJFGV — Conteúdos Práticos de Gestão, Finanças, Marketing e Business Intelligence"
   descricao="Leia artigos práticos elaborados pelos consultores da EJFGV (Fundação Getulio Vargas, desde 1988) para apoiar PMEs em estratégia, finanças, marketing, operações e Business Intelligence."
   canonicalPath="/blog/"
@@ -477,4 +540,161 @@ const faqBlog = [
       grid-template-columns: 1fr;
     }
   }
+=======
+	titulo="Blog de gestão para pequenas e médias empresas - EJFGV"
+	descricao="Artigos gratuitos da EJFGV, a Empresa Júnior da FGV, sobre gestão, empreendedorismo, liderança e Business Intelligence para pequenas e médias empresas."
+>
+	<PageHeader
+		kicker="Blog da EJFGV"
+		titulo="Blog de gestão para pequenas e médias empresas"
+		descricao={`O blog da ${SITE.nome}, a ${SITE.nomeCompleto}, publica desde 2018 artigos gratuitos sobre gestão, empreendedorismo, liderança e Business Intelligence para donos e gestores de pequenas e médias empresas. Quando quiser levar um tema para o seu negócio, nossos consultores fazem um diagnóstico gratuito.`}
+	>
+		<Fragment slot="acoes">
+			<a href="/contato/" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+			<a href="#newsletter" class="button-tertiary">Receber os conteúdos por e-mail →</a>
+		</Fragment>
+	</PageHeader>
+
+	<section id="artigos" class="blog_artigos" aria-labelledby="artigos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="icp_header">
+					<span class="eyebrow">Artigos</span>
+					<h2 id="artigos-titulo">Artigos mais recentes</h2>
+					<p>São {TOTAL_POSTS} artigos publicados desde 2018 (levantamento de 27/09/2026). Comece pelos mais recentes ou escolha um tema.</p>
+				</div>
+
+				<nav class="tag-chips blog_temas" aria-label="Temas do blog">
+					<a class="tag-chip" href={BLOG}>Todos</a>{' '}
+					{CATEGORIAS.map((c) => <><a class="tag-chip" href={c.url}>{c.nome}</a>{' '}</>)}
+				</nav>
+
+				<div class="posts_grid">
+					{POSTS.map((p) => (
+						<article class="case_card post_card">
+							<ImagemReservada descricao="capa do post" classe="post_capa" />
+							<div>
+								<p class="post_meta">
+									{p.categorias.map((c) => <><span class="case_tag">{c}</span>{' '}</>)}
+									<time datetime={p.data}>{dataBr(p.data)}</time>
+								</p>
+								<h3><a href={p.url}>{p.titulo}</a></h3>
+							</div>
+							<p class="post_ler" aria-hidden="true">Ler no blog →</p>
+						</article>
+					))}
+				</div>
+
+				<div class="blog_todos">
+					<a class="button-secondary" href={BLOG}>Ver todos os artigos no blog</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Newsletter />
+
+	<Solucoes
+		id="solucoes"
+		kicker="Da leitura à prática"
+		titulo="Leve esses temas para dentro da sua empresa"
+		texto="Os artigos ajudam a entender o problema. Para resolver no seu negócio, conte com as soluções de consultoria da EJFGV, feitas por alunos da FGV com orientação de professores."
+	>
+		<div class="frente_mini-card">
+			<span>Diagnóstico gratuito</span>
+			<h3><a href="/contato/">Não sabe por onde começar?</a></h3>
+			<p>Conte o desafio da sua empresa: o diagnóstico é gratuito e a equipe retorna em até {NUMEROS.retornoDiasUteis} dia útil.</p>
+			<p class="solucoes_mais" aria-hidden="true">Fale com um especialista →</p>
+		</div>
+	</Solucoes>
+
+	<Faq itens={faq} />
+
+	<CtaBanner titulo="Quer aplicar esses temas na sua empresa?" href="/contato/" rotulo="Fale com um Especialista" escuro />
+</Layout>
+
+<style>
+	.blog_artigos {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.icp_header p {
+		margin-top: 0.75rem;
+		color: var(--gray600);
+	}
+
+	.blog_temas {
+		margin-bottom: 2rem;
+	}
+
+	.posts_grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.post_card {
+		position: relative;
+		justify-content: flex-start;
+	}
+
+	.post_card:focus-within {
+		border-color: var(--primary300);
+	}
+
+	.post_card :global(.post_capa) {
+		min-height: 0;
+		aspect-ratio: 16 / 9;
+	}
+
+	.post_meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.6rem;
+	}
+
+	.post_meta .case_tag {
+		margin-bottom: 0;
+	}
+
+	/* O card inteiro é clicável, mas o link (e o nome lido pelo leitor de tela) é só o título */
+	.post_card h3 a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: var(--card-radius-lg);
+	}
+
+	.post_card:hover h3 a {
+		text-decoration: underline;
+	}
+
+	.post_ler {
+		margin-top: auto;
+		color: var(--primary700);
+		font-weight: 600;
+	}
+
+	.blog_todos {
+		display: flex;
+		justify-content: center;
+		margin-top: 2.5rem;
+	}
+
+	@media (max-width: 1024px) {
+		.posts_grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.posts_grid {
+			grid-template-columns: 1fr;
+		}
+	}
+>>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 </style>

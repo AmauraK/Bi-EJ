@@ -1,0 +1,65 @@
+---
+// Newsletter do blog e dos materiais (docx: "Inscreva-se para receber nossos conteúdos e ficar à frente").
+// Mesmo visual do LeadForm. Endpoint em FORMULARIOS.newsletter: vazio = sem envio (o main.js avisa e mostra
+// WhatsApp e e-mail). Usada uma vez por página, por isso os ids são fixos.
+import { CONTATO, FORMULARIOS } from '../../consts';
+---
+
+<section id="newsletter" class="section_form" aria-labelledby="newsletter-titulo">
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="form_wrapper">
+				<div class="form_info-col">
+					<div>
+						<div class="home-hero_divider"></div>
+						<span class="eyebrow">Newsletter</span>
+						<h2 id="newsletter-titulo">Inscreva-se para receber nossos conteúdos e ficar à frente</h2>
+						<p>Quer receber conteúdos informativos sobre gestão? Deixe seu nome e e-mail.</p>
+						<p class="newsletter_pendente"><span class="preencher">A preencher: frequência e conteúdo dos envios da newsletter</span></p>
+					</div>
+				</div>
+
+				<div class="form_component">
+					<form
+						data-form="newsletter"
+						action={FORMULARIOS.newsletter}
+						method="post"
+						novalidate
+						data-whatsapp={CONTATO.whatsappUrl}
+						data-email={CONTATO.email}
+					>
+						<div class="form_grid-2">
+							<div class="form-field-wrapper">
+								<label for="newsletter-name" class="field-label">Nome <span class="text-color-primary600">*</span></label>
+								<input class="form-input" maxlength="256" name="name" id="newsletter-name" placeholder="Nome completo" type="text" autocomplete="name" required />
+							</div>
+							<div class="form-field-wrapper">
+								<label for="newsletter-email" class="field-label">E-mail <span class="text-color-primary600">*</span></label>
+								<input class="form-input" maxlength="256" name="Email" id="newsletter-email" placeholder="voce@suaempresa.com.br" type="email" autocomplete="email" required />
+							</div>
+						</div>
+
+						<div class="form-honeypot" aria-hidden="true">
+							<label>Não preencha este campo <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+						</div>
+
+						<label class="form-checkbox" for="newsletter-consentimento">
+							<input type="checkbox" name="Consentimento" id="newsletter-consentimento" required />
+							<span>Aceito receber os conteúdos da EJFGV por e-mail, conforme a <a href="/politica-de-privacidade/">Política de Privacidade</a>.</span>
+						</label>
+
+						<button type="submit" class="button is-button-large">Quero receber os conteúdos</button>
+
+						<div class="form-feedback" role="status" aria-live="polite"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.newsletter_pendente {
+		margin-top: 1rem;
+	}
+</style>

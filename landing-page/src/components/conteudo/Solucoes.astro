@@ -1,0 +1,100 @@
+---
+// As soluções de SOLUCOES (nome, descrição e link) em fundo escuro: "Da leitura à prática" no blog e
+// Carta de Serviços nos materiais. O slot recebe um card extra (.frente_mini-card) no fim da grade.
+import { SOLUCOES } from '../../consts';
+
+interface Props {
+	id: string;
+	kicker: string;
+	titulo: string;
+	texto: string;
+}
+
+const { id, kicker, titulo, texto } = Astro.props;
+---
+
+<section id={id} class="section_beneficios" aria-labelledby={`${id}-titulo`}>
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="beneficios_wrapper">
+				<div class="beneficios_title">
+					<span class="beneficios_eyebrow">{kicker}</span>
+					<h2 id={`${id}-titulo`}>{titulo}</h2>
+					<p>{texto}</p>
+				</div>
+				<div class="frentes_cards-grid solucoes_grid">
+					{SOLUCOES.map((s) => (
+						<div class="frente_mini-card">
+							<span>{s.rotulo}</span>
+							<h3><a href={s.url}>{s.nome}</a></h3>
+							<p>{s.descricao}</p>
+							<p class="solucoes_mais" aria-hidden="true">Quero saber mais →</p>
+						</div>
+					))}
+					<slot />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* :global para valer também no card extra, que vem do slot com o escopo da página */
+	.solucoes_grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.solucoes_grid :global(.frente_mini-card) {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.solucoes_grid :global(.frente_mini-card:focus-within) {
+		border-color: var(--primary500);
+	}
+
+	.solucoes_grid :global(h3) {
+		margin-bottom: 0.5rem;
+		color: var(--white);
+		font-size: 1.05rem;
+		font-weight: 700;
+	}
+
+	/* O card inteiro é clicável, mas o link (e o nome lido pelo leitor de tela) é só o título */
+	.solucoes_grid :global(h3 a::after) {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: var(--card-radius-md);
+	}
+
+	.solucoes_grid :global(.solucoes_mais) {
+		margin-top: auto;
+		padding-top: 1rem;
+		color: var(--primary200);
+		font-weight: 700;
+	}
+
+	/* .frente_mini-card span é o eyebrow do card; o marcador "A preencher" volta ao normal */
+	.solucoes_grid :global(.preencher) {
+		display: inline;
+		margin: 0;
+		color: inherit;
+		font-size: inherit;
+		letter-spacing: normal;
+		text-transform: none;
+	}
+
+	@media (max-width: 1024px) {
+		.solucoes_grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.solucoes_grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
