@@ -7,51 +7,58 @@
    ========================================================================== */
 
 :root {
-  /* 1. PRIMITIVE TOKENS — Brand Primary (Terracotta / Laranja EJFGV) */
-  --primary25:  #fefaf5;
-  --primary50:  #fef6ee;
-  --primary100: #fdead7;
-  --primary200: #f7b27a; /* Eyebrow em fundo escuro (.section_beneficios) */
-  --primary300: #f38744;
-  --primary400: #df792f;
-  --primary500: #ef6820; /* Superfície de destaque (.beneficios_banner) */
-  --primary600: #e04f16; /* Acento principal, Botão Primário, Cursor, Hero Divider */
-  --primary700: #b93815; /* Hover Primário, Eyebrow claro ("Quem somos?"), Botão Terciário */
-  --primary800: #932f19;
-  --primary900: #772917;
+  /* 0. CORES DO BRANDBOOK EJFGV 2026 — única fonte de verdade.
+        Todo token abaixo é uma dessas 4 cores ou uma mistura (color-mix) entre elas. */
+  --brand-laranja: #e38e33; /* RGB 227·142·51 — destaque, CTAs, títulos de ênfase */
+  --brand-chumbo:  #252832; /* RGB 37·40·50   — fundo principal, texto em fundo claro */
+  --brand-cinza:   #dadae4; /* RGB 218·218·228 — fundos secundários, separadores */
+  --brand-menta:   #f9fffc; /* RGB 249·255·252 — fundo de páginas claras, respiro */
 
-  /* 2. PRIMITIVE TOKENS — Gray Warm (Contraste Escuro Quente & Textos de Apoio) */
-  --graywarm950: #171412; /* Fundo profundo / Botão secundário / Texto no banner laranja */
-  --graywarm900: #1c1917; /* Fundo da seção escura (.section_beneficios) */
-  --graywarm600: #57534e; /* Texto secundário em cards (.metodo_card, .icp_item) */
-  --graywarm300: #d7d3d0; /* Texto de apoio e checklist em fundo escuro */
+  /* 1. PRIMITIVE TOKENS — Laranja EJFGV (claros = laranja + menta, escuros = laranja + chumbo) */
+  --primary25:  color-mix(in srgb, var(--brand-laranja) 4%, var(--brand-menta));
+  --primary50:  color-mix(in srgb, var(--brand-laranja) 9%, var(--brand-menta));
+  --primary100: color-mix(in srgb, var(--brand-laranja) 22%, var(--brand-menta));
+  --primary200: color-mix(in srgb, var(--brand-laranja) 70%, var(--brand-menta)); /* Eyebrow em fundo escuro */
+  --primary300: color-mix(in srgb, var(--brand-laranja) 90%, var(--brand-menta));
+  --primary400: var(--brand-laranja);
+  --primary500: var(--brand-laranja); /* Superfície de destaque (.beneficios_banner) */
+  --primary600: var(--brand-laranja); /* Acento principal, Botão Primário, Cursor, Hero Divider */
+  --primary700: color-mix(in srgb, var(--brand-laranja) 78%, var(--brand-chumbo)); /* Hover Primário, Eyebrow claro */
+  --primary800: color-mix(in srgb, var(--brand-laranja) 62%, var(--brand-chumbo));
+  --primary900: color-mix(in srgb, var(--brand-laranja) 48%, var(--brand-chumbo));
 
-  /* 3. PRIMITIVE TOKENS — Gray Cool (Interface, Tipografia Clara & Formulários) */
-  --gray900: #101828;
-  --gray800: #182230;
-  --gray700: #344054;
-  --gray600: #475467;
-  --gray500: #667085;
-  --gray400: #98a2b3;
-  --gray300: #d0d5dd;
-  --gray200: #eaecf0;
-  --gray100: #f2f4f7;
-  --gray50:  #f9fafb;
-  --gray25:  #fcfcfd;
-  --white:   #ffffff;
+  /* 2. PRIMITIVE TOKENS — Chumbo (contraste escuro & textos de apoio) */
+  --graywarm950: var(--brand-chumbo); /* Fundo profundo / Botão secundário / Texto no banner laranja */
+  --graywarm900: color-mix(in srgb, var(--brand-chumbo) 94%, var(--brand-cinza)); /* Fundo da seção escura */
+  --graywarm600: color-mix(in srgb, var(--brand-chumbo) 78%, var(--brand-menta)); /* Texto secundário em cards */
+  --graywarm300: var(--brand-cinza); /* Texto de apoio e checklist em fundo escuro */
 
-  /* 4. STATUS TOKENS */
-  --success50:  #ecfdf3;
-  --success200: #a6f4c5;
-  --success500: #12b76a;
-  --success700: #027a48;
-  --warning500: #f79009;
-  --error500:   #f04438;
+  /* 3. PRIMITIVE TOKENS — Chumbo → Cinza → Menta (interface, tipografia clara & formulários) */
+  --gray900: var(--brand-chumbo);
+  --gray800: var(--brand-chumbo);
+  --gray700: color-mix(in srgb, var(--brand-chumbo) 88%, var(--brand-menta));
+  --gray600: color-mix(in srgb, var(--brand-chumbo) 78%, var(--brand-menta));
+  --gray500: color-mix(in srgb, var(--brand-chumbo) 64%, var(--brand-menta));
+  --gray400: color-mix(in srgb, var(--brand-chumbo) 42%, var(--brand-cinza));
+  --gray300: var(--brand-cinza);
+  --gray200: color-mix(in srgb, var(--brand-cinza) 55%, var(--brand-menta));
+  --gray100: color-mix(in srgb, var(--brand-cinza) 30%, var(--brand-menta));
+  --gray50:  color-mix(in srgb, var(--brand-cinza) 14%, var(--brand-menta));
+  --gray25:  color-mix(in srgb, var(--brand-cinza) 6%, var(--brand-menta));
+  --white:   var(--brand-menta);
 
-  /* 5. GRADIENT TOKENS (Extraídos do Webflow EJFGV) */
-  --gradient-title-gray:  linear-gradient(63deg, #182230, #475467);
-  --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
-  --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0), #f5f5f5 80%);
+  /* 4. STATUS TOKENS — o brandbook não define verde/vermelho/amarelo: status usa as 4 cores da marca */
+  --success50:  var(--gray100);
+  --success200: var(--brand-cinza);
+  --success500: var(--brand-chumbo);
+  --success700: var(--brand-chumbo);
+  --warning500: var(--brand-laranja);
+  --error500:   var(--primary700);
+
+  /* 5. GRADIENT TOKENS */
+  --gradient-title-gray:  linear-gradient(63deg, var(--brand-chumbo), var(--gray600));
+  --gradient-metodo-card: linear-gradient(90deg, var(--gray100), var(--primary50));
+  --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(249, 255, 252, 0), var(--gray100) 80%);
 
   /* 6. SEMANTIC & COMPONENT TOKENS */
   --surface-page-light:       var(--white);
@@ -69,9 +76,9 @@
   --text-eyebrow-light:       var(--primary700);
   --text-eyebrow-dark:        var(--primary200);
 
-  --border-hairline-light:    rgba(16, 24, 40, 0.1);
-  --border-hairline-dark:     rgba(255, 255, 255, 0.12);
-  --ring-focus:               0 1px 2px 0 rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
+  --border-hairline-light:    rgba(37, 40, 50, 0.1);
+  --border-hairline-dark:     rgba(249, 255, 252, 0.12);
+  --ring-focus:               0 1px 2px 0 rgba(37, 40, 50, 0.05), 0 0 0 4px var(--primary100);
 
   /* 7. TYPOGRAPHY & MOTION (Sans-Serif + Grotesk Zero) */
   --font-sans: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -114,7 +121,7 @@ body {
 
 ::selection {
   background: var(--primary600);
-  color: var(--white);
+  color: var(--brand-chumbo);
 }
 
 a {
@@ -226,7 +233,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(1.25rem, 3.5vw, 3.5rem);
-  background: rgba(23, 20, 18, 0.92);
+  background: rgba(37, 40, 50, 0.92);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-hairline-dark);
@@ -275,7 +282,7 @@ body::after {
   letter-spacing: 0.16em;
   color: var(--graywarm300);
   padding-left: 10px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(249, 255, 252, 0.2);
 }
 
 .gz-nav .links {
@@ -292,7 +299,7 @@ body::after {
   text-transform: uppercase;
   position: relative;
   padding: 4px 0;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(249, 255, 252, 0.88);
   transition: color 0.25s;
 }
 
@@ -320,7 +327,7 @@ body::after {
   font-family: var(--font-sans);
   border: 1px solid var(--primary600);
   background: var(--primary600);
-  color: var(--white);
+  color: var(--brand-chumbo);
   padding: 10px 18px;
   border-radius: 6px;
   font-size: 11px;
@@ -347,7 +354,7 @@ body::after {
   background-color: var(--primary600);
   min-width: 190px;
   height: 54px;
-  color: var(--white);
+  color: var(--brand-chumbo);
   text-align: center;
   white-space: nowrap;
   border-radius: var(--btn-radius);
@@ -359,7 +366,7 @@ body::after {
   font-weight: 600;
   transition: all 0.3s var(--ease-out-expo);
   display: inline-flex;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 1px 2px rgba(37, 40, 50, 0.06);
   cursor: pointer;
 }
 
@@ -391,7 +398,7 @@ body::after {
   font-weight: 600;
   transition: all 0.3s var(--ease-out-expo);
   display: inline-flex;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 1px 2px rgba(37, 40, 50, 0.06);
   cursor: pointer;
 }
 
@@ -558,7 +565,7 @@ body::after {
   background: var(--graywarm950);
   border: 2px solid var(--white);
   box-shadow:
-    0 24px 48px -12px rgba(23, 20, 18, 0.22),
+    0 24px 48px -12px rgba(37, 40, 50, 0.22),
     0 0 0 1px var(--gray200);
 }
 
@@ -594,10 +601,10 @@ body::after {
   right: 1rem;
   bottom: 1rem;
   z-index: 3;
-  background: rgba(23, 20, 18, 0.88);
+  background: rgba(37, 40, 50, 0.88);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(249, 255, 252, 0.14);
   border-radius: 0.85rem;
   padding: 0.85rem 1.15rem;
   display: flex;
@@ -618,7 +625,7 @@ body::after {
   height: 10px;
   border-radius: 50%;
   background: var(--primary500);
-  box-shadow: 0 0 0 4px rgba(239, 104, 32, 0.22);
+  box-shadow: 0 0 0 4px rgba(227, 142, 51, 0.22);
   flex-shrink: 0;
 }
 
@@ -640,7 +647,7 @@ body::after {
   align-items: center;
   gap: 0.5rem;
   background: var(--primary600);
-  color: var(--white);
+  color: var(--brand-chumbo);
   padding: 0.5rem 0.9rem;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -763,7 +770,7 @@ body::after {
 }
 
 .frente_tab {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(249, 255, 252, 0.05);
   border: 1px solid var(--border-hairline-dark);
   color: var(--graywarm300);
   padding: 0.6rem 1.15rem;
@@ -778,7 +785,7 @@ body::after {
 .frente_tab.is-active {
   background: var(--primary600);
   border-color: var(--primary600);
-  color: var(--white);
+  color: var(--brand-chumbo);
 }
 
 /* Linhas Z-Pattern (.beneficios_item) */
@@ -1109,7 +1116,7 @@ body::after {
 
 .case_card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.08);
 }
 
 .case_metric {
@@ -1198,7 +1205,7 @@ body::after {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #e4e7ec;
+  background: var(--gray200);
   border: none;
   cursor: pointer;
   transition: background 0.25s, transform 0.25s;
@@ -1238,11 +1245,11 @@ body::after {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(224, 79, 22, 0.92);
+  background: rgba(227, 142, 51, 0.92);
   color: var(--white);
   display: grid;
   place-items: center;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 24px rgba(37, 40, 50, 0.3);
   transition: transform 0.25s var(--ease-out-expo);
 }
 
@@ -1281,10 +1288,10 @@ body::after {
 }
 
 .metodo_card {
-  color: #181818;
+  color: var(--brand-chumbo);
   text-align: center;
   background-image: var(--gradient-metodo-card);
-  border: 1px solid rgba(16, 24, 40, 0.07);
+  border: 1px solid rgba(37, 40, 50, 0.07);
   border-radius: var(--card-radius-lg);
   padding: 2rem 1.5rem;
   display: flex;
@@ -1297,7 +1304,7 @@ body::after {
 
 .metodo_card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.08);
 }
 
 .metodo_step-badge {
@@ -1306,7 +1313,7 @@ body::after {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--primary700);
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(249, 255, 252, 0.85);
   padding: 4px 10px;
   border-radius: 999px;
   margin-bottom: 0.25rem;
@@ -1338,7 +1345,7 @@ body::after {
   border-radius: var(--card-radius-xl);
   overflow: hidden;
   border: 1px solid var(--gray200);
-  box-shadow: 0 20px 40px -16px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 20px 40px -16px rgba(37, 40, 50, 0.08);
 }
 
 .form_info-col {
@@ -1498,7 +1505,7 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: 9500;
-  background: rgba(16, 24, 40, 0.86);
+  background: rgba(37, 40, 50, 0.86);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   display: none;
@@ -1515,11 +1522,11 @@ body::after {
   width: 100%;
   max-width: 900px;
   aspect-ratio: 16 / 9;
-  background: #000;
+  background: var(--brand-chumbo);
   border-radius: 1rem;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(37, 40, 50, 0.5);
 }
 
 .video-modal_close {
@@ -1527,9 +1534,9 @@ body::after {
   top: 12px;
   right: 12px;
   z-index: 5;
-  background: rgba(23, 20, 18, 0.85);
+  background: rgba(37, 40, 50, 0.85);
   color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(249, 255, 252, 0.2);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -1608,7 +1615,7 @@ body::after {
   padding: 0.75rem 1.1rem;
   border-radius: var(--btn-radius);
   font-weight: 700;
-  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.25);
+  box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.25);
 }
 
 .skip-link:focus {
@@ -1642,7 +1649,7 @@ body::after {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(249, 255, 252, 0.88);
   transition: color 0.25s;
 }
 
@@ -1678,7 +1685,7 @@ body::after {
   background: var(--graywarm950);
   border: 1px solid var(--border-hairline-dark);
   border-radius: var(--card-radius-md);
-  box-shadow: 0 24px 48px -12px rgba(23, 20, 18, 0.35);
+  box-shadow: 0 24px 48px -12px rgba(37, 40, 50, 0.35);
 }
 
 .gz-nav .links .dropdown-list a:not(.buy) {
@@ -1698,7 +1705,7 @@ body::after {
 
 .gz-nav .links .dropdown-list a:not(.buy):hover,
 .gz-nav .links .dropdown-list a[aria-current="page"] {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(249, 255, 252, 0.06);
   color: var(--white);
 }
 
@@ -1710,7 +1717,7 @@ body::after {
   height: 38px;
   padding: 0 12px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(249, 255, 252, 0.24);
   border-radius: 6px;
   color: var(--white);
   font-size: 11px;
@@ -1898,7 +1905,7 @@ body::after {
 }
 
 .section_page-header.is-dark .hero_background {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(249, 255, 252, 0.09) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
@@ -1921,7 +1928,7 @@ body::after {
 }
 
 .section_page-header.is-dark .button-tertiary:hover {
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(249, 255, 252, 0.06);
 }
 
 @media (max-width: 1024px) {
@@ -1951,8 +1958,8 @@ body::after {
 }
 
 .image-placeholder.is-dark {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(249, 255, 252, 0.03);
+  border-color: rgba(249, 255, 252, 0.18);
   color: var(--graywarm300);
 }
 
@@ -1981,7 +1988,7 @@ body::after {
   padding: 0.05em 0.4em;
   border: 1px dashed var(--warning500);
   border-radius: 4px;
-  background: rgba(247, 144, 9, 0.08);
+  background: rgba(227, 142, 51, 0.08);
   color: inherit;
   font-style: normal;
   font-weight: 600;
@@ -2094,7 +2101,7 @@ body::after {
   height: 3rem;
   margin-bottom: 0.35rem;
   border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(249, 255, 252, 0.85);
   color: var(--primary700);
 }
 
@@ -2213,7 +2220,7 @@ body::after {
   color: var(--white);
   font-size: 0.875rem;
   font-weight: 700;
-  box-shadow: 0 12px 24px -8px rgba(16, 24, 40, 0.35);
+  box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.35);
   transition: transform 0.25s var(--ease-out-expo);
 }
 

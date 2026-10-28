@@ -37,8 +37,12 @@ Objetivo: construir, nesse mesmo projeto Astro, um site novo com a estrutura e a
 - **Design**
   - `landing-page/src/styles/styles.css` é a fonte da verdade.
   - `EJFGVreferences/DS EJFGV.html` diverge na nav e nos botões e só inspira o que falta.
-  - Componentes novos usam só os tokens existentes e a convenção de nomes do CSS. Nenhuma cor do DS muda.
-  - Os botões grandes da Home (64 px, texto de 19 px em negrito) passam no contraste AA.
+  - **Cores: a fonte da verdade é o `EJFGV Brandbook 2026 (1).pdf`**, com só 4 cores: Laranja `#e38e33`, Chumbo `#252832`, Cinza Claro `#dadae4` e Menta `#f9fffc`. Estão no `:root` como `--brand-laranja`, `--brand-chumbo`, `--brand-cinza` e `--brand-menta`.
+  - Todo outro token de cor (`--primary*`, `--gray*`, `--graywarm*`, status) é uma dessas 4 cores ou uma mistura entre elas (`color-mix`). Os nomes antigos ficam para não quebrar os componentes.
+  - Cor nova fora do brandbook (azul, verde, vermelho, preto, branco puro) não entra. `--white` vale Menta; status de sucesso e erro usam Chumbo e Laranja escurecido.
+  - Texto sobre fundo laranja é Chumbo (5,73:1). Menta sobre laranja dá 2,53:1 e não passa.
+  - Componentes novos usam só os tokens existentes e a convenção de nomes do CSS.
+  - Os botões grandes da Home (64 px, texto de 19 px em negrito) passam no contraste AA, com texto Chumbo sobre o Laranja.
 - **Imagens**
   - Toda foto vira `ImagemReservada`: espaço vazio no tamanho da imagem original, com um rótulo discreto do que entra ali.
   - Ficam só ativos reais: logos de clientes, ícones, a logo da EJ (CDN Webflow da EJ) e as fotos reais dos clientes nos depoimentos.
@@ -212,7 +216,7 @@ src/styles/styles.css   novo bloco "9. SITE MULTIPÁGINA" no fim
 ### Sobre `/sobre-nos/` (títulos simples)
 1. **`PageHeader`**, com foto reservada e vídeo.
 2. **Por que a EJFGV**, com o texto de `sobre.mjs`.
-3. **Propósito, Visão e 6 valores**, já com **Inovação**. Os "quadradinhos" passam a usar as cores do DS.
+3. **Propósito, Visão e 6 valores**, já com **Inovação**. Os "quadradinhos" passam a usar as cores do brandbook.
 4. **Linha do tempo** 1967 → 1988 → hoje. Os outros marcos ficam a preencher.
 5. **Nosso impacto:** `StatsStrip`, mais os números X/Y/Z do docx e o projeto **Inmar** como marcadores.
 6. **`Credibilidade`** e professores mentores (a preencher).
@@ -334,5 +338,5 @@ O que é próprio de cada solução:
   - qual ferramenta recebe os formulários;
   - GTM e banner de cookies;
   - se os crawlers de IA serão liberados;
-  - contraste do botão laranja: 3,96:1, abaixo do mínimo AA;
+  - contraste do eyebrow e dos links em laranja escurecido sobre Menta: 3,58:1, abaixo do AA para texto pequeno;
   - como o `/blog/` vai conviver com o WordPress na troca de domínio. Isso bloqueia a publicação, não o build.
