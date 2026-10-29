@@ -24,7 +24,11 @@ interface Props {
 	/** Descrição da foto reservada do cabeçalho. */
 	fotoHeader?: string;
 	depoimentos?: Depoimento[];
+	/** Rótulo do CTA do cabeçalho (curto o bastante para 1 linha em 360 px). */
+	ctaRotulo?: string;
 }
+// Slots opcionais: "titulo" (H1 com destaque), "acoes" (CTA secundário ao lado do principal) e
+// "midia" (substitui a foto reservada do cabeçalho, ex.: uma ilustração própria em HTML/SVG).
 
 const {
 	solucao,
@@ -35,6 +39,7 @@ const {
 	kicker = titulo.startsWith(solucao.nome) ? `Soluções ${SITE.nome}` : solucao.nome,
 	fotoHeader = 'trabalho real em grupo',
 	depoimentos = DEPOIMENTOS,
+	ctaRotulo = 'Solicite seu diagnóstico gratuito',
 } = Astro.props;
 
 const cases = CASES.filter((c) => solucao.cases.includes(c.slug));
@@ -62,15 +67,21 @@ const servico = {
 	<div class="solucao">
 		<!-- 1. Cabeçalho escuro: H1, abertura curta, CTA logo abaixo, credenciais e logos de clientes à frente -->
 		<PageHeader titulo={titulo} kicker={kicker} descricao={abertura} escuro>
+			{Astro.slots.has('titulo') && <slot name="titulo" slot="titulo" />}
 			<div class="hero_actions">
-				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+				<a href="#formulario" class="button is-button-large">{ctaRotulo}</a>
+				<slot name="acoes" />
 			</div>
 			<ul class="solucao_credenciais" aria-label={`Por que a ${SITE.nome}`}>
 				{credenciais.map((c) => <li>{c}</li>)}
 			</ul>
-			<figure slot="midia" class="hero-photo-frame">
-				<ImagemReservada descricao={fotoHeader} classe="home-hero_image" escuro />
-			</figure>
+			{Astro.slots.has('midia') ? (
+				<slot name="midia" slot="midia" />
+			) : (
+				<figure slot="midia" class="hero-photo-frame">
+					<ImagemReservada descricao={fotoHeader} classe="home-hero_image" escuro />
+				</figure>
+			)}
 		</PageHeader>
 		<div class="solucao_logos" aria-label="Empresas que já contrataram a EJFGV">
 			<div class="page-padding">

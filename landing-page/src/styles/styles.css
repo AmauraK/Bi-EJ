@@ -1794,14 +1794,20 @@ body::after {
     gap: 8px;
   }
 
+  /* Rótulo curto para o CTA caber em 1 linha até 360 px */
   .gz-nav .buy {
-    max-width: 132px;
-    padding: 7px 10px;
+    padding: 9px 12px;
     font-size: 10px;
-    line-height: 1.25;
-    letter-spacing: 0.04em;
-    text-align: center;
-    white-space: normal;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .gz-nav .buy .buy_longo {
+    display: none;
+  }
+
+  .gz-nav .buy .buy_curto {
+    display: inline;
   }
 
   .gz-nav .menu-toggle {
@@ -2204,6 +2210,11 @@ body::after {
   }
 }
 
+/* CTA da navegação: rótulo curto só no celular (ver max-width: 480px) */
+.gz-nav .buy_curto {
+  display: none;
+}
+
 /* Botão flutuante de WhatsApp */
 .whatsapp-float {
   position: fixed;
@@ -2221,7 +2232,7 @@ body::after {
   font-size: 0.875rem;
   font-weight: 700;
   box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.35);
-  transition: transform 0.25s var(--ease-out-expo);
+  transition: transform 0.25s var(--ease-out-expo), opacity 0.25s;
 }
 
 .whatsapp-float:hover {
@@ -2244,7 +2255,20 @@ body::after {
   .whatsapp-float span {
     display: none;
   }
+
+  /* Respiro: o fim do rodapé não fica atrás do botão */
+  .footer {
+    padding-bottom: 6rem;
+  }
 }
+
+/* Some quando o formulário ou o rodapé estão na tela (eles já têm WhatsApp); ver main.js */
+.whatsapp-float.is-oculto {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1rem);
+}
+
 
 /* Formulário: estado de atenção (sem envio ou erro); nunca sucesso falso */
 .form-feedback.is-error {
@@ -2277,6 +2301,14 @@ body::after {
 
 select.form-input {
   appearance: auto;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+/* Opções longas do <select> não alargam a coluna do formulário no celular */
+.form_wrapper > *,
+.form_grid-2 > * {
+  min-width: 0;
 }
 
 /* Modal de vídeo como <dialog> */
