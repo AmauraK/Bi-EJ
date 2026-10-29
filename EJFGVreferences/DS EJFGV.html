@@ -10,62 +10,68 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     /* ==========================================================================
-       1. PRIMITIVE TOKENS (Extraídos de conteudo.ejfgv.com/business-intelligence-dados)
+       1. PRIMITIVE TOKENS (Cores do Brandbook EJFGV 2026)
        ========================================================================== */
     :root {
-      /* Brand Primary — Terracotta / Laranja Institucional EJFGV */
-      --primary25:  #fefaf5;
-      --primary50:  #fef6ee;
-      --primary100: #fdead7;
-      --primary200: #f7b27a; /* Eyebrow em fundo escuro (.section_beneficios) */
-      --primary300: #f38744;
-      --primary400: #df792f;
-      --primary500: #ef6820; /* Superfície de destaque (.beneficios_banner) */
-      --primary600: #e04f16; /* Acento principal, Botão Primário, Cursor, Hero Divider */
-      --primary700: #b93815; /* Hover Primário, Eyebrow em fundo claro ("Quem somos?"), Botão Terciário */
-      --primary800: #932f19;
-      --primary900: #772917;
+      /* CORES DO BRANDBOOK EJFGV 2026 — única fonte de verdade. Todo token abaixo é uma destas 4 cores ou uma mistura entre elas. */
+      --brand-laranja: #e38e33; /* RGB 227·142·51 — destaque, CTAs, títulos de ênfase */
+      --brand-chumbo:  #252832; /* RGB 37·40·50 — fundo principal, texto em fundo claro */
+      --brand-cinza:   #dadae4; /* RGB 218·218·228 — fundos secundários, separadores */
+      --brand-menta:   #f9fffc; /* RGB 249·255·252 — fundo de páginas claras, respiro */
 
-      /* Gray Warm — Escala Escura Quente (DNA Consultoria & Contraste Editorial) */
-      --graywarm950: #171412; /* Fundo profundo / Botão secundário / Texto sobre banner laranja */
-      --graywarm900: #1c1917; /* Fundo da seção escura (.section_beneficios) */
-      --graywarm600: #57534e; /* Texto secundário em cards (.metodo_card, .icp_item) */
-      --graywarm300: #d7d3d0; /* Texto de apoio e itens de checklist sobre fundo escuro */
+      /* Laranja EJFGV (claros = laranja + menta, escuros = laranja + chumbo) */
+      --primary25:  #f8faf4;
+      --primary50:  #f7f5ea;
+      --primary100: #f4e6d0;
+      --primary200: #eab06f; /* Eyebrow em fundo escuro (.section_beneficios) */
+      --primary300: #e59947;
+      --primary400: #e38e33;
+      --primary500: #e38e33; /* Superfície de destaque (.beneficios_banner) */
+      --primary600: #e38e33; /* Acento principal, Botão Primário, Cursor, Hero Divider */
+      --primary700: #b97833; /* Hover Primário, Eyebrow em fundo claro ("Quem somos?"), Botão Terciário */
+      --primary800: #9b6733;
+      --primary900: #805932;
 
-      /* Gray Cool — Escala Neutra de Interface, Tipografia e Formulários */
-      --gray900: #101828; /* Títulos principais sobre fundo claro */
-      --gray800: #182230; /* Início do gradiente de títulos (.text-color-gradient-gray) */
-      --gray700: #344054; /* Labels de formulário e subtítulos fortes */
-      --gray600: #475467; /* Lead do Hero e fim do gradiente de títulos */
-      --gray500: #667085; /* Texto auxiliar / metadados */
-      --gray400: #98a2b3; /* Placeholders e ícones inativos */
-      --gray300: #d0d5dd; /* Bordas de inputs e divisores estruturais */
-      --gray200: #eaecf0; /* Bordas sutis de cards e linhas de tabela */
-      --gray100: #f2f4f7; /* Superfície neutra secundária */
-      --gray50:  #f9fafb; /* Superfície de depoimentos (.depoimentos_content) e seções alternadas */
-      --gray25:  #fcfcfd; /* Fundo claro sutil */
-      --white:   #ffffff;
+      /* Chumbo — escala escura (nome legado graywarm; valores = Chumbo/Cinza do brandbook) */
+      --graywarm950: #252832; /* Fundo profundo / Botão secundário / Texto sobre banner laranja */
+      --graywarm900: #30333d; /* Fundo da seção escura (.section_beneficios) */
+      --graywarm600: #54575e; /* Texto secundário em cards (.metodo_card, .icp_item) */
+      --graywarm300: #dadae4; /* Texto de apoio e itens de checklist sobre fundo escuro */
 
-      /* Status / Feedback Semântico (Extraídos do Webflow EJFGV) */
-      --success50:  #ecfdf3;
-      --success200: #a6f4c5;
-      --success500: #12b76a;
-      --success700: #027a48;
+      /* Chumbo → Cinza → Menta — escala neutra de interface, tipografia e formulários */
+      --gray900: #252832; /* Títulos principais sobre fundo claro */
+      --gray800: #252832; /* Início do gradiente de títulos (.text-color-gradient-gray) */
+      --gray700: #3e424a; /* Labels de formulário e subtítulos fortes */
+      --gray600: #54575e; /* Lead do Hero e fim do gradiente de títulos */
+      --gray500: #71757b; /* Texto auxiliar / metadados */
+      --gray400: #8e8f99; /* Placeholders e ícones inativos */
+      --gray300: #dadae4; /* Bordas de inputs e divisores estruturais */
+      --gray200: #e8ebef; /* Bordas sutis de cards e linhas de tabela */
+      --gray100: #f0f4f5; /* Superfície neutra secundária */
+      --gray50:  #f5faf9; /* Superfície de depoimentos (.depoimentos_content) e seções alternadas */
+      --gray25:  #f7fdfb; /* Fundo claro sutil */
+      --white:   #f9fffc;
 
-      --warning50:  #fffaeb;
-      --warning200: #fedf89;
-      --warning500: #f79009;
-      --warning700: #b54708;
+      /* Status — o brandbook não define verde/vermelho/amarelo: status usa as 4 cores da marca */
+      --success50:  #f0f4f5;
+      --success200: #dadae4;
+      --success500: #252832;
+      --success700: #252832;
 
-      --error50:    #fef3f2;
-      --error200:   #fecdca;
-      --error500:   #f04438;
-      --error700:   #b42318;
+      --warning50:  #f8faf4;
+      --warning200: #f4e6d0;
+      --warning500: #e38e33;
+      --warning700: #9b6733;
+
+      --error50:    #f8faf4;
+      --error200:   #f4e6d0;
+      --error500:   #b97833;
+      --error700:   #b97833;
 
       /* Gradientes Originais da Página BI & Dados */
-      --gradient-title-gray: linear-gradient(63deg, #182230, #475467);
-      --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
-      --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0), #f5f5f5 80%);
+      --gradient-title-gray: linear-gradient(63deg, #252832, #54575e);
+      --gradient-metodo-card: linear-gradient(90deg, #f0f4f5, #f7f5ea);
+      --gradient-hero-radial: radial-gradient(circle at 50% 0, rgba(249, 255, 252, 0), #f0f4f5 80%);
 
       /* ========================================================================
          2. SEMANTIC & ALIAS TOKENS (Camada Semântica do DS EJFGV)
@@ -88,11 +94,11 @@
       --text-eyebrow-dark:       var(--primary200);
       --text-accent:             var(--primary600);
 
-      --border-hairline-light:   rgba(16, 24, 40, 0.12);
-      --border-hairline-dark:    rgba(255, 255, 255, 0.14);
+      --border-hairline-light:   rgba(37, 40, 50, 0.12);
+      --border-hairline-dark:    rgba(249, 255, 252, 0.14);
       --border-input:            var(--gray300);
       --border-focus:            var(--primary600);
-      --ring-focus:              0 1px 2px 0 rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
+      --ring-focus:              0 1px 2px 0 rgba(37, 40, 50, 0.05), 0 0 0 4px var(--primary100);
 
       /* ========================================================================
          3. TYPOGRAPHY & MOTION TOKENS (Sans-Serif + Grotesk Zero Mechanics)
@@ -214,7 +220,7 @@
       justify-content: space-between;
       padding: 18px 3.2vw;
       mix-blend-mode: difference;
-      color: #ffffff;
+      color: #f9fffc;
       transition: background 0.35s var(--ease-out-expo),
                   border-color 0.35s var(--ease-out-expo);
     }
@@ -223,7 +229,7 @@
     .gz-nav.is-glass {
       mix-blend-mode: normal;
       color: var(--white);
-      background: rgba(23, 20, 18, 0.94);
+      background: rgba(37, 40, 50, 0.94);
       -webkit-backdrop-filter: blur(14px);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border-hairline-dark);
@@ -337,7 +343,7 @@
       font-weight: 700;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.45);
+      color: rgba(249, 255, 252, 0.45);
     }
 
     .ds-sidebar .ds-lbl:first-child {
@@ -355,7 +361,7 @@
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.75);
+      color: rgba(249, 255, 252, 0.75);
       transition: background 0.25s var(--ease-out-expo), color 0.25s var(--ease-out-expo);
       border-radius: 4px;
     }
@@ -364,18 +370,18 @@
       font-weight: 600;
       font-size: 10px;
       letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(249, 255, 252, 0.4);
       font-variant-numeric: tabular-nums;
     }
 
     .ds-sidebar a:hover {
       color: var(--white);
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(249, 255, 252, 0.06);
     }
 
     .ds-sidebar a.is-current {
       color: var(--white);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(249, 255, 252, 0.1);
     }
 
     .ds-sidebar a.is-current::before {
@@ -501,7 +507,7 @@
 
     .ds-swatch:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+      box-shadow: 0 8px 20px rgba(37, 40, 50, 0.08);
     }
 
     .ds-swatch-color {
@@ -601,7 +607,7 @@
       font-weight: 600;
       transition: all 0.3s var(--ease-out-expo);
       display: inline-flex;
-      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+      box-shadow: 0 1px 2px rgba(37, 40, 50, 0.05);
       cursor: pointer;
     }
 
@@ -647,7 +653,7 @@
       text-decoration: none;
       transition: all 0.3s var(--ease-out-expo);
       display: inline-flex;
-      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+      box-shadow: 0 1px 2px rgba(37, 40, 50, 0.05);
       cursor: pointer;
     }
 
@@ -771,7 +777,7 @@
       padding: 2rem;
       position: relative;
       border: 1px solid var(--border-hairline-dark);
-      box-shadow: 0 24px 48px -12px rgba(23, 20, 18, 0.25);
+      box-shadow: 0 24px 48px -12px rgba(37, 40, 50, 0.25);
     }
 
     .hero_video-badge {
@@ -825,7 +831,7 @@
       width: 3rem;
       height: 3rem;
       border-radius: 0.75rem;
-      background: rgba(224, 79, 22, 0.16);
+      background: rgba(227, 142, 51, 0.16);
       border: 1px solid rgba(247, 178, 122, 0.3);
       color: var(--primary200);
       display: grid;
@@ -853,7 +859,7 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: rgba(224, 79, 22, 0.22);
+      background: rgba(227, 142, 51, 0.22);
       color: var(--primary300);
       display: inline-grid;
       place-items: center;
@@ -892,10 +898,10 @@
     }
 
     .metodo_card {
-      color: #181818;
+      color: #252832;
       text-align: center;
       background-image: var(--gradient-metodo-card);
-      border: 1px solid rgba(16, 24, 40, 0.06);
+      border: 1px solid rgba(37, 40, 50, 0.06);
       border-radius: var(--card-radius-lg);
       display: flex;
       flex-direction: column;
@@ -915,7 +921,7 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--primary700);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(249, 255, 252, 0.8);
       padding: 4px 10px;
       border-radius: 999px;
       margin-bottom: 1rem;
@@ -1246,7 +1252,7 @@
           <div class="icp_item" style="margin:0;">
             <div class="icp_icon">01</div>
             <h4>Cores &amp; Insights</h4>
-            <p>Extraídos diretamente do CSS de produção (<code>ejfgv.webflow.shared.css</code>) da página <strong>conteudo.ejfgv.com/business-intelligence-dados</strong>.</p>
+            <p>Cores 100% do <strong>Brandbook EJFGV 2026</strong> (Laranja #E38E33, Chumbo #252832, Cinza Claro #DADAE4, Menta #F9FFFC); estrutura de componentes extraída de conteudo.ejfgv.com/business-intelligence-dados.</p>
           </div>
           <div class="icp_item" style="margin:0;">
             <div class="icp_icon">02</div>
@@ -1262,7 +1268,7 @@
       </section>
 
       <!-- ====================================================================
-           01. CORES & TOKENS (Extraídos de conteudo.ejfgv.com/business-intelligence-dados)
+           01. CORES & TOKENS (Brandbook EJFGV 2026)
            ==================================================================== -->
       <section class="ds-group" id="colors">
         <div class="ds-head">
@@ -1272,53 +1278,53 @@
 
         <!-- Escala Primary -->
         <div class="ds-spec">
-          <h3>Escala Principal — Primary (Terracotta / Laranja EJFGV)</h3>
+          <h3>Escala Principal — Primary (Laranja EJFGV #E38E33)</h3>
           <p class="ds-note">
-            Extraída integralmente do <code>:root</code> de <code>conteudo.ejfgv.com/business-intelligence-dados</code>. O tom <code>--primary600 (#e04f16)</code> lidera os botões primários, divisores de hero e o cursor interativo; <code>--primary500 (#ef6820)</code> colore os banners de conversão; <code>--primary200 (#f7b27a)</code> ilumina eyebrows sobre seções escuras.
+            Derivada do Laranja Principal do Brandbook EJFGV 2026 (<code>#e38e33</code>, RGB 227·142·51): os tons claros misturam laranja com Menta e os escuros, com Chumbo. O tom <code>--primary600 (#e38e33)</code> lidera os botões primários, divisores de hero e o cursor interativo; <code>--primary500 (#e38e33)</code> colore os banners de conversão; <code>--primary200 (#eab06f)</code> ilumina eyebrows sobre seções escuras.
           </p>
           <div class="ds-swatch-grid">
             <div class="ds-swatch" data-copy="var(--primary25)">
-              <div class="ds-swatch-color" style="background:#fefaf5; color:#101828;"><span>Aa</span><span>#FEFAF5</span></div>
+              <div class="ds-swatch-color" style="background:#f8faf4; color:#252832;"><span>Aa</span><span>#F8FAF4</span></div>
               <div class="ds-swatch-body"><strong>Primary 25</strong><code>--primary25</code><p>Fundo cálido mínimo</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary50)">
-              <div class="ds-swatch-color" style="background:#fef6ee; color:#101828;"><span>Aa</span><span>#FEF6EE</span></div>
+              <div class="ds-swatch-color" style="background:#f7f5ea; color:#252832;"><span>Aa</span><span>#F7F5EA</span></div>
               <div class="ds-swatch-body"><strong>Primary 50</strong><code>--primary50</code><p>Hover de botão terciário e badges</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary100)">
-              <div class="ds-swatch-color" style="background:#fdead7; color:#101828;"><span>Aa</span><span>#FDEAD7</span></div>
+              <div class="ds-swatch-color" style="background:#f4e6d0; color:#252832;"><span>Aa</span><span>#F4E6D0</span></div>
               <div class="ds-swatch-body"><strong>Primary 100</strong><code>--primary100</code><p>Anel de foco (4px focus ring)</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary200)">
-              <div class="ds-swatch-color" style="background:#f7b27a; color:#171412;"><span>Aa</span><span>#F7B27A</span></div>
+              <div class="ds-swatch-color" style="background:#eab06f; color:#252832;"><span>Aa</span><span>#EAB06F</span></div>
               <div class="ds-swatch-body"><strong>Primary 200</strong><code>--primary200</code><p>Eyebrow sobre fundo escuro (Benefícios)</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary300)">
-              <div class="ds-swatch-color" style="background:#f38744; color:#171412;"><span>Aa</span><span>#F38744</span></div>
+              <div class="ds-swatch-color" style="background:#e59947; color:#252832;"><span>Aa</span><span>#E59947</span></div>
               <div class="ds-swatch-body"><strong>Primary 300</strong><code>--primary300</code><p>Ícones de destaque em fundo escuro</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary400)">
-              <div class="ds-swatch-color" style="background:#df792f; color:#ffffff;"><span>Aa</span><span>#DF792F</span></div>
+              <div class="ds-swatch-color" style="background:#e38e33; color:#f9fffc;"><span>Aa</span><span>#E38E33</span></div>
               <div class="ds-swatch-body"><strong>Primary 400</strong><code>--primary400</code><p>Acento intermediário</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary500)">
-              <div class="ds-swatch-color" style="background:#ef6820; color:#171412;"><span>Aa</span><span>#EF6820</span></div>
+              <div class="ds-swatch-color" style="background:#e38e33; color:#252832;"><span>Aa</span><span>#E38E33</span></div>
               <div class="ds-swatch-body"><strong>Primary 500</strong><code>--primary500</code><p>Fundo do <code>.beneficios_banner</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary600)">
-              <div class="ds-swatch-color" style="background:#e04f16; color:#ffffff;"><span>Aa</span><span>#E04F16</span></div>
+              <div class="ds-swatch-color" style="background:#e38e33; color:#f9fffc;"><span>Aa</span><span>#E38E33</span></div>
               <div class="ds-swatch-body"><strong>Primary 600 ★</strong><code>--primary600</code><p>Botão primário, Hero divider e Cursor</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary700)">
-              <div class="ds-swatch-color" style="background:#b93815; color:#ffffff;"><span>Aa</span><span>#B93815</span></div>
+              <div class="ds-swatch-color" style="background:#b97833; color:#f9fffc;"><span>Aa</span><span>#B97833</span></div>
               <div class="ds-swatch-body"><strong>Primary 700</strong><code>--primary700</code><p>Hover primário, Eyebrow claro, Terciário</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary800)">
-              <div class="ds-swatch-color" style="background:#932f19; color:#ffffff;"><span>Aa</span><span>#932F19</span></div>
+              <div class="ds-swatch-color" style="background:#9b6733; color:#f9fffc;"><span>Aa</span><span>#9B6733</span></div>
               <div class="ds-swatch-body"><strong>Primary 800</strong><code>--primary800</code><p>Contraste profundo de marca</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--primary900)">
-              <div class="ds-swatch-color" style="background:#772917; color:#ffffff;"><span>Aa</span><span>#772917</span></div>
+              <div class="ds-swatch-color" style="background:#805932; color:#f9fffc;"><span>Aa</span><span>#805932</span></div>
               <div class="ds-swatch-body"><strong>Primary 900</strong><code>--primary900</code><p>Tom escuro máximo da escala laranja</p></div>
             </div>
           </div>
@@ -1326,25 +1332,25 @@
 
         <!-- Escala Gray Warm -->
         <div class="ds-spec">
-          <h3>Escala Gray Warm — Contraste Escuro &amp; Neutros Quentes</h3>
+          <h3>Escala Chumbo — Contraste Escuro (tokens <code>graywarm</code>)</h3>
           <p class="ds-note">
-            O segredo do peso institucional da página de BI da EJFGV está no uso de cinzas quentes profundos (<code>--graywarm950</code> e <code>--graywarm900</code>) para a vitrine de serviços e botões secundários, criando harmonia imediata com o laranja <code>--primary600</code> e com a estética <em>ink</em> do Grotesk Zero.
+            O peso institucional da EJFGV vem do Chumbo (<code>#252832</code>) como fundo principal (<code>--graywarm950</code> e <code>--graywarm900</code>) para a vitrine de serviços e botões secundários, em contraste com o Laranja <code>--primary600</code> e o Cinza Claro <code>#dadae4</code> (<code>--graywarm300</code>).
           </p>
           <div class="ds-swatch-grid">
             <div class="ds-swatch" data-copy="var(--graywarm950)">
-              <div class="ds-swatch-color" style="background:#171412; color:#ffffff;"><span>Aa</span><span>#171412</span></div>
+              <div class="ds-swatch-color" style="background:#252832; color:#f9fffc;"><span>Aa</span><span>#252832</span></div>
               <div class="ds-swatch-body"><strong>Gray Warm 950 ★</strong><code>--graywarm950</code><p>Botão secundário, sidebar e texto no banner laranja</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--graywarm900)">
-              <div class="ds-swatch-color" style="background:#1c1917; color:#ffffff;"><span>Aa</span><span>#1C1917</span></div>
+              <div class="ds-swatch-color" style="background:#30333d; color:#f9fffc;"><span>Aa</span><span>#30333D</span></div>
               <div class="ds-swatch-body"><strong>Gray Warm 900 ★</strong><code>--graywarm900</code><p>Fundo da seção escura <code>.section_beneficios</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--graywarm600)">
-              <div class="ds-swatch-color" style="background:#57534e; color:#ffffff;"><span>Aa</span><span>#57534E</span></div>
+              <div class="ds-swatch-color" style="background:#54575e; color:#f9fffc;"><span>Aa</span><span>#54575E</span></div>
               <div class="ds-swatch-body"><strong>Gray Warm 600</strong><code>--graywarm600</code><p>Descrições em <code>.metodo_card</code> e <code>.icp_item</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--graywarm300)">
-              <div class="ds-swatch-color" style="background:#d7d3d0; color:#171412;"><span>Aa</span><span>#D7D3D0</span></div>
+              <div class="ds-swatch-color" style="background:#dadae4; color:#252832;"><span>Aa</span><span>#DADAE4</span></div>
               <div class="ds-swatch-body"><strong>Gray Warm 300</strong><code>--graywarm300</code><p>Parágrafos e checklist sobre fundo escuro</p></div>
             </div>
           </div>
@@ -1352,38 +1358,38 @@
 
         <!-- Escala Gray Cool -->
         <div class="ds-spec">
-          <h3>Escala Gray Cool — Tipografia Clara, Bordas &amp; Formulários</h3>
+          <h3>Escala Chumbo → Cinza → Menta — Tipografia Clara, Bordas &amp; Formulários</h3>
           <div class="ds-swatch-grid">
             <div class="ds-swatch" data-copy="var(--gray900)">
-              <div class="ds-swatch-color" style="background:#101828; color:#ffffff;"><span>Aa</span><span>#101828</span></div>
+              <div class="ds-swatch-color" style="background:#252832; color:#f9fffc;"><span>Aa</span><span>#252832</span></div>
               <div class="ds-swatch-body"><strong>Gray 900</strong><code>--gray900</code><p>Títulos principais em fundo claro</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray800)">
-              <div class="ds-swatch-color" style="background:#182230; color:#ffffff;"><span>Aa</span><span>#182230</span></div>
+              <div class="ds-swatch-color" style="background:#252832; color:#f9fffc;"><span>Aa</span><span>#252832</span></div>
               <div class="ds-swatch-body"><strong>Gray 800</strong><code>--gray800</code><p>Início do gradiente <code>.text-color-gradient-gray</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray700)">
-              <div class="ds-swatch-color" style="background:#344054; color:#ffffff;"><span>Aa</span><span>#344054</span></div>
+              <div class="ds-swatch-color" style="background:#3e424a; color:#f9fffc;"><span>Aa</span><span>#3e424a</span></div>
               <div class="ds-swatch-body"><strong>Gray 700</strong><code>--gray700</code><p>Labels de formulário</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray600)">
-              <div class="ds-swatch-color" style="background:#475467; color:#ffffff;"><span>Aa</span><span>#475467</span></div>
+              <div class="ds-swatch-color" style="background:#54575e; color:#f9fffc;"><span>Aa</span><span>#54575e</span></div>
               <div class="ds-swatch-body"><strong>Gray 600</strong><code>--gray600</code><p>Subtítulo Hero e fim do gradiente de título</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray400)">
-              <div class="ds-swatch-color" style="background:#98a2b3; color:#101828;"><span>Aa</span><span>#98A2B3</span></div>
+              <div class="ds-swatch-color" style="background:#8e8f99; color:#252832;"><span>Aa</span><span>#8E8F99</span></div>
               <div class="ds-swatch-body"><strong>Gray 400</strong><code>--gray400</code><p>Placeholders e logos de clientes em repouso</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray300)">
-              <div class="ds-swatch-color" style="background:#d0d5dd; color:#101828;"><span>Aa</span><span>#D0D5DD</span></div>
+              <div class="ds-swatch-color" style="background:#dadae4; color:#252832;"><span>Aa</span><span>#DADAE4</span></div>
               <div class="ds-swatch-body"><strong>Gray 300</strong><code>--gray300</code><p>Bordas padrão de inputs</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray200)">
-              <div class="ds-swatch-color" style="background:#eaecf0; color:#101828;"><span>Aa</span><span>#EAECF0</span></div>
+              <div class="ds-swatch-color" style="background:#e8ebef; color:#252832;"><span>Aa</span><span>#E8EBEF</span></div>
               <div class="ds-swatch-body"><strong>Gray 200</strong><code>--gray200</code><p>Divisores e bordas de cards</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gray50)">
-              <div class="ds-swatch-color" style="background:#f9fafb; color:#101828;"><span>Aa</span><span>#F9FAFB</span></div>
+              <div class="ds-swatch-color" style="background:#f5faf9; color:#252832;"><span>Aa</span><span>#F5FAF9</span></div>
               <div class="ds-swatch-body"><strong>Gray 50</strong><code>--gray50</code><p>Fundo do card de depoimentos</p></div>
             </div>
           </div>
@@ -1391,23 +1397,23 @@
 
         <!-- Gradientes e Status -->
         <div class="ds-spec">
-          <h3>Gradientes de Superfície &amp; Tokens de Status</h3>
+          <h3>Gradientes de Superfície &amp; Tokens de Status (sem cores fora do brandbook)</h3>
           <div class="ds-swatch-grid">
             <div class="ds-swatch" data-copy="var(--gradient-title-gray)">
-              <div class="ds-swatch-color" style="background:linear-gradient(63deg, #182230, #475467); color:#ffffff;"><span>H1/H2</span><span>63deg</span></div>
-              <div class="ds-swatch-body"><strong>Gradient Title Gray</strong><code>--gradient-title-gray</code><p><code>linear-gradient(63deg, #182230, #475467)</code></p></div>
+              <div class="ds-swatch-color" style="background:linear-gradient(63deg, #252832, #54575e); color:#f9fffc;"><span>H1/H2</span><span>63deg</span></div>
+              <div class="ds-swatch-body"><strong>Gradient Title Gray</strong><code>--gradient-title-gray</code><p><code>linear-gradient(63deg, #252832, #54575e)</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--gradient-metodo-card)">
-              <div class="ds-swatch-color" style="background:linear-gradient(90deg, #eef5ff, #fff2f2); color:#181818;"><span>Card</span><span>90deg</span></div>
-              <div class="ds-swatch-body"><strong>Gradient Método Card</strong><code>--gradient-metodo-card</code><p><code>linear-gradient(90deg, #eef5ff, #fff2f2)</code></p></div>
+              <div class="ds-swatch-color" style="background:linear-gradient(90deg, #f0f4f5, #f7f5ea); color:#252832;"><span>Card</span><span>90deg</span></div>
+              <div class="ds-swatch-body"><strong>Gradient Método Card</strong><code>--gradient-metodo-card</code><p><code>linear-gradient(90deg, #f0f4f5, #f7f5ea)</code></p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--success500)">
-              <div class="ds-swatch-color" style="background:#12b76a; color:#ffffff;"><span>OK</span><span>#12B76A</span></div>
-              <div class="ds-swatch-body"><strong>Success 500</strong><code>--success500</code><p>Validação positiva e métricas em alta</p></div>
+              <div class="ds-swatch-color" style="background:#252832; color:#f9fffc;"><span>OK</span><span>#252832</span></div>
+              <div class="ds-swatch-body"><strong>Success 500</strong><code>--success500</code><p>Validação positiva (Chumbo)</p></div>
             </div>
             <div class="ds-swatch" data-copy="var(--error500)">
-              <div class="ds-swatch-color" style="background:#f04438; color:#ffffff;"><span>!</span><span>#F04438</span></div>
-              <div class="ds-swatch-body"><strong>Error 500</strong><code>--error500</code><p>Erro de validação em formulário</p></div>
+              <div class="ds-swatch-color" style="background:#b97833; color:#f9fffc;"><span>!</span><span>#B97833</span></div>
+              <div class="ds-swatch-body"><strong>Error 500</strong><code>--error500</code><p>Erro de validação em formulário (Laranja escurecido)</p></div>
             </div>
           </div>
         </div>
@@ -1495,8 +1501,8 @@
 
           <!-- Demonstração da Nav sobre fundo dividido -->
           <div class="nav-specimen-box is-split">
-            <a href="#cursor-nav" class="wordmark" style="mix-blend-mode:difference; color:#fff; font-weight:900; font-size:15px; letter-spacing:0.05em; transition:font-variation-settings 0.5s var(--ease-out-expo);" onmouseover="this.style.fontVariationSettings='\'wght\' 100'" onmouseout="this.style.fontVariationSettings='\'wght\' 900'">EJFGV CONSULTORIA</a>
-            <div style="display:flex; gap:28px; align-items:center; mix-blend-mode:difference; color:#fff;">
+            <a href="#cursor-nav" class="wordmark" style="mix-blend-mode:difference; color:#f9fffc; font-weight:900; font-size:15px; letter-spacing:0.05em; transition:font-variation-settings 0.5s var(--ease-out-expo);" onmouseover="this.style.fontVariationSettings='\'wght\' 100'" onmouseout="this.style.fontVariationSettings='\'wght\' 900'">EJFGV CONSULTORIA</a>
+            <div style="display:flex; gap:28px; align-items:center; mix-blend-mode:difference; color:#f9fffc;">
               <a href="#cursor-nav" style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Soluções</a>
               <a href="#cursor-nav" style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Método</a>
               <a href="#cursor-nav" style="border:1px solid currentColor; padding:9px 18px; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:600;">Agendar Reunião</a>
@@ -1504,7 +1510,7 @@
           </div>
 
           <span class="ds-meta">
-            <strong>Regras extraídas de <code>grotesk.css</code>:</strong> <code>nav { position:fixed; padding:18px 3.2vw; mix-blend-mode:difference; color:#fff; }</code> · <code>nav .wordmark { font-variation-settings:'wght' 900; } nav .wordmark:hover { font-variation-settings:'wght' 100; }</code> · <code>nav .links a::after { height:1px; width:0; transition:width .35s cubic-bezier(.22,1,.36,1); }</code>
+            <strong>Regras extraídas de <code>grotesk.css</code>:</strong> <code>nav { position:fixed; padding:18px 3.2vw; mix-blend-mode:difference; color:#f9fffc; }</code> · <code>nav .wordmark { font-variation-settings:'wght' 900; } nav .wordmark:hover { font-variation-settings:'wght' 100; }</code> · <code>nav .links a::after { height:1px; width:0; transition:width .35s cubic-bezier(.22,1,.36,1); }</code>
           </span>
         </div>
 
@@ -1651,7 +1657,7 @@
         <div class="ds-spec">
           <h3>Contraste Quente Profundo (<code>--graywarm900</code>) + Checklist de Entregáveis + Banner <code>--primary500</code></h3>
           <p class="ds-note">
-            A página quebra a monotonia do fundo branco mergulhando os serviços em <code>--graywarm900 (#1c1917)</code>. O eyebrow usa <code>--primary200 (#f7b27a)</code>, cada serviço apresenta um ícone laranja, descrição em <code>--graywarm300</code> e lista de 5 entregáveis (<code>.vantagens_list-item</code>), fechando com o banner de alto impacto <code>.beneficios_banner</code> em <code>--primary500 (#ef6820)</code> com botão <code>.button-secondary</code> escuro.
+            A página quebra a monotonia do fundo branco mergulhando os serviços em <code>--graywarm900 (#30333d)</code>. O eyebrow usa <code>--primary200 (#eab06f)</code>, cada serviço apresenta um ícone laranja, descrição em <code>--graywarm300</code> e lista de 5 entregáveis (<code>.vantagens_list-item</code>), fechando com o banner de alto impacto <code>.beneficios_banner</code> em <code>--primary500 (#e38e33)</code> com botão <code>.button-secondary</code> escuro.
           </p>
 
           <div class="specimen-beneficios">
@@ -1687,20 +1693,20 @@
                   <span style="font-size:11px; background:rgba(18,183,106,0.15); color:var(--success200); padding:4px 8px; border-radius:4px;">● Atualizado agora</span>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.5rem;">
-                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                  <div style="background:rgba(249, 255, 252, 0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
                     <div style="font-size:11px; color:var(--graywarm300);">Margem EBITDA</div>
                     <div style="font-size:20px; font-weight:800; color:var(--white); margin-top:4px;">28,4%</div>
                   </div>
-                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                  <div style="background:rgba(249, 255, 252, 0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
                     <div style="font-size:11px; color:var(--graywarm300);">Tempo de Relatório</div>
                     <div style="font-size:20px; font-weight:800; color:var(--primary200); margin-top:4px;">-85%</div>
                   </div>
-                  <div style="background:rgba(255,255,255,0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
+                  <div style="background:rgba(249, 255, 252, 0.03); padding:14px; border-radius:8px; border:1px solid var(--border-hairline-dark);">
                     <div style="font-size:11px; color:var(--graywarm300);">Fontes Integradas</div>
                     <div style="font-size:20px; font-weight:800; color:var(--white); margin-top:4px;">12 ERPs</div>
                   </div>
                 </div>
-                <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden;">
+                <div style="height:8px; background:rgba(249, 255, 252, 0.08); border-radius:999px; overflow:hidden;">
                   <div style="width:78%; height:100%; background:var(--primary500);"></div>
                 </div>
               </div>
@@ -1728,7 +1734,7 @@
         </div>
 
         <div class="ds-spec">
-          <h3>Cards de Processo (<code>.metodo_card</code> com <code>linear-gradient(90deg, #eef5ff, #fff2f2)</code>)</h3>
+          <h3>Cards de Processo (<code>.metodo_card</code> com <code>linear-gradient(90deg, #f0f4f5, #f7f5ea)</code>)</h3>
           <p class="ds-note">
             O processo de atendimento da EJFGV é apresentado em 4 etapas horizontais claras (<strong>Contato → Diagnóstico → Proposta → Solução</strong>) usando o gradiente suave original extraído do CSS da página.
           </p>
@@ -1925,39 +1931,45 @@
         <div class="ds-spec">
           <h3>Arquitetura Consolidada de Tokens do DS EJFGV</h3>
           <pre style="background:var(--graywarm950); color:var(--graywarm300); padding:24px; border-radius:var(--card-radius-md); overflow-x:auto; font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:12.5px; line-height:1.65; border:1px solid var(--border-hairline-dark);"><code>:root {
-  /* 1. Brand Primary (Extraído de conteudo.ejfgv.com/business-intelligence-dados) */
-  --primary25:  #fefaf5;
-  --primary50:  #fef6ee;
-  --primary100: #fdead7;
-  --primary200: #f7b27a;
-  --primary300: #f38744;
-  --primary400: #df792f;
-  --primary500: #ef6820;
-  --primary600: #e04f16;
-  --primary700: #b93815;
-  --primary800: #932f19;
-  --primary900: #772917;
+  /* 0. Cores do Brandbook EJFGV 2026 (única fonte de verdade) */
+  --brand-laranja: #e38e33;
+  --brand-chumbo:  #252832;
+  --brand-cinza:   #dadae4;
+  --brand-menta:   #f9fffc;
+
+  /* 1. Laranja EJFGV (derivado) */
+  --primary25:  #f8faf4;
+  --primary50:  #f7f5ea;
+  --primary100: #f4e6d0;
+  --primary200: #eab06f;
+  --primary300: #e59947;
+  --primary400: #e38e33;
+  --primary500: #e38e33;
+  --primary600: #e38e33;
+  --primary700: #b97833;
+  --primary800: #9b6733;
+  --primary900: #805932;
 
   /* 2. Warm &amp; Cool Grays */
-  --graywarm950: #171412;
-  --graywarm900: #1c1917;
-  --graywarm600: #57534e;
-  --graywarm300: #d7d3d0;
-  --gray900: #101828;
-  --gray800: #182230;
-  --gray700: #344054;
-  --gray600: #475467;
-  --gray500: #667085;
-  --gray400: #98a2b3;
-  --gray300: #d0d5dd;
-  --gray200: #eaecf0;
-  --gray100: #f2f4f7;
-  --gray50:  #f9fafb;
-  --white:   #ffffff;
+  --graywarm950: #252832;
+  --graywarm900: #30333d;
+  --graywarm600: #54575e;
+  --graywarm300: #dadae4;
+  --gray900: #252832;
+  --gray800: #252832;
+  --gray700: #3e424a;
+  --gray600: #54575e;
+  --gray500: #71757b;
+  --gray400: #8e8f99;
+  --gray300: #dadae4;
+  --gray200: #e8ebef;
+  --gray100: #f0f4f5;
+  --gray50:  #f5faf9;
+  --white:   #f9fffc;
 
   /* 3. Gradientes Originais EJFGV */
-  --gradient-title-gray:  linear-gradient(63deg, #182230, #475467);
-  --gradient-metodo-card: linear-gradient(90deg, #eef5ff, #fff2f2);
+  --gradient-title-gray:  linear-gradient(63deg, #252832, #54575e);
+  --gradient-metodo-card: linear-gradient(90deg, #f0f4f5, #f7f5ea);
 
   /* 4. Tipografia Sans-Serif + Easing Grotesk Zero */
   --font-sans: 'Archivo', 'Inter', sans-serif;

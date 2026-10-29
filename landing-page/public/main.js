@@ -169,6 +169,18 @@
     });
   });
 
+  /* 6b. WhatsApp flutuante some enquanto formulário ou rodapé estão na tela (os dois já têm WhatsApp) */
+  const whatsappFloat = document.querySelector(".whatsapp-float");
+  const zonasComWhatsapp = document.querySelectorAll(".section_form, .footer");
+  if (whatsappFloat && zonasComWhatsapp.length && "IntersectionObserver" in window) {
+    const visiveis = new Set();
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? visiveis.add(e.target) : visiveis.delete(e.target)));
+      whatsappFloat.classList.toggle("is-oculto", visiveis.size > 0);
+    });
+    zonasComWhatsapp.forEach((el) => obs.observe(el));
+  }
+
   /* 7. Máscara de Telefone BR */
   document.querySelectorAll("input[type=tel]").forEach((phoneInput) => {
     phoneInput.addEventListener("input", () => {

@@ -171,23 +171,23 @@ export const SOLUCOES: Solucao[] = [
     url: '/consultoria-business-intelligence/',
     nome: 'Consultoria de Business Intelligence',
     rotulo: 'Business Intelligence',
-    descricao: 'Fazemos análises descritivas e preditivas para embasar decisões estratégicas. Com experiência em clusterização e análise de sentimentos, ajudamos sua empresa a chegar a resultados orientados por dados.',
+    // PRO-20: a área de BI hoje entrega 3 frentes (Power BI, sites com chatbot e automações). Fonte: brief PRO-20.
+    descricao: 'Dashboards em Power BI para a gestão financeira e operacional, sites com chatbot e integrações, e automações com n8n e IA. Dados, sites e automações para a sua empresa decidir e operar melhor.',
     seo: {
-      titulo: 'Consultoria de Business Intelligence - EJFGV',
-      descricao: 'Compreenda as principais variáveis do seu negócio e obtenha insights pela análise de dados. Conheça a consultoria em Business Intelligence da EJFGV.',
+      titulo: 'Business Intelligence, Sites e Automações - EJFGV',
+      descricao: 'Dashboards em Power BI, sites com chatbot e automações com n8n e IA para pequenas e médias empresas. Feito por alunos da FGV. Agende um diagnóstico gratuito.',
     },
     quandoFazSentido: [
-      { titulo: 'Decidir com respaldo de dados', texto: 'Para quem quer crescer com planos de ação embasados na análise de dados, inclusive de fontes externas ao negócio.' },
-      { titulo: 'Entender as variáveis do negócio', texto: 'Para quem quer otimizar atividades com a modelagem das variáveis que mais pesam, ganhando eficiência e cortando custos.' },
+      { titulo: 'Decidir com os números na mão', texto: 'Para quem quer acompanhar vendas, custos, metas e caixa em painéis claros, sem juntar planilhas.' },
+      { titulo: 'Atender e operar com menos esforço', texto: 'Para quem quer um site que capta clientes e quer tirar do caminho as tarefas repetitivas do time.' },
     ],
     escopo: [
-      { item: 'Análises descritivas' },
-      { item: 'Análises preditivas' },
-      { item: 'Clusterização' },
-      { item: 'Análise do perfil do consumidor' },
+      { item: 'Dashboards em Power BI', href: '/consultoria-business-intelligence/#dashboards' },
+      { item: 'Sites com chatbot e integrações', href: '/consultoria-business-intelligence/#sites' },
+      { item: 'Automações com n8n e IA', href: '/consultoria-business-intelligence/#automacoes' },
     ],
     cases: [],
-    chamada: 'Quais perguntas os seus dados podem responder?',
+    chamada: 'O que dados, um site ou uma automação mudariam na sua empresa?',
     icone: `${CDN}/672a37ae7609689739689139_transformacao-digital-icon.svg`,
   },
 ];

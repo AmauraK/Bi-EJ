@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Metodo from '../components/Metodo.astro';
 import LeadForm from '../components/LeadForm.astro';
-import { CONTATO, NUMEROS, SITE } from '../consts';
+import { NUMEROS, SITE } from '../consts';
 ---
 
 <Layout
@@ -18,7 +18,6 @@ import { CONTATO, NUMEROS, SITE } from '../consts';
 	>
 		<Fragment slot="acoes">
 			<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
-			<a href={CONTATO.whatsappUrl} class="button-tertiary" target="_blank" rel="noopener">Conversar no WhatsApp →</a>
 		</Fragment>
 	</PageHeader>
 
