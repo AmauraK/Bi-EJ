@@ -1,8 +1,4 @@
 ---
-<<<<<<< HEAD
-import Layout from '../layouts/Layout.astro';
-import PageHeader from '../components/PageHeader.astro';
-=======
 // Página Sobre (/sobre-nos/), na ordem do PLANO-NOVO-SITE.md: cabeçalho com foto reservada e vídeo → por que a
 // EJFGV → propósito, visão e valores → linha do tempo → nosso impacto → credibilidade e professores mentores →
 // equipe → serviços → logos → seja consultor → FAQ → banner final.
@@ -11,62 +7,16 @@ import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
 import StatsStrip from '../components/StatsStrip.astro';
->>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 import Credibilidade from '../components/Credibilidade.astro';
 import LogoWall from '../components/LogoWall.astro';
 import Faq from '../components/Faq.astro';
 import CtaBanner from '../components/CtaBanner.astro';
-<<<<<<< HEAD
-import PorQueEjfgv from '../components/sobre/PorQueEjfgv.astro';
-import PropositoValores from '../components/sobre/PropositoValores.astro';
-import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
-import NossoImpacto from '../components/sobre/NossoImpacto.astro';
-import EquipeGrid from '../components/sobre/EquipeGrid.astro';
-import SolucoesSobre from '../components/sobre/SolucoesSobre.astro';
-import BannerProcessoSeletivo from '../components/sobre/BannerProcessoSeletivo.astro';
-import { CONTATO, NUMEROS, VIDEO_INSTITUCIONAL } from '../consts';
-
-const faqSobre = [
-  {
-    pergunta: 'Quem realiza os projetos da EJFGV?',
-    resposta: `Os projetos são executados por estudantes dos cursos de graduação da Fundação Getulio Vargas em São Paulo, selecionados em processo rigoroso e capacitados continuamente em metodologias de consultoria estratégica. Cada projeto é acompanhado por coordenadores experientes e conta com validação técnica de professores da FGV.`,
-    validar: true,
-  },
-  {
-    pergunta: 'Como funciona a orientação dos professores da Fundação Getulio Vargas?',
-    resposta: `A EJFGV mantém vínculo institucional direto com a Fundação Getulio Vargas em São Paulo. Durante as etapas críticas do projeto — como modelagem financeira, pesquisa de mercado, redesenho de processos ou estruturação de Business Intelligence — nossa equipe consulta professores especialistas da FGV e utiliza as bases de dados e bibliotecas da instituição.`,
-    validar: true,
-  },
-  {
-    pergunta: 'A EJFGV atende empresas de qual porte e segmento?',
-    resposta: `Desde ${NUMEROS.fundacao}, já entregamos ${NUMEROS.projetosFormatado} projetos em ${NUMEROS.setores} setores da economia. Atendemos desde empreendedores validando um novo Plano de Negócios e pequenas e médias empresas buscando profissionalizar sua gestão até grandes corporações que demandam estudos de mercado e inovação.`,
-    validar: true,
-  },
-  {
-    pergunta: 'Como funciona o diagnóstico inicial gratuito?',
-    resposta: `Após o seu contato pelo formulário do site ou pelo e-mail ${CONTATO.email}, nossa equipe comercial agenda uma conversa sem custo em até 1 dia útil. Nessa reunião, ouvimos os desafios atuais da sua empresa e desenhamos uma proposta sob medida com escopo, cronograma de entregas e investimento transparente.`,
-    validar: true,
-  },
-  {
-    pergunta: 'Qual é a duração média de um projeto de consultoria na EJFGV?',
-    resposta: `Os projetos têm duração média de 3 meses, variando conforme a complexidade do escopo contratado. Ao longo de todo o período, realizamos reuniões semanais de alinhamento e cocriação com os gestores da empresa cliente.`,
-    validar: true,
-  },
-=======
 import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
 import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL } from '../consts';
 
 const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
 // Os 6 valores do legado; "Inovação" ocupa o lugar do 5º valor antigo (docx).
-// `texto`: explicação que aparece ao clicar no card. Vazio = mostra o marcador "A preencher".
-const VALORES = [
-	{ nome: 'Foco no cliente', texto: '' },
-	{ nome: 'Ir além', texto: '' },
-	{ nome: 'Sentimento de dono', texto: '' },
-	{ nome: 'Comunidade', texto: '' },
-	{ nome: 'Inovação', texto: '' },
-	{ nome: 'Inconformismo', texto: '' },
-];
+const VALORES = ['Foco no cliente', 'Ir além', 'Sentimento de dono', 'Comunidade', 'Inovação', 'Inconformismo'];
 // Benefícios citados no docx para o banner "Seja consultor EJ FGV".
 const BENEFICIOS_CONSULTOR = ['Experiência prática em projetos de consultoria estratégica', 'Network FGV', 'Mentoria de professores da FGV'];
 const ICONE_CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
@@ -105,103 +55,10 @@ const faq = [
 	},
 	{ pergunta: 'Quanto custa um projeto?' },
 	{ pergunta: 'Como faço para ser consultor da EJFGV?' },
->>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 ];
 ---
 
 <Layout
-<<<<<<< HEAD
-  titulo="Sobre Nós — A Primeira Empresa Júnior da América Latina | EJFGV"
-  descricao={`Conheça a história da EJFGV, fundada em ${NUMEROS.fundacao} na Fundação Getulio Vargas em São Paulo. Veja nosso propósito, valores, linha do tempo, equipe e impacto em ${NUMEROS.projetosFormatado} projetos.`}
-  canonicalPath="/sobre-nos/"
->
-  <!-- 1. PageHeader -->
-  <PageHeader
-    breadcrumb={[
-      { rotulo: 'Início', href: '/' },
-      { rotulo: 'Sobre Nós' },
-    ]}
-    eyebrow={`Institucional · Pioneira na América Latina desde ${NUMEROS.fundacao}`}
-    titulo="Sobre a EJFGV: consultoria estratégica com excelência FGV"
-    lead="Nosso objetivo é impulsionar o crescimento de pequenas, médias e grandes empresas por meio da construção colaborativa de soluções e do rigor técnico da Fundação Getulio Vargas."
-    abertura={`A EJFGV é a Empresa Júnior da Fundação Getulio Vargas em São Paulo. Fundada em ${NUMEROS.fundacao} como a primeira Empresa Júnior do Brasil e da América Latina, acumula ${NUMEROS.projetosFormatado} projetos entregues em ${NUMEROS.setores} setores nas frentes de Plano de Negócios, Marketing, Finanças, Operações e Business Intelligence.`}
-    acoes={[
-      {
-        rotulo: 'Fale com um Especialista',
-        href: '/contato/#formulario',
-        variante: 'primary',
-        grande: true,
-      },
-      {
-        rotulo: 'Conhecer nossa história',
-        href: '#nossa-historia',
-        variante: 'secondary',
-        grande: true,
-      },
-    ]}
-    imagemRotulo="Fotografia institucional da equipe da EJFGV reunida na Fundação Getulio Vargas em São Paulo"
-    imagemProporcao="16/10"
-    videoUrl={VIDEO_INSTITUCIONAL}
-    videoRotulo="Assistir vídeo institucional"
-  >
-    <p class="sobre-header_video-nota">
-      <span class="preencher">Vídeo institucional atualizado: a enviar pelo Marketing (vídeo atual mantido provisoriamente)</span>
-    </p>
-  </PageHeader>
-
-  <!-- 2. Por que a EJFGV -->
-  <PorQueEjfgv />
-
-  <!-- 3. Propósito, Visão e 6 Valores -->
-  <PropositoValores />
-
-  <!-- 4. Linha do tempo (1967 → 1988 → Hoje) -->
-  <LinhaDoTempo />
-
-  <!-- 5. Nosso impacto (StatsStrip + X/Y/Z + Projeto Inmar) -->
-  <NossoImpacto />
-
-  <!-- 6. Credibilidade (FGV, Bain & Company, Brasil Júnior + Professores Mentores) -->
-  <Credibilidade
-    eyebrow="Respaldo Institucional e Mentoria"
-    titulo="Apoio acadêmico da Fundação Getulio Vargas, mentoria executiva e rede Brasil Júnior"
-    subtitulo="Unimos a formação de excelência da FGV em São Paulo à orientação de professores doutores e parceiros estratégicos de mercado."
-    mostrarMentoresPendentes={true}
-  />
-
-  <!-- 7. Equipe (Diretoria Executiva e Coordenadores) -->
-  <EquipeGrid />
-
-  <!-- 8. Serviços (Nossas Soluções — 5 cards com links reais) -->
-  <SolucoesSobre />
-
-  <!-- 9. LogoWall -->
-  <LogoWall />
-
-  <!-- 10. Banner "Seja consultor EJFGV" (Processo Seletivo) -->
-  <BannerProcessoSeletivo />
-
-  <!-- 11. FAQ Institucional -->
-  <Faq
-    eyebrow="Dúvidas Frequentes · Institucional"
-    titulo="Perguntas frequentes sobre a EJFGV e nosso modelo de atuação"
-    itens={faqSobre}
-  />
-
-  <!-- 12. CtaBanner -->
-  <CtaBanner
-    titulo="Vamos transformar a realidade do seu negócio com uma solução sob medida?"
-    subtitulo="Converse gratuitamente com nossa equipe comercial e descubra como a EJFGV pode apoiar os próximos passos da sua empresa."
-    rotuloBotao="Solicite seu diagnóstico gratuito"
-    href="/contato/#formulario"
-  />
-</Layout>
-
-<style>
-  .sobre-header_video-nota {
-    margin-top: 1rem;
-  }
-=======
 	titulo="Sobre nós - EJFGV"
 	descricao={`Conheça a Empresa Júnior FGV: alunos da FGV que fazem consultoria estratégica para pequenas e médias empresas desde ${NUMEROS.fundacao}.`}
 >
@@ -279,18 +136,8 @@ const faq = [
 						<ul class="sobre-valores">
 							{VALORES.map((valor, i) => (
 								<li class="sobre-valor">
-									<button type="button" class="sobre-valor_botao" aria-expanded="false" aria-controls={`valor-${i}`}>
-										<span class="sobre-valor_topo" aria-hidden="true">
-											<span class="sobre-valor_bloco"></span>
-											<span class="sobre-valor_rotulo">Valor {String(i + 1).padStart(2, '0')}</span>
-											<span class="sobre-valor_icone"></span>
-										</span>
-										<span class="sobre-valor_nome">{valor.nome}</span>
-										<span class="sobre-valor_numero" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-									</button>
-									<div class="sobre-valor_painel" id={`valor-${i}`}>
-										<p>{valor.texto || <span class="preencher">A preencher: explicação de “{valor.nome}”</span>}</p>
-									</div>
+									<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+									{valor}
 								</li>
 							))}
 						</ul>
@@ -455,24 +302,6 @@ const faq = [
 	<CtaBanner titulo="Vamos transformar a realidade do seu negócio?" href="/contato/" rotulo="Fale com um Especialista" />
 </Layout>
 
-<script>
-	// Accordion dos valores: um card aberto por vez; clicar no aberto fecha.
-	const botoes = document.querySelectorAll<HTMLButtonElement>('.sobre-valor_botao');
-	botoes.forEach((botao) => {
-		botao.addEventListener('click', () => {
-			const abrir = botao.getAttribute('aria-expanded') !== 'true';
-			botoes.forEach((b) => {
-				b.setAttribute('aria-expanded', 'false');
-				b.classList.remove('is-aberto');
-			});
-			if (abrir) {
-				botao.setAttribute('aria-expanded', 'true');
-				botao.classList.add('is-aberto');
-			}
-		});
-	});
-</script>
-
 <style>
 	/* Texto de apoio abaixo dos títulos */
 	.sobre-intro {
@@ -553,224 +382,48 @@ const faq = [
 		line-height: 1.6;
 	}
 
-	/* Valores: cada card carrega a sua cor do DS em --cor (os "quadradinhos" do docx) */
 	.sobre-valores {
 		list-style: none;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 1rem;
-		align-items: start; /* o card aberto cresce sem esticar os vizinhos da linha */
 	}
 
 	.sobre-valor {
-		--cor: var(--primary600);
-		position: relative;
-		overflow: hidden; /* corta o número gigante no canto do card */
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.15rem 1.25rem;
 		background: var(--graywarm950);
 		border: 1px solid var(--border-hairline-dark);
 		border-radius: var(--card-radius-md);
-		transition: border-color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
-	}
-
-	.sobre-valor:nth-child(3n + 2) {
-		--cor: var(--primary200);
-	}
-
-	.sobre-valor:nth-child(3n) {
-		--cor: var(--graywarm300);
-	}
-
-	.sobre-valor_botao {
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-		width: 100%;
-		min-height: 11rem;
-		padding: 1.35rem 1.35rem 1.5rem;
-		background: none;
-		border: 0;
 		color: var(--white);
-		text-align: left;
-		cursor: pointer;
+		font-size: 1.05rem;
+		font-weight: 700;
+		line-height: 1.3;
 	}
 
-	/* O overflow do card cortaria o anel de foco do botão, então o anel vai para o card */
-	.sobre-valor_botao:focus-visible {
-		outline: none;
-	}
-
-	.sobre-valor:has(.sobre-valor_botao:focus-visible) {
-		outline: 2px solid var(--primary200);
-		outline-offset: 3px;
-	}
-
-	.sobre-valor_topo {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-	}
-
-	/* O quadradinho estica até virar a barra do hero (.home-hero_divider) */
+	/* Os "quadradinhos" (docx): cores do DS, alternadas */
 	.sobre-valor_bloco {
-		width: var(--hero-divider-h);
-		height: var(--hero-divider-h);
-		background: var(--cor);
-		border-radius: 2px;
-		transition: width 0.6s var(--ease-out-expo);
-	}
-
-	.sobre-valor_rotulo {
-		flex: 1;
-		color: var(--graywarm300);
-		font-size: 0.7rem;
-		font-weight: 600;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-	}
-
-	/* "+" que gira para "×", como no FAQ */
-	.sobre-valor_icone {
-		position: relative;
-		flex-shrink: 0;
-		width: 2rem;
-		height: 2rem;
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: 50%;
-		transition: background 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
-	}
-
-	.sobre-valor_icone::before,
-	.sobre-valor_icone::after {
-		content: "";
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 0.7rem;
-		height: 2px;
-		background: var(--white);
-		transform: translate(-50%, -50%);
-		transition: background 0.3s;
-	}
-
-	.sobre-valor_icone::after {
-		transform: translate(-50%, -50%) rotate(90deg);
-	}
-
-	/* Mesmo jogo de peso variável do wordmark da navegação: do 800 ao fino e largo */
-	.sobre-valor_nome {
-		position: relative;
-		z-index: 1;
-		max-width: 11ch;
-		margin-top: auto;
-		font-size: clamp(1.4rem, 2.2vw, 1.75rem);
-		font-weight: 800;
-		line-height: 1.1;
-		letter-spacing: -0.02em;
-		font-variation-settings: 'wght' 800, 'wdth' 100;
-		transition: font-variation-settings 0.6s var(--ease-out-expo);
-	}
-
-	/* Número gigante vazado; preenche com a cor do card no hover e quando aberto */
-	.sobre-valor_numero {
-		position: absolute;
-		right: -0.04em;
-		bottom: -0.3em;
-		color: transparent;
-		font-size: 7.5rem;
-		font-weight: 900;
-		line-height: 1;
-		letter-spacing: -0.05em;
-		-webkit-text-stroke: 1px rgba(249, 255, 252, 0.14);
-		pointer-events: none;
-		transition: color 0.6s var(--ease-out-expo), -webkit-text-stroke-color 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
-	}
-
-	.sobre-valor:has(.is-aberto) {
-		border-color: var(--cor);
-	}
-
-	.sobre-valor_botao.is-aberto .sobre-valor_bloco {
-		width: var(--hero-divider-w);
-	}
-
-	.sobre-valor_botao.is-aberto .sobre-valor_icone {
-		background: var(--cor);
-		border-color: var(--cor);
-		transform: rotate(135deg);
-	}
-
-	.sobre-valor_botao.is-aberto .sobre-valor_icone::before,
-	.sobre-valor_botao.is-aberto .sobre-valor_icone::after {
-		background: var(--graywarm950);
-	}
-
-	.sobre-valor_botao.is-aberto .sobre-valor_numero {
-		color: color-mix(in srgb, var(--cor) 16%, transparent);
-		-webkit-text-stroke-color: var(--cor);
-	}
-
-	@media (hover: hover) {
-		.sobre-valor:hover {
-			border-color: var(--cor);
-			transform: translateY(-3px);
-		}
-
-		.sobre-valor:hover .sobre-valor_bloco {
-			width: var(--hero-divider-w);
-		}
-
-		.sobre-valor:hover .sobre-valor_nome {
-			font-variation-settings: 'wght' 300, 'wdth' 115;
-		}
-
-		.sobre-valor:hover .sobre-valor_numero {
-			color: color-mix(in srgb, var(--cor) 16%, transparent);
-			-webkit-text-stroke-color: var(--cor);
-			transform: translateY(-0.08em);
-		}
-	}
-
-	/* Abre/fecha animando a altura: a linha do grid vai de 0fr a 1fr */
-	.sobre-valor_painel {
-		position: relative;
-		z-index: 1;
 		display: grid;
-		grid-template-rows: 0fr;
-		transition: grid-template-rows 0.4s var(--ease-out-expo);
+		place-items: center;
+		flex-shrink: 0;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 0.5rem;
+		background: var(--primary600);
+		color: var(--graywarm950);
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.04em;
 	}
 
-	.sobre-valor_painel > p {
-		overflow: hidden;
-		max-width: 30ch;
-		padding: 0 1.35rem;
-		color: var(--graywarm300);
-		font-size: 0.95rem;
-		line-height: 1.6;
-		opacity: 0;
-		transition: opacity 0.4s ease, padding 0.4s var(--ease-out-expo);
+	.sobre-valor:nth-child(3n + 2) .sobre-valor_bloco {
+		background: var(--primary200);
 	}
 
-	.sobre-valor_botao.is-aberto + .sobre-valor_painel {
-		grid-template-rows: 1fr;
-	}
-
-	.sobre-valor_botao.is-aberto + .sobre-valor_painel > p {
-		padding-bottom: 1.5rem;
-		opacity: 1;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.sobre-valor,
-		.sobre-valor *,
-		.sobre-valor *::before,
-		.sobre-valor *::after {
-			transition: none;
-		}
-
-		.sobre-valor:hover,
-		.sobre-valor:hover .sobre-valor_numero {
-			transform: none;
-		}
+	.sobre-valor:nth-child(3n) .sobre-valor_bloco {
+		background: var(--graywarm300);
 	}
 
 	/* 5. Nosso impacto */
@@ -990,15 +643,6 @@ const faq = [
 			grid-template-columns: 1fr;
 		}
 
-		.sobre-valor_botao {
-			min-height: 8.5rem;
-			gap: 1.5rem;
-		}
-
-		.sobre-valor_numero {
-			font-size: 6rem;
-		}
-
 		.sobre-cards {
 			grid-template-columns: repeat(2, 1fr);
 			gap: 0.75rem;
@@ -1012,5 +656,4 @@ const faq = [
 			max-width: none;
 		}
 	}
->>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5
 </style>
