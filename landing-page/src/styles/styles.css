@@ -54,6 +54,10 @@
   --success700: var(--brand-chumbo);
   --warning500: var(--brand-laranja);
   --error500:   var(--primary700);
+  /* 4.1 TERCEIROS — cores oficiais do WhatsApp (uso restrito ao botão flutuante) */
+  --whatsapp-green:       #25D366;
+  --whatsapp-green-hover: #128C7E;
+  --whatsapp-text:        #ffffff;
 
   /* 5. GRADIENT TOKENS */
   --gradient-title-gray:  linear-gradient(63deg, var(--brand-chumbo), var(--gray600));
@@ -2226,16 +2230,19 @@ body::after {
   gap: 0.5rem;
   height: 52px;
   padding: 0 1.1rem;
-  background: var(--success700);
+  background: var(--whatsapp-green);
   border-radius: 999px;
-  color: var(--white);
+  color: var(--whatsapp-text);
   font-size: 0.875rem;
   font-weight: 700;
   box-shadow: 0 12px 24px -8px rgba(37, 40, 50, 0.35);
-  transition: transform 0.25s var(--ease-out-expo), opacity 0.25s;
+  transition: background 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo), opacity 0.25s;
 }
 
-.whatsapp-float:hover {
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible {
+  background: var(--whatsapp-green-hover);
+  color: var(--whatsapp-text);
   transform: translateY(-2px);
 }
 
