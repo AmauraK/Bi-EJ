@@ -83,15 +83,31 @@ const servico = {
 				</figure>
 			)}
 		</PageHeader>
-		<div class="solucao_logos" aria-label="Empresas que já contrataram a EJFGV">
-			<div class="page-padding">
-				<div class="container-large">
-					<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
-					<div class="grandes-clientes_row">
-						{LOGOS.slice(0, 6).map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
+		<!-- Fim do cabeçalho em curva: a dobra de baixo sobe no centro, com a seta para o conteúdo -->
+		<div class="solucao_hero-fim">
+			<div class="solucao_logos" aria-label="Empresas que já contrataram a EJFGV">
+				<div class="page-padding">
+					<div class="container-large">
+						<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
+						<div class="grandes-clientes_row">
+							{LOGOS.slice(0, 6).map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
+						</div>
 					</div>
 				</div>
 			</div>
+			<svg class="solucao_curva-linha" viewBox="0 0 4000 100" preserveAspectRatio="none" aria-hidden="true">
+				<defs>
+					<linearGradient id="solucao-curva-degrade" gradientUnits="userSpaceOnUse" x1="1280" x2="2720">
+						<stop offset="0" style="stop-color: var(--gray500)" />
+						<stop offset="1" style="stop-color: var(--brand-laranja)" />
+					</linearGradient>
+				</defs>
+				<path d="M0 96H1770C1860 96 1870 12 2000 12S2140 96 2230 96H4000" />
+			</svg>
+			<a href="#solucao-conteudo" class="solucao_rolar" aria-label="Ir para o conteúdo">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7" /></svg>
+			</a>
+			<span id="solucao-conteudo" class="solucao_ancora"></span>
 		</div>
 
 		<!-- 2. Corpo próprio de cada solução -->
@@ -150,6 +166,7 @@ const servico = {
 
 <style>
 	.solucao {
+		--curva-h: clamp(56px, 6vw, 88px); /* altura da curva no fim do cabeçalho (ver .solucao_hero-fim) */
 		background: var(--gray50);
 	}
 
@@ -187,9 +204,82 @@ const servico = {
 	}
 
 	/* Logos brancos sobre o mesmo cinza do cabeçalho, como continuação dele */
+	/* Curva no fim do cabeçalho: a máscara abre o "morro" no centro e a dobra de baixo (que sobe por
+	   baixo pela margem negativa) aparece nele. A linha em degradê acompanha a borda. */
+	.solucao_hero-fim {
+		--curva-mascara: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4000 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4000V96H2230C2140 96 2130 12 2000 12S1860 96 1770 96H0Z'/%3E%3C/svg%3E");
+		position: relative;
+		z-index: 1;
+		margin-bottom: calc(var(--curva-h) * -1);
+		overflow: clip; /* a linha tem 4000px: sem rolagem lateral */
+	}
+
+	/* A dobra de baixo ganha a altura da curva na própria cor, sem perder o respiro */
+	.solucao_hero-fim + :global(*) {
+		border-top: var(--curva-h) solid transparent;
+	}
+
 	.solucao_logos {
-		padding: 0 0 clamp(2rem, 4vw, 3rem);
+		padding: 0 0 calc(clamp(2rem, 4vw, 3rem) + var(--curva-h));
 		background: var(--graywarm900);
+		-webkit-mask:
+			linear-gradient(#000 0 0) top / 100% calc(100% - var(--curva-h) + 1px) no-repeat,
+			var(--curva-mascara) center bottom / 4000px var(--curva-h) no-repeat;
+		mask:
+			linear-gradient(#000 0 0) top / 100% calc(100% - var(--curva-h) + 1px) no-repeat,
+			var(--curva-mascara) center bottom / 4000px var(--curva-h) no-repeat;
+	}
+
+	.solucao_curva-linha {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: 4000px;
+		max-width: none;
+		height: var(--curva-h);
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.solucao_curva-linha path {
+		fill: none;
+		stroke: url(#solucao-curva-degrade);
+		stroke-width: 3;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.solucao_rolar {
+		position: absolute;
+		bottom: calc(var(--curva-h) * 0.18);
+		left: 50%;
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		margin-left: -22px;
+		color: var(--graywarm950);
+		border-radius: 50%;
+		animation: solucao-rolar 2.4s var(--ease-out-expo) infinite;
+	}
+
+	.solucao_rolar svg {
+		width: 22px;
+		height: 22px;
+	}
+
+	.solucao_rolar:hover {
+		color: var(--primary700);
+	}
+
+	@keyframes solucao-rolar {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(5px); }
+	}
+
+	.solucao_ancora {
+		position: absolute;
+		bottom: 0;
+		scroll-margin-top: var(--nav-height);
 	}
 
 	.solucao_logos .grandes-clientes_label {
