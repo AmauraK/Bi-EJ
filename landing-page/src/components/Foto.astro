@@ -1,0 +1,28 @@
+---
+// Foto real (FOTOS em consts.ts) no lugar de um ImagemReservada: WebP responsivo gerado pelo Astro.
+import { Image } from 'astro:assets';
+import type { Foto } from '../consts';
+
+interface Props {
+	foto: Foto;
+	classe?: string;
+	/** Largura que a foto ocupa na tela, para o navegador escolher o tamanho certo. */
+	sizes?: string;
+	/** Foto da primeira tela (cabeçalho): carrega logo. Fora dela, false para carregar ao rolar. */
+	prioridade?: boolean;
+}
+
+const { foto, classe, sizes = '(min-width: 1024px) 580px, 100vw', prioridade = true } = Astro.props;
+---
+
+<Image
+	src={foto.src}
+	alt={foto.alt}
+	class={classe}
+	widths={[480, 800, 1200, 1600]}
+	quality={70}
+	sizes={sizes}
+	loading={prioridade ? 'eager' : 'lazy'}
+	fetchpriority={prioridade ? 'high' : 'auto'}
+	style={foto.posicao ? `object-position: ${foto.posicao}` : undefined}
+/>

@@ -5,7 +5,7 @@
 // Credibilidade (FGV, Bain, Brasil Júnior) e "Quando contratar" ficam no Sobre e nas páginas de solução.
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import ImagemReservada from '../components/ImagemReservada.astro';
+import Foto from '../components/Foto.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Metodo from '../components/Metodo.astro';
 import LogoWall from '../components/LogoWall.astro';
@@ -13,7 +13,7 @@ import CaseCard from '../components/CaseCard.astro';
 import Depoimentos from '../components/Depoimentos.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES, CONTATO, VIDEO_INSTITUCIONAL } from '../consts';
+import { SITE, NUMEROS, SOLUCOES, CASES, CONTATO, VIDEO_INSTITUCIONAL, FOTOS } from '../consts';
 
 // Ícone de check do CDN da EJ (o mesmo da LP original).
 const CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
@@ -106,7 +106,7 @@ const faq = [
 							<a href="/sobre-nos/" class="button-secondary home-historia_botao">Saiba mais sobre a EJFGV</a>
 						</div>
 						<figure class="hero-photo-frame">
-							<ImagemReservada classe="home-hero_image" escuro descricao="foto dinâmica da equipe ou de projeto em ação" />
+							<Foto foto={FOTOS.equipeEscadaria} classe="home-hero_image" prioridade={false} />
 							<figcaption class="hero-photo-caption">
 								<div class="hero-photo-caption-left">
 									<span class="hero-photo-dot" aria-hidden="true"></span>

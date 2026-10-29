@@ -6,13 +6,14 @@
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
+import Foto from '../components/Foto.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Credibilidade from '../components/Credibilidade.astro';
 import LogoWall from '../components/LogoWall.astro';
 import Faq from '../components/Faq.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
-import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL } from '../consts';
+import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL, FOTOS } from '../consts';
 
 const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
 // Os 6 valores do legado; "Inovação" ocupa o lugar do 5º valor antigo (docx).
@@ -75,7 +76,7 @@ const faq = [
 		</Fragment>
 		<Fragment slot="midia">
 			<figure class="hero-photo-frame">
-				<ImagemReservada classe="home-hero_image" escuro descricao="foto atualizada da equipe atual" />
+				<Foto foto={FOTOS.equipeCompleta} classe="home-hero_image" />
 				<figcaption class="hero-photo-caption">
 					<div class="hero-photo-caption-left">
 						<span class="hero-photo-dot" aria-hidden="true"></span>

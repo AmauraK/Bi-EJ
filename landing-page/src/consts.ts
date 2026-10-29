@@ -1,8 +1,29 @@
 // Fonte única de fatos do site. Nada aqui é inventado: cada dado indica de onde veio.
 // Fontes: docx "EJFGV Mudanças Site" (verdade), legado em ../site/conteudo/*.mjs, a LP original
 // (git show HEAD:landing-page/src/pages/index.astro) e o site atual ejfgv.com (26/10/2026).
+import equipeCompleta from './assets/fotos/equipe-completa.jpg';
+import equipeEscadaria from './assets/fotos/equipe-escadaria.jpg';
+import equipeConvite from './assets/fotos/equipe-convite.jpg';
+import consultoresNotebook from './assets/fotos/consultores-notebook.jpg';
+import consultorasDocumento from './assets/fotos/consultoras-documento.jpg';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
+
+// Fotos reais da equipe: originais na raiz do repositório, reduzidas para src/assets/fotos (o Astro gera
+// WebP no build). `posicao` é o object-position do recorte no quadro do cabeçalho.
+export interface Foto {
+  src: ImageMetadata;
+  alt: string;
+  posicao?: string;
+}
+
+export const FOTOS = {
+  equipeCompleta: { src: equipeCompleta, alt: 'Equipe atual da EJFGV reunida em uma escadaria ao ar livre', posicao: 'center 55%' },
+  equipeEscadaria: { src: equipeEscadaria, alt: 'Consultores da EJFGV reunidos ao ar livre', posicao: 'center 70%' },
+  equipeConvite: { src: equipeConvite, alt: 'Consultores da EJFGV sorrindo e apontando para a câmera', posicao: 'center 60%' },
+  consultoresNotebook: { src: consultoresNotebook, alt: 'Quatro consultores da EJFGV analisando dados juntos em um notebook', posicao: 'center 45%' },
+  consultorasDocumento: { src: consultorasDocumento, alt: 'Duas consultoras da EJFGV revisando um documento de projeto', posicao: 'center 52%' },
+} satisfies Record<string, Foto>;
 
 export const SITE = {
   nome: 'EJFGV',

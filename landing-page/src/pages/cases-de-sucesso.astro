@@ -3,12 +3,12 @@
 // cards com o resultado em destaque (o "spoiler"), logos, depoimentos e CTA.
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import ImagemReservada from '../components/ImagemReservada.astro';
+import Foto from '../components/Foto.astro';
 import CaseCard from '../components/CaseCard.astro';
 import LogoWall from '../components/LogoWall.astro';
 import Depoimentos from '../components/Depoimentos.astro';
 import CtaBanner from '../components/CtaBanner.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES } from '../consts';
+import { SITE, NUMEROS, SOLUCOES, CASES, FOTOS } from '../consts';
 import { tagDo } from '../components/cases/conteudo';
 
 // Ordem dos filtros decidida em 26/10/2026.
@@ -46,7 +46,7 @@ const colecao = {
 			<a href="#lista-cases" class="button-tertiary">Ver os cases ↓</a>
 		</Fragment>
 		<figure slot="midia" class="hero-photo-frame">
-			<ImagemReservada descricao="foto de abertura dos cases: equipe EJFGV em projeto com cliente" classe="home-hero_image" escuro />
+			<Foto foto={FOTOS.equipeConvite} classe="home-hero_image" />
 		</figure>
 	</PageHeader>
 

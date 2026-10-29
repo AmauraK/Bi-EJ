@@ -587,6 +587,7 @@ body::after {
 
 .home-hero_image {
   width: 100%;
+  height: auto; /* ignora o height do <Image> do Astro: quem manda é o aspect-ratio */
   aspect-ratio: 16 / 10.8;
   object-fit: cover;
   object-position: center 28%;
@@ -1598,6 +1599,9 @@ body::after {
   .hero-photo-caption {
     flex-direction: column;
     align-items: flex-start;
+    position: static; /* no celular a legenda vai abaixo da foto, sem cobri-la */
+    border-width: 1px 0 0;
+    border-radius: 0;
   }
 }
 
