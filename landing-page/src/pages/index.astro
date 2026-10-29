@@ -1,49 +1,19 @@
 ---
-<<<<<<< HEAD
-import Layout from '../layouts/Layout.astro';
-import PageHeader from '../components/PageHeader.astro';
-import LeadForm from '../components/LeadForm.astro';
----
-
-<Layout
-  titulo="EJFGV — Consultoria Estratégica feita por alunos da FGV"
-  descricao="A EJFGV é a Empresa Júnior da Fundação Getulio Vargas em São Paulo. Desde 1988, entregamos +800 projetos sob medida em Estratégia, Marketing, Finanças, Operações e Business Intelligence."
-  canonicalPath="/"
-  ctaHref="#formulario"
->
-  <PageHeader
-    eyebrow="A primeira Empresa Júnior da América Latina · desde 1988"
-    titulo="Consultoria estratégica feita por alunos da FGV"
-    lead="A EJFGV é a Empresa Júnior da Fundação Getulio Vargas em São Paulo."
-    acoes={[
-      { rotulo: 'Solicite seu diagnóstico gratuito', href: '#formulario', grande: true },
-    ]}
-  />
-  <section id="solucoes" class="padding-section-medium">
-    <div class="page-padding">
-      <div class="container-large">
-        <h2>Nossas Soluções</h2>
-      </div>
-    </div>
-  </section>
-  <LeadForm />
-</Layout>
-=======
-// Home (/). Ordem do plano: hero centralizado → números → história → soluções em abas → método → banner →
-// logos → prova social → credibilidade → resultados → FAQ → formulário.
+// Home (/) em 7 dobras de mais ou menos uma tela, cada uma com uma função e um CTA:
+// 1. promessa (hero + logos) → 2. quem somos (história, vídeo e números) → 3. soluções em abas →
+// 4. como funciona → 5. resultados (cases e depoimentos) → 6. FAQ → 7. formulário.
+// Credibilidade (FGV, Bain, Brasil Júnior) e "Quando contratar" ficam no Sobre e nas páginas de solução.
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Metodo from '../components/Metodo.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import LogoWall from '../components/LogoWall.astro';
 import CaseCard from '../components/CaseCard.astro';
 import Depoimentos from '../components/Depoimentos.astro';
-import Credibilidade from '../components/Credibilidade.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES, LOGOS, VIDEO_INSTITUCIONAL } from '../consts';
+import { SITE, NUMEROS, SOLUCOES, CASES, CONTATO, VIDEO_INSTITUCIONAL } from '../consts';
 
 // Ícone de check do CDN da EJ (o mesmo da LP original).
 const CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
@@ -52,8 +22,8 @@ const buscarCase = (slug: string) => CASES.find((c) => c.slug === slug)!;
 const maCerise = buscarCase('como-a-confeitaria-ma-cerise-aumentou-em-1124-sua-demanda');
 const talent = buscarCase('como-auxiliamos-a-talent-academy-a-alavancar-sua-area-de-marketing-e-comunicacao');
 
-// "Resultados": o 1º case de cada solução (Business Intelligence ainda não tem case).
-const resultados = SOLUCOES.filter((s) => s.cases.length).map((s) => ({ solucao: s, caso: buscarCase(s.cases[0]) }));
+// Cada aba de solução traz o resultado do 1º case dela (Business Intelligence ainda não tem case).
+const solucoes = SOLUCOES.map((s) => ({ ...s, caso: s.cases[0] ? buscarCase(s.cases[0]) : undefined }));
 
 const nomesSolucoes = new Intl.ListFormat('pt-BR', { type: 'conjunction' }).format(SOLUCOES.map((s) => s.nome));
 
@@ -104,7 +74,7 @@ const faq = [
 	ctaHref="#formulario"
 >
 	<div class="home">
-		<!-- 1. Hero centralizado: selo, H1, abertura "resposta primeiro", 2 CTAs grandes, logos e foto larga -->
+		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes -->
 		<PageHeader
 			centralizado
 			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
@@ -112,43 +82,15 @@ const faq = [
 			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
 		>
 			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
+			<p class="home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
 			<Fragment slot="acoes">
 				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
 				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
 			</Fragment>
-			<Fragment slot="midia">
-				<div class="home-hero_grandes-clientes home-hero_logos">
-					<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
-					<div class="grandes-clientes_row">
-						{LOGOS.slice(0, 6).map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
-					</div>
-				</div>
-				<figure class="hero-photo-frame">
-					<ImagemReservada classe="home-hero_image" escuro descricao="foto dinâmica da equipe ou de projeto em ação" />
-					<figcaption class="hero-photo-caption">
-						<div class="hero-photo-caption-left">
-							<span class="hero-photo-dot" aria-hidden="true"></span>
-							<div>
-								<strong>Equipe EJFGV · Projetos Personalizados</strong>
-								<span>Orientação de professores da FGV · Retorno em até {NUMEROS.retornoDiasUteis} dia útil</span>
-							</div>
-						</div>
-						<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
-							<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg>
-							Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
-						</button>
-					</figcaption>
-				</figure>
-			</Fragment>
 		</PageHeader>
+		<LogoWall titulo="Aprovada por grandes clientes" />
 
-		<!-- 2. Números (+800 e NPS sobem animados) -->
-		<StatsStrip />
-		<div class="page-padding">
-			<p class="container-large home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
-		</div>
-
-		<!-- 3. História curta -->
+		<!-- Dobra 2 · Quem somos: história curta ao lado da foto/vídeo da equipe, e os números logo abaixo -->
 		<section id="historia" class="section_icp" aria-labelledby="historia-titulo">
 			<div class="page-padding padding-section-medium">
 				<div class="container-large">
@@ -157,32 +99,47 @@ const faq = [
 							<span class="eyebrow">Nossa história</span>
 							<h2 id="historia-titulo" class="home-historia_titulo">A primeira Empresa Júnior da América Latina</h2>
 							<p class="home-historia_frase">Transformando realidades de negócios desde {NUMEROS.fundacao}</p>
-						</div>
-						<div>
 							<p class="quem-somos_copy">
 								Fundada em {NUMEROS.fundacao}, a {SITE.nome} é a {SITE.nomeCompleto}, instituição reconhecida internacionalmente como centro de excelência em ensino, pesquisa e consultoria.{' '}
 								<span class="preencher">A preencher: completar a frase “Somos vanguarda e criadores…” (o texto do docx está cortado)</span>
 							</p>
 							<a href="/sobre-nos/" class="button-secondary home-historia_botao">Saiba mais sobre a EJFGV</a>
 						</div>
+						<figure class="hero-photo-frame">
+							<ImagemReservada classe="home-hero_image" escuro descricao="foto dinâmica da equipe ou de projeto em ação" />
+							<figcaption class="hero-photo-caption">
+								<div class="hero-photo-caption-left">
+									<span class="hero-photo-dot" aria-hidden="true"></span>
+									<div>
+										<strong>Equipe EJFGV · Projetos Personalizados</strong>
+										<span>Orientação de professores da FGV · Retorno em até {NUMEROS.retornoDiasUteis} dia útil</span>
+									</div>
+								</div>
+								<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
+									<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg>
+									Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
+								</button>
+							</figcaption>
+						</figure>
 					</div>
 				</div>
 			</div>
 		</section>
+		<StatsStrip />
 
-		<!-- 4. Soluções em abas (sem JS, todos os painéis aparecem) -->
-		<section id="solucoes" class="section_beneficios" aria-labelledby="solucoes-titulo">
+		<!-- Dobra 3 · Soluções em abas: o que fazemos, o escopo e um resultado real de cada área -->
+		<section id="solucoes" class="section_beneficios home-solucoes" aria-labelledby="solucoes-titulo">
 			<div class="page-padding padding-section-medium">
 				<div class="container-large">
 					<div class="beneficios_wrapper">
 						<div class="beneficios_title">
 							<span class="beneficios_eyebrow">Nossos serviços são personalizados de acordo com suas demandas</span>
 							<h2 id="solucoes-titulo">Soluções para cada momento da sua empresa</h2>
-							<p>Escolha uma área para ver o que fazemos, quando vale a pena contratar e o que pode entrar no projeto. Todas começam com um diagnóstico gratuito.</p>
+							<p>Escolha uma área para ver o que fazemos. Todas começam com um diagnóstico gratuito.</p>
 						</div>
 
 						<div class="frentes_tabs" role="tablist" aria-label="Soluções da EJFGV" data-abas>
-							{SOLUCOES.map((s, i) => (
+							{solucoes.map((s, i) => (
 								<button
 									type="button"
 									role="tab"
@@ -196,7 +153,7 @@ const faq = [
 						</div>
 
 						<div class="beneficios_list">
-							{SOLUCOES.map((s) => (
+							{solucoes.map((s) => (
 								<div class="beneficios_item home-solucao" role="tabpanel" id={`painel-${s.slug}`} aria-labelledby={`aba-${s.slug}`} tabindex="0">
 									<div>
 										<img src={s.icone} alt="" class="vantagens_icon" loading="lazy" />
@@ -205,15 +162,6 @@ const faq = [
 										<a href={s.url} class="button is-button-large home-solucao_cta" aria-label={`Quero saber mais sobre ${s.nome}`}>Quero saber mais</a>
 									</div>
 									<div>
-										<h4>Quando contratar</h4>
-										<ul class="home-solucao_quando">
-											{s.quandoFazSentido.map((q) => (
-												<li>
-													<strong>{q.titulo}</strong>
-													<p>{q.texto}</p>
-												</li>
-											))}
-										</ul>
 										<h4>O que pode entrar no projeto</h4>
 										<ul class="vantagens_list">
 											{s.escopo.map((e) => (
@@ -223,6 +171,13 @@ const faq = [
 												</li>
 											))}
 										</ul>
+										{s.caso && (
+											<a class="frente_mini-card home-solucao_case" href={s.caso.url}>
+												<span>Resultado real</span>
+												<strong>{s.caso.destaque}</strong>
+												<p>{s.caso.cliente} · Ver case →</p>
+											</a>
+										)}
 									</div>
 								</div>
 							))}
@@ -262,26 +217,26 @@ const faq = [
 			}
 		</script>
 
-		<!-- 5. Método, logo depois de Soluções (um ícone por etapa) -->
-		<Metodo kicker="Como funciona" />
+		<!-- Dobra 4 · Como funciona, logo depois de Soluções (docx), fechando com o CTA do diagnóstico -->
+		<Metodo kicker="Como funciona">
+			<div class="home-metodo_cta">
+				<p>Sua empresa pode ser o próximo case de sucesso. O primeiro passo é um diagnóstico gratuito.</p>
+				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+			</div>
+		</Metodo>
 
-		<!-- 6. Banner de conversão -->
-		<CtaBanner
-			titulo="Sua empresa pode ser o próximo case de sucesso. O primeiro passo é um diagnóstico gratuito."
-			href="#formulario"
-			rotulo="Solicite seu diagnóstico gratuito"
-		/>
-
-		<!-- 7. Logos reais + os 4 pendentes do docx como marcadores -->
-		<LogoWall />
-
-		<!-- 8. Prova social: resultados reais dos depoimentos da home atual -->
-		<section id="prova-social" class="section_depoimentos" aria-labelledby="prova-social-titulo">
+		<!-- Dobra 5 · Resultados (docx: ícone "Resultados" no fim, com copy persuasiva): cases, depoimentos e CTA -->
+		<section id="resultados" class="section_depoimentos" aria-labelledby="resultados-titulo">
 			<div class="page-padding padding-section-medium">
 				<div class="container-large">
-					<div class="icp_header">
-						<span class="eyebrow">Cases e depoimentos</span>
-						<h2 id="prova-social-titulo">Resultados reais, nas palavras de quem contratou</h2>
+					<div class="icp_header home-resultados_header">
+						<span class="home-resultados_icone" aria-hidden="true">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 14 4-4 3 3 6-6"></path><path d="M15 7h5v5"></path></svg>
+						</span>
+						<div>
+							<span class="eyebrow">Resultados</span>
+							<h2 id="resultados-titulo">Resultados reais, nas palavras de quem contratou</h2>
+						</div>
 					</div>
 					<div class="cases_grid home-cases">
 						<CaseCard
@@ -310,57 +265,27 @@ const faq = [
 						<span class="preencher">A preencher: segmento e solução do projeto da M Cassavia</span>
 					</p>
 					<Depoimentos pendentes={2} />
-					<div class="home-prova_rodape">
-						<a href="/cases-de-sucesso/" class="button-secondary">Ver todos os cases de sucesso</a>
+					<div class="home-resultados_cta">
+						<a href="#formulario" class="button is-button-large">Quero resultados como esses</a>
+						<a href="/cases-de-sucesso/" class="button-secondary is-button-large">Ver todos os cases</a>
+						<p>Diagnóstico gratuito e retorno em até {NUMEROS.retornoDiasUteis} dia útil.</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- 9. Credibilidade: FGV, Bain e Brasil Júnior -->
-		<Credibilidade />
+		<!-- Dobra 6 · FAQ (rascunhos a validar), com saída para o WhatsApp -->
+		<Faq itens={faq}>
+			<p class="home-faq_whatsapp">Não achou sua dúvida? <a href={CONTATO.whatsappUrl} target="_blank" rel="noopener">Fale com a gente no WhatsApp</a>.</p>
+		</Faq>
 
-		<!-- 10. Resultados: ícone, um resultado real por solução e CTA -->
-		<section id="resultados" class="section_beneficios" aria-labelledby="resultados-titulo">
-			<div class="page-padding padding-section-medium">
-				<div class="container-large">
-					<div class="beneficios_wrapper">
-						<div class="beneficios_title">
-							<span class="home-resultados_icone" aria-hidden="true">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 14 4-4 3 3 6-6"></path><path d="M15 7h5v5"></path></svg>
-							</span>
-							<span class="beneficios_eyebrow">Resultados</span>
-							<h2 id="resultados-titulo">Um resultado real para cada desafio da sua empresa</h2>
-							<p>Tirar uma ideia do papel, conquistar novos mercados, decidir com segurança ou fazer a operação fluir: veja o que a EJFGV já entregou em cada área.</p>
-						</div>
-						<div class="frentes_cards-grid">
-							{resultados.map(({ solucao, caso }) => (
-								<a class="frente_mini-card" href={caso.url}>
-									<span>{solucao.rotulo}</span>
-									<h3>{caso.destaque}</h3>
-									<p>{caso.cliente} · Ver case →</p>
-								</a>
-							))}
-						</div>
-						<div class="home-resultados_cta">
-							<a href="#formulario" class="button is-button-large">Quero resultados como esses</a>
-							<p>Diagnóstico gratuito e retorno em até {NUMEROS.retornoDiasUteis} dia útil.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- 11. FAQ (rascunhos a validar) -->
-		<Faq itens={faq} />
-
-		<!-- 12. Formulário, com a prova social (+800 projetos, NPS, retorno) na coluna ao lado -->
+		<!-- Dobra 7 · Formulário, com a prova social (+800 projetos, NPS, retorno) na coluna ao lado -->
 		<LeadForm titulo="Solicite seu diagnóstico gratuito e descubra como transformar a realidade da sua empresa." />
 	</div>
 </Layout>
 
 <style>
-	/* 1. Hero: selo, destaque do H1 em linha própria, logos centralizados e foto larga */
+	/* Dobra 1 · Hero: selo, destaque do H1 em linha própria e abertura em 3 linhas */
 	.home :global(.hero_kicker) {
 		display: inline-flex;
 		align-items: center;
@@ -386,29 +311,16 @@ const faq = [
 		text-wrap: balance;
 	}
 
+	.home :global(.section_page-header .hero_description) {
+		max-width: 66ch;
+	}
+
+	.home :global(.section_page-header .hero_actions) {
+		margin-bottom: 0;
+	}
+
 	.home-hero_destaque {
 		display: block;
-	}
-
-	.home-hero_logos {
-		max-width: 56rem;
-		margin: 0 auto clamp(2rem, 4vw, 3rem);
-		text-align: center;
-	}
-
-	.home-hero_logos .grandes-clientes_row {
-		justify-content: center;
-	}
-
-	/* A legenda cobre a base da foto: o rótulo do espaço reservado sobe para o topo. */
-	.hero-photo-frame :global(.image-placeholder) {
-		align-items: flex-start;
-	}
-
-	@media (min-width: 768px) {
-		.hero-photo-frame :global(.home-hero_image) {
-			aspect-ratio: 21 / 9;
-		}
 	}
 
 	@media (max-width: 767px) {
@@ -422,13 +334,14 @@ const faq = [
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 0.5rem;
-		margin-top: 1rem;
+		margin-bottom: 1.5rem;
 		font-size: 0.8rem;
 		color: var(--gray600);
 	}
 
-	/* 3. História */
+	/* Dobra 2 · Quem somos */
 	.home-historia {
+		align-items: center;
 		margin-bottom: 0;
 	}
 
@@ -439,17 +352,25 @@ const faq = [
 	}
 
 	.home-historia_frase {
-		margin-top: 0.75rem;
+		margin: 0.75rem 0 1.25rem;
 		color: var(--primary700);
 		font-size: 1.1rem;
 		font-weight: 700;
 	}
 
 	.home-historia_botao {
-		margin-top: 1.5rem;
+		margin-top: 1.75rem;
 	}
 
-	/* 4. Soluções em abas (cores da aba ativa: as do DS, .frente_tab.is-active). */
+	/* Dobra 3 · Soluções em abas (cores da aba ativa: as do DS, .frente_tab.is-active) */
+	.home-solucoes .beneficios_wrapper {
+		gap: 2.5rem;
+	}
+
+	.home-solucoes .frentes_tabs {
+		margin-top: 0;
+	}
+
 	.home-solucao {
 		align-items: start;
 	}
@@ -459,7 +380,7 @@ const faq = [
 	}
 
 	.home-solucao h4 {
-		margin: 1.75rem 0 0.75rem;
+		margin-bottom: 1rem;
 		color: var(--text-eyebrow-dark);
 		font-size: 0.8rem;
 		font-weight: 700;
@@ -467,30 +388,10 @@ const faq = [
 		text-transform: uppercase;
 	}
 
-	.home-solucao h4:first-child {
-		margin-top: 0;
-	}
-
-	.home-solucao_quando {
-		display: grid;
-		gap: 0.75rem;
-		list-style: none;
-	}
-
-	.home-solucao_quando li {
-		padding: 1.1rem 1.25rem;
-		background: var(--graywarm950);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-md);
-	}
-
-	.home-solucao_quando strong {
-		display: block;
-		margin-bottom: 0.25rem;
-		color: var(--white);
-	}
-
 	.home-solucao .vantagens_list {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.85rem 1.5rem;
 		margin-top: 0;
 	}
 
@@ -504,39 +405,57 @@ const faq = [
 		margin-top: 1.75rem;
 	}
 
-	/* 8. Prova social */
-	.home-cases :global(.case_metric) {
-		font-size: clamp(1.5rem, 2.2vw, 1.75rem);
-		line-height: 1.1;
+	.home-solucao_case {
+		display: block;
+		margin-top: 1.75rem;
 	}
 
-	.home-nota_cases {
-		margin: -1.25rem 0 2.5rem;
+	.home-solucao_case strong {
+		display: block;
+		margin-bottom: 0.35rem;
+		color: var(--white);
+		font-size: 1.05rem;
+		line-height: 1.35;
 	}
 
-	.home-prova_rodape {
+	@media (max-width: 767px) {
+		.home-solucao .vantagens_list {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* Dobra 4 · Como funciona: CTA logo abaixo das etapas (substitui o banner laranja) */
+	.home-metodo_cta {
 		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
 		justify-content: center;
+		gap: 1rem 2rem;
 		margin-top: 2.5rem;
 	}
 
-	/* 9. Credibilidade em cinza, para separar da prova social (as duas seriam brancas) */
-	.home :global(.credibilidade) {
-		background: var(--gray50);
-		border-top: 1px solid var(--gray200);
+	.home-metodo_cta p {
+		max-width: 34ch;
+		color: var(--gray900);
+		font-size: 1.15rem;
+		font-weight: 700;
+		line-height: 1.35;
 	}
 
-	.home :global(.credibilidade .icp_item) {
-		background: var(--white);
+	/* Dobra 5 · Resultados */
+	.home-resultados_header {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		max-width: 48rem;
 	}
 
-	/* 10. Resultados */
 	.home-resultados_icone {
 		display: grid;
+		flex-shrink: 0;
 		place-items: center;
 		width: 4rem;
 		height: 4rem;
-		margin: 0 auto 1.25rem;
 		border-radius: var(--card-radius-md);
 		background: var(--primary600);
 		color: var(--white);
@@ -547,25 +466,121 @@ const faq = [
 		height: 2rem;
 	}
 
-	.frente_mini-card h3 {
-		margin-bottom: 0.5rem;
-		color: var(--white);
-		font-size: 1.05rem;
-		font-weight: 700;
-		line-height: 1.35;
+	.home-cases :global(.case_metric) {
+		font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+		line-height: 1.1;
+	}
+
+	.home-nota_cases {
+		margin: -1.25rem 0 2.5rem;
+	}
+
+	/* A foto do vídeo acompanha a altura do texto em vez de esticar o card */
+	.home :global(.depoimentos_lightbox img) {
+		position: absolute;
+		inset: 0;
 	}
 
 	.home-resultados_cta {
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
 		align-items: center;
+		justify-content: center;
 		gap: 0.75rem;
-		text-align: center;
+		margin-top: 2.5rem;
 	}
 
 	.home-resultados_cta p {
-		color: var(--graywarm300);
+		flex-basis: 100%;
+		color: var(--gray600);
 		font-size: 0.9rem;
+		text-align: center;
+	}
+
+	/* Dobra 6 · FAQ em cinza (separa Resultados e Formulário, ambos brancos) e em 2 colunas no desktop */
+	.home :global(.section_faq) {
+		background: var(--gray50);
+		border-top: 1px solid var(--gray200);
+	}
+
+	.home :global(.section_faq .faq_item) {
+		background: var(--white);
+	}
+
+	.home-faq_whatsapp {
+		margin-top: 1rem;
+		color: var(--gray600);
+	}
+
+	.home-faq_whatsapp a {
+		color: var(--primary700);
+		font-weight: 700;
+		text-decoration: underline;
+	}
+
+	@media (min-width: 1025px) {
+		.home :global(.section_faq .container-large) {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr);
+			gap: 4rem;
+			align-items: start;
+		}
+
+		.home :global(.section_faq .metodo_header) {
+			margin: 0;
+			text-align: left;
+		}
+
+		.home :global(.section_faq .faq_list) {
+			max-width: none;
+			margin: 0;
+		}
+	}
+
+	/* Tablet e celular: cases em carrossel com rolagem lateral (o próximo card aparece na borda) e foto do
+	   depoimento em 16:10, para cada dobra não virar uma pilha de cards */
+	@media (max-width: 1024px) {
+		.home-cases {
+			display: flex;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			padding-bottom: 0.5rem;
+		}
+
+		.home-cases > :global(.case_card) {
+			flex: 0 0 min(85%, 22rem);
+			scroll-snap-align: start;
+		}
+
+		.home :global(.depoimentos_lightbox) {
+			min-height: 0;
+			aspect-ratio: 16 / 10;
+		}
+	}
+
+	/* Celular: números em 2x2 e etapas do método em linha (ícone à esquerda) */
+	@media (max-width: 767px) {
+		.home :global(.resultados_grid) {
+			grid-template-columns: 1fr 1fr;
+			gap: 0.75rem;
+		}
+
+		.home :global(.resultados_card) {
+			padding: 1rem;
+		}
+
+		.home :global(.metodo_card) {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			column-gap: 1rem;
+			align-items: start;
+			justify-items: start;
+			padding: 1.25rem;
+			text-align: left;
+		}
+
+		.home :global(.metodo_icon) {
+			grid-row: span 3;
+		}
 	}
 </style>
->>>>>>> c2b167ed17103e29ea80ae0abaed8f447231ddb5

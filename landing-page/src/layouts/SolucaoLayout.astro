@@ -1,26 +1,23 @@
 ---
-// Esqueleto comum das 5 landings de solução (fundo geral --gray50), na ordem do plano:
-// cabeçalho escuro → credibilidade → quando contratar e benefícios → escopo → slot "especifico" →
-// prova social → método → banner → FAQ → formulário (serviço pré-selecionado) → outras soluções.
+// Moldura comum das 5 landings de solução (fundo geral --gray50). O layout cuida só do que se repete:
+// cabeçalho escuro com credenciais e logos → números → [corpo da página, slot padrão] → prova social →
+// método → FAQ → formulário (serviço pré-selecionado) → outras soluções.
+// O corpo (para quem é, o que entra no projeto, diferencial) é de cada página.
 import Layout from './Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
-import Credibilidade from '../components/Credibilidade.astro';
 import StatsStrip from '../components/StatsStrip.astro';
-import LogoWall from '../components/LogoWall.astro';
 import CaseCard from '../components/CaseCard.astro';
 import Depoimentos from '../components/Depoimentos.astro';
 import Metodo from '../components/Metodo.astro';
-import CtaBanner from '../components/CtaBanner.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
-import { SITE, CONTATO, NUMEROS, SOLUCOES, CASES, CITACAO_PROJETO, DEPOIMENTOS, type Solucao, type Depoimento } from '../consts';
+import { SITE, CONTATO, NUMEROS, SOLUCOES, CASES, DEPOIMENTOS, LOGOS, type Solucao, type Depoimento } from '../consts';
 
 interface Props {
 	solucao: Solucao;
-	/** Abertura "resposta primeiro": o que é, para quem e desde quando. */
+	/** Abertura "resposta primeiro": 1 ou 2 frases, o que é e para quem. */
 	abertura: string;
-	beneficios: { titulo: string; texto: string }[];
 	faq: { pergunta: string; resposta?: string; validar?: boolean }[];
 	/** H1 (padrão: nome da solução). */
 	titulo?: string;
@@ -33,16 +30,23 @@ interface Props {
 const {
 	solucao,
 	abertura,
-	beneficios,
 	faq,
 	titulo = solucao.nome,
-	kicker = `${SITE.nome} · Empresa Júnior da FGV desde ${NUMEROS.fundacao}`,
+	// Kicker não repete o H1 quando o título é o próprio nome da solução
+	kicker = titulo.startsWith(solucao.nome) ? `Soluções ${SITE.nome}` : solucao.nome,
 	fotoHeader = 'trabalho real em grupo',
 	depoimentos = DEPOIMENTOS,
 } = Astro.props;
 
 const cases = CASES.filter((c) => solucao.cases.includes(c.slug));
 const outras = SOLUCOES.filter((s) => s.slug !== solucao.slug);
+
+// "Potência FGV" logo no topo (docx), só com fatos de consts.ts.
+const credenciais = [
+	`1ª Empresa Júnior da América Latina, desde ${NUMEROS.fundacao}`,
+	'Orientação de professores da FGV',
+	`+${NUMEROS.projetos} projetos entregues`,
+];
 
 const servico = {
 	'@context': 'https://schema.org',
@@ -57,103 +61,47 @@ const servico = {
 
 <Layout titulo={solucao.seo.titulo} descricao={solucao.seo.descricao} ctaHref="#formulario" jsonLd={servico}>
 	<div class="solucao">
-		<!-- 1. Cabeçalho escuro: H1 grande, abertura, potência FGV, CTA para o formulário e WhatsApp -->
+		<!-- 1. Cabeçalho escuro: H1, abertura curta, credenciais, CTA e logos de clientes à frente -->
 		<PageHeader titulo={titulo} kicker={kicker} descricao={abertura} escuro>
-			<p class="hero_description">
-				Agora, imagine aproveitar o ecossistema da FGV e poder contar com especialistas em marketing, finanças, vendas e muito mais.
-			</p>
+			<ul class="solucao_credenciais" aria-label={`Por que a ${SITE.nome}`}>
+				{credenciais.map((c) => <li>{c}</li>)}
+			</ul>
 			<Fragment slot="acoes">
-				<a href="#formulario" class="button is-button-large">Fale com um Especialista</a>
+				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
 				<a href={CONTATO.whatsappUrl} class="button-tertiary" target="_blank" rel="noopener">Conversar no WhatsApp →</a>
 			</Fragment>
 			<figure slot="midia" class="hero-photo-frame">
 				<ImagemReservada descricao={fotoHeader} classe="home-hero_image" escuro />
 			</figure>
 		</PageHeader>
-
-		<!-- 2. Credibilidade (Brasil Júnior logo abaixo do cabeçalho) -->
-		<Credibilidade />
-
-		<!-- 3. Quando contratar e Benefícios principais -->
-		<section class="section_icp" aria-labelledby="quando-contratar">
-			<div class="page-padding padding-section-medium">
+		<div class="solucao_logos" aria-label="Empresas que já contrataram a EJFGV">
+			<div class="page-padding">
 				<div class="container-large">
-					<div class="icp_header">
-						<img src={solucao.icone} loading="lazy" alt="" class="icp_icon" />
-						<span class="eyebrow">{solucao.nome}</span>
-						<h2 id="quando-contratar">Quando contratar</h2>
-					</div>
-					<div class="icp_list">
-						{solucao.quandoFazSentido.map((q) => (
-							<div class="icp_item">
-								<h3>{q.titulo}</h3>
-								<p>{q.texto}</p>
-							</div>
-						))}
-					</div>
-
-					<div class="icp_header solucao_beneficios-header">
-						<h2>Benefícios principais</h2>
-					</div>
-					<div class="cases_grid">
-						{beneficios.map((b) => (
-							<div class="icp_item">
-								<h3>{b.titulo}</h3>
-								<p>{b.texto}</p>
-							</div>
-						))}
+					<p class="grandes-clientes_label">Aprovada por grandes clientes</p>
+					<div class="grandes-clientes_row">
+						{LOGOS.slice(0, 6).map((logo) => <img src={logo.src} alt={logo.nome} class="grandes-clientes_logo" loading="eager" />)}
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 
-		<!-- 4. Escopo com links cruzados -->
-		<section id="escopo" class="section_beneficios" aria-labelledby="escopo-titulo">
-			<div class="page-padding padding-section-medium">
-				<div class="container-large">
-					<div class="beneficios_wrapper">
-						<div class="beneficios_title">
-							<span class="beneficios_eyebrow">Escopo sob medida para a sua empresa</span>
-							<h2 id="escopo-titulo">O que pode entrar no projeto</h2>
-							<p>{solucao.descricao}</p>
-						</div>
-						<div class="frentes_cards-grid">
-							{solucao.escopo.map((e, i) =>
-								e.href ? (
-									<a class="frente_mini-card" href={e.href}>
-										<span>Frente {String(i + 1).padStart(2, '0')}</span>
-										<h3>{e.item}</h3>
-										<p>Conheça a consultoria completa →</p>
-									</a>
-								) : (
-									<div class="frente_mini-card">
-										<span>Frente {String(i + 1).padStart(2, '0')}</span>
-										<h3>{e.item}</h3>
-									</div>
-								)
-							)}
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- 5. Conteúdo próprio de cada solução -->
-		<slot name="especifico" />
-
-		<!-- 6. Prova social -->
+		<!-- 2. Números -->
 		<StatsStrip />
-		<LogoWall />
+
+		<!-- 3. Corpo próprio de cada solução -->
+		<slot />
+
+		<!-- 4. Prova social -->
 		<section class="section_depoimentos" aria-labelledby="prova-social-titulo">
 			<div class="page-padding padding-section-medium">
 				<div class="container-large">
 					<div class="icp_header">
-						<span class="eyebrow">Cases de sucesso</span>
-						<h2 id="prova-social-titulo">Resultados de quem já contratou</h2>
+						<span class="eyebrow">{cases.length ? 'Cases de sucesso' : 'Depoimentos'}</span>
+						<h2 id="prova-social-titulo">{cases.length ? 'Resultados de quem já contratou' : `O que dizem os clientes da ${SITE.nome}`}</h2>
 					</div>
-					<div class="cases_grid solucao_cases">
-						{cases.length ? (
-							cases.map((c) => (
+					{cases.length > 0 && (
+						<div class="cases_grid solucao_cases">
+							{cases.map((c) => (
 								<CaseCard
 									tag={`${c.segmento} · ${c.solucao}`}
 									metrica={c.destaque}
@@ -161,62 +109,36 @@ const servico = {
 									texto={`Desafio: ${c.problema}.`}
 									href={c.url}
 								/>
-							))
-						) : (
-							<article class="case_card">
-								<div>
-									<span class="case_tag">{solucao.rotulo}</span>
-									<div class="case_metric"><span class="preencher">A preencher: resultado</span></div>
-								</div>
-								<div>
-									<h3><span class="preencher">Case de {solucao.rotulo}: a preencher</span></h3>
-								</div>
-							</article>
-						)}
-					</div>
+							))}
+						</div>
+					)}
 					<Depoimentos itens={depoimentos} />
-					<figure class="solucao_citacao">
-						<blockquote class="depoimento_quote">“{CITACAO_PROJETO.texto}”</blockquote>
-						<figcaption class="depoimento_author">
-							<strong>— {CITACAO_PROJETO.autor}</strong>
-							<span>{CITACAO_PROJETO.cargo}, EJFGV</span>
-						</figcaption>
-					</figure>
 				</div>
 			</div>
 		</section>
 
-		<!-- 7. Método -->
+		<!-- 5. Método -->
 		<Metodo />
 
-		<!-- 8. Banner para o formulário -->
-		<CtaBanner titulo={solucao.chamada} href="#formulario" rotulo="Fale com um Especialista" escuro />
-
-		<!-- 9. FAQ -->
+		<!-- 6. FAQ -->
 		<Faq itens={faq} titulo={`Perguntas frequentes sobre ${solucao.nome}`} />
 
-		<!-- 10. Formulário com o serviço pré-selecionado -->
+		<!-- 7. Formulário com o serviço pré-selecionado -->
 		<LeadForm servico={solucao.slug} titulo="Agende um diagnóstico gratuito e descubra como podemos ajudar a sua empresa." />
 
-		<!-- 11. Outras soluções -->
-		<section class="section_beneficios" aria-labelledby="outras-solucoes">
-			<div class="page-padding padding-section-medium">
+		<!-- 8. Outras soluções -->
+		<nav class="solucao_outras" aria-labelledby="outras-solucoes">
+			<div class="page-padding">
 				<div class="container-large">
-					<div class="beneficios_title">
-						<h2 id="outras-solucoes">Outras soluções da EJFGV</h2>
-					</div>
-					<div class="frentes_cards-grid solucao_outras">
+					<h2 id="outras-solucoes" class="eyebrow">Outras soluções da {SITE.nome}</h2>
+					<ul>
 						{outras.map((s) => (
-							<a class="frente_mini-card" href={s.url}>
-								<span>{s.rotulo}</span>
-								<h3>{s.nome}</h3>
-								<p>Quero saber mais →</p>
-							</a>
+							<li><a href={s.url}>{s.nome} <span aria-hidden="true">→</span></a></li>
 						))}
-					</div>
+					</ul>
 				</div>
 			</div>
-		</section>
+		</nav>
 	</div>
 </Layout>
 
@@ -237,8 +159,50 @@ const servico = {
 		background: var(--white);
 	}
 
-	.solucao_beneficios-header {
-		margin-top: clamp(3rem, 5vw, 4.5rem);
+	.solucao :global(.section_page-header .hero_heading) {
+		font-size: clamp(2.5rem, 5vw, 4.25rem);
+		text-wrap: balance;
+	}
+
+	.solucao_credenciais {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 1.5rem;
+		list-style: none;
+	}
+
+	.solucao_credenciais li {
+		padding: 0.4rem 0.8rem;
+		color: var(--graywarm300);
+		font-size: 0.85rem;
+		font-weight: 600;
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+	}
+
+	/* Logos brancos sobre o mesmo cinza do cabeçalho, como continuação dele */
+	.solucao_logos {
+		padding: 0 0 clamp(2rem, 4vw, 3rem);
+		background: var(--graywarm900);
+	}
+
+	.solucao_logos .grandes-clientes_label {
+		color: var(--graywarm300);
+	}
+
+	.solucao_logos .grandes-clientes_logo {
+		filter: grayscale(1) brightness(0) invert(1);
+		opacity: 0.7;
+	}
+
+	.solucao_logos .grandes-clientes_logo:hover {
+		filter: grayscale(1) brightness(0) invert(1);
+		opacity: 1;
+	}
+
+	.solucao_cases {
+		margin-bottom: 2.5rem;
 	}
 
 	.solucao_cases :global(.case_metric) {
@@ -246,27 +210,32 @@ const servico = {
 		line-height: 1.2;
 	}
 
-	.solucao_citacao {
-		margin-top: 2.5rem;
-		padding: clamp(1.75rem, 3vw, 2.5rem);
+	.solucao_outras {
+		padding: clamp(2.5rem, 5vw, 4rem) 0;
+		border-top: 1px solid var(--gray200);
+	}
+
+	.solucao_outras ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 1rem;
+		list-style: none;
+	}
+
+	.solucao_outras a {
+		display: inline-block;
+		padding: 0.7rem 1.1rem;
+		color: var(--gray900);
+		font-weight: 700;
 		background: var(--white);
 		border: 1px solid var(--gray200);
-		border-left: 4px solid var(--primary600);
-		border-radius: var(--card-radius-lg);
+		border-radius: var(--card-radius-md);
+		transition: border-color 0.2s, color 0.2s;
 	}
 
-	.solucao_citacao .depoimento_quote {
-		margin-bottom: 1rem;
-	}
-
-	.solucao_outras {
-		margin-top: 2.5rem;
-	}
-
-	.frente_mini-card h3 {
-		font-size: 1.05rem;
-		font-weight: 700;
-		color: var(--white);
-		margin-bottom: 0.5rem;
+	.solucao_outras a:hover {
+		color: var(--primary700);
+		border-color: var(--primary600);
 	}
 </style>
