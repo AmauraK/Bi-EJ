@@ -1,0 +1,780 @@
+---
+// Ilustrações próprias (HTML/CSS/SVG, sem imagem) das 3 frentes de BI: painel em Power BI, site com
+// chatbot e fluxo de automação. Decorativas (aria-hidden) e sem números: nada aqui é dado real.
+// Tudo é medido em em sobre um font-size proporcional à largura (cqi), então o mesmo mock serve
+// grande nos cartões de serviço e pequeno, em camadas, no cabeçalho.
+interface Props {
+	tipo: 'dashboard' | 'site' | 'fluxo';
+	classe?: string;
+}
+
+const { tipo, classe } = Astro.props;
+
+// Alturas relativas das barras (12 meses) do painel, em % da área do gráfico.
+const barras = [38, 46, 42, 55, 50, 61, 58, 66, 63, 72, 70, 84];
+
+// Ícones de traço (mesmo estilo do Método), para o cadeado do navegador e os nós do fluxo.
+const icones = {
+	cadeado: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+	raio: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+	ia: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+	planilha: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>',
+	mensagem: '<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/>',
+};
+const nos = [
+	{ classe: 'is-gatilho', icone: icones.raio, titulo: 'Gatilho', texto: 'Novo contato no site' },
+	{ classe: 'is-ia', icone: icones.ia, titulo: 'IA · Claude', texto: 'Resume o pedido' },
+	{ classe: 'is-planilha', icone: icones.planilha, titulo: 'Planilha', texto: 'Registra o contato' },
+	{ classe: 'is-aviso', icone: icones.mensagem, titulo: 'WhatsApp', texto: 'Avisa a equipe' },
+];
+---
+
+<div class:list={['mock', `is-${tipo}`, classe]} aria-hidden="true">
+	<div class="mock_frame">
+		{tipo === 'dashboard' && (
+			<>
+				<div class="mock_bar">
+					<span class="mock_dots"><i></i><i></i><i></i></span>
+					<span class="mock_title">Painel de gestão</span>
+					<span class="mock_chip">Mês atual ▾</span>
+				</div>
+				<div class="dash">
+					<div class="dash_side">
+						<i class="is-on"></i><i></i><i></i><i></i>
+					</div>
+					<div class="dash_main">
+						<div class="dash_kpis">
+							<div class="dash_kpi">
+								<span>Vendas</span>
+								<b class="is-up">▲ acima da meta</b>
+								<svg viewBox="0 0 60 16" preserveAspectRatio="none"><path d="M0 13 L10 11 L20 12 L30 8 L40 9 L50 5 L60 3" /></svg>
+							</div>
+							<div class="dash_kpi">
+								<span>Custos</span>
+								<b>▼ menor que o mês anterior</b>
+								<svg viewBox="0 0 60 16" preserveAspectRatio="none"><path d="M0 4 L10 6 L20 5 L30 8 L40 9 L50 11 L60 12" /></svg>
+							</div>
+							<div class="dash_kpi">
+								<span>Caixa</span>
+								<b>● dentro do previsto</b>
+								<span class="dash_meter"><i></i></span>
+							</div>
+						</div>
+						<div class="dash_chart">
+							<div class="dash_chart-head"><span>Vendas por mês</span><span class="dash_legend"><i></i>Meta</span></div>
+							<div class="dash_bars">
+								<svg viewBox="0 0 120 100" preserveAspectRatio="none">
+									{barras.map((h, i) => <rect class:list={{ 'is-alta': i >= 6, 'is-last': i === barras.length - 1 }} x={i * 10 + 1.5} y={100 - h} width="7" height={h} rx="1" />)}
+								</svg>
+								<span class="dash_meta"></span>
+							</div>
+						</div>
+						<div class="dash_bottom">
+							<div class="dash_donut"><span></span></div>
+							<div class="dash_rows">
+								{['A', 'B', 'C', 'D'].map((letra) => (
+									<div class="dash_row"><span>Produto {letra}</span><i></i></div>
+								))}
+							</div>
+						</div>
+					</div>
+				</div>
+			</>
+		)}
+
+		{tipo === 'site' && (
+			<>
+				<div class="mock_bar">
+					<span class="mock_dots"><i></i><i></i><i></i></span>
+					<span class="mock_url"><svg viewBox="0 0 24 24" set:html={icones.cadeado} />suaempresa.com.br</span>
+				</div>
+				<div class="site">
+					<div class="site_nav"><i class="site_logo"></i><i></i><i></i><i></i><b></b></div>
+					<div class="site_hero">
+						<i class="site_h is-long"></i>
+						<i class="site_h"></i>
+						<i class="site_p"></i>
+						<i class="site_p is-short"></i>
+						<b class="site_btn">Pedir orçamento</b>
+					</div>
+					<div class="site_cards"><i></i><i></i><i></i></div>
+
+					<div class="chat">
+						<div class="chat_head"><span class="chat_avatar"></span><span><b>Atendimento</b><small>online agora</small></span></div>
+						<div class="chat_body">
+							<p class="chat_msg is-bot">Olá! Posso ajudar?</p>
+							<p class="chat_msg is-user">Quero um orçamento</p>
+							<p class="chat_msg is-bot">Claro! Qual é o seu WhatsApp?</p>
+							<p class="chat_typing"><i></i><i></i><i></i></p>
+						</div>
+					</div>
+					<span class="chat_launcher"></span>
+				</div>
+			</>
+		)}
+
+		{tipo === 'fluxo' && (
+			<>
+				<div class="mock_bar">
+					<span class="mock_dots"><i></i><i></i><i></i></span>
+					<span class="mock_title">Fluxo · novo contato</span>
+					<span class="mock_chip is-on">● Ativo</span>
+				</div>
+				<div class="fluxo">
+					<svg class="fluxo_linhas" viewBox="0 0 100 100" preserveAspectRatio="none">
+						<path d="M14 50 L46 50" />
+						<path d="M46 50 C63 50 63 24 82 24" />
+						<path d="M46 50 C63 50 63 76 82 76" />
+					</svg>
+					{nos.map((no) => (
+						<div class:list={['fluxo_no', no.classe]}>
+							<span class="fluxo_icone"><svg viewBox="0 0 24 24" set:html={no.icone} /></span>
+							<span><b>{no.titulo}</b>{no.texto}</span>
+						</div>
+					))}
+				</div>
+			</>
+		)}
+	</div>
+</div>
+
+<style>
+	/* Container: o font-size interno acompanha a largura do mock */
+	.mock {
+		container-type: inline-size;
+		width: 100%;
+	}
+
+	.mock_frame {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		overflow: hidden;
+		color: var(--brand-chumbo);
+		font-size: clamp(6px, 2.35cqi, 14px);
+		line-height: 1.3;
+		background: var(--white);
+		border: 1px solid var(--border-hairline-light);
+		border-radius: 1.1em;
+		box-shadow:
+			0 0.2em 0.6em rgba(37, 40, 50, 0.08),
+			0 2em 4em -1em rgba(37, 40, 50, 0.35);
+	}
+
+	.mock i,
+	.mock b {
+		display: block;
+		font-style: normal;
+	}
+
+	/* Barra de janela */
+	.mock_bar {
+		display: flex;
+		align-items: center;
+		gap: 0.8em;
+		padding: 0.75em 1em;
+		background: var(--gray50);
+		border-bottom: 1px solid var(--gray200);
+	}
+
+	.mock_dots {
+		display: flex;
+		gap: 0.35em;
+	}
+
+	.mock_dots i {
+		width: 0.65em;
+		height: 0.65em;
+		border-radius: 50%;
+		background: var(--gray300);
+	}
+
+	.mock_dots i:first-child {
+		background: var(--primary600);
+	}
+
+	.mock_title {
+		font-weight: 700;
+	}
+
+	.mock_chip {
+		margin-left: auto;
+		padding: 0.2em 0.7em;
+		font-size: 0.85em;
+		font-weight: 600;
+		color: var(--gray600);
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 999px;
+	}
+
+	.mock_chip.is-on {
+		color: var(--brand-chumbo);
+		background: var(--primary100);
+		border-color: transparent;
+	}
+
+	.mock svg {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.mock_url {
+		display: flex;
+		align-items: center;
+		gap: 0.45em;
+		flex: 1;
+		padding: 0.25em 0.9em;
+		font-size: 0.9em;
+		color: var(--gray600);
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 999px;
+	}
+
+	.mock_url svg {
+		width: 1em;
+		height: 1em;
+	}
+
+	/* ---------- Painel (Power BI) ---------- */
+	.dash {
+		display: grid;
+		grid-template-columns: 2.6em 1fr;
+		flex: 1;
+	}
+
+	.dash_side {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9em;
+		padding: 1.1em 0.8em;
+		background: var(--brand-chumbo);
+	}
+
+	.dash_side i {
+		height: 1em;
+		border-radius: 0.3em;
+		background: rgba(249, 255, 252, 0.18);
+	}
+
+	.dash_side i.is-on {
+		background: var(--primary600);
+	}
+
+	.dash_main {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9em;
+		padding: 1em;
+		background: var(--gray25);
+	}
+
+	.dash_kpis {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.7em;
+	}
+
+	.dash_kpi,
+	.dash_chart,
+	.dash_bottom {
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 0.7em;
+	}
+
+	.dash_kpi {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25em;
+		padding: 0.7em 0.8em;
+	}
+
+	.dash_kpi > span:first-child {
+		font-size: 0.85em;
+		font-weight: 600;
+		color: var(--gray600);
+	}
+
+	.dash_kpi b {
+		font-size: 0.9em;
+		font-weight: 800;
+		line-height: 1.2;
+	}
+
+	.dash_kpi b.is-up {
+		color: var(--primary800);
+	}
+
+	.dash_kpi svg {
+		width: 100%;
+		height: 1.6em;
+		margin-top: auto;
+		overflow: visible;
+	}
+
+	.dash_kpi path {
+		fill: none;
+		stroke: var(--primary600);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.dash_meter {
+		height: 0.55em;
+		margin-top: auto;
+		border-radius: 999px;
+		background: var(--gray200);
+	}
+
+	.dash_meter i {
+		width: 68%;
+		height: 100%;
+		border-radius: inherit;
+		background: var(--brand-chumbo);
+	}
+
+	.dash_chart {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6em;
+		min-height: 9em;
+		padding: 0.8em 0.9em;
+	}
+
+	.dash_chart-head {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.85em;
+		font-weight: 700;
+	}
+
+	.dash_legend {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		font-weight: 600;
+		color: var(--gray600);
+	}
+
+	.dash_legend i {
+		width: 1.4em;
+		border-top: 2px dashed var(--brand-chumbo);
+	}
+
+	.dash_bars {
+		position: relative;
+		flex: 1;
+		border-bottom: 1px solid var(--gray300);
+	}
+
+	.dash_bars svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.dash_bars rect {
+		fill: var(--gray300);
+		stroke: none;
+		transform-box: fill-box;
+		transform-origin: bottom;
+		animation: mock-cresce 0.9s var(--ease-out-expo) both;
+	}
+
+	.dash_bars rect.is-alta {
+		fill: color-mix(in srgb, var(--brand-laranja) 45%, var(--gray300));
+	}
+
+	.dash_bars rect.is-last {
+		fill: var(--primary600);
+	}
+
+	.dash_meta {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 64%;
+		border-top: 2px dashed var(--brand-chumbo);
+		opacity: 0.55;
+	}
+
+	.dash_bottom {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 1em;
+		padding: 0.8em 0.9em;
+	}
+
+	.dash_donut {
+		display: grid;
+		place-items: center;
+		width: 4.2em;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: conic-gradient(var(--primary600) 0 42%, var(--brand-chumbo) 42% 71%, var(--gray300) 71% 100%);
+	}
+
+	.dash_donut span {
+		width: 58%;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--white);
+	}
+
+	.dash_rows {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45em;
+	}
+
+	.dash_row {
+		display: grid;
+		grid-template-columns: 5.2em 1fr;
+		align-items: center;
+		gap: 0.6em;
+		font-size: 0.8em;
+		color: var(--gray600);
+	}
+
+	.dash_row:nth-child(2) i { width: 64%; }
+	.dash_row:nth-child(3) i { width: 47%; }
+	.dash_row:nth-child(4) i { width: 30%; }
+
+	.dash_row i {
+		width: 82%;
+		height: 0.6em;
+		border-radius: 999px;
+		background: var(--brand-chumbo);
+		opacity: 0.8;
+	}
+
+	/* ---------- Site com chatbot ---------- */
+	.site {
+		position: relative;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 1.2em;
+		padding: 1em 1.3em 1.4em;
+		background:
+			radial-gradient(circle at 85% 0, var(--primary50), transparent 55%),
+			var(--white);
+	}
+
+	.site_nav {
+		display: flex;
+		align-items: center;
+		gap: 0.8em;
+	}
+
+	.site_nav i {
+		width: 3em;
+		height: 0.5em;
+		border-radius: 999px;
+		background: var(--gray200);
+	}
+
+	.site_nav .site_logo {
+		width: 1.4em;
+		height: 1.4em;
+		margin-right: auto;
+		border-radius: 0.4em;
+		background: var(--brand-chumbo);
+	}
+
+	.site_nav b {
+		width: 4.5em;
+		height: 1.5em;
+		border-radius: 0.4em;
+		background: var(--primary600);
+	}
+
+	.site_hero {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55em;
+		max-width: 62%;
+		padding-top: 0.6em;
+	}
+
+	.site_h {
+		width: 80%;
+		height: 1.25em;
+		border-radius: 0.3em;
+		background: var(--brand-chumbo);
+	}
+
+	.site_h.is-long {
+		width: 100%;
+	}
+
+	.site_p {
+		width: 92%;
+		height: 0.5em;
+		border-radius: 999px;
+		background: var(--gray200);
+	}
+
+	.site_p.is-short {
+		width: 70%;
+	}
+
+	.site_btn {
+		align-self: flex-start;
+		margin-top: 0.5em;
+		padding: 0.55em 1em;
+		font-size: 0.9em;
+		font-weight: 700;
+		border-radius: 0.45em;
+		background: var(--primary600);
+	}
+
+	.site_cards {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.7em;
+		max-width: 58%;
+		margin-top: auto;
+	}
+
+	.site_cards i {
+		height: 4.5em;
+		border-radius: 0.6em;
+		background: var(--gray50);
+		border: 1px solid var(--gray200);
+	}
+
+	.chat {
+		position: absolute;
+		right: 1.2em;
+		bottom: 4.6em;
+		width: 40%;
+		min-width: 13em;
+		overflow: hidden;
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 0.9em;
+		box-shadow: 0 1.5em 3em -1em rgba(37, 40, 50, 0.35);
+	}
+
+	.chat_head {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		padding: 0.7em 0.8em;
+		color: var(--white);
+		background: var(--brand-chumbo);
+	}
+
+	.chat_head b {
+		font-size: 0.95em;
+	}
+
+	.chat_head small {
+		display: block;
+		font-size: 0.75em;
+		color: var(--graywarm300);
+	}
+
+	.chat_avatar {
+		width: 1.8em;
+		height: 1.8em;
+		flex-shrink: 0;
+		border-radius: 50%;
+		background: var(--primary600);
+		box-shadow: 0 0 0 0.25em rgba(227, 142, 51, 0.25);
+	}
+
+	.chat_body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45em;
+		padding: 0.8em;
+		background: var(--gray25);
+	}
+
+	.chat_msg {
+		max-width: 88%;
+		padding: 0.45em 0.7em;
+		font-size: 0.85em;
+		border-radius: 0.8em;
+		animation: mock-entra 0.5s var(--ease-out-expo) both;
+	}
+
+	.chat_msg.is-bot {
+		align-self: flex-start;
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-bottom-left-radius: 0.2em;
+	}
+
+	.chat_msg.is-user {
+		align-self: flex-end;
+		font-weight: 600;
+		background: var(--primary100);
+		border-bottom-right-radius: 0.2em;
+	}
+
+	.chat_msg:nth-child(2) {
+		animation-delay: 0.5s;
+	}
+
+	.chat_msg:nth-child(3) {
+		animation-delay: 1s;
+	}
+
+	.chat_typing {
+		display: flex;
+		gap: 0.25em;
+		padding: 0.3em 0.2em;
+	}
+
+	.chat_typing i {
+		width: 0.4em;
+		height: 0.4em;
+		border-radius: 50%;
+		background: var(--gray400);
+		animation: mock-digita 1.2s ease-in-out infinite;
+	}
+
+	.chat_typing i:nth-child(2) {
+		animation-delay: 0.15s;
+	}
+
+	.chat_typing i:nth-child(3) {
+		animation-delay: 0.3s;
+	}
+
+	.chat_launcher {
+		position: absolute;
+		right: 1.2em;
+		bottom: 1em;
+		width: 2.8em;
+		height: 2.8em;
+		border-radius: 50%;
+		background: var(--primary600);
+		box-shadow: 0 0.6em 1.4em -0.3em rgba(37, 40, 50, 0.4);
+	}
+
+	.chat_launcher::after {
+		content: "";
+		position: absolute;
+		inset: 30%;
+		border: 0.2em solid var(--brand-chumbo);
+		border-radius: 50% 50% 50% 0.2em;
+	}
+
+	/* ---------- Fluxo de automação (n8n + IA) ---------- */
+	.fluxo {
+		position: relative;
+		flex: 1;
+		min-height: 15em;
+		background-color: var(--gray25);
+		background-image: radial-gradient(var(--gray300) 1px, transparent 1px);
+		background-size: 1.4em 1.4em;
+	}
+
+	.fluxo_linhas {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.fluxo_linhas path {
+		fill: none;
+		stroke: var(--gray400);
+		stroke-width: 2;
+		stroke-dasharray: 6 5;
+		vector-effect: non-scaling-stroke;
+		animation: mock-flui 1.6s linear infinite;
+	}
+
+	/* Posições casadas com os caminhos do SVG (viewBox 0 0 100 100): as linhas ligam os centros dos nós */
+	.fluxo_no {
+		position: absolute;
+		left: 82%;
+		top: 24%;
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		width: 28%;
+		padding: 0.6em 0.7em;
+		font-size: 0.85em;
+		line-height: 1.25;
+		color: var(--gray600);
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 0.7em;
+		box-shadow: 0 0.5em 1.2em -0.4em rgba(37, 40, 50, 0.25);
+		transform: translate(-50%, -50%);
+	}
+
+	.fluxo_no b {
+		color: var(--brand-chumbo);
+		font-size: 1.05em;
+	}
+
+	.fluxo_no.is-gatilho { left: 14%; top: 50%; }
+	.fluxo_no.is-ia { left: 46%; top: 50%; }
+	.fluxo_no.is-aviso { top: 76%; }
+
+	.fluxo_icone svg {
+		width: 1.1em;
+		height: 1.1em;
+	}
+
+	.fluxo_icone {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 2.1em;
+		height: 2.1em;
+		font-size: 1.05em;
+		color: var(--brand-chumbo);
+		background: var(--gray100);
+		border-radius: 0.5em;
+	}
+
+	.fluxo_no.is-gatilho .fluxo_icone {
+		background: var(--primary600);
+	}
+
+	.fluxo_no.is-ia {
+		border-color: var(--primary300);
+		box-shadow: 0 0 0 0.25em rgba(227, 142, 51, 0.15), 0 0.5em 1.2em -0.4em rgba(37, 40, 50, 0.25);
+	}
+
+	.fluxo_no.is-ia .fluxo_icone {
+		color: var(--white);
+		background: var(--brand-chumbo);
+	}
+
+	@keyframes mock-cresce {
+		from { transform: scaleY(0); }
+	}
+
+	@keyframes mock-entra {
+		from { opacity: 0; transform: translateY(0.6em); }
+	}
+
+	@keyframes mock-digita {
+		0%, 60%, 100% { opacity: 0.35; transform: none; }
+		30% { opacity: 1; transform: translateY(-0.2em); }
+	}
+
+	@keyframes mock-flui {
+		to { stroke-dashoffset: -22; }
+	}
+</style>

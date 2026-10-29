@@ -1,37 +1,138 @@
 ---
-// Consultoria de Business Intelligence. A moldura (cabeçalho, números, prova social, método, FAQ, formulário)
-// vem do SolucaoLayout; aqui ficam só "Para quem é" e "O que entra no projeto".
-// Escopo e dores vêm de consts.ts (escopo, quandoFazSentido); formatos de entrega, da LP original.
+// Business Intelligence (PRO-20): a área entrega 3 frentes, que esta página apresenta juntas:
+// dashboards em Power BI, sites com chatbot e integrações, e automações com n8n e IA.
+// A moldura (credenciais, logos, depoimentos, método, FAQ, formulário) vem do SolucaoLayout; aqui ficam
+// o H1 e a ilustração do cabeçalho, e o corpo: serviços → como as frentes se conectam → para quem é → números.
+// Fontes: brief PRO-20 (frentes e posicionamento), consts.ts (NUMEROS, DEPOIMENTOS) e a LP original.
+// As ilustrações (Mock) são decorativas e não trazem números: nada nelas é dado de cliente.
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import { CDN, NUMEROS, SOLUCOES, DEPOIMENTOS } from '../consts';
+import StatsStrip from '../components/StatsStrip.astro';
+import Mock from '../components/solucoes/consultoria-business-intelligence/Mock.astro';
+import { NUMEROS, SOLUCOES, DEPOIMENTOS } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
-const sol = (slug: string) => SOLUCOES.find((s) => s.slug === slug)!;
 
-const CHECK = `${CDN}/671c665a9c8c2a788c93dd9b_check-icon.svg`;
+const abertura = 'Painéis em Power BI para a gestão financeira e operacional, sites com chatbot que atendem e captam clientes, e automações com n8n e IA que tiram o trabalho repetitivo do caminho. Para pequenas e médias empresas.';
 
-const abertura = 'Organizamos os dados que a sua empresa já tem e os transformamos em painéis e análises que mostram o que vender, onde cortar custos e quem é o seu cliente. Para pequenas e médias empresas que querem parar de decidir no feeling.';
+// Ícones de traço (SVG inline, mesmo estilo do Método), um por frente.
+const icones = {
+	dashboards: '<path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5" rx="0.5"/><rect x="12" y="8" width="3" height="9" rx="0.5"/><rect x="17" y="5" width="3" height="12" rx="0.5"/>',
+	sites: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 12.5h6a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3l-2 2v-2H9a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1z"/>',
+	automacoes: '<rect x="2" y="9" width="6" height="6" rx="1.5"/><rect x="16" y="3" width="6" height="6" rx="1.5"/><rect x="16" y="15" width="6" height="6" rx="1.5"/><path d="M8 12h2.5a2 2 0 0 0 2-2V8a2 2 0 0 1 2-2H16M10.5 12a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2H16"/>',
+};
+const CHECK = '<path d="M20 6 9 17l-5-5"/>';
+const SETA = '<path d="M5 12h14M13 6l6 6-6 6"/>';
 
-// Rascunhos feitos só com fatos de consts.ts e da LP (validar: true). Preço não tem fonte: fica a preencher.
+// As 3 frentes (brief PRO-20). Os ids casam com os links do escopo em consts.ts.
+const frentes = [
+	{
+		id: 'dashboards',
+		mock: 'dashboard' as const,
+		icone: icones.dashboards,
+		nome: 'Dashboards em Power BI',
+		curto: 'Dashboards',
+		area: 'Gestão financeira e operacional',
+		texto: 'Para ver em uma tela como estão vendas, custos, metas, caixa e operação, e decidir com o número na mão, não no feeling.',
+		entra: [
+			'Base de dados organizada: planilhas e sistemas reunidos em um só lugar',
+			'Indicadores (KPIs) definidos com você, do jeito que o seu negócio funciona',
+			'Painéis interativos em Power BI, com filtros por período, produto ou equipe',
+			'Visão financeira e operacional: vendas, custos, metas, caixa e operação',
+			'Treinamento para o seu time manter e atualizar os painéis',
+		],
+		exemplos: [
+			'Loja que acompanha vendas por produto e por vendedor',
+			'Distribuidora que enxerga custo e margem de cada cliente',
+			'Prestador de serviço que fecha o caixa do mês sem planilha paralela',
+		],
+		cta: 'Quero um dashboard',
+	},
+	{
+		id: 'sites',
+		mock: 'site' as const,
+		icone: icones.sites,
+		nome: 'Sites com chatbot e integrações',
+		curto: 'Sites com chatbot',
+		area: 'Presença digital, atendimento e captação',
+		texto: 'Para ter um site moderno, que apresenta bem a empresa, funciona no celular e já conversa com quem chega, inclusive fora do horário comercial.',
+		entra: [
+			'Site moderno e responsivo, feito com apoio de IA',
+			'Chatbot no site e no WhatsApp para atender e captar contatos, a integração principal',
+			'Formulários de contato e orçamento que chegam direto para a sua equipe',
+			'Outras integrações possíveis, definidas no diagnóstico conforme a sua rotina',
+		],
+		exemplos: [
+			'Clínica que responde dúvidas frequentes pelo chatbot',
+			'Prestador de serviço que recebe pedidos de orçamento no WhatsApp',
+			'Empresa B2B que capta contatos qualificados pelo site',
+		],
+		cta: 'Quero um site com chatbot',
+	},
+	{
+		id: 'automacoes',
+		mock: 'fluxo' as const,
+		icone: icones.automacoes,
+		nome: 'Automações com n8n e IA',
+		curto: 'Automações',
+		area: 'Rotinas no automático',
+		texto: 'Para tirar do caminho as tarefas repetitivas, como copiar dados, montar o mesmo relatório e mandar o mesmo aviso, e liberar o time para o que dá resultado.',
+		entra: [
+			'Mapeamento das tarefas repetitivas que mais tomam tempo da equipe',
+			'Fluxos em n8n que conectam sistemas, planilhas e ERP',
+			'IA (Claude) para ler, resumir, classificar e responder no meio do fluxo',
+			'Relatórios automáticos que chegam prontos por e-mail ou WhatsApp',
+			'Rotinas de atendimento e de operação automatizadas',
+		],
+		exemplos: [
+			'Relatório de vendas que chega pronto toda segunda-feira',
+			'Pedido do site que vira linha na planilha e aviso para a equipe',
+			'E-mails de clientes separados por assunto com a ajuda da IA',
+		],
+		cta: 'Quero automatizar uma rotina',
+	},
+];
+const frente = Object.fromEntries(frentes.map((f) => [f.id, f]));
+
+// Como as frentes se conectam: um exemplo ilustrativo, sem números.
+const conexao = [
+	{ frente: frente.sites, titulo: 'O chatbot capta o contato', texto: 'Um visitante tira uma dúvida no site ou no WhatsApp, e o chatbot responde e pede o contato.' },
+	{ frente: frente.automacoes, titulo: 'A automação registra e avisa', texto: 'O fluxo em n8n grava o contato na planilha ou no sistema e avisa a equipe na hora.' },
+	{ frente: frente.dashboards, titulo: 'O dashboard mostra o funil', texto: 'No Power BI, você acompanha quantos contatos chegaram, de onde vieram e quantos viraram venda.' },
+];
+
+// Dores do dono de PME, cada uma ligada à frente que resolve.
+const dores = [
+	{ titulo: 'Os números estão espalhados', texto: 'Vendas numa planilha, financeiro em outra, estoque no sistema. Fechar o mês consome horas da equipe.', frente: frente.dashboards },
+	{ titulo: 'As decisões saem no feeling', texto: 'Preço, compras e metas são definidos na intuição, sem olhar o histórico do próprio negócio.', frente: frente.dashboards },
+	{ titulo: 'O site não traz clientes', texto: 'Está desatualizado, não funciona bem no celular e ninguém responde quem chega fora do horário.', frente: frente.sites },
+	{ titulo: 'O time vive de tarefa repetitiva', texto: 'Copiar dados de um sistema para outro, montar o mesmo relatório toda semana, responder as mesmas perguntas.', frente: frente.automacoes },
+];
+
+// Rascunhos feitos só com o brief PRO-20 e fatos de consts.ts (validar: true). Preço não tem fonte: fica a preencher.
 const faq = [
 	{
-		pergunta: 'O que faz a consultoria de Business Intelligence da EJFGV?',
-		resposta: 'Transforma os dados da sua empresa em decisões. Conforme a necessidade, o projeto inclui painéis para acompanhar vendas, custos e indicadores, projeções de vendas e demanda, a divisão dos clientes em grupos e a análise do perfil e da opinião dos consumidores. É feito por alunos da FGV, com orientação de professores da FGV.',
+		pergunta: 'Vocês trabalham com Power BI?',
+		resposta: 'Sim. Os dashboards são feitos em Power BI: organizamos a base de dados, definimos os indicadores com você e montamos painéis interativos para acompanhar vendas, custos, metas, caixa e operação. No fim, treinamos o seu time para manter os painéis.',
+		validar: true,
+	},
+	{
+		pergunta: 'O site já vem com chatbot?',
+		resposta: 'Pode vir. O chatbot é a principal integração dos sites que fazemos: ele atende e capta contatos no site e no WhatsApp. O que entra no seu site, como chatbot, formulários e outras integrações, é definido no diagnóstico, conforme o que a sua empresa precisa.',
+		validar: true,
+	},
+	{
+		pergunta: 'Que automações dá para fazer com n8n?',
+		resposta: 'Fluxos que tiram tarefas repetitivas do caminho: relatórios que chegam prontos, dados que passam sozinhos entre sistemas, planilhas e ERP, avisos para a equipe e rotinas de atendimento. Quando faz sentido, usamos IA (Claude) no meio do fluxo para ler, resumir ou classificar informações.',
+		validar: true,
+	},
+	{
+		pergunta: 'Preciso trocar meus sistemas?',
+		resposta: 'Não necessariamente. Partimos das planilhas, sistemas e ferramentas que você já usa e conectamos o que for preciso. Se alguma mudança fizer sentido, ela aparece no diagnóstico, antes da proposta.',
 		validar: true,
 	},
 	{
 		pergunta: 'Preciso ter os dados organizados antes de contratar?',
-		resposta: 'Não. A consultoria também atende empresas que dependem de planilhas soltas ou de sistemas desconectados. Nesses casos, o projeto pode começar pela centralização dos dados, conectando vendas, financeiro e operação em uma base única e confiável.',
-		validar: true,
-	},
-	{
-		pergunta: 'Vocês trabalham com Power BI?',
-		resposta: 'Sim. Construímos dashboards em Power BI, personalizados para a rotina da sua empresa, além de organizar bancos de dados e automatizar processos.',
-		validar: true,
-	},
-	{
-		pergunta: 'Quanto tempo dura um projeto?',
-		resposta: `Os projetos da EJFGV têm em média ${NUMEROS.prazoMedioMeses} meses. O prazo de cada projeto é apresentado na proposta, junto com o escopo.`,
+		resposta: 'Não. Muitas empresas chegam com planilhas soltas ou sistemas desconectados. Nesses casos, o projeto começa organizando os dados em uma base única e confiável.',
 		validar: true,
 	},
 	{
@@ -39,147 +140,754 @@ const faq = [
 		resposta: 'Sim, o diagnóstico é gratuito. Depois do primeiro contato com o nosso time comercial, fazemos uma reunião de diagnóstico para identificar dores, desafios e oportunidades. Em seguida, apresentamos uma proposta com escopo, prazos e soluções personalizadas para a sua empresa.',
 		validar: true,
 	},
-	{ pergunta: 'Quanto custa um projeto de Business Intelligence?' },
-];
-
-// Dores do dono de PME, a partir de quandoFazSentido e do "Para quem é" da LP.
-const dores = [
-	{ icone: `${CDN}/672a37ae2d2e20a904bf4c11_pme-icon.svg`, titulo: 'Dados espalhados', texto: 'Vendas numa planilha, financeiro em outra, estoque no sistema. Fechar o mês consome horas da equipe.' },
-	{ icone: `${CDN}/672a37aed9b0d27f7453d2a3_novas-icon.svg`, titulo: 'Decisões no feeling', texto: 'Preço, compras e metas saem da intuição, sem olhar o histórico do próprio negócio.' },
-	{ icone: `${CDN}/671c65bc0ece9976827460a6_speed-icon.svg`, titulo: 'Custos que não fecham', texto: 'Você sabe que dá para ganhar eficiência, mas não sabe quais fatores mais pesam no resultado.' },
-	{ icone: `${CDN}/672a37ae7609689739689139_transformacao-digital-icon.svg`, titulo: 'Cliente desconhecido', texto: 'Não está claro quem compra mais, quem parou de comprar e o que falam da sua marca.' },
-];
-
-// Cada frente do escopo (consts) traduzida na pergunta de negócio que ela responde.
-const detalhes: Record<string, { pergunta: string; texto: string; entrega: string; veja?: { texto: string; slug: string } }> = {
-	'Análises descritivas': {
-		pergunta: 'O que está acontecendo na minha empresa?',
-		texto: 'Organizamos o histórico de vendas, custos e operação para mostrar o que vende mais, onde a margem aperta e como cada número evolui mês a mês.',
-		entrega: 'os indicadores certos para o seu negócio, em painéis fáceis de acompanhar.',
-		veja: { texto: 'Se o problema for margem, veja também a', slug: 'consultoria-financeira' },
+	{
+		pergunta: 'Quanto tempo dura um projeto?',
+		resposta: `Os projetos da EJFGV têm em média ${NUMEROS.prazoMedioMeses} meses. O prazo de cada projeto é apresentado na proposta, junto com o escopo.`,
+		validar: true,
 	},
-	'Análises preditivas': {
-		pergunta: 'O que deve acontecer nos próximos meses?',
-		texto: 'Com o histórico da empresa e, quando faz sentido, dados de fora dela, como os do seu mercado, estimamos tendências de vendas e demanda para você planejar compras, estoque e equipe com antecedência.',
-		entrega: 'projeções e cenários explicados em linguagem simples, prontos para o planejamento.',
-	},
-	'Clusterização': {
-		pergunta: 'Que tipos de cliente eu tenho?',
-		texto: 'Clusterização é separar clientes (ou produtos) em grupos parecidos entre si: os fiéis, os que só compram em promoção, os que sumiram. Cada grupo pede uma ação diferente, e você para de tratar todo mundo igual.',
-		entrega: 'os grupos mapeados, com o perfil de cada um e o que fazer com ele.',
-	},
-	'Análise do perfil do consumidor': {
-		pergunta: 'Quem é o meu cliente e o que ele pensa da minha marca?',
-		texto: 'Traçamos o perfil de quem compra de você a partir dos dados de compra. Com análise de sentimentos, lemos comentários e avaliações em volume para separar o que agrada do que incomoda.',
-		entrega: 'o retrato do seu cliente e os pontos que mais pesam na satisfação dele.',
-		veja: { texto: 'Para transformar esse perfil em campanha, conheça a', slug: 'consultoria-mercadologica' },
-	},
-};
-
-// Formatos de entrega (LP original: Power BI, base única, plano de ação, treinamento).
-const formatos = [
-	{ titulo: 'Seus dados em um só lugar', texto: 'Vendas, financeiro e operação reunidos em uma base confiável, sem consolidar planilhas toda semana.' },
-	{ titulo: 'Painéis em Power BI', texto: 'Personalizados para a sua rotina, para acompanhar vendas, custos e metas sem montar relatório.' },
-	{ titulo: 'Plano de ação', texto: 'Os números traduzidos em prioridades: onde está o gargalo e onde agir primeiro.' },
-	{ titulo: 'Equipe treinada', texto: 'Treinamento prático para o seu time manter os painéis funcionando depois do projeto.' },
+	{ pergunta: 'Quanto custa um dashboard, um site ou uma automação?' },
 ];
 ---
 
 <SolucaoLayout
 	solucao={solucao}
+	titulo="Dados, sites e automações para decidir e operar melhor"
 	abertura={abertura}
 	faq={faq}
-	kicker="Dados que viram decisão"
-	fotoHeader="trabalho real em grupo: consultores da EJFGV analisando dados com o cliente"
+	ctaRotulo="Agendar diagnóstico"
 	depoimentos={DEPOIMENTOS.slice(0, 2)}
 >
-	<section id="para-quem" class="section_icp" aria-labelledby="bi-para-quem-titulo">
+	<Fragment slot="titulo">Dados, sites e automações <span class="highlight-purpose">para decidir e operar melhor</span></Fragment>
+	<a slot="acoes" href="#servicos" class="button-secondary is-button-large bi_cta-sec">Ver os serviços</a>
+
+	<!-- Ilustração própria das 3 frentes juntas, em camadas -->
+	<figure slot="midia" class="bi_hero">
+		<div class="bi_palco">
+			<div class="bi_camada is-dashboard">
+				<span class="bi_selo"><svg viewBox="0 0 24 24" set:html={icones.dashboards} />Power BI</span>
+				<Mock tipo="dashboard" />
+			</div>
+			<div class="bi_camada is-site">
+				<span class="bi_selo"><svg viewBox="0 0 24 24" set:html={icones.sites} />Site + chatbot</span>
+				<Mock tipo="site" />
+			</div>
+			<div class="bi_camada is-fluxo">
+				<span class="bi_selo"><svg viewBox="0 0 24 24" set:html={icones.automacoes} />n8n + IA</span>
+				<Mock tipo="fluxo" />
+			</div>
+		</div>
+		<figcaption class="bi_legenda">Ilustração das três frentes: painel, site com chatbot e fluxo de automação.</figcaption>
+	</figure>
+
+	<!-- 1. Serviços: as 3 frentes em cartões grandes -->
+	<section id="servicos" class="bi_servicos" aria-labelledby="bi-servicos-titulo">
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="bi_cabeca">
+					<span class="eyebrow">O que fazemos</span>
+					<h2 id="bi-servicos-titulo">Três frentes para a sua empresa decidir e operar melhor</h2>
+					<p>Cada frente resolve um problema do dia a dia. O que entra no seu projeto é definido com você no diagnóstico gratuito.</p>
+				</div>
+
+				<nav class="bi_atalhos" aria-label="Ir para um serviço">
+					{frentes.map((f) => (
+						<a href={`#${f.id}`}><svg viewBox="0 0 24 24" aria-hidden="true" set:html={f.icone} />{f.nome}</a>
+					))}
+				</nav>
+
+				<div class="bi_frentes">
+					{frentes.map((f) => (
+						<article id={f.id} class="bi_frente" aria-labelledby={`${f.id}-titulo`}>
+							<div class="bi_frente-texto">
+								<span class="bi_icone" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={f.icone} /></span>
+								<span class="bi_area">{f.area}</span>
+								<h3 id={`${f.id}-titulo`}>{f.nome}</h3>
+								<p class="bi_para">{f.texto}</p>
+
+								<h4>O que entra</h4>
+								<ul class="bi_lista">
+									{f.entra.map((item) => (
+										<li><svg viewBox="0 0 24 24" aria-hidden="true" set:html={CHECK} />{item}</li>
+									))}
+								</ul>
+
+								<h4>Exemplos de uso em PMEs</h4>
+								<ul class="bi_exemplos">
+									{f.exemplos.map((e) => <li>{e}</li>)}
+								</ul>
+
+								<a href="#formulario" class="bi_link">{f.cta}<svg viewBox="0 0 24 24" aria-hidden="true" set:html={SETA} /></a>
+							</div>
+							<figure class="bi_frente-visual">
+								<Mock tipo={f.mock} />
+								<figcaption>Ilustração</figcaption>
+							</figure>
+						</article>
+					))}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 2. Como as frentes se conectam (exemplo ilustrativo) -->
+	<section class="bi_conexao" aria-labelledby="bi-conexao-titulo">
+		<div class="hero_background" aria-hidden="true"></div>
+		<div class="page-padding padding-section-medium">
+			<div class="container-large">
+				<div class="bi_cabeca">
+					<span class="eyebrow">Como combinamos as frentes</span>
+					<h2 id="bi-conexao-titulo">Juntas, uma frente alimenta a outra</h2>
+					<p>Cada frente funciona sozinha. Combinadas, o contato que chega pelo site vira informação para decidir.</p>
+				</div>
+
+				<p class="bi_tag-exemplo">Exemplo ilustrativo</p>
+				<ol class="bi_fluxo">
+					{conexao.map((passo) => (
+						<li class="bi_passo">
+							<span class="bi_icone" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={passo.frente.icone} /></span>
+							<a class="bi_passo-frente" href={`#${passo.frente.id}`}>{passo.frente.nome}</a>
+							<h3>{passo.titulo}</h3>
+							<p>{passo.texto}</p>
+						</li>
+					))}
+				</ol>
+			</div>
+		</div>
+	</section>
+
+	<!-- 3. Para quem é: dores ligadas à frente que resolve -->
+	<section id="para-quem" class="bi_para-quem" aria-labelledby="bi-para-quem-titulo">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large">
 				<div class="icp_header">
 					<span class="eyebrow">Para quem é</span>
-					<h2 id="bi-para-quem-titulo">Os números existem. Só não ajudam você a decidir.</h2>
+					<h2 id="bi-para-quem-titulo">Para pequenas e médias empresas que perdem tempo, cliente ou clareza</h2>
 				</div>
 				<ul class="bi_dores">
 					{dores.map((d) => (
-						<li class="icp_item">
-							<img src={d.icone} loading="lazy" alt="" class="icp_icon" />
+						<li class="bi_dor">
+							<span class="bi_icone is-claro" aria-hidden="true"><svg viewBox="0 0 24 24" set:html={d.frente.icone} /></span>
 							<h3>{d.titulo}</h3>
 							<p>{d.texto}</p>
+							<a href={`#${d.frente.id}`}>Solução: {d.frente.curto}<svg viewBox="0 0 24 24" aria-hidden="true" set:html={SETA} /></a>
 						</li>
 					))}
 				</ul>
 				<div class="bi_aviso">
-					<p><strong>Não precisa chegar com tudo organizado.</strong> O projeto pode começar pelas planilhas e sistemas que você já usa.</p>
-					<a href="#formulario" class="button-tertiary">Contar como estão meus dados →</a>
+					<p><strong>Não precisa trocar seus sistemas nem chegar com tudo organizado.</strong> Partimos das planilhas e ferramentas que você já usa.</p>
+					<a href="#formulario" class="button-tertiary">Contar como funciona hoje →</a>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<section id="o-que-entra" class="section_beneficios" aria-labelledby="bi-escopo-titulo">
-		<div class="page-padding padding-section-medium">
-			<div class="container-large">
-				<div class="beneficios_wrapper">
-					<div class="beneficios_title">
-						<span class="eyebrow">O que entra no projeto</span>
-						<h2 id="bi-escopo-titulo">Cada análise responde a uma pergunta do seu negócio</h2>
-						<p>O escopo é montado com você no diagnóstico gratuito, só com o que a sua empresa precisa. Abra cada frente para ver o que ela entrega.</p>
-					</div>
-
-					<div class="bi_escopo">
-						<!-- name= deixa só uma frente aberta por vez (acordeão nativo, sem JS) -->
-						<div class="bi_frentes">
-							{solucao.escopo.map((e, i) => {
-								const d = detalhes[e.item];
-								return (
-									<details class="bi_frente" name="bi-escopo" open={i === 0}>
-										<summary>
-											<span class="bi_frente-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-											<h3>
-												<span class="bi_frente-nome">{e.item}</span>
-												{d?.pergunta}
-											</h3>
-										</summary>
-										{d && (
-											<div class="bi_frente-corpo">
-												<p>{d.texto}</p>
-												<p class="bi_frente-entrega"><strong>Você recebe:</strong> {d.entrega}</p>
-												{d.veja && <p>{d.veja.texto} <a href={sol(d.veja.slug).url}>{sol(d.veja.slug).nome}</a>.</p>}
-												{e.href && <p><a href={e.href}>Conheça a consultoria →</a></p>}
-											</div>
-										)}
-									</details>
-								);
-							})}
-						</div>
-
-						<div class="bi_entrega">
-							<h3>Como o resultado chega até você</h3>
-							<ul class="vantagens_list">
-								{formatos.map((f) => (
-									<li class="vantagens_list-item">
-										<img src={CHECK} loading="lazy" alt="" />
-										<span><strong>{f.titulo}.</strong> {f.texto}</span>
-									</li>
-								))}
-							</ul>
-							<a href="#formulario" class="button">Quero analisar meus dados</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	<!-- 4. Números da EJFGV (os mesmos do resto do site) -->
+	<StatsStrip />
 </SolucaoLayout>
 
 <style>
-	/* Para quem é: 4 dores lado a lado no desktop */
+	/* ---------- Cabeçalho ---------- */
+	.bi_cta-sec {
+		background: transparent;
+		border-color: var(--border-hairline-dark);
+	}
+
+	.bi_cta-sec:hover {
+		background: rgba(249, 255, 252, 0.08);
+		border-color: rgba(249, 255, 252, 0.3);
+	}
+
+	.bi_hero {
+		position: relative;
+		margin-top: 1.5rem;
+	}
+
+	@media (min-width: 1025px) {
+		:global(.page-header_wrapper:has(.bi_hero)) {
+			grid-template-columns: 0.92fr 1.08fr;
+		}
+	}
+
+	:global(.page-header_wrapper:has(.bi_hero) .hero_heading) {
+		font-size: clamp(2.5rem, 4.6vw, 3.9rem);
+	}
+
+	/* Brilho laranja discreto atrás das camadas */
+	.bi_hero::before {
+		content: "";
+		position: absolute;
+		inset: 12% 8%;
+		z-index: 0;
+		background: radial-gradient(closest-side, rgba(227, 142, 51, 0.28), transparent);
+		filter: blur(30px);
+	}
+
+	/* Palco proporcional: as camadas usam % para manter a composição em qualquer largura */
+	.bi_palco {
+		position: relative;
+		z-index: 1;
+		aspect-ratio: 1 / 0.94;
+	}
+
+	.bi_camada {
+		position: absolute;
+		animation: bi-entra 0.9s var(--ease-out-expo) both;
+		transition: transform 0.6s var(--ease-out-expo);
+	}
+
+	.bi_camada.is-dashboard {
+		top: 0;
+		left: 0;
+		width: 76%;
+	}
+
+	.bi_camada.is-site {
+		top: 27%;
+		right: 0;
+		width: 58%;
+		z-index: 2;
+		animation-delay: 0.15s;
+	}
+
+	.bi_camada.is-fluxo {
+		bottom: 0;
+		left: 4%;
+		width: 64%;
+		z-index: 3;
+		animation-delay: 0.3s;
+	}
+
+	.bi_camada :global(.mock_frame) {
+		aspect-ratio: 16 / 11;
+	}
+
+	.bi_camada.is-site :global(.mock_frame) {
+		aspect-ratio: 4 / 3.4;
+	}
+
+	.bi_camada.is-fluxo :global(.mock_frame) {
+		aspect-ratio: 16 / 7.6;
+	}
+
+	.bi_camada.is-fluxo :global(.fluxo) {
+		min-height: 0;
+	}
+
+	/* No hover, as camadas se afastam um pouco (profundidade) */
+	.bi_hero:hover .is-dashboard {
+		transform: translate(-1.5%, -1.5%);
+	}
+
+	.bi_hero:hover .is-site {
+		transform: translate(1.5%, -1%);
+	}
+
+	.bi_hero:hover .is-fluxo {
+		transform: translate(-1%, 1.5%);
+	}
+
+	.bi_selo {
+		position: absolute;
+		bottom: calc(100% - 0.4rem);
+		left: 1rem;
+		z-index: 4;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.3rem 0.7rem;
+		color: var(--brand-chumbo);
+		font-size: 0.75rem;
+		font-weight: 800;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+		background: var(--primary600);
+		border-radius: 999px;
+		box-shadow: 0 6px 16px -6px rgba(37, 40, 50, 0.5);
+	}
+
+	.is-site .bi_selo {
+		right: 1rem;
+		left: auto;
+	}
+
+	.bi_selo svg,
+	.bi_atalhos svg,
+	.bi_icone svg,
+	.bi_lista svg,
+	.bi_link svg,
+	.bi_dor a svg {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.bi_selo svg {
+		width: 0.95rem;
+		height: 0.95rem;
+	}
+
+	.bi_legenda {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	/* ---------- Títulos de seção ---------- */
+	/* Laranja escurecido (primary800) nos rótulos pequenos em fundo claro: passa o AA */
+	.bi_servicos .eyebrow,
+	.bi_para-quem .eyebrow {
+		color: var(--primary800);
+	}
+
+	.bi_cabeca {
+		max-width: 46rem;
+		margin: 0 auto clamp(2rem, 4vw, 3rem);
+		text-align: center;
+	}
+
+	.bi_cabeca h2 {
+		margin-top: 0.35rem;
+		color: var(--gray900);
+		font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+		font-weight: 800;
+		line-height: 1.12;
+		letter-spacing: -0.025em;
+		text-wrap: balance;
+	}
+
+	.bi_cabeca p {
+		margin-top: 1rem;
+		color: var(--gray600);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		text-wrap: pretty;
+	}
+
+	/* ---------- 1. Serviços ---------- */
+	.bi_atalhos {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.6rem;
+		margin-bottom: clamp(2rem, 4vw, 3.5rem);
+	}
+
+	.bi_atalhos a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1.1rem;
+		color: var(--gray900);
+		font-size: 0.9rem;
+		font-weight: 700;
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: 999px;
+		transition: border-color 0.25s, color 0.25s, transform 0.25s var(--ease-out-expo);
+	}
+
+	.bi_atalhos a:hover {
+		color: var(--primary800);
+		border-color: var(--primary600);
+		transform: translateY(-1px);
+	}
+
+	.bi_atalhos svg {
+		width: 1.1rem;
+		height: 1.1rem;
+		color: var(--primary700);
+	}
+
+	.bi_frentes {
+		display: flex;
+		flex-direction: column;
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.bi_frente {
+		display: grid;
+		grid-template-columns: 1fr 1.08fr;
+		gap: clamp(2rem, 4vw, 4rem);
+		align-items: center;
+		padding: clamp(1.5rem, 3.5vw, 3rem);
+		scroll-margin-top: calc(var(--nav-height) + 1rem);
+		background: var(--white);
+		border: 1px solid var(--gray200);
+		border-radius: var(--card-radius-xl);
+		box-shadow: 0 1px 2px rgba(37, 40, 50, 0.04), 0 24px 48px -32px rgba(37, 40, 50, 0.25);
+	}
+
+	/* Ritmo em Z: a ilustração alterna de lado */
+	.bi_frente:nth-child(even) .bi_frente-visual {
+		order: -1;
+	}
+
+	.bi_icone {
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		color: var(--brand-chumbo);
+		background: var(--primary600);
+		border-radius: 0.85rem;
+	}
+
+	.bi_icone svg {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.bi_icone.is-claro {
+		color: var(--primary800);
+		background: var(--primary50);
+	}
+
+	.bi_area {
+		display: block;
+		margin-top: 1.25rem;
+		color: var(--primary800);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.bi_frente h3 {
+		margin-top: 0.35rem;
+		color: var(--gray900);
+		font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+		font-weight: 800;
+		line-height: 1.12;
+		letter-spacing: -0.025em;
+	}
+
+	.bi_para {
+		margin-top: 0.85rem;
+		color: var(--gray700);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+	}
+
+	.bi_frente h4 {
+		margin-top: 1.75rem;
+		color: var(--gray900);
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.bi_lista {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		margin-top: 0.85rem;
+		list-style: none;
+	}
+
+	.bi_lista li {
+		display: flex;
+		gap: 0.65rem;
+		color: var(--gray700);
+		font-size: 0.975rem;
+		line-height: 1.5;
+	}
+
+	.bi_lista svg {
+		flex-shrink: 0;
+		width: 1.25rem;
+		height: 1.25rem;
+		margin-top: 0.1rem;
+		padding: 0.2rem;
+		color: var(--brand-chumbo);
+		background: var(--primary100);
+		border-radius: 50%;
+		stroke-width: 3;
+	}
+
+	.bi_exemplos {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.85rem;
+		list-style: none;
+	}
+
+	.bi_exemplos li {
+		padding: 0.45rem 0.8rem;
+		color: var(--gray700);
+		font-size: 0.875rem;
+		line-height: 1.4;
+		background: var(--gray50);
+		border: 1px solid var(--gray200);
+		border-radius: 0.6rem;
+	}
+
+	.bi_link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 1.75rem;
+		color: var(--gray900);
+		font-weight: 800;
+		text-decoration: underline;
+		text-decoration-color: var(--primary600);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 6px;
+	}
+
+	.bi_link svg,
+	.bi_dor a svg {
+		width: 1.1rem;
+		height: 1.1rem;
+		transition: transform 0.25s var(--ease-out-expo);
+	}
+
+	.bi_link:hover svg,
+	.bi_dor a:hover svg {
+		transform: translateX(3px);
+	}
+
+	/* Painel escuro com grade de pontos onde a ilustração "flutua" */
+	.bi_frente-visual {
+		position: relative;
+		display: grid;
+		place-items: center;
+		padding: clamp(1.25rem, 3.5vw, 2.75rem) clamp(1.25rem, 3.5vw, 2.75rem) clamp(2.25rem, 4.5vw, 3rem);
+		background-color: var(--graywarm900);
+		background-image: radial-gradient(rgba(249, 255, 252, 0.09) 1px, transparent 1px);
+		background-size: 18px 18px;
+		border-radius: var(--card-radius-lg);
+		overflow: hidden;
+	}
+
+	.bi_frente-visual::before {
+		content: "";
+		position: absolute;
+		inset: 20% 15%;
+		background: radial-gradient(closest-side, rgba(227, 142, 51, 0.22), transparent);
+		filter: blur(24px);
+	}
+
+	.bi_frente-visual :global(.mock) {
+		position: relative;
+		transition: transform 0.6s var(--ease-out-expo);
+	}
+
+	.bi_frente:hover .bi_frente-visual :global(.mock) {
+		transform: translateY(-4px);
+	}
+
+	.bi_frente-visual :global(.mock_frame) {
+		min-height: 20em;
+	}
+
+	.bi_frente-visual figcaption {
+		position: absolute;
+		right: 1rem;
+		bottom: 0.65rem;
+		color: var(--graywarm300);
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		opacity: 0.85;
+	}
+
+	/* ---------- 2. Conexão ---------- */
+	.bi_conexao {
+		position: relative;
+		overflow: hidden;
+		color: var(--white);
+		background: var(--graywarm950);
+	}
+
+	.bi_conexao .hero_background {
+		background-image: radial-gradient(rgba(249, 255, 252, 0.07) 1px, transparent 1px);
+		background-size: 22px 22px;
+	}
+
+	.bi_conexao .container-large {
+		position: relative;
+		z-index: 2;
+	}
+
+	.bi_conexao .eyebrow {
+		color: var(--text-eyebrow-dark);
+	}
+
+	.bi_conexao .bi_cabeca h2 {
+		color: var(--white);
+	}
+
+	.bi_conexao .bi_cabeca p {
+		color: var(--graywarm300);
+	}
+
+	.bi_conexao :focus-visible {
+		outline-color: var(--primary200);
+	}
+
+	.bi_tag-exemplo {
+		width: fit-content;
+		margin: 0 auto 1.5rem;
+		padding: 0.3rem 0.8rem;
+		color: var(--graywarm300);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		border: 1px dashed rgba(249, 255, 252, 0.3);
+		border-radius: 999px;
+	}
+
+	.bi_fluxo {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: clamp(2.5rem, 5vw, 4.5rem);
+		list-style: none;
+	}
+
+	.bi_passo {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		padding: clamp(1.5rem, 2.5vw, 2rem);
+		background: var(--graywarm900);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-lg);
+		transition: border-color 0.3s, transform 0.3s var(--ease-out-expo);
+	}
+
+	.bi_passo:hover {
+		border-color: rgba(227, 142, 51, 0.55);
+		transform: translateY(-3px);
+	}
+
+	/* Conector entre os passos: linha tracejada com um ponto que percorre o caminho */
+	.bi_passo:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		top: calc(clamp(1.5rem, 2.5vw, 2rem) + 1.5rem - 1px);
+		left: 100%;
+		width: clamp(2.5rem, 5vw, 4.5rem);
+		height: 2px;
+		background-image: linear-gradient(90deg, var(--primary600) 50%, transparent 50%);
+		background-size: 10px 2px;
+		animation: bi-corre 1.2s linear infinite;
+	}
+
+	.bi_passo:not(:last-child)::before {
+		content: "";
+		position: absolute;
+		top: calc(clamp(1.5rem, 2.5vw, 2rem) + 1.5rem - 5px);
+		left: calc(100% + clamp(2.5rem, 5vw, 4.5rem) - 10px);
+		width: 10px;
+		height: 10px;
+		border-top: 2px solid var(--primary600);
+		border-right: 2px solid var(--primary600);
+		transform: rotate(45deg);
+	}
+
+	.bi_passo-frente {
+		width: fit-content;
+		margin-top: 0.6rem;
+		color: var(--primary200);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 4px;
+		transition: text-decoration-color 0.2s;
+	}
+
+	.bi_passo-frente:hover {
+		text-decoration-color: currentColor;
+	}
+
+	.bi_passo h3 {
+		color: var(--white);
+		font-size: 1.3rem;
+		font-weight: 800;
+		line-height: 1.2;
+		letter-spacing: -0.015em;
+	}
+
+	.bi_passo p {
+		color: var(--graywarm300);
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	/* ---------- 3. Para quem é ---------- */
+	.bi_para-quem {
+		background: var(--white);
+	}
+
 	.bi_dores {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 1.25rem;
 		list-style: none;
+	}
+
+	.bi_dor {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		padding: 1.5rem;
+		background: var(--gray50);
+		border: 1px solid var(--gray200);
+		border-radius: var(--card-radius-md);
+		transition: border-color 0.25s, transform 0.25s var(--ease-out-expo);
+	}
+
+	.bi_dor:hover {
+		border-color: var(--primary300);
+		transform: translateY(-2px);
+	}
+
+	.bi_dor .bi_icone {
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.bi_dor .bi_icone svg {
+		width: 1.35rem;
+		height: 1.35rem;
+	}
+
+	.bi_dor h3 {
+		color: var(--gray900);
+		font-size: 1.05rem;
+		font-weight: 800;
+		line-height: 1.3;
+	}
+
+	.bi_dor p {
+		color: var(--graywarm600);
+		font-size: 0.9rem;
+		line-height: 1.55;
+	}
+
+	.bi_dor a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: auto;
+		padding-top: 0.6rem;
+		color: var(--primary800);
+		font-size: 0.85rem;
+		font-weight: 700;
 	}
 
 	.bi_aviso {
@@ -190,7 +898,7 @@ const formatos = [
 		gap: 0.5rem 2rem;
 		margin-top: 1.5rem;
 		padding: 1rem 1.5rem;
-		background: var(--white);
+		background: var(--gray50);
 		border: 1px solid var(--gray200);
 		border-left: 4px solid var(--primary600);
 		border-radius: var(--card-radius-md);
@@ -208,159 +916,112 @@ const formatos = [
 	.bi_aviso .button-tertiary {
 		padding-left: 0;
 		padding-right: 0;
+		color: var(--primary800);
 	}
 
-	/* O que entra: perguntas (acordeão) à esquerda, formato da entrega à direita */
-	.bi_escopo {
-		display: grid;
-		grid-template-columns: 1.35fr 0.9fr;
-		gap: clamp(2rem, 4vw, 3.5rem);
-		align-items: start;
+	/* ---------- Movimento: entrada das seções ao rolar (só onde há suporte e sem preferência por menos movimento) ---------- */
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (animation-timeline: view()) {
+			.bi_frente,
+			.bi_passo,
+			.bi_dor {
+				animation: bi-entra linear both;
+				animation-timeline: view();
+				animation-range: entry 0% entry 40%;
+			}
+		}
 	}
 
-	.bi_frentes {
-		border-top: 1px solid var(--border-hairline-dark);
+	@media (prefers-reduced-motion: reduce) {
+		.bi_hero:hover .bi_camada,
+		.bi_frente:hover .bi_frente-visual :global(.mock) {
+			transform: none;
+		}
 	}
 
-	.bi_frente {
-		border-bottom: 1px solid var(--border-hairline-dark);
+	@keyframes bi-entra {
+		from {
+			opacity: 0;
+			transform: translateY(24px);
+		}
 	}
 
-	.bi_frente summary {
-		display: grid;
-		grid-template-columns: 1.5rem 1fr auto;
-		gap: 1.25rem;
-		align-items: center;
-		padding: 1.5rem 0;
-		list-style: none;
-		cursor: pointer;
+	@keyframes bi-corre {
+		to {
+			background-position: 20px 0;
+		}
 	}
 
-	.bi_frente summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.bi_frente summary::after {
-		content: "+";
-		color: var(--primary200);
-		font-size: 1.75rem;
-		line-height: 1;
-		transition: transform 0.3s var(--ease-out-expo);
-	}
-
-	.bi_frente[open] summary::after {
-		transform: rotate(45deg);
-	}
-
-	.bi_frente-num {
-		color: var(--graywarm300);
-		font-size: 0.85rem;
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.bi_frente[open] .bi_frente-num {
-		color: var(--primary200);
-	}
-
-	.bi_frente h3 {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		color: var(--white);
-		font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-		font-weight: 700;
-		line-height: 1.25;
-		letter-spacing: -0.015em;
-		transition: color 0.2s;
-	}
-
-	.bi_frente summary:hover h3 {
-		color: var(--primary100);
-	}
-
-	.bi_frente-nome {
-		color: var(--primary200);
-		font-size: 0.72rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-	}
-
-	.bi_frente-corpo {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		max-width: 62ch;
-		padding: 0 0 1.75rem 2.75rem;
-		color: var(--graywarm300);
-		line-height: 1.6;
-	}
-
-	.bi_frente-entrega {
-		padding: 0.85rem 1rem;
-		color: var(--white);
-		background: rgba(249, 255, 252, 0.04);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: 0.75rem;
-	}
-
-	.bi_frente-corpo a {
-		color: var(--primary200);
-		font-weight: 600;
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-
-	.bi_entrega {
-		position: sticky;
-		top: calc(var(--nav-height) + 1.5rem);
-		padding: clamp(1.5rem, 3vw, 2.25rem);
-		background: var(--graywarm950);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-lg);
-	}
-
-	.bi_entrega h3 {
-		color: var(--white);
-		font-size: 1.25rem;
-		font-weight: 800;
-		line-height: 1.25;
-	}
-
-	.bi_entrega strong {
-		color: var(--white);
-	}
-
-	.bi_entrega .button {
-		width: 100%;
-		margin-top: 1.75rem;
-	}
-
+	/* ---------- Responsivo ---------- */
 	@media (max-width: 1024px) {
-		.bi_dores {
-			grid-template-columns: repeat(2, 1fr);
+		.bi_hero {
+			max-width: 40rem;
+			margin: 1rem auto 0;
 		}
 
-		.bi_escopo {
+		.bi_frente {
 			grid-template-columns: 1fr;
 		}
 
-		.bi_entrega {
-			position: static;
+		.bi_frente .bi_frente-visual,
+		.bi_frente:nth-child(even) .bi_frente-visual {
+			order: -1;
+		}
+
+		.bi_dores {
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	@media (max-width: 767px) {
+		.bi_selo {
+			left: 0.6rem;
+			padding: 0.2rem 0.55rem;
+			font-size: 0.65rem;
+		}
+
+		.is-site .bi_selo {
+			right: 0.6rem;
+		}
+
+		.bi_frente-visual :global(.mock_frame) {
+			min-height: 0;
+		}
+
+		.bi_frente-visual :global(.fluxo) {
+			min-height: 13em;
+		}
+
+		.bi_fluxo {
+			grid-template-columns: 1fr;
+			gap: 2.75rem;
+		}
+
+		/* Conector vertical no celular */
+		.bi_passo:not(:last-child)::after {
+			top: 100%;
+			left: calc(1.5rem + 1.5rem - 1px);
+			width: 2px;
+			height: 2.75rem;
+			background-image: linear-gradient(180deg, var(--primary600) 50%, transparent 50%);
+			background-size: 2px 10px;
+			animation-name: bi-corre-v;
+		}
+
+		.bi_passo:not(:last-child)::before {
+			top: calc(100% + 2.75rem - 10px);
+			left: calc(1.5rem + 1.5rem - 5px);
+			transform: rotate(135deg);
+		}
+
 		.bi_dores {
 			grid-template-columns: 1fr;
 		}
+	}
 
-		.bi_frente summary {
-			gap: 0.85rem;
-		}
-
-		.bi_frente-corpo {
-			padding-left: 0;
+	@keyframes bi-corre-v {
+		to {
+			background-position: 0 20px;
 		}
 	}
 </style>
