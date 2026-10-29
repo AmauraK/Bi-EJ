@@ -1,0 +1,145 @@
+---
+// Cabeçalho com fotos da equipe das landings de solução (PRO-24). Mesmos slots e classes do PageHeader
+// ("titulo", padrão = CTA e credenciais, "midia" = composição de fotos da página), mas a foto deixa de ser
+// um quadro ao lado do texto: a variante decide como ela ocupa a dobra.
+// - arco:    texto à esquerda, foto em arco que vaza para baixo com as etapas atravessando
+// - mosaico: texto à esquerda, colagem de fotos recortadas que sai da grade
+// - faixa:   texto em duas colunas e a foto numa faixa de ponta a ponta, com o fluxo sobre a borda
+// - mesa:    a foto ocupa o lado direito até a borda da tela, recortada em curva, sob o texto
+// A composição de cada página (fotos, rótulos, desenhos) fica na própria página, no slot "midia".
+interface Props {
+	titulo: string;
+	kicker?: string;
+	descricao?: string;
+	variante: 'arco' | 'mosaico' | 'faixa' | 'mesa';
+}
+
+const { titulo, kicker, descricao, variante } = Astro.props;
+---
+
+<section class:list={['section_page-header is-dark hero-solucao', `is-${variante}`]} aria-labelledby="page-heading">
+	<div class="hero_background" aria-hidden="true"></div>
+	<div class="page-padding">
+		<div class="container-large hero-solucao_grade">
+			<div class="hero-solucao_texto">
+				<div class="hero-solucao_chamada">
+					<div class="home-hero_divider"></div>
+					{kicker && <span class="hero_kicker">{kicker}</span>}
+					<h1 id="page-heading" class="hero_heading">
+						<slot name="titulo">{titulo}</slot>
+					</h1>
+				</div>
+				<div class="hero-solucao_apoio">
+					{descricao && <p class="hero_description">{descricao}</p>}
+					<slot />
+				</div>
+			</div>
+			<div class="hero-solucao_midia">
+				<slot name="midia" />
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero-solucao {
+		padding-top: calc(var(--nav-height) + clamp(1.75rem, 3.5vw, 3rem));
+		padding-bottom: clamp(2rem, 4vw, 3.5rem);
+	}
+
+	.hero-solucao_grade {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		gap: clamp(2rem, 4vw, 4rem);
+		align-items: center;
+	}
+
+	.hero-solucao .hero-solucao_texto .hero_heading {
+		font-size: clamp(2.25rem, 3.7vw, 3.4rem);
+		line-height: 1.06;
+		text-wrap: balance;
+	}
+
+	.hero-solucao .hero_description {
+		margin-bottom: 1.5rem;
+	}
+
+	.hero-solucao_apoio :global(.hero_actions) {
+		margin-bottom: 1.25rem;
+	}
+
+	/* No celular as credenciais ficam compactas para a foto aparecer já na primeira tela */
+	@media (max-width: 480px) {
+		.hero-solucao .hero-solucao_apoio :global(.solucao_credenciais) {
+			gap: 0.35rem;
+		}
+
+		.hero-solucao .hero-solucao_apoio :global(.solucao_credenciais li) {
+			padding: 0.3rem 0.6rem;
+			font-size: 0.75rem;
+		}
+	}
+
+	/* ---------- Arco e mosaico: duas colunas, a composição sai da grade à direita ---------- */
+	@media (min-width: 1025px) {
+		.is-arco .hero-solucao_grade,
+		.is-mosaico .hero-solucao_grade {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+
+		.is-arco .hero-solucao_grade {
+			grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+		}
+	}
+
+	/* ---------- Faixa: título | apoio em cima, foto de ponta a ponta embaixo ---------- */
+	.is-faixa .hero-solucao_midia {
+		/* sai do container até as bordas da tela (a seção corta o excesso) */
+		margin-inline: calc(50% - 50vw);
+	}
+
+	@media (min-width: 1025px) {
+		.is-faixa .hero-solucao_texto {
+			display: grid;
+			grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+			gap: clamp(2rem, 4vw, 4.5rem);
+			align-items: end;
+		}
+
+		.is-faixa .hero_description {
+			max-width: none;
+		}
+	}
+
+	/* ---------- Mesa: a foto encosta na borda direita e ocupa a altura toda da dobra ---------- */
+	@media (min-width: 1025px) {
+		.is-mesa {
+			min-height: 46rem;
+			display: flex;
+			align-items: center;
+		}
+
+		.is-mesa > .page-padding {
+			width: 100%;
+		}
+
+		/* a foto se posiciona pela seção, não pela grade */
+		.is-mesa .hero-solucao_grade {
+			position: static;
+			grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+		}
+
+		.is-mesa .hero-solucao_texto {
+			position: relative;
+			z-index: 2;
+		}
+
+		.is-mesa .hero-solucao_midia {
+			position: absolute;
+			inset: 0 0 0 auto;
+			z-index: 1;
+			width: 57%;
+		}
+	}
+</style>

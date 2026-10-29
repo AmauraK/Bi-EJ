@@ -4,7 +4,8 @@
 // Fontes: consts.ts (solução, cases, depoimentos), legado (solucoes.mjs, sobre.mjs), LP e docx.
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
 import ImagemReservada from '../components/ImagemReservada.astro';
-import { SOLUCOES, CASES, DEPOIMENTOS, NUMEROS, SITE } from '../consts';
+import Foto from '../components/Foto.astro';
+import { SOLUCOES, CASES, DEPOIMENTOS, NUMEROS, SITE, FOTOS } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-mercadologica')!;
 const maCerise = CASES.find((c) => c.cliente === 'Confeitaria Ma Cerise')!;
@@ -27,6 +28,9 @@ const perguntas = [
 	{ titulo: 'Onde a minha marca se encaixa?', texto: 'A análise concorrencial compara a sua empresa com os concorrentes e mostra o seu lugar no mercado.' },
 	{ titulo: 'Existe demanda para a minha ideia?', texto: 'A análise de viabilidade indica se há demanda para um produto ou serviço antes do investimento.' },
 ];
+
+// Cabeçalho: três das perguntas acima viram rótulos sobre a colagem de fotos da equipe.
+const rotulosHero = [perguntas[0], perguntas[2], perguntas[3]].map((p) => p.titulo);
 
 // Rascunhos feitos só com fatos (validar: true). Sem resposta confirmada = sem `resposta`.
 const faq = [
@@ -62,12 +66,31 @@ const faq = [
 <SolucaoLayout
 	solucao={solucao}
 	titulo="Consultoria Mercadológica para conquistar novos mercados"
-	abertura={`A Consultoria Mercadológica da ${SITE.nome}, a ${SITE.nomeCompleto}, ajuda pequenas e médias empresas a vender mais com pesquisa de mercado, análise de viabilidade e plano de marketing. É consultoria estratégica feita por alunos da FGV, desde ${NUMEROS.fundacao}.`}
-	foto="consultorasDocumento"
+	kicker="Mercado · Público · Concorrência · Marketing"
+	abertura={`Pesquisa de mercado, análise de viabilidade e plano de marketing para pequenas e médias empresas venderem mais. Consultoria estratégica da ${SITE.nomeCompleto}, feita por alunos da FGV desde ${NUMEROS.fundacao}.`}
+	hero="mosaico"
 	beneficios={beneficios}
 	faq={faq}
 	depoimentos={depoimentos}
 >
+	<Fragment slot="titulo">Consultoria Mercadológica <span class="highlight-purpose">para conquistar novos mercados</span></Fragment>
+
+	<!-- Cabeçalho: colagem de fotos da equipe com as perguntas que a pesquisa responde. A equipe aponta para
+	     quem visita a página: o cliente no centro. -->
+	<figure slot="midia" class="mk_hero">
+		<div class="mk_foto is-convite">
+			<Foto foto={FOTOS.equipeConvite} sizes="(min-width: 1025px) 460px, 76vw" />
+		</div>
+		<div class="mk_foto is-documento">
+			<Foto foto={FOTOS.consultorasDocumento} sizes="(min-width: 1025px) 240px, 40vw" />
+		</div>
+		<div class="mk_foto is-escadaria">
+			<Foto foto={FOTOS.equipeEscadaria} sizes="(min-width: 1025px) 300px, 50vw" />
+		</div>
+		<ul class="mk_rotulos" aria-label="Perguntas que a pesquisa responde">
+			{rotulosHero.map((r, i) => <li style={`--i: ${i}`}>{r}</li>)}
+		</ul>
+	</figure>
 	<section slot="especifico" class="section_icp" aria-label="Consultoria mercadológica na prática">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large mercadologica_linhas">
@@ -112,6 +135,131 @@ const faq = [
 </SolucaoLayout>
 
 <style>
+	/* ---------- Cabeçalho: colagem de fotos com rótulos de pesquisa ---------- */
+	.mk_hero {
+		position: relative;
+		aspect-ratio: 1 / 0.96;
+		max-width: 38rem;
+		margin-left: auto;
+	}
+
+	.mk_foto {
+		position: absolute;
+		overflow: hidden;
+		background: var(--graywarm950);
+		box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.55);
+	}
+
+	.mk_foto :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	/* Foto principal: canto superior direito em arco, como as curvas do site */
+	.mk_foto.is-convite {
+		top: 0;
+		left: 0;
+		width: 76%;
+		height: 62%;
+		border-radius: var(--card-radius-xl) 10rem var(--card-radius-xl) var(--card-radius-xl);
+	}
+
+	.mk_foto.is-documento {
+		right: 0;
+		bottom: 0;
+		width: 38%;
+		height: 58%;
+		border: 6px solid var(--graywarm900);
+		border-radius: 999px 999px var(--card-radius-xl) var(--card-radius-xl);
+	}
+
+	/* Recorte fechado nos rostos (a foto inteira tem muito céu e árvore) */
+	.mk_foto.is-escadaria {
+		bottom: 2%;
+		left: 8%;
+		width: 50%;
+		height: 33%;
+		border: 6px solid var(--graywarm900);
+		border-radius: var(--card-radius-xl) var(--card-radius-xl) var(--card-radius-xl) 6rem;
+	}
+
+	.mk_foto.is-escadaria :global(img) {
+		transform: scale(1.7);
+		transform-origin: 52% 64%;
+	}
+
+	.mk_rotulos {
+		list-style: none;
+	}
+
+	.mk_rotulos li {
+		position: absolute;
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		padding: 0.55rem 0.95rem;
+		color: var(--white);
+		font-size: 0.875rem;
+		font-weight: 700;
+		white-space: nowrap;
+		background: rgba(37, 40, 50, 0.88);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: 999px;
+		box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+		animation:
+			mk-entra 0.8s var(--ease-out-expo) both calc(var(--i) * 160ms + 300ms),
+			mk-flutua 6s ease-in-out infinite calc(var(--i) * -2s);
+	}
+
+	.mk_rotulos li::before {
+		content: "";
+		flex: none;
+		width: 0.55rem;
+		height: 0.55rem;
+		background: var(--primary600);
+		border-radius: 50%;
+		box-shadow: 0 0 0 4px rgba(227, 142, 51, 0.25);
+	}
+
+	.mk_rotulos li:nth-child(1) { top: 5%; right: 20%; }
+	.mk_rotulos li:nth-child(2) { top: 64%; right: 30%; }
+	.mk_rotulos li:nth-child(3) { right: 2%; bottom: 4%; }
+
+	@keyframes mk-entra {
+		from { opacity: 0; transform: translateY(10px); }
+	}
+
+	@keyframes mk-flutua {
+		50% { translate: 0 -5px; }
+	}
+
+	@media (max-width: 1024px) {
+		.mk_hero {
+			margin-inline: auto;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.mk_rotulos li {
+			max-width: 62%;
+			padding: 0.45rem 0.75rem;
+			font-size: 0.75rem;
+			white-space: normal;
+		}
+
+		.mk_rotulos li:nth-child(3) {
+			right: 0;
+		}
+
+		.mk_foto.is-documento,
+		.mk_foto.is-escadaria {
+			border-width: 4px;
+		}
+	}
+
 	.mercadologica_linhas {
 		display: grid;
 		gap: clamp(3.5rem, 6vw, 5.5rem);

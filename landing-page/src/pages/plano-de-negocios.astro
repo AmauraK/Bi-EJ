@@ -7,7 +7,8 @@
 // 3. Primeiro o mercado: por que o plano começa pela pesquisa (docx: diferencial, expertise e metodologia).
 // Fontes: consts.ts (SOLUCOES, CASES, NUMEROS, CITACAO_PROJETO) e o docx.
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import { SITE, NUMEROS, SOLUCOES, CASES, CITACAO_PROJETO } from '../consts';
+import Foto from '../components/Foto.astro';
+import { SITE, NUMEROS, SOLUCOES, CASES, CITACAO_PROJETO, FOTOS } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'plano-de-negocios')!;
 const caseAudio = CASES.find((c) => c.slug.includes('empresa-de-audio'))!;
@@ -59,6 +60,9 @@ const fases = [
 	}),
 }));
 
+// Cabeçalho: o caminho do projeto, da ideia ao plano (solucao.escopo e abertura, sem prometer nada a mais).
+const etapasHero = ['Ideia e viabilidade', 'Pesquisa de mercado', 'Teste com MVP', 'Operação, finanças e marketing'];
+
 // 3. Por que começar pelo mercado (diferencial e expertise); a metodologia vem na citação.
 const motivos = [
 	{ titulo: 'Você arrisca menos', texto: 'Descobre se a ideia tem público antes de gastar com estrutura.' },
@@ -71,7 +75,7 @@ const motivos = [
 	solucao={solucao}
 	titulo="Plano de Negócios completo para tirar sua ideia do papel"
 	kicker="Para ideias novas e empresas consolidadas"
-	foto="consultorasDocumento"
+	hero="arco"
 	abertura="Pesquisamos o mercado, testamos a ideia e planejamos operação, finanças e marketing em um só projeto. Para quem vai abrir uma empresa ou lançar um novo negócio."
 	faq={[
 		{
@@ -101,6 +105,20 @@ const motivos = [
 		},
 	]}
 >
+	<Fragment slot="titulo">Plano de Negócios completo <span class="highlight-purpose">para tirar sua ideia do papel</span></Fragment>
+
+	<!-- Cabeçalho: as consultoras com o plano na mesa, em arco, e as etapas do projeto atravessando a foto -->
+	<figure slot="midia" class="pn_hero">
+		<div class="pn_arco">
+			<Foto foto={FOTOS.consultorasDocumento} sizes="(min-width: 1025px) 480px, 100vw" />
+		</div>
+		<ol class="pn_etapas" aria-label="Do projeto: da ideia ao plano">
+			{etapasHero.map((etapa, i) => (
+				<li style={`--i: ${i}`}><span class="pn_etapa-n" aria-hidden="true">{i + 1}</span>{etapa}</li>
+			))}
+		</ol>
+	</figure>
+
 	<!-- 1. Para quem é -->
 	<section class="section_icp" aria-labelledby="plano-para-quem-titulo">
 		<div class="page-padding padding-section-medium">
@@ -209,6 +227,125 @@ const motivos = [
 </SolucaoLayout>
 
 <style>
+	/* ---------- Cabeçalho: foto em arco com as etapas atravessando ---------- */
+	.pn_hero {
+		position: relative;
+		padding-bottom: 2.25rem;
+	}
+
+	.pn_arco {
+		--arco: 50% 50% var(--card-radius-xl) var(--card-radius-xl) / 40% 40% var(--card-radius-xl) var(--card-radius-xl);
+		position: relative;
+		width: min(100%, 30rem);
+		aspect-ratio: 4 / 5;
+		margin-left: auto;
+		border-radius: var(--arco);
+		box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+	}
+
+	/* Contorno laranja deslocado: o mesmo arco das curvas do site, como uma camada atrás da foto */
+	.pn_arco::before {
+		content: "";
+		position: absolute;
+		inset: -1.1rem 1.1rem 1.1rem -1.1rem;
+		border: 2px solid color-mix(in srgb, var(--brand-laranja) 65%, transparent);
+		border-radius: var(--arco);
+		pointer-events: none;
+	}
+
+	.pn_arco :global(img) {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: var(--arco);
+	}
+
+	.pn_etapas {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: -14%;
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.6rem;
+		list-style: none;
+	}
+
+	/* Linha do caminho: o mesmo degradê cinza → laranja da curva no fim do cabeçalho */
+	.pn_etapas::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		right: 1rem;
+		left: 1rem;
+		height: 2px;
+		background: linear-gradient(90deg, var(--gray500), var(--brand-laranja));
+	}
+
+	.pn_etapas li {
+		position: relative;
+		display: flex;
+		gap: 0.55rem;
+		align-items: center;
+		min-height: 4.25rem;
+		padding: 0.7rem 0.8rem;
+		color: var(--white);
+		font-size: 0.85rem;
+		font-weight: 600;
+		line-height: 1.25;
+		background: rgba(37, 40, 50, 0.86);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+		animation: pn-etapa 0.8s var(--ease-out-expo) both;
+		animation-delay: calc(var(--i) * 140ms + 250ms);
+	}
+
+	.pn_etapas li:last-child {
+		border-color: color-mix(in srgb, var(--brand-laranja) 60%, transparent);
+	}
+
+	.pn_etapa-n {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 1.6rem;
+		height: 1.6rem;
+		color: var(--brand-chumbo);
+		font-size: 0.8rem;
+		font-weight: 800;
+		background: var(--primary600);
+		border-radius: 50%;
+	}
+
+	@keyframes pn-etapa {
+		from { opacity: 0; transform: translateY(12px); }
+	}
+
+	@media (max-width: 1024px) {
+		.pn_arco {
+			margin-inline: auto;
+		}
+
+		.pn_hero {
+			padding-bottom: 0;
+		}
+
+		.pn_etapas {
+			position: relative;
+			left: 0;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			margin-top: -2.5rem;
+			padding-inline: 0.5rem;
+		}
+
+		.pn_etapas::before {
+			display: none;
+		}
+	}
+
 	/* Títulos do corpo maiores, para dar impacto (docx) */
 	.plano_titulo {
 		font-size: clamp(1.9rem, 3.2vw, 2.75rem);

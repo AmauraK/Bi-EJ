@@ -6,7 +6,8 @@
 // Fontes: consts.ts (SOLUCOES: descrição, quandoFazSentido e escopo; CASES; NUMEROS) e o legado
 // (site/conteudo/solucoes.mjs: "Menos obstáculos. Mais espaço para crescer.").
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import { SITE, NUMEROS, SOLUCOES } from '../consts';
+import Foto from '../components/Foto.astro';
+import { SITE, NUMEROS, SOLUCOES, FOTOS } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-operacional')!;
 const bi = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
@@ -73,6 +74,9 @@ const frentes = [
 
 const frente = (item: string) => frentes.find((f) => f.item === item)!;
 
+// Cabeçalho: as quatro primeiras frentes, na ordem em que o trabalho flui, desenhadas sobre a foto.
+const fluxoHero = frentes.slice(0, 4);
+
 // Os dois momentos de quandoFazSentido, cada um com frases que o dono reconhece.
 const [controle, crescer] = solucao.quandoFazSentido;
 const momentos = [
@@ -102,6 +106,7 @@ const momentos = [
 	titulo="Consultoria Operacional para a sua operação fluir"
 	kicker="Processos, equipe e controle"
 	abertura="Organizamos processos, funções e controles de pequenas e médias empresas: menos obstáculos no dia a dia e mais espaço para crescer."
+	hero="faixa"
 	faq={[
 		{
 			pergunta: 'O que faz a Consultoria Operacional da EJFGV?',
@@ -131,6 +136,32 @@ const momentos = [
 		{ pergunta: 'Quanto custa uma consultoria operacional?' },
 	]}
 >
+	<Fragment slot="titulo">Consultoria Operacional <span class="highlight-purpose">para a sua operação fluir</span></Fragment>
+
+	<!-- Cabeçalho: a equipe em faixa de ponta a ponta e o fluxo das frentes correndo sobre a borda da foto -->
+	<figure slot="midia" class="op_hero">
+		<div class="op_faixa">
+			<Foto foto={FOTOS.equipeAuditorio} sizes="100vw" />
+		</div>
+		<div class="page-padding">
+			<div class="container-large">
+				<ol class="op_fluxo" aria-label="Como o trabalho flui">
+					<svg class="op_onda" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true">
+						<path d="M0 20C125 2 250 2 375 20S625 38 750 20 1000 2 1000 2" />
+					</svg>
+					{fluxoHero.map((f, i) => (
+						<li style={`--i: ${i}`}>
+							<a href={`#${f.id}`}>
+								<span class="op_fluxo-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={f.icone} /></span>
+								<span><span class="op_fluxo-n">Etapa {i + 1}</span>{f.item}</span>
+							</a>
+						</li>
+					))}
+				</ol>
+			</div>
+		</div>
+	</figure>
+
 	<!-- 1. Quando contratar: frases que o dono reconhece, cada uma ligada à frente que resolve -->
 	<section class="section_icp operacional_sinais" aria-labelledby="sinais-titulo">
 		<div class="page-padding padding-section-medium">
@@ -204,6 +235,138 @@ const momentos = [
 </SolucaoLayout>
 
 <style>
+	/* ---------- Cabeçalho: foto em faixa com o fluxo das frentes ---------- */
+	.op_hero {
+		position: relative;
+	}
+
+	.op_faixa {
+		height: clamp(15rem, 30vw, 27rem);
+		/* a faixa nasce e morre no cinza do cabeçalho, sem corte reto */
+		-webkit-mask: linear-gradient(transparent, #000 9%, #000 90%, transparent);
+		mask: linear-gradient(transparent, #000 9%, #000 90%, transparent);
+	}
+
+	.op_faixa :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.op_fluxo {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.75rem;
+		margin-top: -2.75rem;
+		list-style: none;
+	}
+
+	/* Onda laranja que liga as etapas: o mesmo desenho das ondas entre as dobras */
+	.op_onda {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		height: 40px;
+		transform: translateY(-50%);
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	.op_onda path {
+		fill: none;
+		stroke: var(--brand-laranja);
+		stroke-width: 2;
+		stroke-dasharray: 6 6;
+		vector-effect: non-scaling-stroke;
+		animation: op-corre 1.6s linear infinite;
+	}
+
+	@keyframes op-corre {
+		to { stroke-dashoffset: -12; }
+	}
+
+	.op_fluxo li {
+		position: relative;
+		animation: op-entra 0.8s var(--ease-out-expo) both;
+		animation-delay: calc(var(--i) * 140ms + 250ms);
+	}
+
+	.op_fluxo a {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		height: 100%;
+		padding: 0.8rem 1rem;
+		color: var(--white);
+		font-size: 0.95rem;
+		font-weight: 700;
+		line-height: 1.25;
+		background: rgba(37, 40, 50, 0.9);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+		transition: border-color 0.25s, transform 0.25s var(--ease-out-expo);
+	}
+
+	.op_fluxo a:hover {
+		border-color: var(--primary600);
+		transform: translateY(-2px);
+	}
+
+	.op_fluxo-icone {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		color: var(--brand-chumbo);
+		background: var(--primary600);
+		border-radius: 50%;
+	}
+
+	.op_fluxo-icone svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.op_fluxo-n {
+		display: block;
+		color: var(--primary200);
+		font-size: 0.7rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	@keyframes op-entra {
+		from { opacity: 0; transform: translateY(12px); }
+	}
+
+	@media (max-width: 767px) {
+		.op_fluxo {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.5rem;
+			margin-top: -2rem;
+		}
+
+		.op_onda {
+			display: none;
+		}
+
+		.op_fluxo a {
+			gap: 0.55rem;
+			padding: 0.65rem 0.7rem;
+			font-size: 0.85rem;
+		}
+
+		.op_fluxo-icone {
+			width: 2rem;
+			height: 2rem;
+		}
+	}
+
 	/* 1. Sinais */
 	.operacional_sinais .icp_header p {
 		margin-top: 0.75rem;

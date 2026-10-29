@@ -4,7 +4,8 @@
 // 2. O que entra no projeto: cada item de solucao.escopo com uma frase do que é entregue, sem jargão.
 // Cases, números, credenciais, método, FAQ e formulário já vêm do layout. Fontes: consts.ts (descrição, escopo, cases).
 import SolucaoLayout from '../layouts/SolucaoLayout.astro';
-import { SITE, NUMEROS, SOLUCOES } from '../consts';
+import Foto from '../components/Foto.astro';
+import { SITE, NUMEROS, SOLUCOES, FOTOS } from '../consts';
 
 const solucao = SOLUCOES.find((s) => s.slug === 'consultoria-financeira')!;
 
@@ -98,7 +99,38 @@ const faq = [
 	abertura={abertura}
 	faq={faq}
 	kicker="Caixa · Custos · Preço · Valuation"
+	titulo="Consultoria Financeira para decidir com números"
+	hero="mesa"
 >
+	<Fragment slot="titulo">Consultoria Financeira <span class="highlight-purpose">para decidir com números</span></Fragment>
+
+	<!-- Cabeçalho: a equipe analisando dados na mesa, com as frentes desenhadas sobre a foto. Os gráficos são
+	     ilustração (sem valores): nada neles é dado de cliente. -->
+	<figure slot="midia" class="fi_hero">
+		<div class="fi_foto">
+			<Foto foto={FOTOS.consultoresNotebook} sizes="(min-width: 1025px) 57vw, 100vw" />
+		</div>
+		<div class="fi_dados" aria-hidden="true">
+			<div class="fi_card is-caixa">
+				<span class="fi_card-titulo">Gestão de caixa</span>
+				<svg viewBox="0 0 200 70" preserveAspectRatio="none">
+					<path class="fi_area" d="M0 58C25 54 40 44 62 46S100 30 122 32 160 14 200 8V70H0Z" />
+					<path class="fi_linha" d="M0 58C25 54 40 44 62 46S100 30 122 32 160 14 200 8" />
+					<path class="fi_linha is-saida" d="M0 50C30 52 55 48 80 52S130 50 160 54 190 52 200 53" />
+				</svg>
+				<span class="fi_legenda"><i></i>Entradas <i class="is-saida"></i>Saídas</span>
+			</div>
+			<div class="fi_card is-custos">
+				<span class="fi_card-titulo">Corte de custos</span>
+				<span class="fi_barras"><i style="--h: 100%"></i><i style="--h: 82%"></i><i style="--h: 68%"></i><i style="--h: 52%"></i></span>
+			</div>
+			<ul class="fi_chips">
+				<li>Precificação</li>
+				<li>Margem</li>
+				<li>Valuation</li>
+			</ul>
+		</div>
+	</figure>
 	<!-- 1. Para quem é: a pergunta do dono leva à frente que a responde -->
 	<section class="section_icp" aria-labelledby="financeira-para-quem">
 		<div class="page-padding padding-section-medium">
@@ -160,6 +192,217 @@ const faq = [
 </SolucaoLayout>
 
 <style>
+	/* ---------- Cabeçalho: foto até a borda, recortada em curva, com os dados "na mesa" ---------- */
+	.fi_hero {
+		position: relative;
+		height: 100%;
+	}
+
+	.fi_foto {
+		position: absolute;
+		inset: 0;
+		/* borda esquerda em curva, como as ondas do site; a base some no cinza da faixa de logos */
+		clip-path: ellipse(100% 100% at 100% 50%);
+		-webkit-mask: linear-gradient(#000 88%, transparent);
+		mask: linear-gradient(#000 88%, transparent);
+	}
+
+	.fi_foto :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.fi_card,
+	.fi_chips li {
+		position: absolute;
+		color: var(--white);
+		background: rgba(37, 40, 50, 0.9);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--border-hairline-dark);
+		box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+		animation: fi-entra 0.8s var(--ease-out-expo) both;
+	}
+
+	.fi_card {
+		display: grid;
+		gap: 0.6rem;
+		padding: 0.9rem 1rem;
+		border-radius: var(--card-radius-md);
+	}
+
+	.fi_card-titulo {
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+
+	.fi_card.is-caixa {
+		bottom: 20%;
+		left: 3%;
+		width: 15rem;
+		animation-delay: 0.3s;
+	}
+
+	.fi_card.is-caixa svg {
+		width: 100%;
+		height: 4.5rem;
+	}
+
+	.fi_area {
+		fill: rgba(227, 142, 51, 0.18);
+	}
+
+	.fi_linha {
+		fill: none;
+		stroke: var(--brand-laranja);
+		stroke-width: 2.5;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.fi_linha.is-saida {
+		stroke: var(--gray300);
+		stroke-dasharray: 5 4;
+	}
+
+	.fi_legenda {
+		display: flex;
+		gap: 0.4rem;
+		align-items: center;
+		color: var(--graywarm300);
+		font-size: 0.75rem;
+	}
+
+	.fi_legenda i {
+		width: 0.9rem;
+		height: 2px;
+		background: var(--brand-laranja);
+	}
+
+	.fi_legenda i.is-saida {
+		margin-left: 0.5rem;
+		background: var(--gray300);
+	}
+
+	.fi_card.is-custos {
+		right: 5%;
+		bottom: 9%;
+		width: 11rem;
+		animation-delay: 0.45s;
+	}
+
+	.fi_barras {
+		display: flex;
+		gap: 0.45rem;
+		align-items: end;
+		height: 3.25rem;
+	}
+
+	.fi_barras i {
+		flex: 1;
+		height: var(--h);
+		background: linear-gradient(var(--gray300), var(--gray500));
+		border-radius: 3px 3px 0 0;
+	}
+
+	.fi_barras i:last-child {
+		background: var(--brand-laranja);
+	}
+
+	.fi_chips {
+		position: absolute;
+		top: 11%;
+		right: 4%;
+		display: grid;
+		gap: 0.5rem;
+		justify-items: end;
+		list-style: none;
+	}
+
+	.fi_chips li {
+		position: relative;
+		padding: 0.45rem 0.9rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		border-radius: 999px;
+	}
+
+	.fi_chips li:nth-child(1) { animation-delay: 0.55s; }
+	.fi_chips li:nth-child(2) { animation-delay: 0.65s; }
+	.fi_chips li:nth-child(3) { animation-delay: 0.75s; }
+
+	@keyframes fi-entra {
+		from { opacity: 0; transform: translateY(10px); }
+	}
+
+	/* Até 1024 px a foto vem abaixo do texto, inteira, com os dados por cima */
+	@media (max-width: 1024px) {
+		.fi_hero {
+			aspect-ratio: 4 / 3.2;
+			overflow: hidden;
+			border-radius: var(--card-radius-xl) 8rem var(--card-radius-xl) var(--card-radius-xl);
+		}
+
+		.fi_foto {
+			clip-path: none;
+			-webkit-mask: none;
+			mask: none;
+		}
+
+		.fi_card.is-caixa {
+			bottom: 4%;
+			left: 4%;
+			width: 46%;
+		}
+
+		.fi_card.is-custos {
+			right: 4%;
+			bottom: 4%;
+			width: 34%;
+		}
+
+		/* em linha no canto esquerdo: o canto direito é o arco */
+		.fi_chips {
+			top: 5%;
+			right: auto;
+			left: 4%;
+			display: flex;
+			gap: 0.35rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.fi_card {
+			gap: 0.35rem;
+			padding: 0.55rem 0.65rem;
+		}
+
+		.fi_card-titulo,
+		.fi_chips li {
+			font-size: 0.7rem;
+		}
+
+		.fi_card.is-caixa svg {
+			height: 2.5rem;
+		}
+
+		.fi_legenda {
+			display: none;
+		}
+
+		.fi_barras {
+			height: 2.25rem;
+		}
+
+		.fi_chips {
+			gap: 0.3rem;
+		}
+
+		.fi_chips li {
+			padding: 0.3rem 0.65rem;
+		}
+	}
+
 	.financeira_lead {
 		margin-top: 0.75rem;
 		color: var(--gray600);
