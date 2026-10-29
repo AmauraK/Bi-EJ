@@ -6,6 +6,7 @@ import equipeEscadaria from './assets/fotos/equipe-escadaria.jpg';
 import equipeConvite from './assets/fotos/equipe-convite.jpg';
 import consultoresNotebook from './assets/fotos/consultores-notebook.jpg';
 import consultorasDocumento from './assets/fotos/consultoras-documento.jpg';
+import equipeAuditorio from './assets/fotos/equipe-auditorio.jpg';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -23,6 +24,7 @@ export const FOTOS = {
   equipeConvite: { src: equipeConvite, alt: 'Consultores da EJFGV sorrindo e apontando para a câmera', posicao: 'center 60%' },
   consultoresNotebook: { src: consultoresNotebook, alt: 'Quatro consultores da EJFGV analisando dados juntos em um notebook', posicao: 'center 45%' },
   consultorasDocumento: { src: consultorasDocumento, alt: 'Duas consultoras da EJFGV revisando um documento de projeto', posicao: 'center 52%' },
+  equipeAuditorio: { src: equipeAuditorio, alt: 'Consultores da EJFGV reunidos em um auditório de poltronas laranja', posicao: 'center 52%' },
 } satisfies Record<string, Foto>;
 
 export const SITE = {
