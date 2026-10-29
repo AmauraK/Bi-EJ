@@ -74,8 +74,15 @@ const frentes = [
 
 const frente = (item: string) => frentes.find((f) => f.item === item)!;
 
-// Cabeçalho: as quatro primeiras frentes, na ordem em que o trabalho flui, desenhadas sobre a foto.
-const fluxoHero = frentes.slice(0, 4);
+// Cabeçalho: as quatro primeiras frentes giram em ciclo em volta do texto, cada uma com o rosto de alguém da
+// equipe (pessoas = papéis: quem faz o quê). O traço passa pelos centros dos nós (viewBox 1280×700) e `tempo`
+// é a fração do traço em que cada nó fica, medida com getTotalLength: o brilho que corre o ciclo acende um por vez.
+const CICLO = 'M128 108C430 28 850 28 1152 108C1236 250 1236 434 1152 576C850 676 430 676 128 576C44 434 44 250 128 108Z';
+const cicloHero = (['retratoAuditorio1', 'retratoAuditorio2', 'retratoAuditorio3', 'retratoAuditorio4'] as const).map((retrato, i) => ({
+	...frentes[i],
+	retrato,
+	tempo: [0, 0.339, 0.499, 0.839][i],
+}));
 
 // Os dois momentos de quandoFazSentido, cada um com frases que o dono reconhece.
 const [controle, crescer] = solucao.quandoFazSentido;
@@ -106,7 +113,7 @@ const momentos = [
 	titulo="Consultoria Operacional para a sua operação fluir"
 	kicker="Processos, equipe e controle"
 	abertura="Organizamos processos, funções e controles de pequenas e médias empresas: menos obstáculos no dia a dia e mais espaço para crescer."
-	hero="faixa"
+	hero="ciclo"
 	faq={[
 		{
 			pergunta: 'O que faz a Consultoria Operacional da EJFGV?',
@@ -138,29 +145,37 @@ const momentos = [
 >
 	<Fragment slot="titulo">Consultoria Operacional <span class="highlight-purpose">para a sua operação fluir</span></Fragment>
 
-	<!-- Cabeçalho: a equipe em faixa de ponta a ponta e o fluxo das frentes correndo sobre a borda da foto -->
-	<figure slot="midia" class="op_hero">
-		<div class="op_faixa">
-			<Foto foto={FOTOS.equipeAuditorio} sizes="100vw" />
-		</div>
-		<div class="page-padding">
-			<div class="container-large">
-				<ol class="op_fluxo" aria-label="Como o trabalho flui">
-					<svg class="op_onda" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true">
-						<path d="M0 20C125 2 250 2 375 20S625 38 750 20 1000 2 1000 2" />
-					</svg>
-					{fluxoHero.map((f, i) => (
-						<li style={`--i: ${i}`}>
-							<a href={`#${f.id}`}>
-								<span class="op_fluxo-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={f.icone} /></span>
-								<span><span class="op_fluxo-n">Etapa {i + 1}</span>{f.item}</span>
-							</a>
-						</li>
-					))}
-				</ol>
-			</div>
-		</div>
-	</figure>
+	<!-- Cabeçalho: o ciclo da operação. O texto fica no centro e as frentes giram em volta, cada uma com um rosto
+	     da equipe; o brilho percorre o traço e acende uma etapa por vez. Cada etapa leva à frente no corpo. -->
+	<div slot="midia" class="op_ciclo">
+		<svg class="op_ciclo-traco" viewBox="0 0 1280 700" aria-hidden="true">
+			<defs>
+				<linearGradient id="op-ciclo-degrade" gradientUnits="userSpaceOnUse" x1="0" x2="1280">
+					<stop offset="0" style="stop-color: var(--gray500)" />
+					<stop offset="1" style="stop-color: var(--brand-laranja)" />
+				</linearGradient>
+			</defs>
+			<path class="op_ciclo-trilho" d={CICLO} pathLength="100" />
+			<path class="op_ciclo-brilho" d={CICLO} pathLength="100" />
+		</svg>
+		<ol class="op_nos" aria-label="Como o trabalho flui">
+			{cicloHero.map((f, i) => (
+				<li class="op_no" style={`--tempo: ${f.tempo}`}>
+					<a href={`#${f.id}`}>
+						<span class="op_no-foto" aria-hidden="true">
+							<Foto foto={FOTOS[f.retrato]} sizes="144px" />
+							<span class="op_no-icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={f.icone} /></span>
+						</span>
+						<span class="op_no-rotulo">
+							<span class="op_no-n">Etapa {i + 1}</span>
+							<strong>{f.item}</strong>
+							<span class="op_no-resumo">{f.titulo}</span>
+						</span>
+					</a>
+				</li>
+			))}
+		</ol>
+	</div>
 
 	<!-- 1. Quando contratar: frases que o dono reconhece, cada uma ligada à frente que resolve -->
 	<section class="section_icp operacional_sinais" aria-labelledby="sinais-titulo">
@@ -235,135 +250,236 @@ const momentos = [
 </SolucaoLayout>
 
 <style>
-	/* ---------- Cabeçalho: foto em faixa com o fluxo das frentes ---------- */
-	.op_hero {
+	/* ---------- Cabeçalho: ciclo com as frentes em volta do texto ---------- */
+	.op_ciclo {
+		--ciclo: 10s; /* uma volta do brilho */
+		--foto: clamp(6.5rem, 10vw, 9rem);
 		position: relative;
+		aspect-ratio: 1280 / 700;
 	}
 
-	.op_faixa {
-		height: clamp(15rem, 30vw, 27rem);
-		/* a faixa nasce e morre no cinza do cabeçalho, sem corte reto */
-		-webkit-mask: linear-gradient(transparent, #000 9%, #000 90%, transparent);
-		mask: linear-gradient(transparent, #000 9%, #000 90%, transparent);
-	}
-
-	.op_faixa :global(img) {
+	.op_ciclo-traco {
+		position: absolute;
+		inset: 0;
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
-	}
-
-	.op_fluxo {
-		position: relative;
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 0.75rem;
-		margin-top: -2.75rem;
-		list-style: none;
-	}
-
-	/* Onda laranja que liga as etapas: o mesmo desenho das ondas entre as dobras */
-	.op_onda {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		width: 100%;
-		height: 40px;
-		transform: translateY(-50%);
 		overflow: visible;
-		pointer-events: none;
 	}
 
-	.op_onda path {
+	.op_ciclo-traco path {
 		fill: none;
-		stroke: var(--brand-laranja);
-		stroke-width: 2;
-		stroke-dasharray: 6 6;
 		vector-effect: non-scaling-stroke;
-		animation: op-corre 1.6s linear infinite;
+	}
+
+	/* O ciclo se desenha ao carregar */
+	.op_ciclo-trilho {
+		stroke: url(#op-ciclo-degrade);
+		stroke-width: 2;
+		stroke-dasharray: 100;
+		animation: op-desenha 1.8s var(--ease-out-expo) both 0.2s;
+	}
+
+	/* Trecho laranja que corre o ciclo; sem movimento (prefers-reduced-motion) ele some */
+	.op_ciclo-brilho {
+		stroke: var(--brand-laranja);
+		stroke-width: 5;
+		stroke-linecap: round;
+		stroke-dasharray: 5 95;
+		opacity: 0;
+		filter: drop-shadow(0 0 6px rgba(227, 142, 51, 0.9));
+		animation: op-corre var(--ciclo) linear infinite 2s;
+	}
+
+	@keyframes op-desenha {
+		from { stroke-dashoffset: 100; }
+		to { stroke-dashoffset: 0; }
 	}
 
 	@keyframes op-corre {
-		to { stroke-dashoffset: -12; }
+		from { stroke-dashoffset: 2.5; opacity: 1; }
+		to { stroke-dashoffset: -97.5; opacity: 1; }
 	}
 
-	.op_fluxo li {
-		position: relative;
-		animation: op-entra 0.8s var(--ease-out-expo) both;
-		animation-delay: calc(var(--i) * 140ms + 250ms);
+	.op_nos {
+		list-style: none;
 	}
 
-	.op_fluxo a {
+	/* Cada nó fica no ponto do traço; a foto é centrada nele e o rótulo sai para fora do ciclo */
+	.op_no {
+		position: absolute;
+		left: 10%;
+		top: 15.43%;
+	}
+
+	.op_no:nth-child(2) { left: 90%; }
+	.op_no:nth-child(3) { top: 82.29%; left: 90%; }
+	.op_no:nth-child(4) { top: 82.29%; }
+
+	.op_no a {
+		position: absolute;
 		display: flex;
+		flex-direction: column;
 		gap: 0.75rem;
 		align-items: center;
+		width: clamp(11rem, 17vw, 15rem);
+		text-align: center;
+		transform: translate(-50%, calc(var(--foto) / -2));
+	}
+
+	/* Na fileira de baixo o rótulo vai para cima da foto */
+	.op_no:nth-child(n + 3) a {
+		flex-direction: column-reverse;
+		transform: translate(-50%, calc(-100% + var(--foto) / 2));
+	}
+
+	.op_no-foto {
+		position: relative;
+		width: var(--foto);
+		height: var(--foto);
+		border-radius: 50%;
+		box-shadow: 0 0 0 4px var(--graywarm900), 0 0 0 6px var(--gray500);
+		animation: op-acende var(--ciclo) linear infinite calc(2s + var(--tempo) * var(--ciclo));
+	}
+
+	.op_no-foto :global(img) {
+		width: 100%;
 		height: 100%;
-		padding: 0.8rem 1rem;
-		color: var(--white);
-		font-size: 0.95rem;
-		font-weight: 700;
-		line-height: 1.25;
-		background: rgba(37, 40, 50, 0.9);
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(10px);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-md);
-		transition: border-color 0.25s, transform 0.25s var(--ease-out-expo);
-	}
-
-	.op_fluxo a:hover {
-		border-color: var(--primary600);
-		transform: translateY(-2px);
-	}
-
-	.op_fluxo-icone {
-		display: grid;
-		flex: none;
-		place-items: center;
-		width: 2.5rem;
-		height: 2.5rem;
-		color: var(--brand-chumbo);
-		background: var(--primary600);
+		object-fit: cover;
 		border-radius: 50%;
 	}
 
-	.op_fluxo-icone svg {
-		width: 1.25rem;
-		height: 1.25rem;
+	.op_no-icone {
+		position: absolute;
+		right: -0.2rem;
+		bottom: -0.2rem;
+		display: grid;
+		place-items: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		color: var(--brand-chumbo);
+		background: var(--primary600);
+		border: 3px solid var(--graywarm900);
+		border-radius: 50%;
 	}
 
-	.op_fluxo-n {
-		display: block;
+	.op_no-icone svg {
+		width: 1.15rem;
+		height: 1.15rem;
+	}
+
+	.op_no-rotulo {
+		display: grid;
+		gap: 0.15rem;
+		padding: 0.6rem 0.9rem;
+		color: var(--white);
+		font-size: 0.95rem;
+		line-height: 1.25;
+		background: rgba(37, 40, 50, 0.92);
+		border: 1px solid var(--border-hairline-dark);
+		border-radius: var(--card-radius-md);
+		transition: border-color 0.25s;
+	}
+
+	.op_no a:hover .op_no-rotulo {
+		border-color: var(--primary600);
+	}
+
+	.op_no-n {
 		color: var(--primary200);
 		font-size: 0.7rem;
+		font-weight: 700;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
 
-	@keyframes op-entra {
-		from { opacity: 0; transform: translateY(12px); }
+	.op_no-resumo {
+		color: var(--graywarm300);
+		font-size: 0.8rem;
 	}
 
-	@media (max-width: 767px) {
-		.op_fluxo {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 0.5rem;
-			margin-top: -2rem;
-		}
+	@keyframes op-acende {
+		0%, 14% { box-shadow: 0 0 0 4px var(--graywarm900), 0 0 0 6px var(--brand-laranja), 0 0 40px 8px rgba(227, 142, 51, 0.45); }
+		24%, 100% { box-shadow: 0 0 0 4px var(--graywarm900), 0 0 0 6px var(--gray500); }
+	}
 
-		.op_onda {
+	/* Até 1024 px: o mesmo ciclo em miniatura, 2 × 2, abaixo do texto e do CTA */
+	@media (max-width: 1024px) {
+		.op_ciclo {
+			--foto: 5.5rem;
+			aspect-ratio: auto;
+			max-width: 34rem;
+			margin-inline: auto;
+		}
+	}
+
+	/* No celular o ciclo deixa livre a faixa da direita, onde fica o botão flutuante do WhatsApp */
+	@media (max-width: 480px) {
+		.op_ciclo {
+			margin-right: 3.5rem;
+		}
+	}
+
+	@media (max-width: 1024px) {
+
+		.op_ciclo-traco {
 			display: none;
 		}
 
-		.op_fluxo a {
-			gap: 0.55rem;
-			padding: 0.65rem 0.7rem;
+		.op_nos {
+			position: relative;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1.25rem 0.75rem;
+		}
+
+		/* Traço do ciclo ligando os centros das 4 fotos (colunas a 25% e 75%) */
+		.op_nos::before {
+			content: "";
+			position: absolute;
+			inset: calc(var(--foto) / 2) 25%;
+			border: 2px dashed color-mix(in srgb, var(--brand-laranja) 70%, transparent);
+			border-radius: 1.5rem;
+		}
+
+		.op_no,
+		.op_no:nth-child(n) {
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+
+		.op_no:nth-child(3) { grid-area: 2 / 2; }
+		.op_no:nth-child(4) { grid-area: 2 / 1; }
+
+		.op_no a,
+		.op_no:nth-child(n + 3) a {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			gap: 0.5rem;
+			transform: none;
+		}
+
+		.op_no-rotulo {
+			flex: 1;
+			align-content: center;
+			width: 100%;
+			padding: 0.5rem 0.6rem;
 			font-size: 0.85rem;
 		}
 
-		.op_fluxo-icone {
+		.op_no-resumo {
+			display: none;
+		}
+
+		.op_no-icone {
 			width: 2rem;
 			height: 2rem;
+		}
+
+		.op_no-icone svg {
+			width: 1rem;
+			height: 1rem;
 		}
 	}
 

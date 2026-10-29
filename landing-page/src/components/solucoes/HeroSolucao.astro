@@ -4,14 +4,14 @@
 // um quadro ao lado do texto: a variante decide como ela ocupa a dobra.
 // - arco:    texto à esquerda, foto em arco que vaza para baixo com as etapas atravessando
 // - mosaico: texto à esquerda, colagem de fotos recortadas que sai da grade
-// - faixa:   texto em duas colunas e a foto numa faixa de ponta a ponta, com o fluxo sobre a borda
+// - ciclo:   texto no centro de um ciclo desenhado, com as etapas (retratos da equipe) em volta
 // - mesa:    a foto ocupa o lado direito até a borda da tela, recortada em curva, sob o texto
 // A composição de cada página (fotos, rótulos, desenhos) fica na própria página, no slot "midia".
 interface Props {
 	titulo: string;
 	kicker?: string;
 	descricao?: string;
-	variante: 'arco' | 'mosaico' | 'faixa' | 'mesa';
+	variante: 'arco' | 'mosaico' | 'ciclo' | 'mesa';
 }
 
 const { titulo, kicker, descricao, variante } = Astro.props;
@@ -93,22 +93,37 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 		}
 	}
 
-	/* ---------- Faixa: título | apoio em cima, foto de ponta a ponta embaixo ---------- */
-	.is-faixa .hero-solucao_midia {
-		/* sai do container até as bordas da tela (a seção corta o excesso) */
-		margin-inline: calc(50% - 50vw);
-	}
-
+	/* ---------- Ciclo: texto centralizado por cima do desenho, que ocupa a grade toda ---------- */
 	@media (min-width: 1025px) {
-		.is-faixa .hero-solucao_texto {
-			display: grid;
-			grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-			gap: clamp(2rem, 4vw, 4.5rem);
-			align-items: end;
+		.is-ciclo {
+			padding-top: calc(var(--nav-height) + 1rem);
 		}
 
-		.is-faixa .hero_description {
-			max-width: none;
+		.is-ciclo .hero-solucao_grade {
+			grid-template-areas: "ciclo";
+		}
+
+		.is-ciclo .hero-solucao_texto,
+		.is-ciclo .hero-solucao_midia {
+			grid-area: ciclo;
+		}
+
+		.is-ciclo .hero-solucao_texto {
+			position: relative;
+			z-index: 2;
+			justify-self: center;
+			max-width: min(40rem, 56%);
+			text-align: center;
+		}
+
+		.is-ciclo .home-hero_divider,
+		.is-ciclo .hero_description {
+			margin-inline: auto;
+		}
+
+		.is-ciclo .hero-solucao_apoio :global(.hero_actions),
+		.is-ciclo .hero-solucao_apoio :global(.solucao_credenciais) {
+			justify-content: center;
 		}
 	}
 
