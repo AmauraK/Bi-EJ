@@ -137,16 +137,16 @@ const desenharFios = (o: Faixa) => {
 
 // Computador: palco de 1400 px ancorado à direita da faixa (right: -40px). A faixa do "antes" ocupa a largura toda,
 // acima do título; o "depois" fica na coluna direita, embaixo. Os fios se emaranham à esquerda, se alinham na costura
-// e, ainda na faixa, viram para baixo na coluna do "depois": descem por trás das fichas e da foto e continuam nos
-// trilhos das etapas. Cada fio desce no x do seu trilho (x = 928 - 12k no palco = borda da coluna + 48 - 12k).
+// e, ainda na faixa, viram para baixo na coluna do "depois" num feixe junto e param ao encostar na foto (terminam
+// por trás dela). No computador não há trilhos depois da foto; no celular eles continuam até as etapas.
 const FAIXA = 216;
 const ALTURA = 32 + FAIXA + 24;
 const CENTRO = 32 + FAIXA / 2;
 const COSTURA = 720;
-const PISTAS_LARGO = [-21, -7, 7, 21].map((d) => CENTRO + d);
-const DESCIDA_X = [928, 916, 904, 892];
+const PISTAS_LARGO = [-15, -5, 5, 15].map((d) => CENTRO + d);
+const DESCIDA_X = [929, 921, 913, 905];
 const DESCIDA_RAIO = 18;
-const DESCIDA_ATE = ALTURA + 150; // passa do topo dos trilhos, por trás da foto
+const DESCIDA_ATE = ALTURA + 280; // termina por trás da foto: visualmente o feixe para ao encostar nela
 const descida = (k: number) => {
 	const x = DESCIDA_X[k];
 	const y = PISTAS_LARGO[k];
@@ -773,6 +773,11 @@ const momentos = [
 	@media (min-width: 1025px) {
 		.op_depois {
 			padding-top: 2.5rem;
+		}
+
+		/* o feixe termina na foto: sem trilhos saindo dela */
+		.op_trilhos {
+			display: none;
 		}
 	}
 	/* Até 1024 px: o nó compacto vem primeiro; depois do texto e CTA, as fichas já alinhadas abrem a ordem,
