@@ -35,6 +35,8 @@ const organizacao = {
 const extras = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const atualizado = ATUALIZADO_EM.split('-').reverse().join('/');
 const ano = new Date().getFullYear();
+import { Image } from 'astro:assets';
+import logoRodape from '../assets/logo-ejfgv-rodape.png';
 ---
 
 <!doctype html>
@@ -110,12 +112,7 @@ const ano = new Date().getFullYear();
 				<div class="container-large">
 					<div class="footer_grid">
 						<div class="footer_col">
-							<img src={SITE.logo} loading="lazy" alt="Logo EJFGV" class="footer_logo" />
-							<p>
-								{SITE.nome} · {SITE.nomeCompleto}. A primeira empresa júnior da América Latina, desde {NUMEROS.fundacao}.
-								Propósito: <strong>{SITE.proposito}</strong>.
-							</p>
-							<p>{CONTATO.endereco}</p>
+							<Image src={logoRodape} alt="Empresa Júnior FGV · Fundação Getulio Vargas" class="footer_logo" widths={[280, 560]} sizes="280px" loading="lazy" />
 						</div>
 						<nav class="footer_col" aria-label="Serviços">
 							<p class="footer_title">Serviços</p>
