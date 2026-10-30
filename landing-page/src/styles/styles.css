@@ -2243,6 +2243,9 @@ body::after {
 
 .footer_col .footer_logo {
   align-self: flex-start;
+  width: 280px;
+  max-width: 100%;
+  height: auto;
 }
 
 .footer_title {
