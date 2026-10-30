@@ -4,14 +4,15 @@
 // um quadro ao lado do texto: a variante decide como ela ocupa a dobra.
 // - arco:    texto à esquerda, foto em arco que vaza para baixo com as etapas atravessando
 // - mosaico: texto à esquerda, colagem de fotos recortadas que sai da grade
-// - ciclo:   texto no centro de um ciclo desenhado, com as etapas (retratos da equipe) em volta
+// - antes-depois: o "antes" (área "antes") em cima do texto, que fica na transição; o "depois" (área "depois")
+//            ocupa a coluna direita de alto a baixo. Os pedaços do slot entram direto na grade e escolhem a área.
 // - mesa:    a foto ocupa o lado direito até a borda da tela, recortada em curva, sob o texto
 // A composição de cada página (fotos, rótulos, desenhos) fica na própria página, no slot "midia".
 interface Props {
 	titulo: string;
 	kicker?: string;
 	descricao?: string;
-	variante: 'arco' | 'mosaico' | 'ciclo' | 'mesa';
+	variante: 'arco' | 'mosaico' | 'antes-depois' | 'mesa';
 }
 
 const { titulo, kicker, descricao, variante } = Astro.props;
@@ -48,10 +49,11 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 	}
 
 	.hero-solucao_grade {
+		--vao: clamp(2rem, 4vw, 4rem); /* as composições que atravessam o vão leem daqui */
 		position: relative;
 		z-index: 2;
 		display: grid;
-		gap: clamp(2rem, 4vw, 4rem);
+		gap: var(--vao);
 		align-items: center;
 	}
 
@@ -93,37 +95,48 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 		}
 	}
 
-	/* ---------- Ciclo: texto centralizado por cima do desenho, que ocupa a grade toda ---------- */
+	/* ---------- Antes × depois: "antes" em cima do texto, "depois" na coluna direita inteira ---------- */
+	.is-antes-depois .hero-solucao_midia {
+		display: contents;
+	}
+
+	/* No celular: texto e CTA primeiro, depois o antes e o depois */
+	.is-antes-depois .hero-solucao_grade {
+		grid-template-areas: "texto" "antes" "depois";
+	}
+
+	/* por cima do "antes", que desce um pouco atrás do título */
+	.is-antes-depois .hero-solucao_texto {
+		position: relative;
+		z-index: 2;
+		grid-area: texto;
+	}
+
+	.is-antes-depois .hero_description {
+		text-wrap: pretty;
+	}
+
+	/* em telas de 360 px o CTA quebra: duas linhas equilibradas em vez de "gratuito" sozinho */
+	.is-antes-depois .hero-solucao_apoio :global(.hero_actions .button) {
+		text-wrap: balance;
+	}
+
 	@media (min-width: 1025px) {
-		.is-ciclo {
-			padding-top: calc(var(--nav-height) + 1rem);
+		.is-antes-depois {
+			padding-top: calc(var(--nav-height) + 1.25rem);
 		}
 
-		.is-ciclo .hero-solucao_grade {
-			grid-template-areas: "ciclo";
+		.is-antes-depois .hero-solucao_grade {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+			grid-template-areas:
+				"antes depois"
+				"texto depois";
+			row-gap: 0;
+			align-items: start;
 		}
 
-		.is-ciclo .hero-solucao_texto,
-		.is-ciclo .hero-solucao_midia {
-			grid-area: ciclo;
-		}
-
-		.is-ciclo .hero-solucao_texto {
-			position: relative;
-			z-index: 2;
-			justify-self: center;
-			max-width: min(40rem, 56%);
-			text-align: center;
-		}
-
-		.is-ciclo .home-hero_divider,
-		.is-ciclo .hero_description {
-			margin-inline: auto;
-		}
-
-		.is-ciclo .hero-solucao_apoio :global(.hero_actions),
-		.is-ciclo .hero-solucao_apoio :global(.solucao_credenciais) {
-			justify-content: center;
+		.is-antes-depois .hero-solucao_texto {
+			padding-top: 1.75rem;
 		}
 	}
 

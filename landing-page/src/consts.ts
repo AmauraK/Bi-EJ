@@ -11,6 +11,8 @@ import retratoAuditorio1 from './assets/fotos/retrato-auditorio-1.jpg';
 import retratoAuditorio2 from './assets/fotos/retrato-auditorio-2.jpg';
 import retratoAuditorio3 from './assets/fotos/retrato-auditorio-3.jpg';
 import retratoAuditorio4 from './assets/fotos/retrato-auditorio-4.jpg';
+// Reunião de trabalho (IMG_4709): já vinha otimizada do site estático, em public/fotos/img-4709-2400.webp
+import equipeReuniao from './assets/fotos/equipe-reuniao.webp';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -34,6 +36,7 @@ export const FOTOS = {
   retratoAuditorio2: { src: retratoAuditorio2, alt: 'Consultora da EJFGV sorrindo' },
   retratoAuditorio3: { src: retratoAuditorio3, alt: 'Consultor da EJFGV de óculos sorrindo' },
   retratoAuditorio4: { src: retratoAuditorio4, alt: 'Consultora da EJFGV sorrindo' },
+  equipeReuniao: { src: equipeReuniao, alt: 'Quatro consultores da EJFGV em reunião de trabalho, com notebooks e documentos sobre a mesa' },
 } satisfies Record<string, Foto>;
 
 export const SITE = {
