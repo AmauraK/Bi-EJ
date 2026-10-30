@@ -6,6 +6,13 @@ import equipeEscadaria from './assets/fotos/equipe-escadaria.jpg';
 import equipeConvite from './assets/fotos/equipe-convite.jpg';
 import consultoresNotebook from './assets/fotos/consultores-notebook.jpg';
 import consultorasDocumento from './assets/fotos/consultoras-documento.jpg';
+import equipeAuditorio from './assets/fotos/equipe-auditorio.jpg';
+import retratoAuditorio1 from './assets/fotos/retrato-auditorio-1.jpg';
+import retratoAuditorio2 from './assets/fotos/retrato-auditorio-2.jpg';
+import retratoAuditorio3 from './assets/fotos/retrato-auditorio-3.jpg';
+import retratoAuditorio4 from './assets/fotos/retrato-auditorio-4.jpg';
+// Reunião de trabalho (IMG_4709): já vinha otimizada do site estático, em public/fotos/img-4709-2400.webp
+import equipeReuniao from './assets/fotos/equipe-reuniao.webp';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -23,6 +30,13 @@ export const FOTOS = {
   equipeConvite: { src: equipeConvite, alt: 'Consultores da EJFGV sorrindo e apontando para a câmera', posicao: 'center 60%' },
   consultoresNotebook: { src: consultoresNotebook, alt: 'Quatro consultores da EJFGV analisando dados juntos em um notebook', posicao: 'center 45%' },
   consultorasDocumento: { src: consultorasDocumento, alt: 'Duas consultoras da EJFGV revisando um documento de projeto', posicao: 'center 52%' },
+  equipeAuditorio: { src: equipeAuditorio, alt: 'Consultores da EJFGV reunidos em um auditório de poltronas laranja', posicao: 'center 52%' },
+  // Retratos recortados da mesma foto do auditório (IMG_4043), um rosto por quadro
+  retratoAuditorio1: { src: retratoAuditorio1, alt: 'Consultor da EJFGV sorrindo' },
+  retratoAuditorio2: { src: retratoAuditorio2, alt: 'Consultora da EJFGV sorrindo' },
+  retratoAuditorio3: { src: retratoAuditorio3, alt: 'Consultor da EJFGV de óculos sorrindo' },
+  retratoAuditorio4: { src: retratoAuditorio4, alt: 'Consultora da EJFGV sorrindo' },
+  equipeReuniao: { src: equipeReuniao, alt: 'Quatro consultores da EJFGV em reunião de trabalho, com notebooks e documentos sobre a mesa' },
 } satisfies Record<string, Foto>;
 
 export const SITE = {
