@@ -4,8 +4,8 @@
 // um quadro ao lado do texto: a variante decide como ela ocupa a dobra.
 // - arco:    texto à esquerda, foto em arco que vaza para baixo com as etapas atravessando
 // - mosaico: texto à esquerda, colagem de fotos recortadas que sai da grade
-// - antes-depois: o "antes" (área "antes") em cima do texto, que fica na transição; o "depois" (área "depois")
-//            ocupa a coluna direita de alto a baixo. Os pedaços do slot entram direto na grade e escolhem a área.
+// - antes-depois: o "antes" ocupa uma faixa acima do título; abaixo, o texto abre a leitura e o "depois"
+//            ocupa a coluna direita. Os pedaços do slot entram direto na grade e escolhem a área.
 // - mesa:    a foto ocupa o lado direito até a borda da tela, recortada em curva, sob o texto
 // A composição de cada página (fotos, rótulos, desenhos) fica na própria página, no slot "midia".
 interface Props {
@@ -100,9 +100,10 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 		display: contents;
 	}
 
-	/* No celular: texto e CTA primeiro, depois o antes e o depois */
+	/* A narrativa desta variante é sempre vertical: caos, proposta e ordem. */
 	.is-antes-depois .hero-solucao_grade {
-		grid-template-areas: "texto" "antes" "depois";
+		grid-template-areas: "antes" "texto" "depois";
+		row-gap: 2rem;
 	}
 
 	/* por cima do "antes", que desce um pouco atrás do título */
@@ -129,14 +130,14 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 		.is-antes-depois .hero-solucao_grade {
 			grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
 			grid-template-areas:
-				"antes depois"
+				"antes antes"
 				"texto depois";
-			row-gap: 0;
+			row-gap: 2rem;
 			align-items: start;
 		}
 
 		.is-antes-depois .hero-solucao_texto {
-			padding-top: 1.75rem;
+			padding-top: 0;
 		}
 	}
 

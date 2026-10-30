@@ -160,34 +160,34 @@ const BASE = 32 + FAIXA - 6;
 const COSTURA_LARGA = `M${COSTURA - 4} -10C${COSTURA - 10} 100 ${COSTURA - 26} ${BASE - 50} ${COSTURA - 120} ${BASE - 16}S${COSTURA - 360} ${BASE} -30 ${BASE}`;
 const BOLSA_LARGA = `M-30 -10H${COSTURA - 4}${COSTURA_LARGA.slice(COSTURA_LARGA.indexOf('C'))}Z`;
 
-// Celular: palco de 440 px de largura a partir da borda esquerda da tela. Os fios descem, se alinham em
-// y = 250 nas pistas x = 32…68 (as mesmas dos trilhos das etapas) e passam por trás da foto.
-const FAIXA_ESTREITA = 340;
+// Celular: o emaranhado vira uma faixa compacta antes do título. Os fios começam a se alinhar no fim dela;
+// as mesmas quatro pistas reaparecem no "depois", abaixo do CTA, e passam por trás da foto.
+const FAIXA_ESTREITA = 150;
 const PISTAS_ESTREITO = [68, 56, 44, 32];
-const noEstreito = sino(110, 75);
+const noEstreito = sino(64, 44);
 const fiosEstreito = desenharFios({
-	de: -20,
-	ate: FAIXA_ESTREITA + 200,
+	de: -12,
+	ate: FAIXA_ESTREITA + 40,
 	centro: 170,
-	amplitude: 92,
-	laco: 26,
-	volta: 34,
+	amplitude: 88,
+	laco: 22,
+	volta: 30,
 	no: noEstreito,
-	noInicial: (y) => Math.max(noEstreito(y), sino(305, 55)(y)),
-	costura: 250,
-	transicao: 95,
+	noInicial: (y) => Math.max(noEstreito(y), sino(126, 34)(y)),
+	costura: 112,
+	transicao: 48,
 	pistas: PISTAS_ESTREITO,
 	desce: true,
 });
-const COSTURA_ESTREITA = 'M-10 268C80 268 150 250 230 206S350 146 450 136';
-const BOLSA_ESTREITA = 'M-10 -10H450V136C350 146 310 162 230 206C150 250 80 268 -10 268Z';
+const COSTURA_ESTREITA = 'M-10 142C92 142 164 130 232 104S354 76 450 72';
+const BOLSA_ESTREITA = 'M-10 -10H450V72C354 76 300 88 232 104C164 130 92 142 -10 142Z';
 
 // Tarefas soltas no antes; as mesmas fichas, em ordem, no depois (rótulos qualitativos, sem números).
 // x/y: no palco do computador (px); xm/ym: no do celular.
 const antes = [
-	{ texto: 'Retrabalho', x: 650, y: 66, xm: '4%', ym: 34, giro: -8 },
-	{ texto: 'Improviso', x: 690, y: 190, xm: '34%', ym: 168, giro: 7 },
-	{ texto: 'Quem faz o quê?', x: 790, y: 44, xm: '48%', ym: 70, giro: -4 },
+	{ texto: 'Retrabalho', x: 650, y: 66, xm: '3%', ym: 30, giro: -8 },
+	{ texto: 'Improviso', x: 690, y: 190, xm: '29%', ym: 102, giro: 7 },
+	{ texto: 'Quem faz o quê?', x: 790, y: 44, xm: '47%', ym: 48, giro: -4 },
 ];
 const depois = [
 	{ texto: 'Processo', dx: -46, dy: 34, giro: -14 },
@@ -282,7 +282,7 @@ const momentos = [
 					{fiosLargo.map((f) => <path class="op_fio is-ordem" d={f.ordem} style={`--emaranhado: path('${f.emaranhado}')`} />)}
 					{PISTAS_LARGO.map((y, k) => <path class="op_pulso" style={`--k: ${k}`} pathLength="1" d={`M${COSTURA} ${y}H1400`} />)}
 				</svg>
-				<svg class="is-estreito" viewBox={`0 0 440 ${FAIXA_ESTREITA + 200}`} aria-hidden="true">
+				<svg class="is-estreito" viewBox={`0 0 440 ${FAIXA_ESTREITA + 40}`} aria-hidden="true">
 					<defs>
 						<linearGradient id="op-fio-estreito" gradientUnits="userSpaceOnUse" x1="0" y1="110" x2="0" y2="250">
 							<stop offset="0" style="stop-color: var(--graywarm300); stop-opacity: 0.7" />
@@ -301,7 +301,7 @@ const momentos = [
 					<path class="op_costura" d={COSTURA_ESTREITA} />
 					{fiosEstreito.map((f) => <path class="op_fio" d={f.caos} />)}
 					{fiosEstreito.map((f) => <path class="op_fio is-ordem" d={f.ordem} style={`--emaranhado: path('${f.emaranhado}')`} />)}
-					{PISTAS_ESTREITO.map((x, k) => <path class="op_pulso" style={`--k: ${k}`} pathLength="1" d={`M${x} 250V${FAIXA_ESTREITA + 200}`} />)}
+					{PISTAS_ESTREITO.map((x, k) => <path class="op_pulso" style={`--k: ${k}`} pathLength="1" d={`M${x} 112V${FAIXA_ESTREITA + 40}`} />)}
 				</svg>
 				<ul class="op_tarefas is-antes">
 					{antes.map((t) => (
@@ -321,15 +321,25 @@ const momentos = [
 			</div>
 		</div>
 		<div class="op_depois">
+			<div class="op_ordem-mobile">
+				<span class="op_rotulo-mobile">Depois</span>
+				<ul class="op_tarefas is-depois-mobile">
+					{depois.map((t) => (
+						<li style={`--dx: ${t.dx}px; --dy: ${t.dy}px; --giro: ${t.giro}deg`}>
+							<span class="op_caixa" aria-hidden="true"></span>{t.texto}
+						</li>
+					))}
+				</ul>
+			</div>
 			<figure class="op_foto">
 				<Foto foto={FOTOS.equipeReuniao} sizes="(min-width: 1025px) 480px, 100vw" />
 			</figure>
 			<div class="op_etapas">
-				<svg class="op_trilhos" viewBox="0 -160 80 432" aria-hidden="true">
+				<svg class="op_trilhos" viewBox="0 -400 80 672" aria-hidden="true">
 					{etapasHero.map((_, i) => {
 						const x = 48 - i * 12;
 						const y = 34 + i * 68;
-						const d = `M${x} -160V${y - 12}Q${x} ${y} ${x + 12} ${y}H68`;
+						const d = `M${x} -400V${y - 12}Q${x} ${y} ${x + 12} ${y}H68`;
 						return (
 							<>
 								<path class="op_trilho" style={`--i: ${i}`} pathLength="1" d={d} />
@@ -440,7 +450,7 @@ const momentos = [
 	.op_palco {
 		position: absolute;
 		top: -2rem;
-		right: calc(-1 * var(--vao) - 40px);
+		right: -40px;
 		width: 1400px;
 		height: var(--altura);
 		pointer-events: none;
@@ -594,6 +604,57 @@ const momentos = [
 		gap: 1.5rem;
 	}
 
+	.op_palco > .op_rotulo.is-depois,
+	.op_palco > .op_tarefas.is-depois {
+		display: none;
+	}
+
+	.op_ordem-mobile {
+		display: grid;
+		gap: 0.65rem;
+		padding-left: 5rem;
+	}
+
+	.op_rotulo-mobile {
+		color: var(--primary200);
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.op_tarefas.is-depois-mobile {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.op_tarefas.is-depois-mobile li {
+		gap: 0.35rem;
+		padding: 0.4rem 0.55rem 0.4rem 0.45rem;
+		color: var(--white);
+		font-size: 0.75rem;
+		border-color: color-mix(in srgb, var(--brand-laranja) 55%, transparent);
+	}
+
+	.is-depois-mobile .op_caixa {
+		background: var(--brand-laranja);
+		border-color: var(--brand-laranja);
+		opacity: 1;
+	}
+
+	.is-depois-mobile .op_caixa::after {
+		content: "";
+		position: absolute;
+		top: 0.04rem;
+		left: 0.2rem;
+		width: 0.2rem;
+		height: 0.42rem;
+		border: solid var(--brand-chumbo);
+		border-width: 0 2px 2px 0;
+		transform: rotate(45deg);
+	}
+
 	/* Foto em "D": o lado esquerdo é um semicírculo, por onde os fios entram e saem */
 	.op_foto {
 		position: relative;
@@ -617,10 +678,10 @@ const momentos = [
 	/* Trilhos: cada fio desce por trás da foto e vira para a sua etapa, sem cruzar os outros */
 	.op_trilhos {
 		position: absolute;
-		top: -160px;
+		top: -400px;
 		left: 0;
 		width: 80px;
-		height: 432px;
+		height: 672px;
 		overflow: visible;
 	}
 
@@ -693,8 +754,13 @@ const momentos = [
 		color: var(--primary200);
 	}
 
-	/* Até 1024 px: tudo em uma coluna depois do texto e do CTA. Os fios descem: nó, costura, fichas em ordem,
-	   foto e etapas. O palco (440 px) começa 20 px antes da coluna (a borda da tela, no celular). */
+	@media (min-width: 1025px) {
+		.op_depois {
+			padding-top: 2.5rem;
+		}
+	}
+	/* Até 1024 px: o nó compacto vem primeiro; depois do texto e CTA, as fichas já alinhadas abrem a ordem,
+	   seguida pela foto e pelas etapas. O palco começa 20 px antes da coluna (a borda da tela, no celular). */
 	@media (max-width: 1024px) {
 		.op_antes,
 		.op_depois {
@@ -710,20 +776,21 @@ const momentos = [
 			top: 0;
 			right: auto;
 			left: -20px; /* pistas em x 32…68 = trilhos das etapas (12…48) */
-			width: 440px;
-			height: calc(var(--faixa-estreita) + 200px);
+			width: min(440px, calc(100vw + 20px));
+			height: calc(var(--faixa-estreita) + 40px);
+			overflow: hidden;
 		}
 
 		.op_palco .is-largo {
 			display: none;
 		}
 
-		/* os fios nascem do nada logo abaixo das credenciais, e a bolsa se desfaz à direita (no tablet sobra tela) */
+		/* os fios nascem do nada e a bolsa se desfaz à direita (no tablet sobra tela) */
 		.op_palco .is-estreito {
 			display: block;
-			-webkit-mask: linear-gradient(transparent, #000 4.5rem), linear-gradient(to right, #000 70%, transparent);
+			-webkit-mask: linear-gradient(transparent, #000 0.75rem), linear-gradient(to right, #000 82%, transparent);
 			-webkit-mask-composite: source-in;
-			mask: linear-gradient(transparent, #000 4.5rem) intersect, linear-gradient(to right, #000 70%, transparent);
+			mask: linear-gradient(transparent, #000 0.75rem) intersect, linear-gradient(to right, #000 82%, transparent);
 		}
 
 		.op_tarefas.is-antes li {
@@ -731,22 +798,22 @@ const momentos = [
 			left: var(--xm);
 		}
 
-		.op_rotulo.is-depois {
-			top: 276px;
-			left: 88px;
+
+		.op_ordem-mobile {
+			display: grid;
+			gap: 0.65rem;
+			padding-left: 5rem;
 		}
 
-		.op_tarefas.is-depois {
-			top: 298px;
-			left: 84px;
+
+		.op_tarefas.is-depois-mobile {
+			display: flex;
+			flex-wrap: wrap;
 			gap: 0.4rem;
+			padding-right: 3.5rem;
 		}
 
-		.op_tarefas.is-depois li {
-			gap: 0.35rem;
-			padding: 0.4rem 0.55rem 0.4rem 0.45rem;
-			font-size: 0.75rem;
-		}
+
 	}
 
 	/* Carregamento: os fios se desembaraçam, as fichas assentam, os trilhos descem e as etapas aparecem em ordem */
@@ -755,7 +822,8 @@ const momentos = [
 			animation: op-desembaraca 2.2s var(--ease-out-expo) 0.35s both;
 		}
 
-		.op_tarefas.is-depois li {
+		.op_tarefas.is-depois li,
+		.op_tarefas.is-depois-mobile li {
 			animation: op-assenta 2.2s var(--ease-out-expo) 0.35s both;
 		}
 
