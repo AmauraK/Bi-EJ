@@ -43,7 +43,7 @@ export const SITE = {
   nome: 'EJFGV',
   nomeCompleto: 'Empresa Júnior da Fundação Getulio Vargas',
   url: 'https://ejfgv.com',
-  proposito: 'Transformar realidades',
+  proposito: 'Transformar realidades de negócios e pessoas', // Brandbook 2026, 1.4
   logo: `${CDN}/671fb0e60ebabd3e4785e9ab_EJFGV-darktheme.svg`,
 };
 
