@@ -13,14 +13,9 @@ import LogoWall from '../components/LogoWall.astro';
 import Faq from '../components/Faq.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import LinhaDoTempo from '../components/sobre/LinhaDoTempo.astro';
+import PropositoValores from '../components/sobre/PropositoValores.astro';
 import { SITE, CONTATO, NUMEROS, SOLUCOES, VIDEO_INSTITUCIONAL, FOTOS } from '../consts';
 
-const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
-// Os 6 valores do legado; "Inovação" ocupa o lugar do 5º valor antigo (docx).
-const VALORES = ['Foco no cliente', 'Ir além', 'Sentimento de dono', 'Comunidade', 'Inovação', 'Inconformismo'];
-// Benefícios citados no docx para o banner "Seja consultor EJ FGV".
-const BENEFICIOS_CONSULTOR = ['Experiência prática em projetos de consultoria estratégica', 'Network FGV', 'Mentoria de professores da FGV'];
-const ICONE_CHECK = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a/671c665a9c8c2a788c93dd9b_check-icon.svg';
 
 // Rascunhos feitos só com fatos de consts.ts e do legado (validar: true). Sem fato confirmado, fica sem resposta.
 const faq = [
@@ -113,40 +108,8 @@ const faq = [
 		</div>
 	</section>
 
-	<!-- 3. Propósito, visão e valores. Os "quadradinhos" dos valores usam as cores do DS (docx) -->
-	<section class="section_beneficios" aria-labelledby="identidade-titulo">
-		<div class="page-padding padding-section-medium">
-			<div class="container-large">
-				<div class="beneficios_wrapper">
-					<div class="beneficios_title">
-						<span class="eyebrow">Nossa identidade</span>
-						<h2 id="identidade-titulo">Propósito, visão e valores</h2>
-					</div>
-					<div class="sobre-identidade">
-						<div class="sobre-painel">
-							<h3 class="sobre-rotulo">Propósito</h3>
-							<p class="sobre-proposito">{SITE.proposito}.</p>
-						</div>
-						<div class="sobre-painel">
-							<h3 class="sobre-rotulo">Visão</h3>
-							<p class="sobre-visao">{VISAO}</p>
-						</div>
-					</div>
-					<div>
-						<h3 class="sobre-rotulo">Valores</h3>
-						<ul class="sobre-valores">
-							{VALORES.map((valor, i) => (
-								<li class="sobre-valor">
-									<span class="sobre-valor_bloco" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-									{valor}
-								</li>
-							))}
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	<!-- 3. Propósito, visão e valores (textos do Brandbook 2026) -->
+	<PropositoValores />
 
 	<!-- 4. Linha do tempo: 1967 → 1988 → marcos a preencher → hoje -->
 	<LinhaDoTempo />
@@ -264,36 +227,6 @@ const faq = [
 	<!-- 9. Logos de clientes -->
 	<LogoWall />
 
-	<!-- 10. Seja consultor EJFGV (docx): benefícios citados; link do processo seletivo e depoimentos a receber -->
-	<section aria-labelledby="consultor-titulo">
-		<div class="page-padding padding-section-medium">
-			<div class="container-large">
-				<div class="beneficios_banner is-dark">
-					<div>
-						<span class="eyebrow">Para alunos da FGV</span>
-						<h2 id="consultor-titulo" class="beneficios-banner_title">Seja consultor EJFGV</h2>
-						<p class="sobre-consultor_texto">A EJFGV é formada por alunos de todos os cursos de graduação da FGV. Quem faz parte do time ganha:</p>
-						<ul class="vantagens_list">
-							{BENEFICIOS_CONSULTOR.map((beneficio) => (
-								<li class="vantagens_list-item"><img src={ICONE_CHECK} alt="" loading="lazy" /><span>{beneficio}</span></li>
-							))}
-						</ul>
-					</div>
-					<p class="sobre-consultor_acao"><span class="preencher">A preencher: link do processo seletivo</span></p>
-				</div>
-				<h3 class="sobre-consultor_subtitulo">Quem já passou pela EJFGV</h3>
-				<ul class="sobre-cards is-dois">
-					{[1, 2].map(() => (
-						<li class="sobre-card">
-							<p><span class="preencher">A preencher: mini depoimento de ex-consultor</span></p>
-							<p><span class="preencher">A preencher: nome, curso e onde trabalha hoje ou negócio que abriu</span></p>
-						</li>
-					))}
-				</ul>
-			</div>
-		</div>
-	</section>
-
 	<!-- 11. Perguntas frequentes -->
 	<div class="sobre-faq">
 		<Faq itens={faq} titulo="Perguntas frequentes sobre a EJFGV" />
@@ -344,87 +277,6 @@ const faq = [
 
 	.sobre-porque strong {
 		color: var(--gray900);
-	}
-
-	/* 3. Propósito, visão e valores */
-	.sobre-identidade {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.25rem;
-	}
-
-	.sobre-painel {
-		padding: clamp(1.5rem, 3vw, 2.25rem);
-		background: var(--graywarm950);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-lg);
-	}
-
-	.sobre-rotulo {
-		margin-bottom: 0.85rem;
-		color: var(--primary200);
-		font-size: 0.75rem;
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-	}
-
-	.sobre-proposito {
-		color: var(--white);
-		font-size: clamp(1.75rem, 3vw, 2.5rem);
-		font-weight: 800;
-		line-height: 1.15;
-		letter-spacing: -0.02em;
-	}
-
-	.sobre-visao {
-		color: var(--graywarm300);
-		font-size: 1.05rem;
-		line-height: 1.6;
-	}
-
-	.sobre-valores {
-		list-style: none;
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 1rem;
-	}
-
-	.sobre-valor {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1.15rem 1.25rem;
-		background: var(--graywarm950);
-		border: 1px solid var(--border-hairline-dark);
-		border-radius: var(--card-radius-md);
-		color: var(--white);
-		font-size: 1.05rem;
-		font-weight: 700;
-		line-height: 1.3;
-	}
-
-	/* Os "quadradinhos" (docx): cores do DS, alternadas */
-	.sobre-valor_bloco {
-		display: grid;
-		place-items: center;
-		flex-shrink: 0;
-		width: 2.75rem;
-		height: 2.75rem;
-		border-radius: 0.5rem;
-		background: var(--primary600);
-		color: var(--graywarm950);
-		font-size: 0.8rem;
-		font-weight: 800;
-		letter-spacing: 0.04em;
-	}
-
-	.sobre-valor:nth-child(3n + 2) .sobre-valor_bloco {
-		background: var(--primary200);
-	}
-
-	.sobre-valor:nth-child(3n) .sobre-valor_bloco {
-		background: var(--graywarm300);
 	}
 
 	/* 5. Nosso impacto */
@@ -510,10 +362,6 @@ const faq = [
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	.sobre-cards.is-dois {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
 	.sobre-card {
 		display: flex;
 		flex-direction: column;
@@ -585,26 +433,6 @@ const faq = [
 		padding-top: 1.25rem;
 	}
 
-	/* 10. Seja consultor EJFGV */
-	.sobre-consultor_texto {
-		max-width: 52ch;
-		margin-top: 0.75rem;
-		color: var(--graywarm300);
-		line-height: 1.6;
-	}
-
-	.sobre-consultor_acao {
-		flex-shrink: 0;
-		max-width: 22rem;
-	}
-
-	.sobre-consultor_subtitulo {
-		margin: 2.5rem 0 1rem;
-		color: var(--gray900);
-		font-size: 1.15rem;
-		font-weight: 700;
-	}
-
 	/* 11. FAQ em fundo cinza, para separar do bloco anterior */
 	.sobre-faq :global(.section_faq) {
 		background: var(--gray50);
@@ -617,10 +445,6 @@ const faq = [
 	}
 
 	@media (max-width: 1024px) {
-		.sobre-valores {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
 		.sobre-servicos {
 			grid-template-columns: repeat(2, 1fr);
 		}
@@ -636,11 +460,8 @@ const faq = [
 	}
 
 	@media (max-width: 767px) {
-		.sobre-identidade,
-		.sobre-valores,
 		.sobre-servicos,
-		.sobre-cards.is-tres,
-		.sobre-cards.is-dois {
+		.sobre-cards.is-tres {
 			grid-template-columns: 1fr;
 		}
 
@@ -651,10 +472,6 @@ const faq = [
 
 		.sobre-card {
 			padding: 0.85rem;
-		}
-
-		.sobre-consultor_acao {
-			max-width: none;
 		}
 	}
 </style>

@@ -1,248 +1,399 @@
 ---
-const proposito = 'Transformar realidades de negócios e formar lideranças que impactam o Brasil';
+// Propósito, visão e valores (/sobre-nos/). Textos do Brandbook 2026 (seções 1.4 a 1.6).
+// O propósito vira manifesto com "realidades" grifado em laranja, como nos posts do brandbook; a visão fica no
+// cartão Cinza Claro, como no brandbook; os 6 valores formam um mosaico com uma foto real da equipe.
+import Foto from '../Foto.astro';
+import { SITE, FOTOS } from '../../consts';
 
-const visao =
-  'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
+const VISAO = 'Gerar valor para nossos clientes, membros e parceiros por meio de projetos de consultoria estratégica que proporcionam resultados significativos e duradouros.';
+const [antes, depois] = SITE.proposito.split('realidades');
 
-const valores = [
-  {
-    titulo: 'Compromisso com o resultado do cliente',
-    orig: 'Foco no cliente',
-    descricao:
-      'Mergulhamos na realidade de cada empresa para entregar recomendações viáveis, mensuráveis e orientadas ao retorno sobre o investimento.',
-    tom: 'is-primary600',
-  },
-  {
-    titulo: 'Excelência técnica',
-    orig: 'Ir além',
-    descricao:
-      'Aplicamos metodologias rigorosas da Fundação Getulio Vargas e buscamos superar expectativas em cada análise e entregável.',
-    tom: 'is-primary700',
-  },
-  {
-    titulo: 'Ética e transparência',
-    orig: 'Integridade institucional',
-    descricao:
-      'Atuamos com confidencialidade, clareza de escopo e honestidade técnica sobre premissas, riscos e viabilidade.',
-    tom: 'is-gray900',
-  },
-  {
-    titulo: 'Protagonismo e dedicação',
-    orig: 'Sentimento de dono',
-    descricao:
-      'Assumimos responsabilidade ponta a ponta pelo sucesso do projeto, tratando o desafio do cliente como nosso.',
-    tom: 'is-primary500',
-  },
-  {
-    titulo: 'Colaboração e cocriação',
-    orig: 'Comunidade',
-    descricao:
-      'Construímos soluções em conjunto com a equipe do cliente, professores orientadores e rede de ex-membros da EJFGV.',
-    tom: 'is-gray800',
-  },
-  {
-    titulo: 'Inovação',
-    orig: 'Inconformismo e tecnologia',
-    descricao:
-      'Questionamos respostas prontas e incorporamos Business Intelligence, dados e novas ferramentas para resolver problemas complexos.',
-    tom: 'is-primary600',
-  },
+// Ícones de traço (24 × 24). "tom" alterna as cores do brandbook; "largo" ocupa duas colunas do mosaico.
+const VALORES = [
+	{ nome: 'Foco no cliente', descricao: 'O cliente no centro de cada decisão e entrega.', tom: 'is-laranja', largo: true, icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>' },
+	{ nome: 'Ir além', descricao: 'Buscamos superar expectativas em tudo que fazemos.', tom: 'is-chumbo', icone: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>' },
+	{ nome: 'Sentimento de dono', descricao: 'Responsabilidade e comprometimento total com cada projeto.', tom: 'is-cinza', icone: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9"/><path d="M16 7l2.5 2.5"/><path d="M13.5 9.5l2 2"/>' },
+	{ nome: 'Comunidade', descricao: 'Senso de pertencimento e construção coletiva.', tom: 'is-chumbo', icone: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14a5 5 0 0 1 5 6"/>' },
+	{ nome: 'Inovação', descricao: 'Busca constante por novas soluções e abordagens criativas.', tom: 'is-cinza', icone: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.9 2.9M15.5 15.5l2.9 2.9M5.6 18.4l2.9-2.9M15.5 8.5l2.9-2.9"/>' },
+	{ nome: 'Inconformismo', descricao: 'Questionamos o status quo para evoluir sempre.', tom: 'is-contorno', largo: true, icone: '<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>' },
 ];
 ---
 
-<section class="section_icp padding-section-medium" aria-labelledby="proposito-titulo">
-  <div class="page-padding">
-    <div class="container-large">
-      <div class="bussola_top">
-        <div class="bussola_proposito-card">
-          <span class="eyebrow is-dark">Nosso Propósito</span>
-          <h2 id="proposito-titulo" class="bussola_proposito-heading">
-            {proposito}
-          </h2>
-        </div>
+<section class="section_beneficios identidade" aria-labelledby="identidade-titulo">
+	<div class="page-padding padding-section-medium">
+		<div class="container-large">
+			<div class="identidade_topo">
+				<div>
+					<div class="home-hero_divider"></div>
+					<span class="eyebrow">Nossa identidade · Propósito</span>
+					<h2 id="identidade-titulo" class="identidade_manifesto">
+						{antes}<span class="identidade_grifo">realidades</span>{depois}.
+					</h2>
+				</div>
+				<div class="identidade_visao">
+					<h3 class="identidade_rotulo">Visão</h3>
+					<p>{VISAO}</p>
+					<ul class="identidade_publicos" aria-label="Para quem geramos valor">
+						<li>Clientes</li>
+						<li>Membros</li>
+						<li>Parceiros</li>
+					</ul>
+				</div>
+			</div>
 
-        <div class="bussola_visao-card">
-          <span class="eyebrow">Nossa Visão</span>
-          <h3>Impacto duradouro para clientes, membros e parceiros</h3>
-          <p>{visao}</p>
-        </div>
-      </div>
-
-      <div class="valores_header">
-        <span class="eyebrow">Nossos 6 Valores</span>
-        <h3>Os princípios que guiam cada decisão e projeto da EJFGV</h3>
-      </div>
-
-      <ul class="valores_grid">
-        {valores.map((valor) => (
-          <li class="valor_card">
-            <div class="valor_top">
-              <span class:list={['valor_quadradinho', valor.tom]} aria-hidden="true"></span>
-              <span class="valor_tag">{valor.orig}</span>
-            </div>
-            <h3>{valor.titulo}</h3>
-            <p>{valor.descricao}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+			<div class="identidade_mosaico">
+				<div class="identidade_capa">
+					<Foto foto={FOTOS.equipeConvite} sizes="(min-width: 1025px) 760px, 100vw" prioridade={false} />
+					<div class="identidade_capa-texto">
+						<h3>Nossos valores</h3>
+						<p>Seis princípios que guiam cada projeto e cada pessoa da EJFGV.</p>
+					</div>
+				</div>
+				<ol class="identidade_valores">
+					{VALORES.map((valor, i) => (
+						<li class:list={['identidade_valor', valor.tom, { 'is-largo': valor.largo }]}>
+							<span class="identidade_valor-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+							<span class="identidade_valor-icone" aria-hidden="true">
+								<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={valor.icone} />
+							</span>
+							<h4>{valor.nome}</h4>
+							<p>{valor.descricao}</p>
+						</li>
+					))}
+				</ol>
+			</div>
+		</div>
+	</div>
 </section>
 
 <style>
-  .bussola_top {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-  }
+	/* Brilho laranja atrás do manifesto */
+	.identidade {
+		background-image: radial-gradient(42rem 28rem at 12% 18%, color-mix(in srgb, var(--brand-laranja) 14%, transparent), transparent 70%);
+	}
 
-  .bussola_proposito-card {
-    background: var(--graywarm950);
-    color: var(--white);
-    border-radius: var(--card-radius-xl);
-    padding: clamp(2rem, 3.5vw, 3rem);
-    border: 1px solid var(--border-hairline-dark);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+	/* 1. Propósito (manifesto) + visão */
+	.identidade_topo {
+		display: grid;
+		grid-template-columns: 1.45fr 1fr;
+		align-items: end;
+		gap: clamp(2rem, 5vw, 5rem);
+		margin-bottom: clamp(3rem, 6vw, 5.5rem);
+	}
 
-  .bussola_proposito-heading {
-    font-size: clamp(1.65rem, 2.6vw, 2.35rem);
-    font-weight: 800;
-    line-height: 1.16;
-    letter-spacing: -0.02em;
-    color: var(--white);
-  }
+	.identidade_manifesto {
+		margin-top: 0.35rem;
+		color: var(--white);
+		font-size: clamp(2.6rem, 6.2vw, 5.4rem);
+		font-weight: 800;
+		line-height: 1.02;
+		letter-spacing: -0.035em;
+		text-wrap: balance;
+	}
 
-  .bussola_visao-card {
-    background: var(--gray50);
-    border: 1px solid var(--gray200);
-    border-radius: var(--card-radius-xl);
-    padding: clamp(2rem, 3.5vw, 3rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.65rem;
-  }
+	/* Grifo laranja dos posts do brandbook; texto Chumbo sobre Laranja (5,73:1) */
+	.identidade_grifo {
+		display: inline-block;
+		padding: 0 0.12em 0.04em;
+		border-radius: 0.12em;
+		background: linear-gradient(var(--brand-laranja) 0 0) left / 100% 100% no-repeat;
+		color: var(--graywarm950);
+		transform: rotate(-1.5deg);
+	}
 
-  .bussola_visao-card h3 {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--gray900);
-    line-height: 1.25;
-  }
+	.identidade_visao {
+		position: relative;
+		padding: clamp(1.75rem, 3vw, 2.5rem);
+		background: var(--brand-cinza);
+		border-radius: var(--card-radius-xl);
+		color: var(--graywarm950);
+	}
 
-  .bussola_visao-card p {
-    font-size: 0.975rem;
-    color: var(--gray600);
-    line-height: 1.65;
-  }
+	.identidade_rotulo {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 0.9rem;
+		font-size: 0.8rem;
+		font-weight: 800;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
 
-  .valores_header {
-    margin-bottom: 1.75rem;
-  }
+	.identidade_rotulo::before {
+		content: '';
+		width: 0.85rem;
+		height: 0.85rem;
+		border-radius: 0.2rem;
+		background: var(--brand-laranja);
+	}
 
-  .valores_header h3 {
-    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--gray900);
-  }
+	.identidade_visao p {
+		font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+		font-weight: 500;
+		line-height: 1.55;
+	}
 
-  .valores_grid {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
+	.identidade_publicos {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 1.5rem;
+	}
 
-  .valor_card {
-    background: var(--gray50);
-    border: 1px solid var(--gray200);
-    border-radius: var(--card-radius-lg);
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
-  }
+	.identidade_publicos li {
+		padding: 0.4rem 0.85rem;
+		border-radius: 999px;
+		background: var(--graywarm950);
+		color: var(--white);
+		font-size: 0.8rem;
+		font-weight: 700;
+	}
 
-  .valor_card:hover {
-    transform: translateY(-2px);
-    border-color: var(--primary300);
-  }
+	/* 2. Valores: mosaico 4 colunas (capa 2 × 2, "Foco no cliente" e "Inconformismo" largos) */
+	.identidade_mosaico {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-auto-rows: minmax(13.5rem, auto);
+		gap: 1rem;
+	}
 
-  .valor_top {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    margin-bottom: 0.25rem;
-  }
+	.identidade_valores {
+		display: contents;
+		list-style: none;
+	}
 
-  .valor_quadradinho {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 0.35rem;
-    flex-shrink: 0;
-    display: inline-block;
-  }
+	.identidade_capa {
+		position: relative;
+		grid-column: span 2;
+		grid-row: span 2;
+		overflow: hidden;
+		border-radius: var(--card-radius-xl);
+	}
 
-  .valor_quadradinho.is-primary600 {
-    background: var(--primary600);
-  }
+	.identidade_capa :global(img) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.8s var(--ease-out-expo);
+	}
 
-  .valor_quadradinho.is-primary700 {
-    background: var(--primary700);
-  }
+	.identidade_capa:hover :global(img) {
+		transform: scale(1.04);
+	}
 
-  .valor_quadradinho.is-primary500 {
-    background: var(--primary500);
-  }
+	.identidade_capa-texto {
+		position: absolute;
+		inset: auto 0 0;
+		padding: clamp(1.5rem, 3vw, 2.25rem);
+		padding-top: 6rem;
+		background: linear-gradient(to top, var(--graywarm950) 15%, transparent);
+	}
 
-  .valor_quadradinho.is-gray900 {
-    background: var(--gray900);
-  }
+	.identidade_capa h3 {
+		color: var(--white);
+		font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		line-height: 1.1;
+	}
 
-  .valor_quadradinho.is-gray800 {
-    background: var(--gray800);
-  }
+	.identidade_capa p {
+		max-width: 34ch;
+		margin-top: 0.5rem;
+		color: var(--graywarm300);
+		line-height: 1.5;
+	}
 
-  .valor_tag {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--gray500);
-  }
+	.identidade_valor {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: clamp(1.35rem, 2vw, 1.75rem);
+		overflow: hidden;
+		border-radius: var(--card-radius-lg);
+		transition: transform 0.35s var(--ease-out-expo);
+	}
 
-  .valor_card h3 {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--gray900);
-    line-height: 1.3;
-  }
+	.identidade_valor.is-largo {
+		grid-column: span 2;
+	}
 
-  .valor_card p {
-    font-size: 0.9rem;
-    color: var(--gray600);
-    line-height: 1.6;
-  }
+	.identidade_valor:hover {
+		transform: translateY(-4px);
+	}
 
-  @media (max-width: 1024px) {
-    .bussola_top {
-      grid-template-columns: 1fr;
-    }
+	/* Número vazado ao fundo */
+	.identidade_valor-num {
+		position: absolute;
+		top: 0.6rem;
+		right: 1rem;
+		font-size: clamp(3.5rem, 5.5vw, 5.25rem);
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		-webkit-text-fill-color: transparent;
+		-webkit-text-stroke: 1.5px currentColor;
+		opacity: 0.35;
+	}
 
-    .valores_grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+	/* O "quadradinho" de cada valor (docx), agora com ícone */
+	.identidade_valor-icone {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-bottom: auto;
+		border-radius: 0.6rem;
+		background: var(--brand-laranja);
+		color: var(--graywarm950);
+		transition: transform 0.35s var(--ease-out-expo);
+	}
 
-  @media (max-width: 767px) {
-    .valores_grid {
-      grid-template-columns: 1fr;
-    }
-  }
+	.identidade_valor-icone svg {
+		max-width: none;
+	}
+
+	.identidade_valor:hover .identidade_valor-icone {
+		transform: rotate(-8deg) scale(1.08);
+	}
+
+	.identidade_valor h4 {
+		margin-top: 2rem;
+		font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+		font-weight: 800;
+		letter-spacing: -0.015em;
+		line-height: 1.2;
+	}
+
+	.identidade_valor.is-largo h4 {
+		font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+		letter-spacing: -0.025em;
+	}
+
+	.identidade_valor p {
+		max-width: 36ch;
+		margin-top: 0.45rem;
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+
+	/* Tons do brandbook */
+	.identidade_valor.is-laranja {
+		background: var(--brand-laranja);
+		color: var(--graywarm950);
+	}
+
+	.identidade_valor.is-laranja .identidade_valor-icone,
+	.identidade_valor.is-cinza .identidade_valor-icone {
+		background: var(--graywarm950);
+		color: var(--brand-laranja);
+	}
+
+	.identidade_valor.is-cinza {
+		background: var(--brand-cinza);
+		color: var(--graywarm950);
+	}
+
+	.identidade_valor.is-chumbo,
+	.identidade_valor.is-contorno {
+		background: var(--graywarm950);
+		border: 1px solid var(--border-hairline-dark);
+		color: var(--white);
+	}
+
+	.identidade_valor.is-chumbo p,
+	.identidade_valor.is-contorno p {
+		color: var(--graywarm300);
+	}
+
+	.identidade_valor.is-contorno {
+		border: 1.5px solid var(--brand-laranja);
+	}
+
+	.identidade_valor.is-contorno h4,
+	.identidade_valor.is-contorno .identidade_valor-num {
+		color: var(--primary200);
+	}
+
+	/* Entradas ligadas à rolagem (sem JS); sem suporte ou com menos movimento, tudo aparece pronto */
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (animation-timeline: view()) {
+			.identidade_grifo {
+				animation: identidade-grifa linear both;
+				animation-timeline: view();
+				animation-range: entry 40% cover 35%;
+			}
+
+			.identidade_capa,
+			.identidade_valor {
+				animation: identidade-sobe linear both;
+				animation-timeline: view();
+				animation-range: entry 0% entry 70%;
+			}
+		}
+	}
+
+	@keyframes identidade-grifa {
+		from {
+			background-size: 0% 100%;
+			color: var(--white);
+			transform: rotate(0deg);
+		}
+		60% {
+			color: var(--white);
+		}
+		to {
+			background-size: 100% 100%;
+			color: var(--graywarm950);
+			transform: rotate(-1.5deg);
+		}
+	}
+
+	@keyframes identidade-sobe {
+		from {
+			opacity: 0;
+			translate: 0 2.5rem;
+			scale: 0.97;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.identidade_topo {
+			grid-template-columns: 1fr;
+		}
+
+		.identidade_mosaico {
+			grid-template-columns: repeat(2, 1fr);
+			grid-auto-rows: minmax(12rem, auto);
+		}
+
+		.identidade_capa {
+			grid-row: span 1;
+			min-height: 22rem;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.identidade_mosaico {
+			grid-template-columns: 1fr;
+			grid-auto-rows: auto;
+		}
+
+		.identidade_capa,
+		.identidade_valor.is-largo {
+			grid-column: auto;
+		}
+
+		.identidade_capa {
+			min-height: 20rem;
+		}
+
+		.identidade_valor h4 {
+			margin-top: 1.5rem;
+		}
+	}
 </style>
