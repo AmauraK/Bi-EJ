@@ -135,26 +135,36 @@ const desenharFios = (o: Faixa) => {
 	});
 };
 
-// Computador: palco de 1400 px ancorado na foto (x = 1360 é a borda dela; o fim dos fios passa por trás). A faixa
-// do "antes" começa em y = 32 (acima disso fica sob o menu) e tem FAIXA px; o palco sobra 24 px abaixo dela.
+// Computador: palco de 1400 px ancorado à direita da faixa (right: -40px). A faixa do "antes" ocupa a largura toda,
+// acima do título; o "depois" fica na coluna direita, embaixo. Os fios se emaranham à esquerda, se alinham na costura
+// e, ainda na faixa, viram para baixo na coluna do "depois": descem por trás das fichas e da foto e continuam nos
+// trilhos das etapas. Cada fio desce no x do seu trilho (x = 928 - 12k no palco = borda da coluna + 48 - 12k).
 const FAIXA = 216;
 const ALTURA = 32 + FAIXA + 24;
 const CENTRO = 32 + FAIXA / 2;
-const COSTURA = 960;
+const COSTURA = 720;
 const PISTAS_LARGO = [-21, -7, 7, 21].map((d) => CENTRO + d);
-const noLargo = sino(720, 190);
+const DESCIDA_X = [928, 916, 904, 892];
+const DESCIDA_RAIO = 18;
+const DESCIDA_ATE = ALTURA + 150; // passa do topo dos trilhos, por trás da foto
+const descida = (k: number) => {
+	const x = DESCIDA_X[k];
+	const y = PISTAS_LARGO[k];
+	return `H${x - DESCIDA_RAIO}Q${x} ${y} ${x} ${y + DESCIDA_RAIO}V${DESCIDA_ATE}`;
+};
+const noLargo = sino(380, 170);
 const fiosLargo = desenharFios({
 	de: -30,
-	ate: 1410,
+	ate: 860,
 	centro: CENTRO,
 	amplitude: 62,
 	laco: 34,
 	no: noLargo,
-	noInicial: (x) => Math.max(noLargo(x), sino(1130, 190)(x)),
+	noInicial: (x) => Math.max(noLargo(x), sino(690, 120)(x)),
 	costura: COSTURA,
 	transicao: 130,
 	pistas: PISTAS_LARGO,
-});
+}).map((f, k) => ({ ...f, ordem: f.ordem + descida(k), emaranhado: f.emaranhado + descida(k) }));
 // A costura desce quase reta onde os fios se alinham e corre para a esquerda logo acima do texto; a bolsa é o "antes"
 const BASE = 32 + FAIXA - 6;
 const COSTURA_LARGA = `M${COSTURA - 4} -10C${COSTURA - 10} 100 ${COSTURA - 26} ${BASE - 50} ${COSTURA - 120} ${BASE - 16}S${COSTURA - 360} ${BASE} -30 ${BASE}`;
@@ -185,9 +195,9 @@ const BOLSA_ESTREITA = 'M-10 -10H450V72C354 76 300 88 232 104C164 130 92 142 -10
 // Tarefas soltas no antes; as mesmas fichas, em ordem, no depois (rótulos qualitativos, sem números).
 // x/y: no palco do computador (px); xm/ym: no do celular.
 const antes = [
-	{ texto: 'Retrabalho', x: 650, y: 66, xm: '3%', ym: 30, giro: -8 },
-	{ texto: 'Improviso', x: 690, y: 190, xm: '29%', ym: 102, giro: 7 },
-	{ texto: 'Quem faz o quê?', x: 790, y: 44, xm: '47%', ym: 48, giro: -4 },
+	{ texto: 'Retrabalho', x: 250, y: 66, xm: '3%', ym: 30, giro: -8 },
+	{ texto: 'Improviso', x: 330, y: 190, xm: '29%', ym: 102, giro: 7 },
+	{ texto: 'Quem faz o quê?', x: 470, y: 44, xm: '47%', ym: 48, giro: -4 },
 ];
 const depois = [
 	{ texto: 'Processo', dx: -46, dy: 34, giro: -14 },
@@ -280,7 +290,7 @@ const momentos = [
 					<path class="op_costura" d={COSTURA_LARGA} />
 					{fiosLargo.map((f) => <path class="op_fio" d={f.caos} />)}
 					{fiosLargo.map((f) => <path class="op_fio is-ordem" d={f.ordem} style={`--emaranhado: path('${f.emaranhado}')`} />)}
-					{PISTAS_LARGO.map((y, k) => <path class="op_pulso" style={`--k: ${k}`} pathLength="1" d={`M${COSTURA} ${y}H1400`} />)}
+					{PISTAS_LARGO.map((y, k) => <path class="op_pulso" style={`--k: ${k}`} pathLength="1" d={`M${COSTURA} ${y}${descida(k)}`} />)}
 				</svg>
 				<svg class="is-estreito" viewBox={`0 0 440 ${FAIXA_ESTREITA + 40}`} aria-hidden="true">
 					<defs>
@@ -483,6 +493,12 @@ const momentos = [
 	.op_costura {
 		stroke: url(#op-costura-largo);
 		stroke-width: 2;
+	}
+
+	/* No computador a costura é só um contorno discreto da bolsa: quem conduz o olhar são os fios */
+	.is-largo .op_costura {
+		stroke-width: 1.5;
+		opacity: 0.35;
 	}
 
 	.is-estreito .op_costura {
