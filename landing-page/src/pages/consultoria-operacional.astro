@@ -772,7 +772,37 @@ const momentos = [
 
 	@media (min-width: 1025px) {
 		.op_depois {
-			padding-top: 2.5rem;
+			display: contents;
+		}
+
+		.op_ordem-mobile {
+			display: none;
+		}
+
+		.op_foto {
+			grid-area: depois;
+			margin-top: 2.5rem;
+		}
+
+		/* As etapas deixam de ficar isoladas sob a foto e usam toda a largura do hero. */
+		.op_etapas {
+			grid-area: etapas;
+			padding-right: 10rem;
+		}
+
+		.op_etapas ol {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 0.75rem;
+		}
+
+		.op_etapas a {
+			height: 100%;
+			min-height: 96px;
+			padding: 1rem;
+			background: rgba(249, 255, 252, 0.04);
+			border: 1px solid var(--border-hairline-dark);
+			border-radius: var(--card-radius-md);
 		}
 
 		/* o feixe termina na foto: sem trilhos saindo dela */

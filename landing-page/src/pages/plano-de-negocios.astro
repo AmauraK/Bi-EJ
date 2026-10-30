@@ -265,7 +265,7 @@ const motivos = [
 		position: absolute;
 		right: 0;
 		bottom: 0;
-		left: -14%;
+		left: -6%; /* invade a coluna do texto sem encostar nas credenciais */
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 0.6rem;
@@ -318,6 +318,14 @@ const motivos = [
 		font-weight: 800;
 		background: var(--primary600);
 		border-radius: 50%;
+	}
+
+	@media (min-width: 1025px) and (max-height: 840px) {
+		/* Em dobras desktop mais baixas, a sequência sobe para liberar o WhatsApp. */
+		.pn_etapas {
+			bottom: 3.5rem;
+			transform: translateX(1.5rem);
+		}
 	}
 
 	@keyframes pn-etapa {

@@ -85,6 +85,11 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 
 	/* ---------- Arco e mosaico: duas colunas, a composição sai da grade à direita ---------- */
 	@media (min-width: 1025px) {
+		/* Mantém a área coberta pelo WhatsApp flutuante como respiro, sem alterar o botão. */
+		.hero-solucao {
+			padding-bottom: clamp(6.5rem, 9vh, 8rem);
+		}
+
 		.is-arco .hero-solucao_grade,
 		.is-mosaico .hero-solucao_grade {
 			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -131,7 +136,8 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 			grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
 			grid-template-areas:
 				"antes antes"
-				"texto depois";
+				"texto depois"
+				"etapas etapas";
 			row-gap: 2rem;
 			align-items: start;
 		}
