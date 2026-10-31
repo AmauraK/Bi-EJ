@@ -2248,6 +2248,12 @@ body::after {
   height: auto;
 }
 
+.footer_endereco {
+  font-style: normal;
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+
 .footer_title {
   margin-bottom: 0.25rem;
   color: var(--text-eyebrow-dark);
