@@ -10,16 +10,18 @@ interface Props {
 	sizes?: string;
 	/** Foto da primeira tela (cabeçalho): carrega logo. Fora dela, false para carregar ao rolar. */
 	prioridade?: boolean;
+	/** Larguras geradas; troque para fotos pequenas, como os retratos. */
+	widths?: number[];
 }
 
-const { foto, classe, sizes = '(min-width: 1024px) 580px, 100vw', prioridade = true } = Astro.props;
+const { foto, classe, sizes = '(min-width: 1024px) 580px, 100vw', prioridade = true, widths = [480, 800, 1200, 1600] } = Astro.props;
 ---
 
 <Image
 	src={foto.src}
 	alt={foto.alt}
 	class={classe}
-	widths={[480, 800, 1200, 1600]}
+	widths={widths}
 	quality={70}
 	sizes={sizes}
 	loading={prioridade ? 'eager' : 'lazy'}

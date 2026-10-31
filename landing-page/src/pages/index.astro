@@ -82,11 +82,28 @@ const faq = [
 			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
 		>
 			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
-			<p class="home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
+			{/* A preencher (nota interna, fora da página pública): confirmar se o número é "+800 projetos" ou "+800 clientes" (o docx usa os dois). */}
 			<Fragment slot="acoes">
 				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
 				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
 			</Fragment>
+			<!-- Constelação: a equipe em volta do texto, que fica no centro como ponto de encontro.
+			     Desktop: arcos e retratos nas margens. Abaixo de 1280px: só os retratos, numa fileira acima do selo. -->
+			<div slot="midia" class="home-gente">
+				<div class="home-gente_lado is-esquerda">
+					<figure class="home-gente_arco"><Foto foto={FOTOS.homeArcoEscadaria} widths={[260, 520]} sizes="210px" prioridade={false} /></figure>
+					<span class="home-gente_etiqueta">Alunos da graduação FGV</span>
+					<Foto foto={FOTOS.homeRetratoConvite} classe="home-gente_rosto is-r1" widths={[160, 320]} sizes="(min-width: 1280px) 112px, 56px" prioridade={false} />
+					<Foto foto={FOTOS.homeRetratoEquipe1} classe="home-gente_rosto is-r2" widths={[160, 320]} sizes="(min-width: 1280px) 80px, 56px" prioridade={false} />
+				</div>
+				<div class="home-gente_lado is-direita">
+					<Foto foto={FOTOS.homeRetratoEscadaria1} classe="home-gente_rosto is-r3" widths={[160, 320]} sizes="(min-width: 1280px) 104px, 56px" prioridade={false} />
+					<figure class="home-gente_arco"><Foto foto={FOTOS.homeArcoNotebook} widths={[260, 520]} sizes="210px" prioridade={false} /></figure>
+					<span class="home-gente_etiqueta">Orientação de professores da FGV</span>
+					<Foto foto={FOTOS.homeRetratoEscadaria2} classe="home-gente_rosto is-r4" widths={[160, 320]} sizes="(min-width: 1280px) 76px, 56px" prioridade={false} />
+					<Foto foto={FOTOS.homeRetratoEquipe2} classe="home-gente_rosto is-r5" widths={[160, 320]} sizes="(min-width: 1280px) 64px, 56px" prioridade={false} />
+				</div>
+			</div>
 		</PageHeader>
 		<LogoWall titulo="Aprovada por grandes clientes" />
 
@@ -326,6 +343,163 @@ const faq = [
 	@media (max-width: 767px) {
 		.home :global(.hero_heading) {
 			font-size: 2rem;
+		}
+	}
+
+	/* Constelação da equipe. A mídia do PageHeader vira camada absoluta da seção (atrás do texto, z-index 2). */
+	.home :global(.section_page-header .page-header_media) {
+		position: static;
+		margin-top: 0;
+	}
+
+	.home-gente {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	.home-gente :global(.home-gente_rosto) {
+		display: block;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 4px solid var(--white);
+		box-shadow: 0 10px 28px rgba(28, 25, 23, 0.16);
+	}
+
+	.home-gente_arco {
+		margin: 0;
+		border-radius: 999px 999px 28px 28px;
+		overflow: hidden;
+		border: 6px solid var(--white);
+		box-shadow: 0 18px 44px rgba(28, 25, 23, 0.18);
+		background: var(--gray200);
+	}
+
+	.home-gente_arco :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.home-gente_etiqueta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.5rem 0.85rem;
+		background: var(--white);
+		border-radius: 999px;
+		box-shadow: 0 8px 22px rgba(28, 25, 23, 0.14);
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--gray800);
+		white-space: nowrap;
+	}
+
+	.home-gente_etiqueta::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--primary600);
+	}
+
+	/* ≥1280px: dois grupos nas margens, presos ao centro (o bloco de texto tem ~660px), numa órbita tracejada */
+	@media (min-width: 1280px) {
+		.home-gente::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: calc(var(--nav-height) + 1.5rem);
+			width: 1180px;
+			height: 540px;
+			translate: -50% 0;
+			border: 1.5px dashed var(--primary200);
+			border-radius: 50%;
+		}
+
+		.home-gente_lado {
+			position: absolute;
+			top: calc(var(--nav-height) + 3rem);
+			width: 280px;
+			height: 480px;
+		}
+
+		.home-gente_lado.is-esquerda {
+			right: calc(50% + 345px);
+		}
+
+		.home-gente_lado.is-direita {
+			left: calc(50% + 345px);
+		}
+
+		.home-gente_lado > :global(*) {
+			position: absolute;
+			animation: home-flutuar 7s ease-in-out infinite alternate;
+		}
+
+		.home-gente_arco {
+			width: 200px;
+			height: 250px;
+		}
+
+		.is-esquerda .home-gente_arco { left: 30px; top: 20px; }
+		.is-esquerda .home-gente_etiqueta { left: 0; top: 262px; animation-delay: -2s; }
+		.is-esquerda > :global(.is-r1) { left: 150px; top: 300px; width: 112px; height: 112px; animation-duration: 8s; animation-delay: -4s; }
+		.is-esquerda > :global(.is-r2) { left: 46px; top: 330px; width: 80px; height: 80px; animation-duration: 6s; animation-delay: -1s; }
+
+		.is-direita .home-gente_arco { right: 30px; top: 70px; animation-delay: -3s; }
+		.is-direita > :global(.is-r3) { left: 10px; top: 0; width: 104px; height: 104px; animation-duration: 8s; }
+		.is-direita .home-gente_etiqueta { right: 0; top: 312px; animation-delay: -5s; }
+		.is-direita > :global(.is-r4) { left: 40px; top: 360px; width: 76px; height: 76px; animation-duration: 6s; animation-delay: -2s; }
+		.is-direita > :global(.is-r5) { right: 40px; top: 380px; width: 64px; height: 64px; animation-duration: 9s; animation-delay: -6s; }
+	}
+
+	@keyframes home-flutuar {
+		from { transform: translateY(0); }
+		to { transform: translateY(-8px); }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.home-gente_lado > :global(*) {
+			animation: none;
+		}
+	}
+
+	/* <1280px: fileira compacta de rostos acima do selo, no lugar do traço laranja */
+	@media (max-width: 1279px) {
+		.home :global(.section_page-header) {
+			padding-top: calc(var(--nav-height) + 1.25rem + 56px + 1.25rem);
+		}
+
+		.home :global(.section_page-header .home-hero_divider),
+		.home-gente_arco,
+		.home-gente_etiqueta {
+			display: none;
+		}
+
+		.home-gente {
+			bottom: auto;
+			top: calc(var(--nav-height) + 1.25rem);
+			display: flex;
+			justify-content: center;
+		}
+
+		.home-gente_lado {
+			display: contents;
+		}
+
+		.home-gente :global(.home-gente_rosto) {
+			width: 56px;
+			height: 56px;
+			border-width: 3px;
+			margin-left: -12px;
+			box-shadow: 0 4px 12px rgba(28, 25, 23, 0.14);
+		}
+
+		.home-gente_lado.is-esquerda > :global(.is-r1) {
+			margin-left: 0;
 		}
 	}
 

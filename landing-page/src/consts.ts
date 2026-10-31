@@ -13,6 +13,14 @@ import retratoAuditorio3 from './assets/fotos/retrato-auditorio-3.jpg';
 import retratoAuditorio4 from './assets/fotos/retrato-auditorio-4.jpg';
 // Reunião de trabalho (IMG_4709): já vinha otimizada do site estático, em public/fotos/img-4709-2400.webp
 import equipeReuniao from './assets/fotos/equipe-reuniao.webp';
+// Primeira dobra da home: arcos e retratos recortados de IMG_4339, IMG_4643, IMG_4630 e IMG_4284
+import homeArcoEscadaria from './assets/fotos/home-arco-escadaria.jpg';
+import homeArcoNotebook from './assets/fotos/home-arco-notebook.jpg';
+import homeRetratoConvite from './assets/fotos/home-retrato-convite.jpg';
+import homeRetratoEscadaria1 from './assets/fotos/home-retrato-escadaria-1.jpg';
+import homeRetratoEscadaria2 from './assets/fotos/home-retrato-escadaria-2.jpg';
+import homeRetratoEquipe1 from './assets/fotos/home-retrato-equipe-1.jpg';
+import homeRetratoEquipe2 from './assets/fotos/home-retrato-equipe-2.jpg';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -37,6 +45,13 @@ export const FOTOS = {
   retratoAuditorio3: { src: retratoAuditorio3, alt: 'Consultor da EJFGV de óculos sorrindo' },
   retratoAuditorio4: { src: retratoAuditorio4, alt: 'Consultora da EJFGV sorrindo' },
   equipeReuniao: { src: equipeReuniao, alt: 'Quatro consultores da EJFGV em reunião de trabalho, com notebooks e documentos sobre a mesa' },
+  homeArcoEscadaria: { src: homeArcoEscadaria, alt: 'Consultores da EJFGV sorrindo juntos em uma escadaria ao ar livre' },
+  homeArcoNotebook: { src: homeArcoNotebook, alt: 'Três consultores da EJFGV analisando um projeto no notebook' },
+  homeRetratoConvite: { src: homeRetratoConvite, alt: 'Consultor da EJFGV sorrindo' },
+  homeRetratoEscadaria1: { src: homeRetratoEscadaria1, alt: 'Consultora da EJFGV sorrindo' },
+  homeRetratoEscadaria2: { src: homeRetratoEscadaria2, alt: 'Consultor da EJFGV sorrindo ao ar livre' },
+  homeRetratoEquipe1: { src: homeRetratoEquipe1, alt: 'Consultora da EJFGV sorrindo' },
+  homeRetratoEquipe2: { src: homeRetratoEquipe2, alt: 'Consultor da EJFGV' },
 } satisfies Record<string, Foto>;
 
 export const SITE = {
