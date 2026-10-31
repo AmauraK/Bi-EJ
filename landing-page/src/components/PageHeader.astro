@@ -2,7 +2,8 @@
 // Cabeçalho de página (H1 da página). Reaproveita .hero_background, .home-hero_divider, .hero_kicker,
 // .hero_heading, .hero_description e .hero_actions da LP.
 // Slots: "titulo" (substitui o texto do H1, ex.: com <span class="highlight-purpose">), default (conteúdo
-// extra abaixo da descrição), "acoes" (botões) e "midia" (coluna da direita; abaixo do texto se centralizado).
+// extra abaixo da descrição), "acoes" (botões), "midia" (coluna da direita; abaixo do texto se centralizado)
+// e "fundo" (camada atrás do texto, ocupando a seção inteira).
 interface Props {
 	titulo: string;
 	kicker?: string;
@@ -18,6 +19,7 @@ const temAcoes = Astro.slots.has('acoes');
 
 <section class:list={['section_page-header', { 'is-dark': escuro }]} aria-labelledby="page-heading">
 	<div class="hero_background" aria-hidden="true"></div>
+	<slot name="fundo" />
 	<div class="page-padding">
 		<div class="container-large">
 			<div class:list={['page-header_wrapper', { 'is-centered': centralizado, 'is-single': !temMidia && !centralizado }]}>

@@ -5,6 +5,7 @@
 // Credibilidade (FGV, Bain, Brasil Júnior) e "Quando contratar" ficam no Sobre e nas páginas de solução.
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
+import HeroMosaico from '../components/home/HeroMosaico.astro';
 import Foto from '../components/Foto.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Metodo from '../components/Metodo.astro';
@@ -74,15 +75,18 @@ const faq = [
 	ctaHref="#formulario"
 >
 	<div class="home">
-		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes -->
+		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes,
+		     sobre o mosaico vivo da equipe (HeroMosaico) -->
 		<PageHeader
 			centralizado
+			escuro
 			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
 			titulo={`Consultoria estratégica feita por alunos da FGV +${NUMEROS.projetos} projetos entregues`}
 			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
 		>
 			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
-			<p class="home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
+			{/* A preencher (nota interna, fora da página pública): confirmar se o número é "+800 projetos" ou "+800 clientes" (o docx usa os dois). */}
+			<HeroMosaico slot="fundo" />
 			<Fragment slot="acoes">
 				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
 				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
@@ -285,17 +289,81 @@ const faq = [
 </Layout>
 
 <style>
-	/* Dobra 1 · Hero: selo, destaque do H1 em linha própria e abertura em 3 linhas */
+	/* Dobra 1 · Hero escuro sobre o mosaico: quase uma tela inteira (a faixa de logos aparece na borda),
+	   texto no centro; só o texto recebe o mouse, o resto deixa o mosaico reagir */
+	.home > :global(.section_page-header) {
+		display: flex;
+		align-items: center;
+		min-height: max(34rem, calc(100svh - 4.5rem));
+		padding-bottom: clamp(3rem, 6vw, 5rem);
+	}
+
+	.home > :global(.section_page-header > .page-padding) {
+		width: 100%;
+		pointer-events: none;
+	}
+
+	.home :global(.section_page-header .page-header_wrapper > div) {
+		text-shadow: 0 1px 18px rgb(37 40 50 / 0.6);
+	}
+
+	.home :global(.section_page-header :is(.hero_kicker, .hero_heading, .hero_description, .hero_actions > *)) {
+		pointer-events: auto;
+	}
+
 	.home :global(.hero_kicker) {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.55rem;
 		padding: 0.45rem 0.95rem;
 		margin-bottom: 1.1rem;
-		background: var(--primary50);
-		border: 1px solid var(--primary200);
+		background: rgb(37 40 50 / 0.7);
+		border: 1px solid color-mix(in srgb, var(--primary200) 55%, transparent);
 		border-radius: var(--card-radius-md);
 		line-height: 1.4;
+		text-shadow: none;
+	}
+
+	.home :global(.section_page-header .hero_description) {
+		color: var(--white);
+	}
+
+	.home :global(.section_page-header .button-secondary) {
+		background-color: rgb(249 255 252 / 0.08);
+		border-color: rgb(249 255 252 / 0.6);
+		text-shadow: none;
+	}
+
+	.home :global(.section_page-header .button-secondary:hover) {
+		background-color: rgb(249 255 252 / 0.18);
+		border-color: var(--white);
+	}
+
+	.home :global(.section_page-header .button) {
+		text-shadow: none;
+	}
+
+	/* Celular: o texto começa no fim da faixa de fotos (HeroMosaico), que se dissolve atrás do selo */
+	@media (max-width: 767px) {
+		.home > :global(.section_page-header) {
+			align-items: flex-start;
+			min-height: 0;
+			padding-top: calc(var(--nav-height) + 100vw / 1.95 - 2.75rem);
+			padding-bottom: 2.5rem;
+		}
+
+		.home :global(.section_page-header .home-hero_divider) {
+			display: none;
+		}
+
+		.home :global(.hero_kicker) {
+			padding: 0.35rem 0.8rem;
+			margin-bottom: 0.9rem;
+		}
+
+		.home :global(.section_page-header .hero_description) {
+			margin-bottom: 1.25rem;
+		}
 	}
 
 	.home :global(.hero_kicker::before) {
