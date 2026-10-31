@@ -68,7 +68,8 @@ for (const [rota, html] of paginas) {
 	if (!noindex && !/<link rel="canonical" href="https:\/\/ejfgv\.com\//.test(html)) falha(rota, 'sem canonical');
 
 	for (const img of html.match(/<img\b[^>]*>/g) || []) {
-		if (!/\salt="/.test(img)) falha(rota, `<img> sem alt: ${img.slice(0, 90)}`);
+		// alt="" sai do Astro como `alt` sem valor (imagem decorativa): também vale
+		if (!/\salt(="|[\s/>])/.test(img)) falha(rota, `<img> sem alt: ${img.slice(0, 90)}`);
 	}
 
 	for (const json of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {

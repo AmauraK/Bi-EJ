@@ -4,7 +4,7 @@
 // 4. como funciona → 5. resultados (cases e depoimentos) → 6. FAQ → 7. formulário.
 // Credibilidade (FGV, Bain, Brasil Júnior) e "Quando contratar" ficam no Sobre e nas páginas de solução.
 import Layout from '../layouts/Layout.astro';
-import PageHeader from '../components/PageHeader.astro';
+import HomeCortina from '../components/home/HomeCortina.astro';
 import Foto from '../components/Foto.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Metodo from '../components/Metodo.astro';
@@ -75,19 +75,17 @@ const faq = [
 >
 	<div class="home">
 		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes -->
-		<PageHeader
-			centralizado
-			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
-			titulo={`Consultoria estratégica feita por alunos da FGV +${NUMEROS.projetos} projetos entregues`}
-			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
-		>
-			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
-			<p class="home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
-			<Fragment slot="acoes">
+		<HomeCortina>
+			<div class="home-hero_divider"></div>
+			<span class="hero_kicker">A primeira Empresa Júnior da América Latina · desde {NUMEROS.fundacao}</span>
+			<h1 id="page-heading" class="hero_heading">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></h1>
+			<p class="hero_description">A {SITE.nome} é a {SITE.nomeCompleto}. Desde {NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.</p>
+			{/* A preencher: confirmar se o número é "+800 projetos" ou "+800 clientes" (o docx usa os dois) */}
+			<div class="hero_actions">
 				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
 				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
-			</Fragment>
-		</PageHeader>
+			</div>
+		</HomeCortina>
 		<LogoWall titulo="Aprovada por grandes clientes" />
 
 		<!-- Dobra 2 · Quem somos: história curta ao lado da foto/vídeo da equipe, e os números logo abaixo -->
@@ -309,14 +307,6 @@ const faq = [
 
 	.home :global(.hero_heading) {
 		text-wrap: balance;
-	}
-
-	.home :global(.section_page-header .hero_description) {
-		max-width: 66ch;
-	}
-
-	.home :global(.section_page-header .hero_actions) {
-		margin-bottom: 0;
 	}
 
 	.home-hero_destaque {
