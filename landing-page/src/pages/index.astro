@@ -289,9 +289,11 @@ const faq = [
 </Layout>
 
 <style>
-	/* Dobra 1 · Hero escuro sobre o mosaico: quase uma tela inteira (a faixa de logos aparece na borda),
-	   texto no centro; só o texto recebe o mouse, o resto deixa o mosaico reagir */
+	/* Dobra 1 · Hero escuro com o mosaico de quadros (HeroMosaico): quase uma tela inteira (a faixa de logos
+	   aparece na borda), texto nos 720px centrais, sem foto atrás; só o texto recebe o mouse, o resto deixa os
+	   quadros reagirem */
 	.home > :global(.section_page-header) {
+		--faixa: clamp(130px, 22vw, 230px);
 		display: flex;
 		align-items: center;
 		min-height: max(34rem, calc(100svh - 4.5rem));
@@ -303,8 +305,8 @@ const faq = [
 		pointer-events: none;
 	}
 
-	.home :global(.section_page-header .page-header_wrapper > div) {
-		text-shadow: 0 1px 18px rgb(37 40 50 / 0.6);
+	.home :global(.section_page-header .page-header_wrapper) {
+		max-width: 45rem;
 	}
 
 	.home :global(.section_page-header :is(.hero_kicker, .hero_heading, .hero_description, .hero_actions > *)) {
@@ -321,7 +323,6 @@ const faq = [
 		border: 1px solid color-mix(in srgb, var(--primary200) 55%, transparent);
 		border-radius: var(--card-radius-md);
 		line-height: 1.4;
-		text-shadow: none;
 	}
 
 	.home :global(.section_page-header .hero_description) {
@@ -331,7 +332,6 @@ const faq = [
 	.home :global(.section_page-header .button-secondary) {
 		background-color: rgb(249 255 252 / 0.08);
 		border-color: rgb(249 255 252 / 0.6);
-		text-shadow: none;
 	}
 
 	.home :global(.section_page-header .button-secondary:hover) {
@@ -339,19 +339,17 @@ const faq = [
 		border-color: var(--white);
 	}
 
-	.home :global(.section_page-header .button) {
-		text-shadow: none;
-	}
-
-	/* Celular: o texto começa no fim da faixa de fotos (HeroMosaico), que se dissolve atrás do selo */
-	@media (max-width: 767px) {
+	/* Tablet e celular: o texto começa abaixo da faixa de quadros */
+	@media (max-width: 1199px) {
 		.home > :global(.section_page-header) {
 			align-items: flex-start;
 			min-height: 0;
-			padding-top: calc(var(--nav-height) + 100vw / 1.95 - 2.75rem);
+			padding-top: calc(var(--nav-height) + 12px + var(--faixa) + 1.25rem);
 			padding-bottom: 2.5rem;
 		}
+	}
 
+	@media (max-width: 767px) {
 		.home :global(.section_page-header .home-hero_divider) {
 			display: none;
 		}

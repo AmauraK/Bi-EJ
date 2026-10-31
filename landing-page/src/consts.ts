@@ -17,26 +17,29 @@ import equipeReuniao from './assets/fotos/equipe-reuniao.webp';
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
 // Fotos reais da equipe: originais na raiz do repositório, reduzidas para src/assets/fotos (o Astro gera
-// WebP no build). `posicao` é o object-position do recorte no quadro do cabeçalho.
+// WebP no build). `posicao` é o object-position do recorte no quadro do cabeçalho. `rostos` é a caixa que
+// contém todos os rostos, em frações da foto [x0, y0, x1, y1]: o mosaico da home enquadra por ela e só põe a
+// foto num quadro em que nenhum rosto fique cortado (medida a olho sobre cada foto).
 export interface Foto {
   src: ImageMetadata;
   alt: string;
   posicao?: string;
+  rostos?: [number, number, number, number];
 }
 
 export const FOTOS = {
-  equipeCompleta: { src: equipeCompleta, alt: 'Equipe atual da EJFGV reunida em uma escadaria ao ar livre', posicao: 'center 55%' },
-  equipeEscadaria: { src: equipeEscadaria, alt: 'Consultores da EJFGV reunidos ao ar livre', posicao: 'center 70%' },
-  equipeConvite: { src: equipeConvite, alt: 'Consultores da EJFGV sorrindo e apontando para a câmera', posicao: 'center 60%' },
-  consultoresNotebook: { src: consultoresNotebook, alt: 'Quatro consultores da EJFGV analisando dados juntos em um notebook', posicao: 'center 45%' },
-  consultorasDocumento: { src: consultorasDocumento, alt: 'Duas consultoras da EJFGV revisando um documento de projeto', posicao: 'center 52%' },
-  equipeAuditorio: { src: equipeAuditorio, alt: 'Consultores da EJFGV reunidos em um auditório de poltronas laranja', posicao: 'center 52%' },
+  equipeCompleta: { src: equipeCompleta, alt: 'Equipe atual da EJFGV reunida em uma escadaria ao ar livre', posicao: 'center 55%', rostos: [0.14, 0.26, 0.79, 0.7] },
+  equipeEscadaria: { src: equipeEscadaria, alt: 'Consultores da EJFGV reunidos ao ar livre', posicao: 'center 70%', rostos: [0.27, 0.41, 0.71, 0.69] },
+  equipeConvite: { src: equipeConvite, alt: 'Consultores da EJFGV sorrindo e apontando para a câmera', posicao: 'center 60%', rostos: [0.23, 0.35, 0.87, 0.72] },
+  consultoresNotebook: { src: consultoresNotebook, alt: 'Quatro consultores da EJFGV analisando dados juntos em um notebook', posicao: 'center 45%', rostos: [0.23, 0.14, 0.69, 0.6] },
+  consultorasDocumento: { src: consultorasDocumento, alt: 'Duas consultoras da EJFGV revisando um documento de projeto', posicao: 'center 52%', rostos: [0.2, 0.43, 0.9, 0.57] },
+  equipeAuditorio: { src: equipeAuditorio, alt: 'Consultores da EJFGV reunidos em um auditório de poltronas laranja', posicao: 'center 52%', rostos: [0.26, 0.34, 0.74, 0.68] },
   // Retratos recortados da mesma foto do auditório (IMG_4043), um rosto por quadro
   retratoAuditorio1: { src: retratoAuditorio1, alt: 'Consultor da EJFGV sorrindo' },
   retratoAuditorio2: { src: retratoAuditorio2, alt: 'Consultora da EJFGV sorrindo' },
   retratoAuditorio3: { src: retratoAuditorio3, alt: 'Consultor da EJFGV de óculos sorrindo' },
   retratoAuditorio4: { src: retratoAuditorio4, alt: 'Consultora da EJFGV sorrindo' },
-  equipeReuniao: { src: equipeReuniao, alt: 'Quatro consultores da EJFGV em reunião de trabalho, com notebooks e documentos sobre a mesa' },
+  equipeReuniao: { src: equipeReuniao, alt: 'Quatro consultores da EJFGV em reunião de trabalho, com notebooks e documentos sobre a mesa', rostos: [0.11, 0.17, 0.73, 0.63] },
 } satisfies Record<string, Foto>;
 
 export const SITE = {
