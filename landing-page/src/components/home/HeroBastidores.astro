@@ -1,0 +1,516 @@
+---
+// Hero da home: fotos inteiras da equipe em tela cheia trocam atrás do texto como num vídeo institucional.
+// Cada troca é uma cortina diagonal com um feixe de luz laranja na borda; a foto ativa faz um zoom lento
+// (Ken Burns) e um duotone leve laranja/chumbo dá unidade às fotos. O texto fica num cartão de vidro escuro.
+// No celular (e em telas em pé) as fotos aparecem inteiras numa faixa 3:2 acima do cartão, sem cortar rostos.
+// O relógio é a própria barra de progresso (animationend avança a foto); "Pausar" congela tudo.
+// Com prefers-reduced-motion: começa pausado, sem zoom nem cortina (troca por esmaecimento se der play).
+import Foto from '../Foto.astro';
+import { FOTOS, NUMEROS, SITE } from '../../consts';
+
+// Ordem com começo, meio e fim: a equipe, o trabalho, o convite. `foco` = de onde parte o zoom (rostos).
+const cenas = [
+	{ foto: FOTOS.equipeCompleta, legenda: `Equipe ${SITE.nome} 2026`, foco: '50% 62%' },
+	{ foto: FOTOS.consultoresNotebook, legenda: 'Bastidores de um projeto', foco: '42% 48%' },
+	{ foto: FOTOS.equipeReuniao, legenda: 'Reunião de trabalho em equipe', foco: '55% 45%' },
+	{ foto: FOTOS.equipeAuditorio, legenda: 'A equipe reunida no auditório', foco: '48% 50%' },
+	{ foto: FOTOS.equipeConvite, legenda: 'O próximo projeto pode ser o seu', foco: '50% 42%' },
+];
+const total = String(cenas.length).padStart(2, '0');
+---
+
+<section class="bastidores" aria-labelledby="page-heading" data-bastidores>
+	<div class="bastidores_palco">
+		{cenas.map((c, i) => (
+			<figure
+				class:list={['bastidores_cena', { 'is-ativa': i === 0 }]}
+				style={`--foco: ${c.foto.posicao ?? c.foco}; --zoom-origem: ${c.foco}`}
+				aria-hidden={i === 0 ? undefined : 'true'}
+				data-legenda={c.legenda}
+			>
+				<Foto foto={c.foto} classe="bastidores_foto" sizes="100vw" prioridade={i === 0} />
+			</figure>
+		))}
+		<span class="bastidores_feixe" aria-hidden="true"></span>
+		<span class="bastidores_veu" aria-hidden="true"></span>
+
+		<div class="bastidores_legenda">
+			<span class="bastidores_contador"><span data-numero>01</span>/{total}</span>
+			<span class="bastidores_trilho" aria-hidden="true"><span class="bastidores_progresso" data-progresso></span></span>
+			<span class="bastidores_texto" data-texto>{cenas[0].legenda}</span>
+			<button type="button" class="bastidores_pausa" aria-label="Pausar as fotos" data-pausa>
+				<svg class="is-icone-pausa" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg>
+				<svg class="is-icone-play" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+			</button>
+		</div>
+	</div>
+
+	<div class="page-padding bastidores_conteudo">
+		<div class="bastidores_cartao">
+			<div class="home-hero_divider" aria-hidden="true"></div>
+			<span class="bastidores_selo">A primeira Empresa Júnior da América Latina · desde {NUMEROS.fundacao}</span>
+			<h1 id="page-heading" class="hero_heading bastidores_titulo">
+				Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose bastidores_destaque">+{NUMEROS.projetos} projetos entregues</span>
+			</h1>
+			<!-- A preencher: confirmar se o número é "+800 projetos" ou "+800 clientes" (o docx usa os dois) -->
+			<p class="hero_description bastidores_descricao">
+				A {SITE.nome} é a {SITE.nomeCompleto}. Desde {NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.
+			</p>
+			<div class="hero_actions bastidores_acoes">
+				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
+				<a href="#solucoes" class="button-secondary is-button-large bastidores_secundario">Conheça nossas soluções</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	const hero = document.querySelector<HTMLElement>('[data-bastidores]');
+	if (hero) {
+		const cenas = Array.from(hero.querySelectorAll<HTMLElement>('.bastidores_cena'));
+		const progresso = hero.querySelector<HTMLElement>('[data-progresso]')!;
+		const numero = hero.querySelector<HTMLElement>('[data-numero]')!;
+		const texto = hero.querySelector<HTMLElement>('[data-texto]')!;
+		const botao = hero.querySelector<HTMLButtonElement>('[data-pausa]')!;
+		let atual = 0;
+		let pausadoPeloUsuario = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		const atualizarPausa = (fora = false) => {
+			hero.toggleAttribute('data-pausado', pausadoPeloUsuario || fora);
+			botao.setAttribute('aria-label', pausadoPeloUsuario ? 'Reproduzir as fotos' : 'Pausar as fotos');
+			botao.classList.toggle('is-pausado', pausadoPeloUsuario);
+		};
+
+		const mostrar = (i: number) => {
+			const anterior = cenas[atual];
+			atual = i;
+			for (const c of cenas) {
+				if (c !== anterior) c.classList.remove('is-ativa', 'is-anterior', 'is-entrando');
+			}
+			anterior.classList.remove('is-ativa', 'is-entrando');
+			anterior.classList.add('is-anterior');
+			anterior.setAttribute('aria-hidden', 'true');
+			const cena = cenas[i];
+			cena.classList.add('is-ativa', 'is-entrando');
+			cena.removeAttribute('aria-hidden');
+			numero.textContent = String(i + 1).padStart(2, '0');
+			texto.textContent = cena.dataset.legenda ?? '';
+			// Reinicia a barra (e o feixe de luz) para a próxima cena.
+			for (const el of [progresso, hero]) {
+				el.classList.remove('is-rodando');
+				void el.offsetWidth;
+				el.classList.add('is-rodando');
+			}
+		};
+
+		progresso.addEventListener('animationend', () => mostrar((atual + 1) % cenas.length));
+		progresso.classList.add('is-rodando');
+
+		botao.addEventListener('click', () => {
+			pausadoPeloUsuario = !pausadoPeloUsuario;
+			atualizarPausa();
+		});
+
+		// Fora da tela, a sequência espera (sem gastar CPU nem pular fotos).
+		new IntersectionObserver(([e]) => atualizarPausa(!e.isIntersecting)).observe(hero);
+		atualizarPausa();
+	}
+</script>
+
+<style>
+	.bastidores {
+		--duracao-cena: 6.5s;
+		--duracao-cortina: 1.8s;
+		position: relative;
+		display: grid;
+		align-items: center;
+		min-height: min(100svh, 62rem);
+		padding-top: calc(var(--nav-height) + 2rem);
+		padding-bottom: 5.5rem;
+		overflow: hidden;
+		background-color: var(--brand-chumbo);
+		color: var(--white);
+		isolation: isolate;
+	}
+
+	/* ---- Palco das fotos (tela cheia) ---- */
+	.bastidores_palco {
+		position: absolute;
+		inset: var(--nav-height) 0 0;
+		z-index: 0;
+	}
+
+	.bastidores_cena {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+		overflow: hidden;
+		visibility: hidden;
+	}
+
+	.bastidores_cena.is-ativa {
+		z-index: 2;
+		visibility: visible;
+	}
+
+	.bastidores_cena.is-anterior {
+		z-index: 1;
+		visibility: visible;
+	}
+
+	.bastidores_cena :global(.bastidores_foto) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--foco);
+		/* Duotone leve: menos saturação aqui e a cor laranja/chumbo no .bastidores_veu */
+		filter: saturate(0.8) contrast(1.05);
+		transform-origin: var(--zoom-origem);
+	}
+
+	/* Véu: duotone laranja/chumbo + vinheta (escurece bordas, topo e base para o menu e a legenda) */
+	.bastidores_veu {
+		position: absolute;
+		inset: 0;
+		z-index: 4;
+		pointer-events: none;
+		background:
+			linear-gradient(180deg, rgba(37, 40, 50, 0.35) 0%, rgba(37, 40, 50, 0) 18%, rgba(37, 40, 50, 0) 72%, rgba(37, 40, 50, 0.7) 100%),
+			radial-gradient(ellipse 80% 75% at 50% 50%, rgba(37, 40, 50, 0) 45%, rgba(37, 40, 50, 0.42) 100%),
+			linear-gradient(115deg, rgba(37, 40, 50, 0.3), rgba(227, 142, 51, 0.14));
+	}
+
+	.bastidores_veu::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(115deg, var(--brand-chumbo), var(--brand-laranja));
+		mix-blend-mode: color;
+		opacity: 0.18;
+	}
+
+	/* Feixe de luz laranja que corre na borda da cortina */
+	.bastidores_feixe {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		pointer-events: none;
+		opacity: 0;
+		background: linear-gradient(105deg, transparent 0 46.5%, rgba(227, 142, 51, 0.3) 49.3%, rgba(255, 196, 128, 0.95) 49.92%, rgba(255, 196, 128, 0.95) 50.08%, rgba(227, 142, 51, 0.3) 50.7%, transparent 53.5% 100%);
+		background-size: 250% 100%;
+		background-repeat: no-repeat;
+	}
+
+	/* ---- Legenda + contador + pausa ---- */
+	.bastidores_legenda {
+		position: absolute;
+		left: clamp(1.25rem, 4vw, 3rem);
+		bottom: clamp(1.25rem, 2.5vw, 2rem);
+		z-index: 6;
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		max-width: calc(100% - 13rem); /* nunca embaixo do botão do WhatsApp */
+		font-size: 0.8125rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: var(--white);
+	}
+
+	.bastidores_contador {
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.08em;
+		color: var(--primary200);
+	}
+
+	.bastidores_trilho {
+		position: relative;
+		flex-shrink: 0;
+		width: 3.5rem;
+		height: 2px;
+		overflow: hidden;
+		border-radius: 2px;
+		background: rgba(249, 255, 252, 0.25);
+	}
+
+	.bastidores_progresso {
+		position: absolute;
+		inset: 0;
+		background: var(--brand-laranja);
+		transform: scaleX(0);
+		transform-origin: left;
+	}
+
+	.bastidores_progresso.is-rodando {
+		animation: bastidores-progresso var(--duracao-cena) linear forwards;
+	}
+
+	.bastidores_texto {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-shadow: 0 1px 8px rgba(37, 40, 50, 0.6);
+	}
+
+	.bastidores_pausa {
+		display: inline-grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 2.25rem;
+		padding: 0;
+		border: 1px solid rgba(249, 255, 252, 0.35);
+		border-radius: 50%;
+		background: rgba(37, 40, 50, 0.45);
+		color: var(--white);
+		cursor: pointer;
+		transition: background 0.2s, border-color 0.2s;
+	}
+
+	.bastidores_pausa:hover {
+		border-color: var(--brand-laranja);
+		background: rgba(37, 40, 50, 0.75);
+	}
+
+	.bastidores_pausa:focus-visible {
+		outline: 2px solid var(--primary200);
+		outline-offset: 3px;
+	}
+
+	.bastidores_pausa .is-icone-play,
+	.bastidores_pausa.is-pausado .is-icone-pausa {
+		display: none;
+	}
+
+	.bastidores_pausa.is-pausado .is-icone-play {
+		display: block;
+	}
+
+	/* ---- Cartão de vidro com o texto ---- */
+	.bastidores_conteudo {
+		position: relative;
+		z-index: 5;
+	}
+
+	.bastidores_cartao {
+		max-width: 49rem;
+		margin: 0 auto;
+		padding: clamp(1.75rem, 3.4vw, 3rem) clamp(1.5rem, 4vw, 3.5rem);
+		text-align: center;
+		/* Tinta ≥ 0,81 garante contraste AA do texto branco e do laranja (texto grande, 3:1) mesmo com branco puro atrás */
+		background: rgba(37, 40, 50, 0.82);
+		border: 1px solid rgba(249, 255, 252, 0.14);
+		border-radius: var(--card-radius-lg);
+		box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6);
+		-webkit-backdrop-filter: blur(18px) saturate(1.2);
+		backdrop-filter: blur(18px) saturate(1.2);
+	}
+
+	.bastidores_cartao .home-hero_divider {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.bastidores_selo {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		margin-bottom: 1.1rem;
+		padding: 0.45rem 0.95rem;
+		border: 1px solid rgba(227, 142, 51, 0.45);
+		border-radius: var(--card-radius-md);
+		background: rgba(227, 142, 51, 0.12);
+		color: var(--primary200);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		line-height: 1.4;
+		text-transform: uppercase;
+	}
+
+	.bastidores_selo::before {
+		content: "";
+		flex-shrink: 0;
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--brand-laranja);
+	}
+
+	.bastidores_titulo {
+		font-size: clamp(2.25rem, 3.6vw, 3.25rem);
+		line-height: 1.08;
+		color: var(--white);
+		text-wrap: balance;
+	}
+
+	.bastidores_destaque {
+		display: block;
+	}
+
+	.bastidores_descricao {
+		max-width: 58ch;
+		margin-left: auto;
+		margin-right: auto;
+		color: var(--brand-cinza);
+	}
+
+	.bastidores_acoes {
+		justify-content: center;
+		margin-bottom: 0;
+	}
+
+	.bastidores_secundario {
+		border-color: rgba(249, 255, 252, 0.4);
+		background: rgba(249, 255, 252, 0.06);
+	}
+
+	.bastidores_secundario:hover {
+		border-color: var(--white);
+		background: rgba(249, 255, 252, 0.14);
+	}
+
+	.bastidores :focus-visible {
+		outline-color: var(--primary200);
+	}
+
+	/* ---- Movimento (só para quem não pediu menos movimento) ---- */
+	@media (prefers-reduced-motion: no-preference) {
+		/* Zoom lento contínuo: a mesma animação segue na cena anterior enquanto a cortina passa */
+		.bastidores_cena.is-ativa :global(.bastidores_foto),
+		.bastidores_cena.is-anterior :global(.bastidores_foto) {
+			animation: bastidores-zoom calc(var(--duracao-cena) + var(--duracao-cortina) + 0.5s) linear both;
+		}
+
+		/* Cortina diagonal com borda macia, da esquerda para a direita */
+		.bastidores_cena.is-entrando {
+			-webkit-mask-image: linear-gradient(105deg, #000 0 47%, transparent 53% 100%);
+			mask-image: linear-gradient(105deg, #000 0 47%, transparent 53% 100%);
+			-webkit-mask-size: 250% 100%;
+			mask-size: 250% 100%;
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			animation: bastidores-cortina var(--duracao-cortina) cubic-bezier(0.65, 0, 0.35, 1) both;
+		}
+
+		.bastidores.is-rodando .bastidores_feixe {
+			animation: bastidores-feixe var(--duracao-cortina) cubic-bezier(0.65, 0, 0.35, 1) both;
+		}
+	}
+
+	/* Menos movimento: sem zoom nem cortina; se a pessoa der play, as fotos só esmaecem */
+	@media (prefers-reduced-motion: reduce) {
+		.bastidores_cena.is-entrando {
+			animation: bastidores-esmaece 0.8s ease both;
+		}
+	}
+
+	.bastidores[data-pausado] *,
+	.bastidores[data-pausado] *::after {
+		animation-play-state: paused !important;
+	}
+
+	@keyframes bastidores-progresso {
+		to { transform: scaleX(1); }
+	}
+
+	@keyframes bastidores-zoom {
+		from { transform: scale(1); }
+		to { transform: scale(1.09); }
+	}
+
+	@keyframes bastidores-cortina {
+		from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+		to { -webkit-mask-position: 0 0; mask-position: 0 0; }
+	}
+
+	@keyframes bastidores-feixe {
+		0% { opacity: 1; background-position: 100% 0; }
+		85% { opacity: 1; }
+		100% { opacity: 0; background-position: 0 0; }
+	}
+
+	@keyframes bastidores-esmaece {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	/* ---- Celular e telas em pé: fotos inteiras numa faixa 3:2, cartão logo abaixo ---- */
+	@media (max-width: 767px), (orientation: portrait) {
+		.bastidores {
+			display: block;
+			min-height: 0;
+			padding-top: var(--nav-height);
+			padding-bottom: 2.5rem;
+		}
+
+		.bastidores_palco {
+			position: relative;
+			inset: auto;
+			aspect-ratio: 3 / 2;
+			max-height: 34rem;
+		}
+
+		.bastidores_veu {
+			background:
+				linear-gradient(180deg, rgba(37, 40, 50, 0.45) 0%, rgba(37, 40, 50, 0) 30%, rgba(37, 40, 50, 0) 55%, rgba(37, 40, 50, 0.95) 100%),
+				linear-gradient(115deg, rgba(37, 40, 50, 0.4), rgba(227, 142, 51, 0.25));
+		}
+
+		.bastidores_legenda {
+			top: 0.75rem;
+			bottom: auto;
+			left: 1rem;
+			max-width: calc(100% - 2rem);
+		}
+
+		.bastidores_conteudo {
+			margin-top: -2.75rem;
+		}
+
+		.bastidores_cartao {
+			padding: 1.25rem 1.125rem 1.375rem;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.bastidores_palco {
+			aspect-ratio: 16 / 9;
+		}
+
+		.bastidores_selo {
+			margin-bottom: 0.85rem;
+			padding: 0.35rem 0.75rem;
+			font-size: 0.6875rem;
+			letter-spacing: 0.1em;
+		}
+
+		.bastidores_cartao .home-hero_divider {
+			display: none;
+		}
+
+		.bastidores_titulo {
+			font-size: 1.625rem;
+			margin-bottom: 0.625rem;
+		}
+
+		.bastidores_descricao {
+			margin-bottom: 1rem;
+			font-size: 0.9375rem;
+			line-height: 1.45;
+		}
+
+		.bastidores_acoes {
+			gap: 0.5rem;
+		}
+
+		.bastidores_acoes .button,
+		.bastidores_acoes .button-secondary {
+			width: 100%;
+			min-width: 0;
+			height: 48px;
+			padding: 0 1rem;
+			font-size: 1rem;
+		}
+	}
+</style>

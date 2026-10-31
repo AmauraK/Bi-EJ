@@ -4,7 +4,7 @@
 // 4. como funciona → 5. resultados (cases e depoimentos) → 6. FAQ → 7. formulário.
 // Credibilidade (FGV, Bain, Brasil Júnior) e "Quando contratar" ficam no Sobre e nas páginas de solução.
 import Layout from '../layouts/Layout.astro';
-import PageHeader from '../components/PageHeader.astro';
+import HeroBastidores from '../components/home/HeroBastidores.astro';
 import Foto from '../components/Foto.astro';
 import StatsStrip from '../components/StatsStrip.astro';
 import Metodo from '../components/Metodo.astro';
@@ -74,20 +74,8 @@ const faq = [
 	ctaHref="#formulario"
 >
 	<div class="home">
-		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes -->
-		<PageHeader
-			centralizado
-			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
-			titulo={`Consultoria estratégica feita por alunos da FGV +${NUMEROS.projetos} projetos entregues`}
-			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
-		>
-			<Fragment slot="titulo">Consultoria estratégica feita por alunos da FGV <span class="highlight-purpose home-hero_destaque">+{NUMEROS.projetos} projetos entregues</span></Fragment>
-			<p class="home-nota"><span class="preencher">A preencher: confirmar se o número é “+{NUMEROS.projetos} projetos” ou “+{NUMEROS.projetos} clientes” (o docx usa os dois)</span></p>
-			<Fragment slot="acoes">
-				<a href="#formulario" class="button is-button-large">Solicite seu diagnóstico gratuito</a>
-				<a href="#solucoes" class="button-secondary is-button-large">Conheça nossas soluções</a>
-			</Fragment>
-		</PageHeader>
+		<!-- Dobra 1 · Promessa: fotos da equipe em sequência atrás do selo, H1, abertura, 2 CTAs; depois os logos de clientes -->
+		<HeroBastidores />
 		<LogoWall titulo="Aprovada por grandes clientes" />
 
 		<!-- Dobra 2 · Quem somos: história curta ao lado da foto/vídeo da equipe, e os números logo abaixo -->
@@ -285,50 +273,6 @@ const faq = [
 </Layout>
 
 <style>
-	/* Dobra 1 · Hero: selo, destaque do H1 em linha própria e abertura em 3 linhas */
-	.home :global(.hero_kicker) {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.55rem;
-		padding: 0.45rem 0.95rem;
-		margin-bottom: 1.1rem;
-		background: var(--primary50);
-		border: 1px solid var(--primary200);
-		border-radius: var(--card-radius-md);
-		line-height: 1.4;
-	}
-
-	.home :global(.hero_kicker::before) {
-		content: "";
-		flex-shrink: 0;
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background: var(--primary600);
-	}
-
-	.home :global(.hero_heading) {
-		text-wrap: balance;
-	}
-
-	.home :global(.section_page-header .hero_description) {
-		max-width: 66ch;
-	}
-
-	.home :global(.section_page-header .hero_actions) {
-		margin-bottom: 0;
-	}
-
-	.home-hero_destaque {
-		display: block;
-	}
-
-	@media (max-width: 767px) {
-		.home :global(.hero_heading) {
-			font-size: 2rem;
-		}
-	}
-
 	.home-nota {
 		display: flex;
 		flex-wrap: wrap;
