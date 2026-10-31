@@ -1,0 +1,391 @@
+---
+// Fundo da dobra 1 da home: um mosaico vivo de ladrilhos com fotos reais da equipe. No carregamento, os
+// ladrilhos (cada um com uma miniatura de outro momento da equipe) deslizam para o lugar e viram em 3D até montar a equipe
+// completa na escadaria. A cada ~6 s uma onda vira o mosaico para outra foto (reunião, auditório) e volta;
+// o mouse vira um ladrilho e mostra, inteira, outra foto da equipe. Sem JS ou com movimento reduzido: só a foto, parada.
+import { Image, getImage } from 'astro:assets';
+import { FOTOS, type Foto as TipoFoto } from '../../consts';
+
+// "center 55%" → [0.5, 0.55]: o mesmo foco do object-position, usado no recorte de cada ladrilho
+const foco = (posicao = 'center center') =>
+	posicao.split(' ').map((p) => (p.endsWith('%') ? parseFloat(p) / 100 : ({ left: 0, top: 0, right: 1, bottom: 1 } as Record<string, number>)[p] ?? 0.5));
+
+const quadro = async (foto: TipoFoto, legenda: string, comImagem = true) => ({
+	src: comImagem ? (await getImage({ src: foto.src, width: 1600, quality: 60, format: 'webp' })).src : '',
+	srcPequena: comImagem ? (await getImage({ src: foto.src, width: 900, quality: 60, format: 'webp' })).src : '',
+	w: foto.src.width,
+	h: foto.src.height,
+	foco: foco(foto.posicao),
+	legenda,
+});
+
+const principal = FOTOS.equipeCompleta;
+// A principal usa o src que o navegador já escolheu no <img> (currentSrc), sem baixar de novo.
+const quadros = [
+	await quadro(principal, 'A equipe EJFGV', false),
+	await quadro(FOTOS.equipeReuniao, 'Em reunião de projeto'),
+	await quadro(FOTOS.equipeAuditorio, 'No auditório'),
+];
+
+// Miniaturas inteiras de outros momentos da equipe: o retalho de que a foto grande se forma na abertura
+const miniaturas = await Promise.all(
+	[FOTOS.equipeEscadaria, FOTOS.equipeConvite, FOTOS.consultoresNotebook, FOTOS.consultorasDocumento, FOTOS.equipeAuditorio, FOTOS.equipeReuniao].map(
+		async (f) => ({ src: (await getImage({ src: f.src, width: 360, quality: 60, format: 'webp' })).src, posicao: f.posicao ?? 'center' }),
+	),
+);
+---
+
+<div class="mosaico" data-mosaico data-quadros={JSON.stringify(quadros)} data-miniaturas={JSON.stringify(miniaturas)}>
+	<Image
+		src={principal.src}
+		alt={principal.alt}
+		class="mosaico_foto"
+		widths={[600, 900, 1280, 1600]}
+		quality={60}
+		width={1600}
+		sizes="100vw"
+		loading="eager"
+		fetchpriority="high"
+		style={`object-position: ${principal.posicao}`}
+	/>
+	<div class="mosaico_grade" aria-hidden="true"></div>
+	<div class="mosaico_veu" aria-hidden="true"></div>
+	<p class="mosaico_legenda" aria-hidden="true">{quadros[0].legenda}</p>
+</div>
+<script is:inline>
+	// Antes da 1ª pintura: com movimento liberado, a foto parada some e o mosaico a monta. Se o script do
+	// mosaico não rodar em 6 s, a foto volta.
+	(() => {
+		const raiz = document.querySelector('[data-mosaico]');
+		if (!raiz || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		raiz.classList.add('is-vivo');
+		setTimeout(() => raiz.classList.contains('is-pronto') || raiz.classList.remove('is-vivo'), 6000);
+	})();
+</script>
+
+<script>
+	type Quadro = { src: string; srcPequena: string; w: number; h: number; foco: number[]; legenda: string };
+	type Miniatura = { src: string; posicao: string };
+	type Ladrilho = { el: HTMLElement; carta: HTMLElement; frente: HTMLElement; verso: HTMLElement; c: number; r: number; detalhe: boolean };
+
+	const raiz = document.querySelector<HTMLElement>('[data-mosaico]');
+	if (raiz?.classList.contains('is-vivo')) {
+		const grade = raiz.querySelector<HTMLElement>('.mosaico_grade')!;
+		const foto = raiz.querySelector<HTMLImageElement>('.mosaico_foto')!;
+		const legenda = raiz.querySelector<HTMLElement>('.mosaico_legenda')!;
+		const [principal, ...outras] = JSON.parse(raiz.dataset.quadros!) as Quadro[];
+		const miniaturas = JSON.parse(raiz.dataset.miniaturas!) as Miniatura[];
+		const pequena = innerWidth * devicePixelRatio < 1000;
+		for (const q of outras) q.src = pequena ? q.srcPequena : q.src;
+
+		const PAUSA = 6000; // tempo com a equipe montada entre uma onda e outra
+		const EXIBICAO = 3200; // tempo com a outra foto à mostra
+		const ONDA = 1100; // atraso entre o 1º e o último ladrilho de uma onda
+		const espera = (ms: number) => new Promise((ok) => setTimeout(ok, ms));
+		const carregar = (src: string) =>
+			new Promise<boolean>((ok) => {
+				const img = new Image();
+				img.onload = () => ok(true);
+				img.onerror = () => ok(false);
+				img.src = src;
+			});
+		// Foto de onda que falhar sai da fila; miniatura que não chegar a tempo fica fora da abertura
+		const prontas: Miniatura[] = [];
+		const carregando = [
+			...outras.map(async (q) => (await carregar(q.src)) || outras.splice(outras.indexOf(q), 1)),
+			...miniaturas.map(async (m) => (await carregar(m.src)) && prontas.push(m)),
+		];
+
+		let ladrilhos: Ladrilho[] = [];
+		let cols = 0, rows = 0, W = 0, H = 0;
+		let timer = 0, vez = 0, sobre = 0, emOnda = false, visivel = true;
+
+		// Recorte "cover" de uma foto na grade inteira (mesma conta do object-fit/object-position)
+		const cobrir = (q: Quadro) => {
+			const s = Math.max(W / q.w, H / q.h);
+			const bw = q.w * s, bh = q.h * s;
+			return { bw, bh, ox: (W - bw) * q.foco[0], oy: (H - bh) * q.foco[1] };
+		};
+		// A face fica 1px para dentro do ladrilho (a fresta entre eles)
+		const pintar = (face: HTMLElement, q: Quadro, t: Ladrilho) => {
+			const { bw, bh, ox, oy } = cobrir(q);
+			face.style.backgroundImage = `url("${q.src}")`;
+			face.style.backgroundSize = `${bw}px ${bh}px`;
+			face.style.backgroundPosition = `${ox - t.c * (W / cols) - 1}px ${oy - t.r * (H / rows) - 1}px`;
+		};
+		// Miniatura inteira no ladrilho (abertura e mouse); sem miniatura carregada, o próprio pedaço da equipe
+		const pintarMiniatura = (face: HTMLElement, t: Ladrilho, i: number) => {
+			const m = prontas[i % prontas.length];
+			if (!m) return pintar(face, principal, t);
+			face.style.backgroundImage = `url("${m.src}")`;
+			face.style.backgroundSize = 'cover';
+			face.style.backgroundPosition = m.posicao;
+		};
+		const virar = (t: Ladrilho, virada: boolean, atraso = 0) => {
+			t.el.style.setProperty('--d', `${atraso}ms`);
+			t.carta.classList.toggle('is-virada', virada);
+		};
+
+		const entrar = (t: Ladrilho) => {
+			if (emOnda || t.detalhe) return;
+			t.detalhe = true;
+			sobre++;
+			pintarMiniatura(t.verso, t, t.c + t.r);
+			t.el.classList.add('is-detalhe');
+			virar(t, true);
+		};
+		const sair = (t: Ladrilho) => {
+			if (!t.detalhe) return;
+			t.detalhe = false;
+			sobre--;
+			t.el.classList.remove('is-detalhe');
+			virar(t, false);
+		};
+
+		const montar = () => {
+			W = grade.clientWidth;
+			H = grade.clientHeight;
+			cols = Math.max(6, Math.round(W / 120));
+			rows = Math.max(3, Math.round(H / (W / cols)));
+			const tw = W / cols, th = H / rows;
+			const passar = matchMedia('(hover: hover)').matches;
+			ladrilhos = [];
+			grade.replaceChildren();
+			for (let r = 0; r < rows; r++) {
+				for (let c = 0; c < cols; c++) {
+					const el = document.createElement('div');
+					el.className = 'mosaico_ladrilho';
+					el.style.cssText = `left:${c * tw}px;top:${r * th}px;width:${tw}px;height:${th}px`;
+					el.innerHTML = '<div class="mosaico_carta"><i></i><i></i></div>';
+					const carta = el.firstElementChild as HTMLElement;
+					const [frente, verso] = Array.from(carta.children) as HTMLElement[];
+					const t = { el, carta, frente, verso, c, r, detalhe: false };
+					pintar(frente, principal, t);
+					if (passar) {
+						el.addEventListener('pointerenter', () => entrar(t));
+						el.addEventListener('pointerleave', () => sair(t));
+					}
+					ladrilhos.push(t);
+					grade.append(el);
+				}
+			}
+		};
+
+		const agendar = (ms: number) => {
+			clearTimeout(timer);
+			timer = window.setTimeout(onda, ms);
+		};
+
+		// Onda diagonal (alternando o canto de partida): vira tudo para a próxima foto, mostra e volta
+		const onda = async () => {
+			if (!outras.length) return;
+			if (!visivel || document.hidden || sobre > 0) return agendar(1500);
+			const q = outras[vez % outras.length];
+			const daDireita = vez++ % 2 === 1;
+			const atraso = (t: Ladrilho) => (((daDireita ? cols - 1 - t.c : t.c) / cols + t.r / rows) / 2) * ONDA;
+			emOnda = true;
+			for (const t of ladrilhos) {
+				pintar(t.verso, q, t);
+				virar(t, true, atraso(t));
+			}
+			legenda.classList.add('is-trocando');
+			await espera(ONDA / 2);
+			legenda.textContent = q.legenda;
+			legenda.classList.remove('is-trocando');
+			timer = window.setTimeout(async () => {
+				for (const t of ladrilhos) virar(t, false, atraso(t));
+				legenda.classList.add('is-trocando');
+				await espera(ONDA / 2);
+				legenda.textContent = principal.legenda;
+				legenda.classList.remove('is-trocando');
+				await espera(ONDA);
+				emOnda = false;
+				agendar(PAUSA);
+			}, ONDA + EXIBICAO);
+		};
+
+		// Abertura: ladrilhos soltos, embaralhados na linha e virados para miniaturas de outras fotos; do
+		// centro para as bordas, cada um desliza para o lugar e vira mostrando o seu pedaço da equipe.
+		const abrir = () => {
+			for (let r = 0; r < rows; r++) {
+				const ordem = [...Array(cols).keys()].sort(() => Math.random() - 0.5);
+				for (const t of ladrilhos.filter((l) => l.r === r)) {
+					pintarMiniatura(t.verso, t, t.c + r * 2);
+					t.el.style.setProperty('--dx', `${(ordem[t.c] - t.c) * (W / cols)}px`);
+					t.el.classList.add('is-solto');
+					t.carta.classList.add('is-virada');
+				}
+			}
+			raiz.classList.add('is-pronto');
+			setTimeout(() => {
+				for (const t of ladrilhos) {
+					const dist = Math.hypot((t.c + 0.5) / cols - 0.5, (t.r + 0.5) / rows - 0.5) / 0.71;
+					t.el.style.setProperty('--d', `${dist * 1000 + Math.random() * 200}ms`);
+					t.el.classList.remove('is-solto');
+					t.carta.classList.remove('is-virada');
+				}
+				agendar(PAUSA + 2300);
+			}, 600);
+		};
+
+		new IntersectionObserver(([e]) => (visivel = e.isIntersecting)).observe(raiz);
+
+		let redim = 0;
+		new ResizeObserver(() => {
+			if (!raiz.classList.contains('is-pronto') || (grade.clientWidth === W && grade.clientHeight === H)) return;
+			clearTimeout(redim);
+			redim = window.setTimeout(() => {
+				clearTimeout(timer);
+				emOnda = false;
+				sobre = 0;
+				legenda.textContent = principal.legenda;
+				montar();
+				agendar(PAUSA);
+			}, 200);
+		}).observe(grade);
+
+		const fotoPronta = foto.decode().catch(() => undefined).then(() => {
+			principal.src = foto.currentSrc || foto.src;
+		});
+		Promise.race([Promise.all([fotoPronta, ...carregando]), espera(2500)]).then(async () => {
+			await fotoPronta;
+			montar();
+			requestAnimationFrame(() => requestAnimationFrame(abrir));
+		});
+	}
+</script>
+
+<style>
+	.mosaico {
+		position: absolute;
+		inset: var(--nav-height) 0 0;
+		z-index: 1;
+		overflow: hidden;
+		background: var(--graywarm950);
+	}
+
+	.mosaico_foto {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.mosaico_grade {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transition: opacity 0.5s ease;
+	}
+
+	.mosaico.is-vivo .mosaico_foto {
+		opacity: 0;
+	}
+
+	.mosaico.is-pronto .mosaico_grade {
+		opacity: 1;
+	}
+
+	.mosaico_grade :global(.mosaico_ladrilho) {
+		position: absolute;
+		transition: transform 1.1s cubic-bezier(0.22, 0.75, 0.2, 1) var(--d, 0ms);
+	}
+
+	.mosaico_grade :global(.mosaico_ladrilho.is-solto) {
+		transform: translateX(var(--dx, 0)) scale(0.8);
+	}
+
+	.mosaico_grade :global(.mosaico_carta) {
+		position: absolute;
+		inset: 0;
+		transform: perspective(800px) rotateY(0deg);
+		transform-style: preserve-3d;
+		transition: transform 0.9s cubic-bezier(0.3, 0.6, 0.2, 1) var(--d, 0ms);
+	}
+
+	.mosaico_grade :global(.mosaico_carta.is-virada) {
+		transform: perspective(800px) rotateY(180deg);
+	}
+
+	.mosaico_grade :global(.mosaico_carta i) {
+		position: absolute;
+		inset: 1px;
+		border-radius: 3px;
+		background-color: var(--graywarm900);
+		background-repeat: no-repeat;
+		backface-visibility: hidden;
+	}
+
+	.mosaico_grade :global(.mosaico_carta i + i) {
+		transform: rotateY(180deg);
+	}
+
+	/* Ladrilho virado pelo mouse: sai do plano e compensa o véu, para o detalhe aparecer */
+	.mosaico_grade :global(.mosaico_ladrilho.is-detalhe) {
+		z-index: 1;
+		transform: scale(1.08);
+	}
+
+	.mosaico_grade :global(.is-detalhe .mosaico_carta i + i) {
+		box-shadow: 0 0 0 2px var(--primary600), 0 12px 30px rgb(0 0 0 / 0.45);
+		filter: brightness(1.2);
+	}
+
+	/* Centro escurecido para o texto (contraste AA sobre qualquer foto); as bordas deixam a equipe à mostra */
+	.mosaico_veu {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background:
+			radial-gradient(ellipse 42% 56% at 50% 50%, rgb(37 40 50 / 0.9) 0%, rgb(37 40 50 / 0.86) 60%, rgb(37 40 50 / 0.2) 100%),
+			linear-gradient(to bottom, rgb(37 40 50 / 0.35), transparent 22%, transparent 70%, rgb(37 40 50 / 0.75));
+	}
+
+	.mosaico_legenda {
+		position: absolute;
+		left: clamp(1rem, 3vw, 2.5rem);
+		bottom: 1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0;
+		color: var(--white);
+		font-size: 0.85rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		pointer-events: none;
+		transition: opacity 0.35s ease;
+	}
+
+	.mosaico_legenda::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--primary600);
+	}
+
+	.mosaico_legenda.is-trocando {
+		opacity: 0;
+	}
+
+	.mosaico:not(.is-vivo) .mosaico_legenda {
+		display: none;
+	}
+
+	/* Celular: a equipe numa faixa logo abaixo do menu (o recorte tira só copa de árvore e pernas), que se
+	   dissolve no fundo escuro do texto */
+	@media (max-width: 767px) {
+		.mosaico {
+			bottom: auto;
+			height: calc(100vw / 1.95);
+		}
+
+		.mosaico_veu {
+			background: linear-gradient(to bottom, transparent, rgb(37 40 50 / 0.1) 55%, rgb(37 40 50 / 0.8) 85%, var(--graywarm900));
+		}
+
+		.mosaico_legenda {
+			display: none;
+		}
+	}
+</style>
