@@ -53,7 +53,8 @@ export const CONTATO = {
   whatsappUrl: 'https://wa.me/5531986506120',
   instagram: 'https://www.instagram.com/ejfgv/',
   linkedin: 'https://www.linkedin.com/company/ejfgv/',
-  endereco: 'Av. Nove de Julho, 2029 (FGV EAESP)', // da LP; a confirmar
+  endereco: 'R. Itapeva, 432 - Bela Vista, São Paulo - SP, 01332-000', // informado pelo Bruno em 30/10/2026
+  enderecoPostal: { rua: 'R. Itapeva, 432 - Bela Vista', cidade: 'São Paulo', uf: 'SP', cep: '01332-000' },
   razaoSocial: 'Empresa Júnior Associação Civil', // rodapé e política do site atual
   cnpj: '61.846.754/0001-00', // rodapé do site atual
 };

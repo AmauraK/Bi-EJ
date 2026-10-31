@@ -29,7 +29,7 @@ const organizacao = {
 	email: CONTATO.email,
 	telephone: CONTATO.whatsapp,
 	foundingDate: String(NUMEROS.fundacao),
-	address: { '@type': 'PostalAddress', streetAddress: CONTATO.endereco, addressCountry: 'BR' },
+	address: { '@type': 'PostalAddress', streetAddress: CONTATO.enderecoPostal.rua, addressLocality: CONTATO.enderecoPostal.cidade, addressRegion: CONTATO.enderecoPostal.uf, postalCode: CONTATO.enderecoPostal.cep, addressCountry: 'BR' },
 	sameAs: [CONTATO.instagram, CONTATO.linkedin],
 };
 const extras = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -132,10 +132,11 @@ import logoRodape from '../assets/logo-ejfgv-rodape.png';
 							<a href={CONTATO.whatsappUrl} target="_blank" rel="noopener">WhatsApp {CONTATO.whatsapp}</a>
 							<a href={CONTATO.instagram} target="_blank" rel="noopener">Instagram</a>
 							<a href={CONTATO.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+							<address class="footer_endereco">{CONTATO.endereco}</address>
 						</div>
 					</div>
 					<div class="footer_bottom">
-						<span>© {ano} {SITE.nome} – Todos os direitos reservados · {CONTATO.razaoSocial} · CNPJ {CONTATO.cnpj}</span>
+						<span>© {ano} {SITE.nome} – Todos os direitos reservados · {CONTATO.razaoSocial}</span>
 						<span>Atualizado em {atualizado}</span>
 					</div>
 				</div>
