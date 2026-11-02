@@ -67,20 +67,11 @@ const colecao = {
 				<ul class="cases_grid casos_lista">
 					{CASES.map((c) => (
 						<li data-solucoes={c.solucoes.join(' ')}>
-							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} texto={`Desafio: ${c.problema}.`} href={c.url} />
+							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} />
 						</li>
 					))}
 					<li data-solucoes={BI.slug}>
-						<article class="case_card">
-							<div>
-								<span class="case_tag">{BI.rotulo}</span>
-								<div class="case_metric"><span class="preencher">A preencher: resultado</span></div>
-							</div>
-							<div>
-								<h3><span class="preencher">Case de {BI.rotulo}: a preencher</span></h3>
-								<p><a class="casos_link" href={BI.url}>Conheça a {BI.nome} →</a></p>
-							</div>
-						</article>
+						<CaseCard tag={BI.rotulo} metrica="A preencher: resultado" titulo={`Case de ${BI.rotulo}: a preencher`} href={BI.url} rotuloLink={`Conheça a ${BI.nome}`} pendente />
 					</li>
 				</ul>
 			</div>
@@ -123,28 +114,16 @@ const colecao = {
 		margin-bottom: 0;
 	}
 
+	/* Repassa as linhas da grade ao card (subgrid do CaseCard) */
 	.casos_lista > li {
-		display: flex;
+		display: grid;
+		grid-row: span 2;
+		grid-template-rows: subgrid;
+		row-gap: 0;
 	}
 
 	.casos_lista > li[hidden] {
 		display: none;
-	}
-
-	.casos_lista :global(.case_card) {
-		flex: 1;
-	}
-
-	/* Resultados em texto: a fonte grande do .case_metric é para números curtos */
-	.casos_lista :global(.case_metric) {
-		font-size: clamp(1.25rem, 1.8vw, 1.5rem);
-		line-height: 1.2;
-	}
-
-	.casos_link {
-		color: var(--primary700);
-		font-weight: 600;
-		text-decoration: underline;
 	}
 
 	@media (min-width: 768px) and (max-width: 1024px) {

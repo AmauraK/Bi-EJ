@@ -157,7 +157,7 @@ const artigo = {
 				</div>
 				<div class="cases_grid case-historias">
 					{historias.map((c) => (
-						<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} texto={`Desafio: ${c.problema}.`} href={c.url} />
+						<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} />
 					))}
 				</div>
 				<a href="/cases-de-sucesso/" class="button-tertiary case-todos">Ver todos os cases →</a>
@@ -351,11 +351,6 @@ const artigo = {
 	.case-todos:hover {
 		background-color: transparent;
 		text-decoration: underline;
-	}
-
-	.case-historias :global(.case_metric) {
-		font-size: clamp(1.25rem, 1.8vw, 1.5rem);
-		line-height: 1.2;
 	}
 
 	/* Efeito de entrada: só com JS ativo (classe .tem-revelar); o que já está na tela não anima */

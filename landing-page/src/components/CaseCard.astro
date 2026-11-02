@@ -1,39 +1,271 @@
 ---
-// Card de case (.case_card, .case_tag, .case_metric da LP). `metrica` é o resultado em destaque (o "spoiler").
+// Card de case. Leitura em 4 passos: cliente (topo escuro com monograma) → setor e solução (chips)
+// → resultado (bloco rotulado) → desafio. Com `href`, o card inteiro é clicável.
+// `tag` segue o formato "Setor · Solução · Solução" (tagDo); sem " · ", vira um chip só.
 interface Props {
 	tag: string;
 	metrica: string;
 	titulo: string;
-	texto: string;
+	/** texto livre, sem rótulo */
+	texto?: string;
+	/** problema do cliente; aparece com o rótulo "Desafio" */
+	desafio?: string;
 	href?: string;
+	rotuloLink?: string;
+	/** conteúdo ainda a preencher: título e resultado com o marcador .preencher */
+	pendente?: boolean;
 	nivel?: 'h2' | 'h3';
 }
 
-const { tag, metrica, titulo, texto, href, nivel = 'h3' } = Astro.props;
+const { tag, metrica, titulo, texto, desafio, href, rotuloLink = 'Ver case completo', pendente = false, nivel = 'h3' } = Astro.props;
 const Titulo = nivel;
+
+const partes = tag.split(' · ');
+const setor = partes.length > 1 ? partes[0] : undefined;
+const solucoes = partes.length > 1 ? partes.slice(1) : partes;
+
+// Monograma: iniciais das duas primeiras palavras do cliente, sem preposições nem acentos.
+const LIGACOES = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'a', 'o']);
+const monograma = pendente
+	? '?'
+	: titulo
+			.normalize('NFD')
+			.replace(/\p{M}/gu, '')
+			.split(/\s+/)
+			.filter((p) => p && !LIGACOES.has(p.toLowerCase()))
+			.slice(0, 2)
+			.map((p) => p[0].toUpperCase())
+			.join('');
 ---
 
-<article class="case_card">
-	<div>
-		<span class="case_tag">{tag}</span>
-		<div class="case_metric">{metrica}</div>
+<article class:list={['case_card', 'case-card', { 'is-link': href }]}>
+	<div class="case-card_topo">
+		<span class="case-card_monograma" aria-hidden="true">{monograma}</span>
+		<div class="case-card_quem">
+			<Titulo class="case-card_cliente">{pendente ? <span class="preencher">{titulo}</span> : titulo}</Titulo>
+			<ul class="case-card_chips">
+				{setor && <li class="case-card_chip is-setor"><span class="sr-only">Setor: </span>{setor}</li>}
+				{solucoes.map((s) => <li class="case-card_chip is-solucao">{setor && <span class="sr-only">Solução: </span>}{s}</li>)}
+			</ul>
+		</div>
 	</div>
-	<div>
-		<Titulo>{titulo}</Titulo>
-		<p>{texto}</p>
-		{href && <a class="button-tertiary case_link" href={href}>Ver case completo →</a>}
+
+	<div class="case-card_corpo">
+		<div class="case-card_resultado">
+			<span class="case-card_rotulo">Resultado</span>
+			<p class="case-card_metrica">{pendente ? <span class="preencher">{metrica}</span> : metrica}</p>
+		</div>
+
+		{desafio && (
+			<div class="case-card_desafio">
+				<span class="case-card_rotulo">Desafio</span>
+				<p>{desafio}</p>
+			</div>
+		)}
+		{texto && <p class="case-card_texto">{texto}</p>}
+
+		{href && (
+			<a class="case-card_link" href={href}>
+				{rotuloLink} <span aria-hidden="true">→</span>
+			</a>
+		)}
 	</div>
 </article>
 
 <style>
-	.case_link {
-		height: auto;
-		margin-top: 0.75rem;
-		padding: 0.35rem 0;
+	/* .case_card (global) dá borda, raio e o hover; aqui o card perde o padding para o topo ir de borda a borda */
+	/* Topo e corpo viram linhas da grade pai (subgrid): os topos de uma mesma linha ficam da mesma altura.
+	   Fora de uma grade (carrossel da home no celular), cai no grid-auto-rows. */
+	.case-card {
+		position: relative;
+		display: grid;
+		grid-row: span 2;
+		grid-template-rows: subgrid;
+		grid-auto-rows: auto 1fr;
+		row-gap: 0;
+		padding: 0;
+		overflow: hidden;
 	}
 
-	.case_link:hover {
-		background-color: transparent;
+	.case-card:not(.is-link):hover {
+		transform: none;
+		box-shadow: none;
+	}
+
+	.case-card.is-link:hover {
+		border-color: var(--primary600);
+		box-shadow: 0 16px 32px -12px rgba(37, 40, 50, 0.18);
+	}
+
+	.case-card:has(.case-card_link:focus-visible) {
+		outline: 3px solid var(--primary700);
+		outline-offset: 3px;
+	}
+
+	/* Topo: chumbo com retícula de pontos que aparece para a direita */
+	.case-card_topo {
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		padding: 1.5rem 1.5rem 1.25rem;
+		background-color: var(--graywarm950);
+		background-image:
+			linear-gradient(90deg, var(--graywarm950) 35%, transparent),
+			radial-gradient(var(--border-hairline-dark) 1.2px, transparent 1.2px);
+		background-size: auto, 10px 10px;
+		color: var(--white);
+	}
+
+	.case-card_monograma {
+		flex: 0 0 3rem;
+		height: 3rem;
+		display: grid;
+		place-items: center;
+		border-radius: 0.75rem;
+		background: var(--primary600);
+		color: var(--graywarm950);
+		font-size: 1.1rem;
+		font-weight: 900;
+		letter-spacing: -0.02em;
+	}
+
+	.case-card_quem {
+		min-width: 0;
+	}
+
+	.case-card_cliente {
+		margin: 0;
+		color: var(--white);
+		font-size: 1.3rem;
+		font-weight: 800;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+	}
+
+	.case-card_cliente .preencher {
+		color: var(--white);
+	}
+
+	.case-card_chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 0.65rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.case-card_chip {
+		padding: 0.2rem 0.55rem;
+		border-radius: 999px;
+		font-size: 0.72rem;
+		font-weight: 700;
+		line-height: 1.4;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.case-card_chip.is-setor {
+		border: 1px solid rgba(249, 255, 252, 0.35);
+		color: var(--graywarm300);
+	}
+
+	.case-card_chip.is-solucao {
+		border: 1px solid var(--primary600);
+		background: var(--primary600);
+		color: var(--graywarm950);
+	}
+
+	.case-card_corpo {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+		padding: 1.25rem 1.5rem 1.5rem;
+	}
+
+	.case-card_rotulo {
+		display: block;
+		margin-bottom: 0.3rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--primary900);
+	}
+
+	.case-card_resultado {
+		padding: 0.9rem 1rem;
+		border-left: 4px solid var(--primary600);
+		border-radius: 0 0.5rem 0.5rem 0;
+		background: var(--primary50);
+	}
+
+	.case-card_metrica {
+		margin: 0;
+		color: var(--gray900);
+		font-size: 1.2rem;
+		font-weight: 800;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+	}
+
+	.case-card_desafio p,
+	.case-card_texto {
+		margin: 0;
+		color: var(--gray600);
+		font-size: 0.9rem;
+		line-height: 1.55;
+	}
+
+	.case-card_desafio p {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		overflow: hidden;
+	}
+
+	.case-card_link {
+		margin-top: auto;
+		align-self: flex-start;
+		color: var(--primary900);
+		font-weight: 700;
+		font-size: 0.95rem;
+		text-decoration: none;
+	}
+
+	/* O link cobre o card todo; o foco aparece no card (regra :has acima) */
+	.case-card_link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.case-card_link:focus-visible {
+		outline: none;
+	}
+
+	.case-card_link span {
+		display: inline-block;
+		transition: transform 0.25s var(--ease-out-expo);
+	}
+
+	.case-card.is-link:hover .case-card_link {
 		text-decoration: underline;
+	}
+
+	.case-card.is-link:hover .case-card_link span {
+		transform: translateX(4px);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
 	}
 </style>

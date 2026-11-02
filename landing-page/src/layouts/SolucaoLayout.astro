@@ -135,7 +135,7 @@ const servico = {
 									tag={`${c.segmento} · ${c.solucao}`}
 									metrica={c.destaque}
 									titulo={c.cliente}
-									texto={`Desafio: ${c.problema}.`}
+									desafio={`${c.problema}.`}
 									href={c.url}
 								/>
 							))}
@@ -321,11 +321,6 @@ const servico = {
 
 	.solucao_cases {
 		margin-bottom: 2.5rem;
-	}
-
-	.solucao_cases :global(.case_metric) {
-		font-size: clamp(1.25rem, 1.8vw, 1.5rem);
-		line-height: 1.2;
 	}
 
 	.solucao_outras {
