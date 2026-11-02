@@ -75,12 +75,12 @@ const faq = [
 	ctaHref="#formulario"
 >
 	<div class="home">
-		<!-- Dobra 1 · Promessa: selo, H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes,
+		<!-- Dobra 1 · Promessa: H1, abertura "resposta primeiro", 2 CTAs grandes e logos de clientes,
 		     sobre o mosaico vivo da equipe (HeroMosaico) -->
 		<PageHeader
 			centralizado
 			escuro
-			kicker={`A primeira Empresa Júnior da América Latina · desde ${NUMEROS.fundacao}`}
+			semDivisor
 			titulo={`Consultoria estratégica feita por alunos da FGV +${NUMEROS.projetos} projetos entregues`}
 			descricao={`A ${SITE.nome} é a ${SITE.nomeCompleto}. Desde ${NUMEROS.fundacao}, alunos da graduação da FGV, com orientação de professores, fazem projetos de consultoria estratégica sob medida para pequenas e médias empresas crescerem.`}
 		>
@@ -307,21 +307,8 @@ const faq = [
 		text-shadow: 0 1px 18px rgb(37 40 50 / 0.6);
 	}
 
-	.home :global(.section_page-header :is(.hero_kicker, .hero_heading, .hero_description, .hero_actions > *)) {
+	.home :global(.section_page-header :is(.hero_heading, .hero_description, .hero_actions > *)) {
 		pointer-events: auto;
-	}
-
-	.home :global(.hero_kicker) {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.55rem;
-		padding: 0.45rem 0.95rem;
-		margin-bottom: 1.1rem;
-		background: rgb(37 40 50 / 0.7);
-		border: 1px solid color-mix(in srgb, var(--primary200) 55%, transparent);
-		border-radius: var(--card-radius-md);
-		line-height: 1.4;
-		text-shadow: none;
 	}
 
 	.home :global(.section_page-header .hero_description) {
@@ -343,7 +330,7 @@ const faq = [
 		text-shadow: none;
 	}
 
-	/* Celular: o texto começa no fim da faixa de fotos (HeroMosaico), que se dissolve atrás do selo */
+	/* Celular: o texto começa no fim da faixa de fotos (HeroMosaico), que se dissolve atrás do título */
 	@media (max-width: 767px) {
 		.home > :global(.section_page-header) {
 			align-items: flex-start;
@@ -352,27 +339,9 @@ const faq = [
 			padding-bottom: 2.5rem;
 		}
 
-		.home :global(.section_page-header .home-hero_divider) {
-			display: none;
-		}
-
-		.home :global(.hero_kicker) {
-			padding: 0.35rem 0.8rem;
-			margin-bottom: 0.9rem;
-		}
-
 		.home :global(.section_page-header .hero_description) {
 			margin-bottom: 1.25rem;
 		}
-	}
-
-	.home :global(.hero_kicker::before) {
-		content: "";
-		flex-shrink: 0;
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background: var(--primary600);
 	}
 
 	.home :global(.hero_heading) {

@@ -10,9 +10,10 @@ interface Props {
 	descricao?: string;
 	escuro?: boolean;
 	centralizado?: boolean;
+	semDivisor?: boolean;
 }
 
-const { titulo, kicker, descricao, escuro = false, centralizado = false } = Astro.props;
+const { titulo, kicker, descricao, escuro = false, centralizado = false, semDivisor = false } = Astro.props;
 const temMidia = Astro.slots.has('midia');
 const temAcoes = Astro.slots.has('acoes');
 ---
@@ -24,7 +25,7 @@ const temAcoes = Astro.slots.has('acoes');
 		<div class="container-large">
 			<div class:list={['page-header_wrapper', { 'is-centered': centralizado, 'is-single': !temMidia && !centralizado }]}>
 				<div>
-					<div class="home-hero_divider"></div>
+					{!semDivisor && <div class="home-hero_divider"></div>}
 					{kicker && <span class="hero_kicker">{kicker}</span>}
 					<h1 id="page-heading" class:list={['hero_heading', { 'text-color-gradient-gray': !escuro }]}>
 						<slot name="titulo">{titulo}</slot>
