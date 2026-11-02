@@ -74,7 +74,7 @@ const miniaturas = await Promise.all(
 <script>
 	type Quadro = { src: string; srcPequena: string; w: number; h: number; foco: number[]; legenda: string };
 	type Miniatura = { src: string; posicao: string };
-	type Ladrilho = { el: HTMLElement; carta: HTMLElement; frente: HTMLElement; verso: HTMLElement; c: number; r: number; detalhe: boolean };
+	type Ladrilho = { el: HTMLElement; carta: HTMLElement; frente: HTMLElement; verso: HTMLElement; c: number; r: number; detalhe: boolean; naFrente: boolean };
 
 	const raiz = document.querySelector<HTMLElement>('[data-mosaico]');
 	const economia = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
@@ -119,6 +119,7 @@ const miniaturas = await Promise.all(
 		let ladrilhos: Ladrilho[] = [];
 		let cols = 0, rows = 0, W = 0, H = 0;
 		let timer = 0, vez = 0, sobre = 0, emOnda = false, visivel = true, versoPronto = '';
+		let fase: 'principal' | 'transicao' | 'outra' = 'principal';
 
 		const cobrir = (q: Quadro) => {
 			const s = Math.max(W / q.w, H / q.h);
@@ -149,15 +150,21 @@ const miniaturas = await Promise.all(
 		};
 		let animandoTimer = 0;
 
+		// Mouse: com a equipe à mostra, o ladrilho vira para o verso (miniatura); com outra foto à mostra
+		// (depois de uma onda), vira de volta para a frente, que recebe a miniatura e depois volta à equipe.
 		const entrar = (t: Ladrilho) => {
-			if (emOnda || t.detalhe) return;
+			if (fase === 'transicao' || t.detalhe) return;
 			t.detalhe = true;
 			sobre++;
-			versoPronto = '';
-			pintarMiniatura(t.verso, t, t.c + t.r);
+			t.naFrente = fase === 'outra';
+			if (t.naFrente) pintarMiniatura(t.frente, t, t.c + t.r);
+			else {
+				versoPronto = '';
+				pintarMiniatura(t.verso, t, t.c + t.r);
+			}
 			t.el.classList.add('is-detalhe');
 			animando(VIRADA + 100);
-			virar(t, true);
+			virar(t, !t.naFrente);
 		};
 		const sair = (t: Ladrilho) => {
 			if (!t.detalhe) return;
@@ -165,7 +172,17 @@ const miniaturas = await Promise.all(
 			sobre--;
 			t.el.classList.remove('is-detalhe');
 			animando(VIRADA + 100);
-			virar(t, false);
+			virar(t, t.naFrente);
+			if (t.naFrente) setTimeout(() => t.detalhe || pintar(t.frente, principal, t), VIRADA);
+		};
+		const soltarMouse = () => {
+			for (const t of ladrilhos) {
+				if (!t.detalhe) continue;
+				t.detalhe = false;
+				t.el.classList.remove('is-detalhe');
+				if (t.naFrente) pintar(t.frente, principal, t);
+			}
+			sobre = 0;
 		};
 
 		const montar = () => {
@@ -188,7 +205,7 @@ const miniaturas = await Promise.all(
 					el.innerHTML = '<div class="mosaico_carta"><i></i><i></i></div>';
 					const carta = el.firstElementChild as HTMLElement;
 					const [frente, verso] = Array.from(carta.children) as HTMLElement[];
-					const t = { el, carta, frente, verso, c, r, detalhe: false };
+					const t = { el, carta, frente, verso, c, r, detalhe: false, naFrente: false };
 					pintar(frente, principal, t);
 					if (passar) {
 						el.addEventListener('pointerenter', () => entrar(t));
@@ -209,7 +226,7 @@ const miniaturas = await Promise.all(
 		const prepararVerso = (q: Quadro) => {
 			if (versoPronto === q.src) return;
 			ocioso(() => {
-				if (emOnda || sobre > 0) return;
+				if (fase !== 'principal' || sobre > 0) return;
 				for (const t of ladrilhos) pintar(t.verso, q, t);
 				versoPronto = q.src;
 			});
@@ -226,6 +243,7 @@ const miniaturas = await Promise.all(
 			const daDireita = vez++ % 2 === 1;
 			const atraso = (t: Ladrilho) => (((daDireita ? cols - 1 - t.c : t.c) / cols + t.r / rows) / 2) * ONDA;
 			emOnda = true;
+			fase = 'transicao';
 			if (versoPronto !== q.src) {
 				for (const t of ladrilhos) pintar(t.verso, q, t);
 				versoPronto = q.src;
@@ -238,7 +256,13 @@ const miniaturas = await Promise.all(
 			await espera(ONDA / 2);
 			legenda.textContent = q.legenda;
 			legenda.classList.remove('is-trocando');
+			await espera(ONDA / 2 + VIRADA);
+			fase = 'outra';
 			timer = window.setTimeout(async () => {
+				for (let i = 0; sobre > 0 && i < 20; i++) await espera(500);
+				fase = 'transicao';
+				soltarMouse();
+				await quadroSeguinte();
 				animando(ONDA + VIRADA + 100);
 				for (const t of ladrilhos) virar(t, false, atraso(t));
 				legenda.classList.add('is-trocando');
@@ -247,11 +271,12 @@ const miniaturas = await Promise.all(
 				legenda.classList.remove('is-trocando');
 				await espera(ONDA + VIRADA / 2);
 				emOnda = false;
+				fase = 'principal';
 				versoPronto = '';
 				const proxima = outras[vez % outras.length];
 				if (proxima) garantir(proxima).then((ok) => ok && prepararVerso(proxima));
 				agendar(PAUSA);
-			}, ONDA + EXIBICAO);
+			}, EXIBICAO);
 		};
 
 		const abrir = () => {
@@ -294,6 +319,7 @@ const miniaturas = await Promise.all(
 			redim = window.setTimeout(() => {
 				clearTimeout(timer);
 				emOnda = false;
+				fase = 'principal';
 				sobre = 0;
 				legenda.textContent = principal.legenda;
 				montar();
@@ -390,7 +416,7 @@ const miniaturas = await Promise.all(
 		transform: translate3d(var(--x), var(--y), 0) scale(1.08);
 	}
 
-	.mosaico_grade :global(.is-detalhe .mosaico_carta i + i) {
+	.mosaico_grade :global(.is-detalhe .mosaico_carta i) {
 		box-shadow: 0 0 0 2px var(--primary600);
 	}
 
