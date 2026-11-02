@@ -55,12 +55,19 @@ const miniaturas = await Promise.all(
 </div>
 <script is:inline>
 	// Antes da 1ª pintura: com movimento liberado, a foto parada some e o mosaico a monta. Se o script do
-	// mosaico não rodar em 6 s, a foto volta.
+	// mosaico não rodar em 6 s de aba visível, a foto volta (aba aberta em segundo plano não conta).
 	(() => {
 		const raiz = document.querySelector('[data-mosaico]');
 		if (!raiz || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		raiz.classList.add('is-vivo');
-		setTimeout(() => raiz.classList.contains('is-pronto') || raiz.classList.remove('is-vivo'), 6000);
+		let visivelMs = 0;
+		const conferir = () => {
+			if (raiz.classList.contains('is-pronto')) return;
+			if (!document.hidden) visivelMs += 1000;
+			if (visivelMs >= 6000) raiz.classList.remove('is-vivo');
+			else setTimeout(conferir, 1000);
+		};
+		setTimeout(conferir, 1000);
 	})();
 </script>
 
