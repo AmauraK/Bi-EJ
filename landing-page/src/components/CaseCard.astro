@@ -1,69 +1,67 @@
 ---
-// Card de case. Leitura em 4 passos: cliente (topo escuro com monograma) → setor e solução (chips)
-// → resultado (bloco rotulado) → desafio. Com `href`, o card inteiro é clicável.
-// `tag` segue o formato "Setor · Solução · Solução" (tagDo); sem " · ", vira um chip só.
+// Card de case em tom editorial: o resultado é a manchete; cliente e setor viram a linha de crédito.
+// Leitura: solução (rótulo discreto) → resultado (manchete) → cliente — setor → desafio.
+// `tag` segue o formato "Setor · Solução · Solução" (tagDo); sem " · ", vira só o rótulo.
+// `destaque`: versão grafite (a página decide a largura). `pendente`: case ainda a preencher.
 interface Props {
 	tag: string;
 	metrica: string;
 	titulo: string;
 	/** texto livre, sem rótulo */
 	texto?: string;
-	/** problema do cliente; aparece com o rótulo "Desafio" */
+	/** problema do cliente; aparece como "Desafio: …" */
 	desafio?: string;
 	href?: string;
 	rotuloLink?: string;
+	destaque?: boolean;
 	/** conteúdo ainda a preencher: título e resultado com o marcador .preencher */
 	pendente?: boolean;
 	nivel?: 'h2' | 'h3';
 }
 
-const { tag, metrica, titulo, texto, desafio, href, rotuloLink = 'Ver case completo', pendente = false, nivel = 'h3' } = Astro.props;
+const {
+	tag,
+	metrica,
+	titulo,
+	texto,
+	desafio,
+	href,
+	rotuloLink = 'Ver case completo',
+	destaque = false,
+	pendente = false,
+	nivel = 'h3',
+} = Astro.props;
 const Titulo = nivel;
 
 const partes = tag.split(' · ');
 const setor = partes.length > 1 ? partes[0] : undefined;
-const solucoes = partes.length > 1 ? partes.slice(1) : partes;
+const solucao = (partes.length > 1 ? partes.slice(1) : partes).join(' · ');
 
-// Monograma: iniciais das duas primeiras palavras do cliente, sem preposições nem acentos.
-const LIGACOES = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'a', 'o']);
-const monograma = pendente
-	? '?'
-	: titulo
-			.normalize('NFD')
-			.replace(/\p{M}/gu, '')
-			.split(/\s+/)
-			.filter((p) => p && !LIGACOES.has(p.toLowerCase()))
-			.slice(0, 2)
-			.map((p) => p[0].toUpperCase())
-			.join('');
+// Só o primeiro número da manchete (com a unidade: %, x, vezes, dias úteis, meses) ganha a cor.
+const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?: (?:vezes|dias úteis|dias|meses))?)(.*)$/s);
 ---
 
-<article class:list={['case_card', 'case-card', { 'is-link': href }]}>
-	<div class="case-card_topo">
-		<span class="case-card_monograma" aria-hidden="true">{monograma}</span>
-		<div class="case-card_quem">
-			<Titulo class="case-card_cliente">{pendente ? <span class="preencher">{titulo}</span> : titulo}</Titulo>
-			<ul class="case-card_chips">
-				{setor && <li class="case-card_chip is-setor"><span class="sr-only">Setor: </span>{setor}</li>}
-				{solucoes.map((s) => <li class="case-card_chip is-solucao">{setor && <span class="sr-only">Solução: </span>}{s}</li>)}
-			</ul>
-		</div>
+<article class:list={['case_card', 'case-card', { 'is-link': href, 'is-destaque': destaque, 'is-pendente': pendente }]}>
+	<div class="case-card_manchete">
+		<p class="case-card_solucao">{setor && <span class="sr-only">Solução: </span>}{solucao}</p>
+		<Titulo class="case-card_resultado">
+			{pendente ? (
+				<span class="preencher">{metrica}</span>
+			) : numero ? (
+				<>{numero[1]}<span class="case-card_numero">{numero[2]}</span>{numero[3]}</>
+			) : (
+				metrica
+			)}
+		</Titulo>
 	</div>
 
-	<div class="case-card_corpo">
-		<div class="case-card_resultado">
-			<span class="case-card_rotulo">Resultado</span>
-			<p class="case-card_metrica">{pendente ? <span class="preencher">{metrica}</span> : metrica}</p>
-		</div>
-
-		{desafio && (
-			<div class="case-card_desafio">
-				<span class="case-card_rotulo">Desafio</span>
-				<p>{desafio}</p>
-			</div>
-		)}
+	<div class="case-card_rodape">
+		<p class="case-card_credito">
+			{pendente ? <span class="preencher">{titulo}</span> : <strong>{titulo}</strong>}
+			{setor && <span class="case-card_setor"> — {setor}</span>}
+		</p>
+		{desafio && <p class="case-card_desafio"><strong>Desafio:</strong> {desafio}</p>}
 		{texto && <p class="case-card_texto">{texto}</p>}
-
 		{href && (
 			<a class="case-card_link" href={href}>
 				{rotuloLink} <span aria-hidden="true">→</span>
@@ -73,28 +71,33 @@ const monograma = pendente
 </article>
 
 <style>
-	/* .case_card (global) dá borda, raio e o hover; aqui o card perde o padding para o topo ir de borda a borda */
-	/* Topo e corpo viram linhas da grade pai (subgrid): os topos de uma mesma linha ficam da mesma altura.
-	   Fora de uma grade (carrossel da home no celular), cai no grid-auto-rows. */
+	/* Papel: tom claro da marca com grão de ruído (SVG inline, ~0,5 kB) */
 	.case-card {
+		--grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .145 0 0 0 0 .157 0 0 0 0 .196 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+		--sombra: 0 1px 2px rgba(37, 40, 50, 0.04), 0 10px 28px -18px rgba(37, 40, 50, 0.22);
 		position: relative;
+		/* Manchete e rodapé são linhas da grade pai (subgrid): na mesma linha da grade, os filetes
+		   e os créditos ficam na mesma altura. Fora de uma grade (carrossel da home), vale grid-auto-rows. */
 		display: grid;
 		grid-row: span 2;
 		grid-template-rows: subgrid;
 		grid-auto-rows: auto 1fr;
 		row-gap: 0;
-		padding: 0;
-		overflow: hidden;
+		padding: 1.75rem 1.75rem 1.5rem;
+		border: 1px solid var(--border-hairline-light);
+		border-radius: var(--card-radius-md);
+		background: var(--grao), var(--primary25);
+		box-shadow: var(--sombra);
 	}
 
 	.case-card:not(.is-link):hover {
 		transform: none;
-		box-shadow: none;
+		box-shadow: var(--sombra);
 	}
 
 	.case-card.is-link:hover {
-		border-color: var(--primary600);
-		box-shadow: 0 16px 32px -12px rgba(37, 40, 50, 0.18);
+		transform: translateY(-4px);
+		box-shadow: 0 2px 4px rgba(37, 40, 50, 0.05), 0 22px 40px -20px rgba(37, 40, 50, 0.32);
 	}
 
 	.case-card:has(.case-card_link:focus-visible) {
@@ -102,115 +105,61 @@ const monograma = pendente
 		outline-offset: 3px;
 	}
 
-	/* Topo: chumbo com retícula de pontos que aparece para a direita */
-	.case-card_topo {
-		display: flex;
-		align-items: flex-start;
-		gap: 1rem;
-		padding: 1.5rem 1.5rem 1.25rem;
-		background-color: var(--graywarm950);
-		background-image:
-			linear-gradient(90deg, var(--graywarm950) 35%, transparent),
-			radial-gradient(var(--border-hairline-dark) 1.2px, transparent 1.2px);
-		background-size: auto, 10px 10px;
-		color: var(--white);
-	}
-
-	.case-card_monograma {
-		flex: 0 0 3rem;
-		height: 3rem;
-		display: grid;
-		place-items: center;
-		border-radius: 0.75rem;
-		background: var(--primary600);
-		color: var(--graywarm950);
-		font-size: 1.1rem;
-		font-weight: 900;
-		letter-spacing: -0.02em;
-	}
-
-	.case-card_quem {
-		min-width: 0;
-	}
-
-	.case-card_cliente {
-		margin: 0;
-		color: var(--white);
-		font-size: 1.3rem;
-		font-weight: 800;
-		line-height: 1.2;
-		letter-spacing: -0.01em;
-	}
-
-	.case-card_cliente .preencher {
-		color: var(--white);
-	}
-
-	.case-card_chips {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin: 0.65rem 0 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.case-card_chip {
-		padding: 0.2rem 0.55rem;
-		border-radius: 999px;
-		font-size: 0.72rem;
-		font-weight: 700;
-		line-height: 1.4;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-	}
-
-	.case-card_chip.is-setor {
-		border: 1px solid rgba(249, 255, 252, 0.35);
-		color: var(--graywarm300);
-	}
-
-	.case-card_chip.is-solucao {
-		border: 1px solid var(--primary600);
-		background: var(--primary600);
-		color: var(--graywarm950);
-	}
-
-	.case-card_corpo {
-		flex: 1;
+	.case-card_manchete {
 		display: flex;
 		flex-direction: column;
-		gap: 1.1rem;
-		padding: 1.25rem 1.5rem 1.5rem;
+		gap: 0.75rem;
 	}
 
-	.case-card_rotulo {
-		display: block;
-		margin-bottom: 0.3rem;
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--primary900);
+	.case-card_solucao {
+		margin: 0;
+		color: var(--gray600);
+		font-size: 0.85rem;
+		font-weight: 600;
+		line-height: 1.3;
 	}
 
 	.case-card_resultado {
-		padding: 0.9rem 1rem;
-		border-left: 4px solid var(--primary600);
-		border-radius: 0 0.5rem 0.5rem 0;
-		background: var(--primary50);
-	}
-
-	.case-card_metrica {
 		margin: 0;
 		color: var(--gray900);
-		font-size: 1.2rem;
+		font-size: clamp(1.45rem, 1.15rem + 0.55vw, 1.7rem);
 		font-weight: 800;
-		line-height: 1.25;
-		letter-spacing: -0.01em;
+		line-height: 1.12;
+		letter-spacing: -0.025em;
+		text-wrap: balance;
 	}
 
-	.case-card_desafio p,
+	/* Único elemento laranja forte do card; --primary700 passa AA para texto grande no papel */
+	.case-card_numero {
+		color: var(--primary700);
+		white-space: nowrap;
+	}
+
+	.case-card_rodape {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		padding-top: 1.75rem;
+	}
+
+	.case-card_credito {
+		margin: 0;
+		padding-top: 0.9rem;
+		border-top: 1px solid var(--border-hairline-light);
+		color: var(--gray900);
+		font-size: 0.95rem;
+		line-height: 1.4;
+	}
+
+	.case-card_credito strong {
+		font-weight: 700;
+	}
+
+	.case-card_setor {
+		color: var(--gray600);
+	}
+
+	.case-card_desafio,
 	.case-card_texto {
 		margin: 0;
 		color: var(--gray600);
@@ -218,7 +167,7 @@ const monograma = pendente
 		line-height: 1.55;
 	}
 
-	.case-card_desafio p {
+	.case-card_desafio {
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;
@@ -226,12 +175,18 @@ const monograma = pendente
 		overflow: hidden;
 	}
 
+	.case-card_desafio strong {
+		color: var(--gray900);
+		font-weight: 600;
+	}
+
 	.case-card_link {
 		margin-top: auto;
+		padding-top: 0.4rem;
 		align-self: flex-start;
-		color: var(--primary900);
-		font-weight: 700;
+		color: var(--gray900);
 		font-size: 0.95rem;
+		font-weight: 700;
 		text-decoration: none;
 	}
 
@@ -240,6 +195,7 @@ const monograma = pendente
 		content: '';
 		position: absolute;
 		inset: 0;
+		border-radius: inherit;
 	}
 
 	.case-card_link:focus-visible {
@@ -253,10 +209,113 @@ const monograma = pendente
 
 	.case-card.is-link:hover .case-card_link {
 		text-decoration: underline;
+		text-underline-offset: 0.2em;
 	}
 
 	.case-card.is-link:hover .case-card_link span {
-		transform: translateX(4px);
+		transform: translateX(5px);
+	}
+
+	/* Destaque: grafite com grão claro; em telas largas, manchete à esquerda e crédito à direita */
+	.case-card.is-destaque {
+		--grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .976 0 0 0 0 1 0 0 0 0 .988 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+		background: var(--grao), var(--graywarm950);
+		border-color: var(--graywarm950);
+	}
+
+	.is-destaque .case-card_solucao,
+	.is-destaque .case-card_setor,
+	.is-destaque .case-card_desafio,
+	.is-destaque .case-card_texto {
+		color: var(--graywarm300);
+	}
+
+	.is-destaque .case-card_resultado,
+	.is-destaque .case-card_credito,
+	.is-destaque .case-card_desafio strong,
+	.is-destaque .case-card_link {
+		color: var(--white);
+	}
+
+	.is-destaque .case-card_numero {
+		color: var(--primary600);
+	}
+
+	.is-destaque .case-card_credito {
+		border-top-color: var(--border-hairline-dark);
+	}
+
+	@media (min-width: 1025px) {
+		.case-card.is-destaque {
+			grid-template-rows: none;
+			grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+			align-items: end;
+			column-gap: 2.5rem;
+			padding: 2.25rem;
+		}
+
+		.is-destaque .case-card_rodape {
+			padding-top: 0;
+		}
+
+		/* rótulo no canto de cima, manchete embaixo, alinhada ao crédito */
+		.is-destaque .case-card_manchete {
+			align-self: stretch;
+			justify-content: space-between;
+			gap: 2rem;
+		}
+
+		.is-destaque .case-card_resultado {
+			font-size: clamp(2rem, 1.2rem + 1.2vw, 2.6rem);
+			line-height: 1.05;
+		}
+	}
+
+	/* Pendente: discreto, sem papel nem sombra; o tracejado diz "a preencher" */
+	.case-card.is-pendente {
+		grid-template-rows: none;
+		gap: 0.75rem;
+		padding-block: 1.25rem;
+		background: transparent;
+		box-shadow: none;
+		border: 1px dashed var(--gray400);
+	}
+
+	.is-pendente .case-card_manchete {
+		gap: 0.4rem;
+	}
+
+	.is-pendente .case-card_rodape {
+		padding-top: 0;
+	}
+
+	@media (min-width: 768px) {
+		.case-card.is-pendente {
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: end;
+			column-gap: 2rem;
+		}
+
+		.is-pendente .case-card_rodape {
+			align-items: flex-end;
+			text-align: right;
+		}
+	}
+
+	.case-card.is-pendente:hover {
+		transform: none;
+		box-shadow: none;
+		border-color: var(--gray600);
+	}
+
+	.is-pendente .case-card_resultado {
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.is-pendente .case-card_credito {
+		border-top: 0;
+		padding-top: 0;
 	}
 
 	.sr-only {

@@ -65,12 +65,12 @@ const colecao = {
 				<p class="casos_status" aria-live="polite" data-filtro-status></p>
 
 				<ul class="cases_grid casos_lista">
-					{CASES.map((c) => (
-						<li data-solucoes={c.solucoes.join(' ')}>
-							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} />
+					{CASES.map((c, i) => (
+						<li data-solucoes={c.solucoes.join(' ')} class:list={{ 'is-destaque': i === 0 }}>
+							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} destaque={i === 0} />
 						</li>
 					))}
-					<li data-solucoes={BI.slug}>
+					<li data-solucoes={BI.slug} class="is-pendente">
 						<CaseCard tag={BI.rotulo} metrica="A preencher: resultado" titulo={`Case de ${BI.rotulo}: a preencher`} href={BI.url} rotuloLink={`Conheça a ${BI.nome}`} pendente />
 					</li>
 				</ul>
@@ -114,12 +114,28 @@ const colecao = {
 		margin-bottom: 0;
 	}
 
+	/* Ritmo: o primeiro case em destaque ocupa 2 colunas (só com 3 colunas) e o case de BI
+	   ainda a preencher vira uma faixa discreta na largura toda. `dense` evita buracos ao filtrar. */
+	.casos_lista {
+		grid-auto-flow: dense;
+	}
+
 	/* Repassa as linhas da grade ao card (subgrid do CaseCard) */
 	.casos_lista > li {
 		display: grid;
 		grid-row: span 2;
 		grid-template-rows: subgrid;
 		row-gap: 0;
+	}
+
+	.casos_lista > li.is-pendente {
+		grid-column: 1 / -1;
+	}
+
+	@media (min-width: 1025px) {
+		.casos_lista > li.is-destaque {
+			grid-column: span 2;
+		}
 	}
 
 	.casos_lista > li[hidden] {
