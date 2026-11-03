@@ -13,6 +13,15 @@ import retratoAuditorio3 from './assets/fotos/retrato-auditorio-3.jpg';
 import retratoAuditorio4 from './assets/fotos/retrato-auditorio-4.jpg';
 // Reunião de trabalho (IMG_4709): já vinha otimizada do site estático, em public/fotos/img-4709-2400.webp
 import equipeReuniao from './assets/fotos/equipe-reuniao.webp';
+import { getImage } from 'astro:assets';
+// Logos recebidos (originais na raiz do repositório), sem margem e com 160 px de altura. A Abra Sorvete veio
+// branca: o branco virou Chumbo para aparecer na faixa clara.
+import logoDocol from './assets/logos/docol.png';
+import logoWarner from './assets/logos/warner.png';
+import logoEpoca from './assets/logos/epoca.png';
+import logoVitacon from './assets/logos/vitacon.png';
+import logoItamedi from './assets/logos/itamedi.png';
+import logoAbraSorvete from './assets/logos/abra-sorvete.png';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -399,10 +408,21 @@ export const LOGOS = [
   { nome: 'Natura', src: `${CDN}/672a0fa8038f40e48b590c3b_natura-cor.svg` },
   { nome: 'Faber-Castell', src: `${CDN}/672a0faa28416fb4936c0982_faber%20castell-cor.svg` },
   { nome: 'Mondelez', src: `${CDN}/672a0faa796590697d979385_mondelez-cor.svg` },
+  // WebP com 64 px de altura (o dobro dos 32 px da faixa, para telas retina)
+  ...(await Promise.all(
+    [
+      { nome: 'Docol', src: logoDocol },
+      { nome: 'Warner Bros.', src: logoWarner },
+      { nome: 'Época Cosméticos', src: logoEpoca },
+      { nome: 'Vitacon', src: logoVitacon },
+      { nome: 'Itamedi', src: logoItamedi },
+      { nome: 'Abra Sorvete', src: logoAbraSorvete },
+    ].map(async ({ nome, src }) => ({ nome, src: (await getImage({ src, height: 64, format: 'webp' })).src }))
+  )),
 ];
 
-// docx: logos a incluir, com fundo transparente. Arquivos ainda não recebidos.
-export const LOGOS_PENDENTES = ['Docol', 'Warner Bros', 'Mandic', 'Época Cosméticos'];
+// docx: logos a incluir, com fundo transparente. Arquivo ainda não recebido.
+export const LOGOS_PENDENTES = ['Mandic'];
 
 // docx: Contato → Diagnóstico → Proposta → Projeto. Textos da LP original.
 export const METODO = [
