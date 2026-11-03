@@ -58,8 +58,8 @@ export const SITE = {
 
 export const CONTATO = {
   email: 'comercial@ejfgv.com',
-  whatsapp: '+55 31 98650-6120', // a confirmar (DDD 31)
-  whatsappUrl: 'https://wa.me/5531986506120',
+  whatsapp: '+55 11 97071-3295', // informado pelo Bruno em 03/11/2026
+  whatsappUrl: 'https://wa.me/5511970713295',
   instagram: 'https://www.instagram.com/ejfgv/',
   linkedin: 'https://www.linkedin.com/company/ejfgv/',
   endereco: 'R. Itapeva, 432 - Bela Vista, São Paulo - SP, 01332-000', // informado pelo Bruno em 30/10/2026
