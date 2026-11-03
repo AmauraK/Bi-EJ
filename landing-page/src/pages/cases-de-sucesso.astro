@@ -54,6 +54,15 @@ const colecao = {
 		</figure>
 	</PageHeader>
 
+	{/* Onda em 3 camadas (grafite, cinza médio, cinza claro) entre a capa escura e a lista clara */}
+	<div class="casos_onda" aria-hidden="true">
+		<svg viewBox="0 0 1440 130" preserveAspectRatio="none">
+			<path class="onda-3" d="M0 0H1440V82C1150 112 800 66 440 56C260 51 110 60 0 76Z" />
+			<path class="onda-2" d="M0 0H1440V56C1150 86 800 40 440 30C260 25 110 34 0 50Z" />
+			<path class="onda-1" d="M0 0H1440V30C1150 60 800 14 440 4C260 -1 110 8 0 24Z" />
+		</svg>
+	</div>
+
 	<section id="lista-cases" class="section_depoimentos casos" aria-labelledby="lista-cases-titulo">
 		<div class="page-padding padding-section-medium">
 			<div class="container-large">
@@ -99,6 +108,27 @@ const colecao = {
 	<CtaBanner titulo="Seu negócio pode ser o próximo case de sucesso da EJFGV." href="/contato/#formulario" rotulo="Fale com um Especialista" escuro />
 
 <style>
+	/* Fundo branco igual ao da lista; a camada de cima tem a cor da capa, então a emenda some */
+	.casos_onda {
+		margin-top: -1px;
+		background: var(--white);
+	}
+
+	.casos_onda svg {
+		display: block;
+		width: 100%;
+		height: clamp(3rem, 8vw, 7.5rem);
+	}
+
+	.onda-1 { fill: var(--graywarm900); }
+	.onda-2 { fill: color-mix(in srgb, var(--graywarm900) 55%, var(--white)); }
+	.onda-3 { fill: color-mix(in srgb, var(--graywarm900) 25%, var(--white)); }
+
+	/* A onda já separa a capa da lista: tira parte do respiro de cima da lista */
+	.casos > .padding-section-medium {
+		padding-top: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
 	.casos_filtros {
 		margin-bottom: 2rem;
 	}
