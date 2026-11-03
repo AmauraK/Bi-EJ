@@ -2454,6 +2454,99 @@ main:has(+ .footer) > :last-child {
   border-top: var(--onda-h) solid transparent;
 }
 
+/* Dobras claras (régua): entre duas seções claras (branco/cinza) entra um eixo de gráfico no lugar do
+   fio de 1px: traço fino com marcações penduradas e um marcador laranja no centro. As seções escuras
+   ficam de fora (têm as ondas), e .sem-regua junta duas seções num bloco só. Ao rolar, a régua se
+   desenha do centro para as pontas. */
+:root {
+  --regua-traco: color-mix(in srgb, var(--brand-chumbo) 18%, transparent);
+  --regua-marca: color-mix(in srgb, var(--brand-chumbo) 26%, transparent);
+  --regua-marca-fina: color-mix(in srgb, var(--brand-chumbo) 14%, transparent);
+}
+
+main section:not(.section_beneficios, .is-dark, .bi_conexao):has(+ section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua)) {
+  border-bottom: 0;
+}
+
+main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua) {
+  position: relative;
+  border-top: 0;
+}
+
+main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  width: min(1280px, 100% - 2 * clamp(1.25rem, 4vw, 3.5rem));
+  height: 128px;
+  translate: -50% -50%;
+  pointer-events: none;
+  /* A régua fica no meio da caixa (y = 64px, a linha entre as seções). De cima para baixo: trecho
+     laranja, traço, marcações a cada 96px e a cada 12px (ladrilhos centrados: a marcação grande do meio
+     cai sob o marcador), o vinco (sombra curta logo abaixo do traço) e o brilho quente do marcador */
+  background:
+    linear-gradient(var(--primary600) 0 0) center / 88px 2px no-repeat,
+    linear-gradient(var(--regua-traco) 0 0) center / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent calc(50% - 0.5px), var(--regua-marca) 0 calc(50% + 0.5px), transparent 0) center 64px / 96px 9px repeat-x,
+    linear-gradient(90deg, transparent calc(50% - 0.5px), var(--regua-marca-fina) 0 calc(50% + 0.5px), transparent 0) center 64px / 12px 4px repeat-x,
+    linear-gradient(color-mix(in srgb, var(--brand-chumbo) 5%, transparent), transparent) center 64px / 100% 28px no-repeat,
+    radial-gradient(closest-side, color-mix(in srgb, var(--brand-laranja) 13%, transparent), transparent) center / min(720px, 100%) 100% no-repeat;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua)::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  translate: -50% -50%;
+  rotate: 45deg;
+  pointer-events: none;
+  background: var(--primary600);
+  outline: 1px solid color-mix(in srgb, var(--brand-laranja) 45%, transparent);
+  outline-offset: 3px;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua) {
+      view-timeline-name: --dobra;
+    }
+
+    main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua)::before {
+      animation-name: regua-desenha;
+      animation-timing-function: linear;
+      animation-fill-mode: backwards;
+      animation-timeline: --dobra;
+      animation-range: entry 5% entry 50%;
+    }
+
+    main section:not(.section_beneficios, .is-dark, .bi_conexao) + section:not(.section_beneficios, .is-dark, .bi_conexao, .sem-regua)::after {
+      animation-name: regua-marcador;
+      animation-timing-function: linear;
+      animation-fill-mode: backwards;
+      animation-timeline: --dobra;
+      animation-range: entry 25% entry 50%;
+    }
+  }
+}
+
+/* Só scale, rotate e opacity: o navegador anima no compositor, sem repintar a cada quadro de rolagem
+   (com clip-path o celular caía de ~50 para ~25 quadros por segundo) */
+@keyframes regua-desenha {
+  from { scale: 0 1; opacity: 0; }
+}
+
+@keyframes regua-marcador {
+  from { scale: 0; rotate: -135deg; }
+}
+
 /* Acessibilidade: foco visível e menos movimento */
 :focus-visible {
   outline: 2px solid var(--primary700);
