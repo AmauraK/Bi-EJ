@@ -2,7 +2,7 @@
 // Card de case em tom editorial: o resultado é a manchete; cliente e setor viram a linha de crédito.
 // Leitura: solução (rótulo discreto) → resultado (manchete) → cliente — setor → desafio.
 // `tag` segue o formato "Setor · Solução · Solução" (tagDo); sem " · ", vira só o rótulo.
-// `destaque`: versão grafite (a página decide a largura). `pendente`: case ainda a preencher.
+// `escuro`: papel grafite. `destaque`: grafite + número gigante (a página decide a largura).
 interface Props {
 	tag: string;
 	metrica: string;
@@ -12,10 +12,10 @@ interface Props {
 	/** problema do cliente; aparece como "Desafio: …" */
 	desafio?: string;
 	href?: string;
+	/** texto do link para leitor de tela (o visível é só a seta) */
 	rotuloLink?: string;
+	escuro?: boolean;
 	destaque?: boolean;
-	/** conteúdo ainda a preencher: título e resultado com o marcador .preencher */
-	pendente?: boolean;
 	nivel?: 'h2' | 'h3';
 }
 
@@ -27,8 +27,8 @@ const {
 	desafio,
 	href,
 	rotuloLink = 'Ver case completo',
+	escuro = false,
 	destaque = false,
-	pendente = false,
 	nivel = 'h3',
 } = Astro.props;
 const Titulo = nivel;
@@ -38,43 +38,48 @@ const setor = partes.length > 1 ? partes[0] : undefined;
 const solucao = (partes.length > 1 ? partes.slice(1) : partes).join(' · ');
 
 // Só o primeiro número da manchete (com a unidade: %, x, vezes, dias úteis, meses) ganha a cor.
-const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?: (?:vezes|dias úteis|dias|meses))?)(.*)$/s);
+const numero = metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?: (?:vezes|dias úteis|dias|meses))?)(.*)$/s);
+// No destaque, o mesmo número em tamanho gigante ("30" + "dias úteis"); é repetição visual da manchete.
+const numeral = destaque && numero ? numero[2].match(/^(\S+)\s*(.*)$/) : null;
 ---
 
-<article class:list={['case_card', 'case-card', { 'is-link': href, 'is-destaque': destaque, 'is-pendente': pendente }]}>
+<article class:list={['case_card', 'case-card', { 'is-link': href, 'is-escuro': escuro || destaque, 'is-destaque': destaque }]}>
+	{numeral && (
+		<p class="case-card_numeral" aria-hidden="true">
+			<span class="case-card_numeral-valor">{numeral[1]}</span>
+			{numeral[2] && <span class="case-card_numeral-unidade">{numeral[2]}</span>}
+		</p>
+	)}
+
 	<div class="case-card_manchete">
 		<p class="case-card_solucao">{setor && <span class="sr-only">Solução: </span>}{solucao}</p>
 		<Titulo class="case-card_resultado">
-			{pendente ? (
-				<span class="preencher">{metrica}</span>
-			) : numero ? (
-				<>{numero[1]}<span class="case-card_numero">{numero[2]}</span>{numero[3]}</>
-			) : (
-				metrica
-			)}
+			{numero ? <>{numero[1]}<span class="case-card_numero">{numero[2]}</span>{numero[3]}</> : metrica}
 		</Titulo>
 	</div>
 
 	<div class="case-card_rodape">
 		<p class="case-card_credito">
-			{pendente ? <span class="preencher">{titulo}</span> : <strong>{titulo}</strong>}
+			<strong>{titulo}</strong>
 			{setor && <span class="case-card_setor"> — {setor}</span>}
 		</p>
 		{desafio && <p class="case-card_desafio"><strong>Desafio:</strong> {desafio}</p>}
 		{texto && <p class="case-card_texto">{texto}</p>}
 		{href && (
 			<a class="case-card_link" href={href}>
-				{rotuloLink} <span aria-hidden="true">→</span>
+				<span class="sr-only">{rotuloLink}: {titulo}</span>
+				<span class="case-card_seta" aria-hidden="true">→</span>
 			</a>
 		)}
 	</div>
 </article>
 
 <style>
-	/* Papel: tom claro da marca com grão de ruído (SVG inline, ~0,5 kB) */
+	/* Papel quente (laranja 9 % na menta) com grão de ruído (SVG inline, ~0,5 kB), borda cinza da marca
+	   e sombra visível: o card se separa tanto do fundo menta quanto do cinza claro das seções */
 	.case-card {
-		--grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .145 0 0 0 0 .157 0 0 0 0 .196 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-		--sombra: 0 1px 2px rgba(37, 40, 50, 0.04), 0 10px 28px -18px rgba(37, 40, 50, 0.22);
+		--grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .145 0 0 0 0 .157 0 0 0 0 .196 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+		--sombra: 0 1px 2px rgba(37, 40, 50, 0.07), 0 14px 30px -14px rgba(37, 40, 50, 0.3);
 		position: relative;
 		/* Manchete e rodapé são linhas da grade pai (subgrid): na mesma linha da grade, os filetes
 		   e os créditos ficam na mesma altura. Fora de uma grade (carrossel da home), vale grid-auto-rows. */
@@ -84,9 +89,9 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 		grid-auto-rows: auto 1fr;
 		row-gap: 0;
 		padding: 1.75rem 1.75rem 1.5rem;
-		border: 1px solid var(--border-hairline-light);
+		border: 1px solid var(--gray300);
 		border-radius: var(--card-radius-md);
-		background: var(--grao), var(--primary25);
+		background: var(--grao), var(--primary50);
 		box-shadow: var(--sombra);
 	}
 
@@ -97,12 +102,16 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 
 	.case-card.is-link:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 2px 4px rgba(37, 40, 50, 0.05), 0 22px 40px -20px rgba(37, 40, 50, 0.32);
+		box-shadow: 0 2px 4px rgba(37, 40, 50, 0.08), 0 24px 40px -18px rgba(37, 40, 50, 0.4);
 	}
 
 	.case-card:has(.case-card_link:focus-visible) {
 		outline: 3px solid var(--primary700);
 		outline-offset: 3px;
+	}
+
+	.case-card_numeral {
+		display: none;
 	}
 
 	.case-card_manchete {
@@ -124,14 +133,20 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 		color: var(--gray900);
 		font-size: clamp(1.45rem, 1.15rem + 0.55vw, 1.7rem);
 		font-weight: 800;
-		line-height: 1.12;
-		letter-spacing: -0.025em;
+		line-height: 1.14;
+		letter-spacing: -0.01em;
 		text-wrap: balance;
 	}
 
-	/* Único elemento laranja forte do card; --primary700 passa AA para texto grande no papel */
-	.case-card_numero {
+	/* Único laranja forte do card, no mesmo tom no papel e no grafite. --primary700 (#b97833) é o
+	   laranja mais claro que passa AA de texto grande nos dois: 3,3:1 no papel e 4,0:1 no grafite
+	   (mínimo 3:1 a partir de 18,66 px em negrito). O laranja puro da marca daria 2,4:1 no papel. */
+	.case-card_numero,
+	.case-card_numeral-valor {
 		color: var(--primary700);
+	}
+
+	.case-card_numero {
 		white-space: nowrap;
 	}
 
@@ -145,7 +160,7 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 	.case-card_credito {
 		margin: 0;
 		padding-top: 0.9rem;
-		border-top: 1px solid var(--border-hairline-light);
+		border-top: 1px solid var(--gray300);
 		color: var(--gray900);
 		font-size: 0.95rem;
 		line-height: 1.4;
@@ -180,17 +195,18 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 		font-weight: 600;
 	}
 
+	/* Só a seta: o card inteiro é o link (::after) e o nome acessível vem do texto oculto */
 	.case-card_link {
 		margin-top: auto;
-		padding-top: 0.4rem;
-		align-self: flex-start;
-		color: var(--gray900);
-		font-size: 0.95rem;
-		font-weight: 700;
+		align-self: flex-end;
+		padding-top: 0.25rem;
+		color: var(--gray600);
+		font-size: 1.35rem;
+		font-weight: 600;
+		line-height: 1;
 		text-decoration: none;
 	}
 
-	/* O link cobre o card todo; o foco aparece no card (regra :has acima) */
 	.case-card_link::after {
 		content: '';
 		position: absolute;
@@ -202,120 +218,120 @@ const numero = pendente ? null : metrica.match(/^(.*?)(\+?\d[\d.,]*(?:%|x\b)?(?:
 		outline: none;
 	}
 
-	.case-card_link span {
+	.case-card_seta {
 		display: inline-block;
-		transition: transform 0.25s var(--ease-out-expo);
+		transition: transform 0.25s var(--ease-out-expo), color 0.25s var(--ease-out-expo);
 	}
 
-	.case-card.is-link:hover .case-card_link {
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
+	.case-card.is-link:hover .case-card_seta {
+		color: var(--gray900);
+		transform: translateX(6px);
 	}
 
-	.case-card.is-link:hover .case-card_link span {
-		transform: translateX(5px);
-	}
-
-	/* Destaque: grafite com grão claro; em telas largas, manchete à esquerda e crédito à direita */
-	.case-card.is-destaque {
+	/* Grafite: chumbo da marca com grão claro */
+	.case-card.is-escuro {
 		--grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .976 0 0 0 0 1 0 0 0 0 .988 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
 		background: var(--grao), var(--graywarm950);
 		border-color: var(--graywarm950);
 	}
 
-	.is-destaque .case-card_solucao,
-	.is-destaque .case-card_setor,
-	.is-destaque .case-card_desafio,
-	.is-destaque .case-card_texto {
+	.is-escuro .case-card_solucao,
+	.is-escuro .case-card_setor,
+	.is-escuro .case-card_desafio,
+	.is-escuro .case-card_texto,
+	.is-escuro .case-card_link {
 		color: var(--graywarm300);
 	}
 
-	.is-destaque .case-card_resultado,
-	.is-destaque .case-card_credito,
-	.is-destaque .case-card_desafio strong,
-	.is-destaque .case-card_link {
+	.is-escuro .case-card_resultado,
+	.is-escuro .case-card_credito,
+	.is-escuro .case-card_desafio strong,
+	.case-card.is-escuro:hover .case-card_seta {
 		color: var(--white);
 	}
 
-	.is-destaque .case-card_numero {
-		color: var(--primary600);
-	}
-
-	.is-destaque .case-card_credito {
+	.is-escuro .case-card_credito {
 		border-top-color: var(--border-hairline-dark);
 	}
 
+	/* Destaque largo: número gigante no canto de cima, rótulo no outro canto, manchete embaixo
+	   e o crédito numa faixa só (crédito | desafio | seta) */
 	@media (min-width: 1025px) {
 		.case-card.is-destaque {
-			grid-template-rows: none;
-			grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-			align-items: end;
-			column-gap: 2.5rem;
-			padding: 2.25rem;
+			grid-template-rows: auto auto 1fr;
+			grid-template-columns: minmax(0, 1fr) auto;
+			grid-template-areas:
+				'numeral solucao'
+				'resultado resultado'
+				'rodape rodape';
+			column-gap: 2rem;
+			padding: 2rem 2.25rem 1.75rem;
 		}
 
-		.is-destaque .case-card_rodape {
-			padding-top: 0;
-		}
-
-		/* rótulo no canto de cima, manchete embaixo, alinhada ao crédito */
 		.is-destaque .case-card_manchete {
-			align-self: stretch;
-			justify-content: space-between;
-			gap: 2rem;
+			display: contents;
+		}
+
+		.case-card_numeral {
+			grid-area: numeral;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 0.25rem 0.85rem;
+			margin: 0 0 1rem;
+		}
+
+		.case-card_numeral-valor {
+			font-size: clamp(6rem, 2rem + 5.5vw, 8.5rem);
+			font-weight: 800;
+			line-height: 0.8;
+			letter-spacing: -0.03em;
+		}
+
+		.case-card_numeral-unidade {
+			color: var(--white);
+			font-size: 1.35rem;
+			font-weight: 700;
+		}
+
+		.is-destaque .case-card_solucao {
+			grid-area: solucao;
+			text-align: right;
 		}
 
 		.is-destaque .case-card_resultado {
-			font-size: clamp(2rem, 1.2rem + 1.2vw, 2.6rem);
-			line-height: 1.05;
+			grid-area: resultado;
+			max-width: 26ch;
+			font-size: clamp(1.7rem, 1.1rem + 0.8vw, 2.05rem);
+			line-height: 1.12;
 		}
-	}
 
-	/* Pendente: discreto, sem papel nem sombra; o tracejado diz "a preencher" */
-	.case-card.is-pendente {
-		grid-template-rows: none;
-		gap: 0.75rem;
-		padding-block: 1.25rem;
-		background: transparent;
-		box-shadow: none;
-		border: 1px dashed var(--gray400);
-	}
+		/* o número já está gigante acima; na manchete ele fica branco (um laranja só) */
+		.is-destaque .case-card_numero {
+			color: inherit;
+		}
 
-	.is-pendente .case-card_manchete {
-		gap: 0.4rem;
-	}
-
-	.is-pendente .case-card_rodape {
-		padding-top: 0;
-	}
-
-	@media (min-width: 768px) {
-		.case-card.is-pendente {
-			grid-template-columns: minmax(0, 1fr) auto;
+		.is-destaque .case-card_rodape {
+			grid-area: rodape;
+			align-self: end;
+			display: grid;
+			grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto;
 			align-items: end;
 			column-gap: 2rem;
+			margin-top: 1.5rem;
+			padding-top: 1rem;
+			border-top: 1px solid var(--border-hairline-dark);
 		}
 
-		.is-pendente .case-card_rodape {
-			align-items: flex-end;
-			text-align: right;
+		.is-destaque .case-card_credito {
+			align-self: start;
+			padding-top: 0;
+			border-top: 0;
 		}
-	}
 
-	.case-card.is-pendente:hover {
-		transform: none;
-		box-shadow: none;
-		border-color: var(--gray600);
-	}
-
-	.is-pendente .case-card_resultado {
-		font-size: 1.15rem;
-		font-weight: 700;
-	}
-
-	.is-pendente .case-card_credito {
-		border-top: 0;
-		padding-top: 0;
+		.is-destaque .case-card_desafio {
+			align-self: start;
+		}
 	}
 
 	.sr-only {

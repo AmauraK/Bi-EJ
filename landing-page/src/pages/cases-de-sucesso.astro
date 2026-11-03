@@ -11,11 +11,15 @@ import CtaBanner from '../components/CtaBanner.astro';
 import { SITE, NUMEROS, SOLUCOES, CASES, FOTOS } from '../consts';
 import { tagDo } from '../components/cases/conteudo';
 
-// Ordem dos filtros decidida em 26/10/2026.
-const FILTROS = ['plano-de-negocios', 'consultoria-business-intelligence', 'consultoria-operacional', 'consultoria-mercadologica', 'consultoria-financeira'].map(
-	(slug) => SOLUCOES.find((s) => s.slug === slug)!
-);
-const BI = SOLUCOES.find((s) => s.slug === 'consultoria-business-intelligence')!;
+// Ordem dos filtros decidida em 26/10/2026. Só aparece o filtro que tem case publicado: o de BI
+// fica oculto até existir um case de BI em CASES (consts.ts) e volta sozinho quando ele for cadastrado.
+const FILTROS = ['plano-de-negocios', 'consultoria-business-intelligence', 'consultoria-operacional', 'consultoria-mercadologica', 'consultoria-financeira']
+	.map((slug) => SOLUCOES.find((s) => s.slug === slug)!)
+	.filter((s) => CASES.some((c) => c.solucoes.includes(s.slug)));
+
+// Ritmo da grade de 3 colunas: o 1º case é o destaque grafite largo (linha 1, à esquerda); na linha 2
+// o grafite fica à direita (5º case) e na linha 3 no meio (7º). Mudou a ordem de CASES? Revise aqui.
+const ESCUROS = [4, 6];
 
 const descricao = 'Cases de sucesso da EJFGV, a Empresa Júnior da Fundação Getulio Vargas: projetos reais com o problema inicial, a solução e os resultados. Filtre por tipo de consultoria.';
 
@@ -67,12 +71,12 @@ const colecao = {
 				<ul class="cases_grid casos_lista">
 					{CASES.map((c, i) => (
 						<li data-solucoes={c.solucoes.join(' ')} class:list={{ 'is-destaque': i === 0 }}>
-							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} destaque={i === 0} />
+							<CaseCard tag={tagDo(c)} metrica={c.destaque} titulo={c.cliente} desafio={`${c.problema}.`} href={c.url} destaque={i === 0} escuro={ESCUROS.includes(i)} />
 						</li>
 					))}
-					<li data-solucoes={BI.slug} class="is-pendente">
-						<CaseCard tag={BI.rotulo} metrica="A preencher: resultado" titulo={`Case de ${BI.rotulo}: a preencher`} href={BI.url} rotuloLink={`Conheça a ${BI.nome}`} pendente />
-					</li>
+					{/* O card provisório de BI ("A preencher") saiu em 02/11/2026. Para reativar, cadastre o case
+					    de BI em CASES (consts.ts) com solucoes: ['consultoria-business-intelligence']: ele entra
+					    nesta lista e o filtro de BI reaparece. */}
 				</ul>
 			</div>
 		</div>
@@ -114,8 +118,7 @@ const colecao = {
 		margin-bottom: 0;
 	}
 
-	/* Ritmo: o primeiro case em destaque ocupa 2 colunas (só com 3 colunas) e o case de BI
-	   ainda a preencher vira uma faixa discreta na largura toda. `dense` evita buracos ao filtrar. */
+	/* Ritmo: o primeiro case em destaque ocupa 2 colunas (só com 3 colunas). `dense` evita buracos ao filtrar. */
 	.casos_lista {
 		grid-auto-flow: dense;
 	}
@@ -128,10 +131,6 @@ const colecao = {
 		row-gap: 0;
 	}
 
-	.casos_lista > li.is-pendente {
-		grid-column: 1 / -1;
-	}
-
 	@media (min-width: 1025px) {
 		.casos_lista > li.is-destaque {
 			grid-column: span 2;
@@ -140,6 +139,13 @@ const colecao = {
 
 	.casos_lista > li[hidden] {
 		display: none;
+	}
+
+	/* Celular: respiro no fim da lista para o botão fixo do WhatsApp (52 px + 20 px) não cobrir o último card */
+	@media (max-width: 767px) {
+		.casos > .padding-section-medium {
+			padding-bottom: calc(clamp(3.75rem, 6.5vw, 6rem) + 4.5rem);
+		}
 	}
 
 	@media (min-width: 768px) and (max-width: 1024px) {
