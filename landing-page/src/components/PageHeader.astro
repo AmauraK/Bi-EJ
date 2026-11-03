@@ -1,5 +1,5 @@
 ---
-// Cabeçalho de página (H1 da página). Reaproveita .hero_background, .home-hero_divider, .hero_kicker,
+// Cabeçalho de página (H1 da página). Reaproveita .hero_background, .hero_kicker,
 // .hero_heading, .hero_description e .hero_actions da LP.
 // Slots: "titulo" (substitui o texto do H1, ex.: com <span class="highlight-purpose">), default (conteúdo
 // extra abaixo da descrição), "acoes" (botões), "midia" (coluna da direita; abaixo do texto se centralizado)
@@ -10,10 +10,9 @@ interface Props {
 	descricao?: string;
 	escuro?: boolean;
 	centralizado?: boolean;
-	semDivisor?: boolean;
 }
 
-const { titulo, kicker, descricao, escuro = false, centralizado = false, semDivisor = false } = Astro.props;
+const { titulo, kicker, descricao, escuro = false, centralizado = false } = Astro.props;
 const temMidia = Astro.slots.has('midia');
 const temAcoes = Astro.slots.has('acoes');
 ---
@@ -25,7 +24,7 @@ const temAcoes = Astro.slots.has('acoes');
 		<div class="container-large">
 			<div class:list={['page-header_wrapper', { 'is-centered': centralizado, 'is-single': !temMidia && !centralizado }]}>
 				<div>
-					{!semDivisor && <div class="home-hero_divider"></div>}
+					
 					{kicker && <span class="hero_kicker">{kicker}</span>}
 					<h1 id="page-heading" class:list={['hero_heading', { 'text-color-gradient-gray': !escuro }]}>
 						<slot name="titulo">{titulo}</slot>

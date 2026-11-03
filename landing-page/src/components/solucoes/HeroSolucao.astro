@@ -24,7 +24,6 @@ const { titulo, kicker, descricao, variante } = Astro.props;
 		<div class="container-large hero-solucao_grade">
 			<div class="hero-solucao_texto">
 				<div class="hero-solucao_chamada">
-					<div class="home-hero_divider"></div>
 					{kicker && <span class="hero_kicker">{kicker}</span>}
 					<h1 id="page-heading" class="hero_heading">
 						<slot name="titulo">{titulo}</slot>

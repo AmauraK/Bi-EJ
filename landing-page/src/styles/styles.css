@@ -93,8 +93,6 @@
   --card-radius-md: 1rem;
   --card-radius-lg: 1.25rem;
   --card-radius-xl: 1.5rem;
-  --hero-divider-w: 4.5rem;
-  --hero-divider-h: 0.75rem;
 }
 
 /* ==========================================================================
@@ -478,14 +476,6 @@ body::after {
   grid-template-columns: 0.88fr 1.12fr;
   gap: clamp(2rem, 3.5vw, 3.5rem);
   align-items: center;
-}
-
-.home-hero_divider {
-  background-color: var(--primary600);
-  width: var(--hero-divider-w);
-  height: var(--hero-divider-h);
-  margin-bottom: 1.15rem;
-  border-radius: 2px;
 }
 
 .hero_kicker {
@@ -1961,7 +1951,6 @@ body::after {
   margin: 0 auto;
 }
 
-.page-header_wrapper.is-centered .home-hero_divider,
 .page-header_wrapper.is-centered .hero_description {
   margin-left: auto;
   margin-right: auto;
