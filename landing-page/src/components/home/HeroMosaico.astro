@@ -1,7 +1,8 @@
 ---
-// Fundo da dobra 1 da home: um mosaico vivo de ladrilhos com fotos reais da equipe. No carregamento, os
-// ladrilhos (cada um com uma miniatura de outro momento da equipe) deslizam para o lugar e viram em 3D até montar a equipe
-// completa na escadaria. A cada ~6 s uma onda vira o mosaico para outra foto (reunião, auditório) e volta;
+// Fundo da dobra 1 da home: um mosaico vivo de ladrilhos com fotos reais da equipe. A foto da equipe na escadaria
+// aparece já na 1ª pintura; na abertura, uma onda que parte do centro dá uma volta completa em 3D em cada ladrilho
+// (no meio da volta aparece uma miniatura de outro momento da equipe) e devolve a foto inteira. A volta é uma única
+// animação CSS de transform, que roda no compositor e não depende do JS durante o movimento. A cada ~6 s uma onda vira o mosaico para outra foto (reunião, auditório) e volta;
 // o mouse vira um ladrilho e mostra, inteira, outra foto da equipe. Sem JS, com movimento reduzido ou com economia de
 // dados: só a foto, parada. Imagens decodificadas antes da onda e verso pintado em tempo ocioso, para a onda não travar.
 import { Image, getImage } from 'astro:assets';
@@ -54,8 +55,8 @@ const miniaturas = await Promise.all(
 	<p class="mosaico_legenda" aria-hidden="true">{quadros[0].legenda}</p>
 </div>
 <script is:inline>
-	// Antes da 1ª pintura: com movimento liberado, a foto parada some e o mosaico a monta. Se o script do
-	// mosaico não rodar em 6 s de aba visível, a foto volta (aba aberta em segundo plano não conta).
+	// Antes da 1ª pintura: marca o mosaico como vivo (a foto continua à mostra até o mosaico assumir). Se o script
+	// do mosaico não rodar em 6 s de aba visível, volta ao modo parado (aba aberta em segundo plano não conta).
 	(() => {
 		const raiz = document.querySelector('[data-mosaico]');
 		if (!raiz || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -89,6 +90,8 @@ const miniaturas = await Promise.all(
 		for (const q of outras) q.src = pequena ? q.srcPequena : q.src;
 
 		const PAUSA = 6000;
+		const ABERTURA = 1200; // volta de cada ladrilho na abertura
+		const ONDA_ABERTURA = 1200; // atraso máximo, do centro para as bordas
 		const EXIBICAO = 3200;
 		const ONDA = 1100;
 		const VIRADA = 900;
@@ -149,6 +152,7 @@ const miniaturas = await Promise.all(
 			animandoTimer = window.setTimeout(() => raiz.classList.remove('is-animando'), ms);
 		};
 		let animandoTimer = 0;
+		let aberturaTimer = 0;
 
 		// Mouse: com a equipe à mostra, o ladrilho vira para o verso (miniatura); com outra foto à mostra
 		// (depois de uma onda), vira de volta para a frente, que recebe a miniatura e depois volta à equipe.
@@ -279,32 +283,36 @@ const miniaturas = await Promise.all(
 			}, EXIBICAO);
 		};
 
+		// Abertura: a grade entra idêntica à foto (troca invisível); dois quadros depois, para o navegador já ter
+		// pintado frente e verso, a onda começa. Nenhum verso é repintado enquanto a onda corre.
 		const abrir = () => {
-			for (let r = 0; r < rows; r++) {
-				const ordem = [...Array(cols).keys()].sort(() => Math.random() - 0.5);
-				for (const t of ladrilhos.filter((l) => l.r === r)) {
-					pintarMiniatura(t.verso, t, t.c + r * 2);
-					t.el.style.setProperty('--dx', `${(ordem[t.c] - t.c) * (W / cols)}px`);
-					t.el.classList.add('is-solto');
-					t.carta.classList.add('is-virada');
-				}
+			fase = 'transicao';
+			for (const t of ladrilhos) {
+				pintarMiniatura(t.verso, t, t.c + t.r * 2);
+				const dist = Math.hypot((t.c + 0.5) / cols - 0.5, (t.r + 0.5) / rows - 0.5) / 0.71;
+				t.el.style.setProperty('--d', `${Math.round(dist * ONDA_ABERTURA + Math.random() * 120)}ms`);
 			}
 			raiz.classList.add('is-pronto');
-			setTimeout(() => {
-				animando(1100 + 1200 + 200);
-				for (const t of ladrilhos) {
-					const dist = Math.hypot((t.c + 0.5) / cols - 0.5, (t.r + 0.5) / rows - 0.5) / 0.71;
-					t.el.style.setProperty('--d', `${Math.round(dist * 1000 + Math.random() * 200)}ms`);
-					t.el.classList.remove('is-solto');
-					t.carta.classList.remove('is-virada');
-				}
-				versoPronto = '';
-				ocioso(async () => {
-					const primeira = outras[0];
-					if (primeira && (await garantir(primeira))) prepararVerso(primeira);
-				});
-				agendar(PAUSA + 2300);
-			}, 600);
+			// Espera a página sossegar (load + um momento ocioso, no máximo 2,5 s): com a foto já à mostra, esperar
+			// não custa nada, e a onda não disputa o processador com o resto do carregamento.
+			const carregada = new Promise<void>((ok) =>
+				document.readyState === 'complete' ? ok() : addEventListener('load', () => ok(), { once: true }),
+			);
+			Promise.race([carregada.then(() => new Promise<void>((ok) => ocioso(() => ok()))), espera(2500)]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+				animando(ABERTURA + ONDA_ABERTURA + 300);
+				raiz.classList.add('is-abrindo');
+				aberturaTimer = window.setTimeout(() => {
+					raiz.classList.remove('is-abrindo');
+					raiz.classList.add('is-montado');
+					fase = 'principal';
+					versoPronto = '';
+					ocioso(async () => {
+						const primeira = outras[0];
+						if (primeira && (await garantir(primeira))) prepararVerso(primeira);
+					});
+					agendar(PAUSA);
+				}, ABERTURA + ONDA_ABERTURA + 200);
+			})));
 		};
 
 		new IntersectionObserver(([e]) => (visivel = e.isIntersecting)).observe(raiz);
@@ -318,6 +326,9 @@ const miniaturas = await Promise.all(
 			clearTimeout(redim);
 			redim = window.setTimeout(() => {
 				clearTimeout(timer);
+				clearTimeout(aberturaTimer);
+				raiz.classList.remove('is-abrindo');
+				raiz.classList.add('is-montado');
 				emOnda = false;
 				fase = 'principal';
 				sobre = 0;
@@ -333,7 +344,7 @@ const miniaturas = await Promise.all(
 		Promise.race([Promise.all([fotoPronta, minisCarregando]), espera(2500)]).then(async () => {
 			await fotoPronta;
 			montar();
-			requestAnimationFrame(() => requestAnimationFrame(abrir));
+			abrir();
 		});
 	}
 </script>
@@ -351,16 +362,18 @@ const miniaturas = await Promise.all(
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		transition: opacity 0.8s ease;
 	}
 
+	/* A grade entra sem transição: na abertura ela é idêntica à foto. Depois da abertura a foto sai devagar,
+	   e as juntas da grade aparecem aos poucos. */
 	.mosaico_grade {
 		position: absolute;
 		inset: 0;
 		opacity: 0;
-		transition: opacity 0.5s ease;
 	}
 
-	.mosaico.is-vivo .mosaico_foto {
+	.mosaico.is-montado .mosaico_foto {
 		opacity: 0;
 	}
 
@@ -377,8 +390,16 @@ const miniaturas = await Promise.all(
 		transition: transform 1.1s cubic-bezier(0.22, 0.75, 0.2, 1) var(--d, 0ms);
 	}
 
-	.mosaico_grade :global(.mosaico_ladrilho.is-solto) {
-		transform: translate3d(calc(var(--x) + var(--dx, 0px)), var(--y), 0) scale(0.8);
+	/* Abertura: cada carta dá uma volta inteira (frente → miniatura → frente) e encolhe um pouco no meio dela.
+	   Uma só animação de transform por ladrilho, sem variáveis nos keyframes: o compositor cuida de tudo. */
+	.mosaico.is-abrindo :global(.mosaico_carta) {
+		animation: mosaico-volta 1.2s cubic-bezier(0.45, 0, 0.25, 1) var(--d, 0ms) both;
+	}
+
+	@keyframes mosaico-volta {
+		0% { transform: perspective(800px) rotateY(0deg) scale(1); }
+		50% { transform: perspective(800px) rotateY(180deg) scale(0.88); }
+		100% { transform: perspective(800px) rotateY(360deg) scale(1); }
 	}
 
 	.mosaico.is-animando :global(.mosaico_carta) {
@@ -401,7 +422,9 @@ const miniaturas = await Promise.all(
 		position: absolute;
 		inset: 1px;
 		border-radius: 3px;
-		background-color: var(--graywarm900);
+		/* Transparente: enquanto a imagem de um ladrilho não foi pintada, aparece o que está atrás (a foto, na
+		   abertura) em vez de um quadrado cinza */
+		background-color: transparent;
 		background-repeat: no-repeat;
 		backface-visibility: hidden;
 	}
@@ -468,6 +491,7 @@ const miniaturas = await Promise.all(
 		.mosaico_grade :global(.mosaico_ladrilho),
 		.mosaico_grade :global(.mosaico_carta) {
 			transition: none;
+			animation: none;
 		}
 	}
 
