@@ -6,7 +6,7 @@ const paginas = Object.keys(import.meta.glob('./**/*.astro'));
 
 export const GET: APIRoute = ({ site }) => {
 	const rotas = paginas
-		.filter((p) => !p.includes('[') && !p.endsWith('/404.astro') && !p.endsWith('/kit.astro'))
+		.filter((p) => !p.includes('[') && !p.endsWith('/404.astro'))
 		.map((p) => p.replace(/^\./, '').replace(/(index)?\.astro$/, '').replace(/([^/])$/, '$1/'));
 	const urls = [...rotas, ...CASES.map((c) => c.url)].sort();
 	const xml = `<?xml version="1.0" encoding="UTF-8"?>
