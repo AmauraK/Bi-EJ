@@ -458,4 +458,4 @@ export const NAV = [
   },
 ];
 
-export const ATUALIZADO_EM = '2026-10-26';
+export const ATUALIZADO_EM = '2026-11-09';
