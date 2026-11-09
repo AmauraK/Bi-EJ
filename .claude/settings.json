@@ -1,0 +1,24 @@
+{
+  "enabledPlugins": {
+    "claude-seo@ejfgv-seo": true
+  },
+  "extraKnownMarketplaces": {
+    "ejfgv-seo": {
+      "source": {
+        "source": "settings",
+        "name": "ejfgv-seo",
+        "plugins": [
+          {
+            "name": "claude-seo",
+            "source": {
+              "source": "github",
+              "repo": "AgriciDaniel/claude-seo",
+              "ref": "v2.5.0",
+              "sha": "219ff485bb016314bb4c15bfc7978df61c668a4f"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

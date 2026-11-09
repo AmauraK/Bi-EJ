@@ -18,6 +18,16 @@ Use quando a tarefa pedir; não carregue todas por padrão.
 
 Fontes e licenças: `addyosmani/agent-skills` e `blader/humanizer`, ambas MIT (`third_party/`). Versões fixadas em `skills-lock.json`.
 
+## SEO: plugin `claude-seo` (só Claude Code)
+
+O plugin [`AgriciDaniel/claude-seo`](https://github.com/AgriciDaniel/claude-seo) (MIT, `third_party/LICENSE-claude-seo`) é habilitado para este projeto em `.claude/settings.json`, fixado na **v2.5.0** (commit `219ff48`). Ele traz 26 skills (`/seo ...`) e 19 subagentes de auditoria: técnico, conteúdo/E-E-A-T, schema, sitemap, desempenho, GEO/busca por IA etc.
+
+- **Instalar (uma vez por máquina, na raiz do repo):** abra o Claude Code aqui, aceite a confiança da pasta e rode `claude plugin install claude-seo@ejfgv-seo --scope project`; depois, dentro do Claude Code, `/seo setup` (cria um Python isolado e o Chromium headless fora do repo) e `/seo doctor` para conferir.
+- **Antes de qualquer `/seo`, leia `seo/CONTEXTO.md`:** o domínio `ejfgv.com` ainda é o WordPress, então o que se audita é `https://ejfgv-site-novo.vercel.app`. O arquivo também diz onde cada correção mora no código, que dados não se inventam e quais extensões pagas ficam desligadas.
+- Relatórios em `seo/relatorios/`; correções em branch + PR, merge só com autorização do Bruno.
+- Codex não carrega plugins do Claude Code: para tarefas de SEO, use o Claude Code.
+- Atualizar a versão: troque `ref`/`sha` em `.claude/settings.json` depois de ler o `CHANGELOG.md` do upstream.
+
 ## Regras do repo
 
 - Branch nova a partir de `main`; PR para `main`; **merge só com autorização do Bruno**.
