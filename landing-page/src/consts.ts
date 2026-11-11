@@ -351,15 +351,8 @@ export interface Depoimento {
   video?: string;
 }
 
-// Ricardo e Isadora: LP original (foto e vídeo reais). Os outros 3: home atual de ejfgv.com (logo do cliente).
+// Isadora: LP original (foto e vídeo reais). Os outros 3: home atual de ejfgv.com (logo do cliente).
 export const DEPOIMENTOS: Depoimento[] = [
-  {
-    texto: 'Eles nos entregaram trabalhos de qualidade e recomendamos a EJFGV. Você não vai se arrepender!',
-    autor: 'Ricardo Piragini',
-    cargo: 'Sócio Sênior, Britânia Propriedade Intelectual',
-    imagem: `${CDN}/671fa2204cbce7ba18851675_Ricardo%20Piragini.avif`,
-    video: 'https://player.vimeo.com/video/1040821356?autoplay=1',
-  },
   {
     texto: 'Desenvolveram o trabalho de forma célere, próxima e eficaz. Atendimento essencial para o desenvolvimento do escritório.',
     autor: 'Isadora Dias Munhoz',
