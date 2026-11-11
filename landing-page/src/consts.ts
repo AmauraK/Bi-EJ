@@ -22,6 +22,7 @@ import logoEpoca from './assets/logos/epoca.png';
 import logoVitacon from './assets/logos/vitacon.png';
 import logoItamedi from './assets/logos/itamedi.png';
 import logoAbraSorvete from './assets/logos/abra-sorvete.png';
+import logoMandic from './assets/logos/mandic.png';
 
 export const CDN = 'https://cdn.prod.website-files.com/67184b3e7b6cf7353f064e7a';
 
@@ -417,12 +418,13 @@ export const LOGOS = [
       { nome: 'Vitacon', src: logoVitacon },
       { nome: 'Itamedi', src: logoItamedi },
       { nome: 'Abra Sorvete', src: logoAbraSorvete },
+      { nome: 'São Leopoldo Mandic', src: logoMandic },
     ].map(async ({ nome, src }) => ({ nome, src: (await getImage({ src, height: 64, format: 'webp' })).src }))
   )),
 ];
 
-// docx: logos a incluir, com fundo transparente. Arquivo ainda não recebido.
-export const LOGOS_PENDENTES = ['Mandic'];
+// docx: logos a incluir, com fundo transparente. Mandic recebida em 11/11/2026 (fundo removido).
+export const LOGOS_PENDENTES: string[] = [];
 
 // docx: Contato → Diagnóstico → Proposta → Projeto. Textos da LP original.
 export const METODO = [
