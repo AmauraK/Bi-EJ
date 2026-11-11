@@ -80,12 +80,11 @@ const faq = [
 							<span>Alunos da graduação da FGV · Orientação de professores da FGV</span>
 						</div>
 					</div>
-					<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url}>
+					<button type="button" class="hero-video-trigger" data-video={VIDEO_INSTITUCIONAL.url} data-poster={VIDEO_INSTITUCIONAL.poster}>
 						<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg> Ver vídeo ({VIDEO_INSTITUCIONAL.duracao})
 					</button>
 				</figcaption>
 			</figure>
-			<p class="sobre-hero_nota"><span class="preencher">A preencher: vídeo institucional novo (FGV e Bain logo no início)</span></p>
 		</Fragment>
 	</PageHeader>
 
@@ -253,12 +252,6 @@ const faq = [
 	/* Sem isto, o max-width: 100% global deixa o ícone encolher até sumir dentro do botão */
 	.hero-video-trigger svg {
 		max-width: none;
-	}
-
-	.sobre-hero_nota {
-		margin-top: 0.75rem;
-		color: var(--gray600);
-		font-size: 0.8rem;
 	}
 
 	/* 2. Por que a EJFGV */

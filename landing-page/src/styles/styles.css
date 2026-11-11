@@ -1532,6 +1532,13 @@ body::after {
   box-shadow: 0 24px 64px rgba(37, 40, 50, 0.5);
 }
 
+.video-modal_dialog video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000;
+}
+
 .video-modal_close {
   position: absolute;
   top: 12px;

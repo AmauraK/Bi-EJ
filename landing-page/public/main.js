@@ -93,14 +93,25 @@
     });
   }
 
-  /* 3. Modal de Vídeo (Vimeo) em <dialog> */
+  /* 3. Modal de Vídeo: .mp4 num <video> (institucional) ou iframe do Vimeo (depoimentos) em <dialog> */
   const videoModal = document.getElementById("videoModal");
   const videoIframe = document.getElementById("videoIframe");
-  if (videoModal && videoIframe && typeof videoModal.showModal === "function") {
+  const videoPlayer = document.getElementById("videoPlayer");
+  if (videoModal && videoIframe && videoPlayer && typeof videoModal.showModal === "function") {
     document.querySelectorAll("[data-video]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        videoIframe.src = btn.getAttribute("data-video");
+        const url = btn.getAttribute("data-video");
+        const isMp4 = /\.mp4($|\?)/.test(url);
+        videoIframe.hidden = isMp4;
+        videoPlayer.hidden = !isMp4;
+        if (isMp4) {
+          videoPlayer.poster = btn.getAttribute("data-poster") || "";
+          videoPlayer.src = url;
+        } else {
+          videoIframe.src = url;
+        }
         videoModal.showModal();
+        if (isMp4) videoPlayer.play().catch(() => {}); // autoplay pode ser barrado; os controles seguem visíveis
       });
     });
 
@@ -108,7 +119,12 @@
     const closeBtn = document.getElementById("closeVideoModal");
     if (closeBtn) closeBtn.addEventListener("click", closeVideo);
     videoModal.addEventListener("click", (e) => { if (e.target === videoModal) closeVideo(); });
-    videoModal.addEventListener("close", () => { videoIframe.src = ""; });
+    videoModal.addEventListener("close", () => {
+      videoIframe.src = "";
+      videoPlayer.pause();
+      videoPlayer.removeAttribute("src");
+      videoPlayer.load(); // descarrega o arquivo
+    });
   }
 
   /* 4. Depoimentos: todos os cards já estão no HTML; os pontos alternam qual aparece */

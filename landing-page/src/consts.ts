@@ -434,10 +434,12 @@ export const METODO = [
   { nome: 'Projeto', texto: 'Execução do projeto acompanhada por professores da FGV com implementação prática.' },
 ];
 
-// Vídeo atual da LP, até o vídeo institucional novo chegar (docx pede refazer).
+// Vídeo institucional novo (tratado e aprovado pelo Bruno, 82 s, hospedado em public/videos/).
+// Toca num <video> no modal; os depoimentos continuam em iframe do Vimeo.
 export const VIDEO_INSTITUCIONAL = {
-  url: 'https://player.vimeo.com/video/1040818556?autoplay=1',
-  duracao: '1:45',
+  url: '/videos/institucional-ejfgv.mp4',
+  poster: '/videos/institucional-ejfgv.jpg',
+  duracao: '1:22',
 };
 
 // Endpoints dos formulários. Vazios = integração ainda não definida (decisão de 26/10/2026).
