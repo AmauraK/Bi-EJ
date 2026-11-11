@@ -77,7 +77,7 @@ export const NUMEROS = {
   anos: new Date().getFullYear() - 1988, // calculado no build
   setores: 70, // LP
   professores: 40, // site atual: "+40 professores renomados da FGV"; a confirmar
-  prazoMedioMeses: 3, // citação de Thiago Caruso (legado)
+  prazoMedioMeses: 2, // confirmado pelo Bruno em 11/11/2026 (vídeo institucional)
   retornoDiasUteis: 1, // LP: "retorno em até 1 dia útil"
 };
 
